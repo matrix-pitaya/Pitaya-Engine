@@ -1,0 +1,20 @@
+# VS临时目录
+.vs/
+# 编译输出
+bin/
+obj/
+# 用户本地配置（不用同步）
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.cache
+*.pdb
+
+# 临时文件
+*.ipch
+*.db
+*.sqlite
+
+# Mac垃圾
+.DS_Store

@@ -1,0 +1,32 @@
+﻿  Log.cpp
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量值
+  (编译源文件“Log/Log.cpp”)
+  
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
+  (编译源文件“Log/Log.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\combaseapi.h(177,9): warning C4005: “DECLARE_INTERFACE”: 宏重定义
+  (编译源文件“Log/Log.cpp”)
+      D:\Pitaya\Core\Define\Define.h(53,9):
+      参见“DECLARE_INTERFACE”的前一个定义
+  
+  LogAPI.cpp
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量值
+  (编译源文件“Log/LogAPI.cpp”)
+  
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\combaseapi.h(177,9): warning C4005: “DECLARE_INTERFACE”: 宏重定义
+  (编译源文件“Log/LogAPI.cpp”)
+      D:\Pitaya\Core\Define\Define.h(53,9):
+      参见“DECLARE_INTERFACE”的前一个定义
+  
+  Thread.cpp
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量值
+  (编译源文件“Thread/Thread.cpp”)
+  
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
+  (编译源文件“Thread/Thread.cpp”)
+  
+  Core.vcxproj -> D:\Pitaya\library\x64\Release\Core.lib

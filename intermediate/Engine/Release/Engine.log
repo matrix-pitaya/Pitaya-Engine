@@ -1,0 +1,16 @@
+﻿  Engine.cpp
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量值
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
+  (编译源文件“Engine/Engine.cpp”)
+  
+  OpenGLRenderer.cpp
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量值
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.cpp(17,21): warning C4834: 放弃具有 [[nodiscard]] 属性的函数的返回值
+  Engine.vcxproj -> D:\Pitaya\library\x64\Release\Engine.lib

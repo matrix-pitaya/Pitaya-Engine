@@ -1,0 +1,10 @@
+﻿  Application.cpp
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量值
+  (编译源文件“Application/Application.cpp”)
+  
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
+  (编译源文件“Application/Application.cpp”)
+  
+  main.cpp
+  正在生成代码...
+LINK : fatal error LNK1104: 无法打开文件“Core.lib”
