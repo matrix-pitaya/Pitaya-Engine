@@ -167,7 +167,6 @@
     <ClCompile Include="Log\Log.cpp" />
     <ClCompile Include="Log\LogAPI.cpp" />
     <ClCompile Include="Thread\Thread.cpp" />
-    <ClCompile Include="Utility\Utility.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

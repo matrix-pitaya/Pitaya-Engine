@@ -10,6 +10,8 @@
 #include"Internal/Input/Input.h"
 #include"Internal/Time/Time.h"
 
+#include"Config/Config.h"
+
 namespace Pitaya::Engine
 {
 	class Engine
@@ -42,36 +44,43 @@ namespace Pitaya::Engine
 		}
 
 #pragma region Input
-		inline bool GetKeyDown(Pitaya::Engine::Input::KeyCode keyCode) const
+		inline bool GetKeyDown(Pitaya::Engine::Input::KeyCode keyCode) const noexcept
 		{
 			return window->GetKeyDown(keyCode);
 		}
 #pragma endregion
 
 #pragma region Time
-		inline const float& GetDeltaTime() const
+		inline const float& GetDeltaTime() const noexcept
 		{
 			return time.delta;
 		}
-		inline const float& GetFixdeltaTime() const
+		inline const float& GetFixdeltaTime() const noexcept
 		{
 			return time.fixdelta;
 		}
-		inline const float& GetUnscaledDeltaTime() const
+		inline const float& GetUnscaledDeltaTime() const noexcept
 		{
 			return time.unscaledDeltaTime;
 		}
-		inline float& GetTimeScale()
+		inline float& GetTimeScale() noexcept
 		{
 			return time.scale;
 		}
-		inline float GetSecondsTime()
+		inline float GetSecondsTime() noexcept
 		{
 			return time.Seconds();
 		}
-		inline int64_t GetMillisecondsTime()
+		inline int64_t GetMillisecondsTime() noexcept
 		{
 			return time.Milliseconds();
+		}
+#pragma endregion
+
+#pragma region Config
+		inline size_t GetMaxFixupdataExecuteTimes() const noexcept
+		{
+			return config.MaxFixupdataExecuteTimes;
 		}
 #pragma endregion
 
@@ -102,7 +111,6 @@ namespace Pitaya::Engine
 		//game
 		//camera
 
-		Pitaya::Engine::Renderer::RendererAPI rendererAPI = Pitaya::Engine::Renderer::RendererAPI::OpenGL;
-		Pitaya::Engine::Physics::PhysicsAPI physicsAPI = Pitaya::Engine::Physics::PhysicsAPI::Bullet;
+		Pitaya::Engine::Config::Config config;
 	};
 }

@@ -14,6 +14,10 @@ namespace Pitaya::Engine
 		{
 			return uid;
 		}
+		inline Pitaya::Core::UID SetUID(Pitaya::Core::UID uid) noexcept
+		{
+			this->uid = uid;
+		}
 
 	protected:
 		Pitaya::Core::UID uid = Pitaya::Core::UID::Next();

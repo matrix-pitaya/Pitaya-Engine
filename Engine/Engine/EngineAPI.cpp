@@ -6,6 +6,11 @@ int Pitaya::Engine::Execute()
 	return Pitaya::Engine::Engine::Instance.Execute();
 }
 
+size_t Pitaya::Engine::Config::GetMaxFixupdataExecuteTimes()
+{
+	return Pitaya::Engine::Engine::Instance.GetMaxFixupdataExecuteTimes();
+}
+
 const float& Pitaya::Engine::Time::delta = Pitaya::Engine::Engine::Engine::Instance.GetDeltaTime();
 const float& Pitaya::Engine::Time::fixdelta = Pitaya::Engine::Engine::Engine::Instance.GetFixdeltaTime();
 const float& Pitaya::Engine::Time::unscaledDeltaTime = Pitaya::Engine::Engine::Engine::Instance.GetUnscaledDeltaTime();

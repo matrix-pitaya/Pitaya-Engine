@@ -1,15 +1,2033 @@
-﻿  Application.cpp
+﻿  main.cpp
+D:\Pitaya\Core\Identifier\UID.h(36,49): warning C4458: “value”的声明隐藏了类成员
+  (编译源文件“main.cpp”)
+      D:\Pitaya\Core\Identifier\UID.h(57,18):
+      参见“Pitaya::Core::UID::value”的声明
+  
+D:\Pitaya\Core\ObjectPool\ObjectPool.h(3,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
 D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量值
-  (编译源文件“Application/Application.cpp”)
+  (编译源文件“main.cpp”)
   
 D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
-  (编译源文件“Application/Application.cpp”)
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Engine\Engine\Runtime\Object.h(17,53): warning C4458: “uid”的声明隐藏了类成员
+  (编译源文件“main.cpp”)
+      D:\Pitaya\Engine\Engine\Runtime\Object.h(23,21):
+      参见“Pitaya::Engine::Object::uid”的声明
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\bit.hpp(7,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\fwd.hpp(6,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\type_traits.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(18,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\memory.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(19,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_set.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_set.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_set.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_set.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\table.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\table.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\any.hpp(8,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\type_info.hpp(7,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(35,15): warning C4820: "entt::internal::basic_hashed_string<Char>": 数据成员 "entt::internal::basic_hashed_string<Char>::hash" 后添加了 "4" 字节填充
+D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(35,15): warning C4820:         with
+D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(35,15): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(35,15): warning C4820:             Char=char
+D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(35,15): warning C4820:         ]
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(35,15):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(300,44):
+          查看对正在编译的 类 模板 实例化“entt::basic_hashed_string<char>”的引用
+          D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(58,38):
+          查看对正在编译的 类 模板 实例化“entt::internal::basic_hashed_string<Char>”的引用
+          with
+          [
+              Char=char
+          ]
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(35,15): warning C4820: "entt::internal::basic_hashed_string<Char>": 数据成员 "entt::internal::basic_hashed_string<Char>::hash" 后添加了 "4" 字节填充
+D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(35,15): warning C4820:         with
+D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(35,15): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(35,15): warning C4820:             Char=wchar_t
+D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(35,15): warning C4820:         ]
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(35,15):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(309,45):
+          查看对正在编译的 类 模板 实例化“entt::basic_hashed_string<wchar_t>”的引用
+          D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(58,38):
+          查看对正在编译的 类 模板 实例化“entt::internal::basic_hashed_string<Char>”的引用
+          with
+          [
+              Char=wchar_t
+          ]
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\any.hpp(535,16): warning C4820: "entt::basic_any<16,8>": 数据成员 "entt::basic_any<16,8>::mode" 后添加了 "3" 字节填充
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\any.hpp(535,16):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\core\any.hpp(605,56):
+          查看对正在编译的 类 模板 实例化“entt::basic_any<16,8>”的引用
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\family.hpp(4,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\monostate.hpp(4,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\component.hpp(6,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\fwd.hpp(7,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\fwd.hpp(8,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\fwd.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\entity.hpp(7,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\entity.hpp(8,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\group.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\group.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\group.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\group.hpp(13,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\group.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\group.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\handle.hpp(8,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\handle.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\handle.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\helper.hpp(7,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\helper.hpp(8,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\storage.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\storage.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\storage.hpp(13,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\storage.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\storage.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\sparse_set.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\sparse_set.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\sparse_set.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\sparse_set.hpp(13,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\sparse_set.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\view.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\view.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\view.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\mixin.hpp(6,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\mixin.hpp(7,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\mixin.hpp(8,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\mixin.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\delegate.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\delegate.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\organizer.hpp(8,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\organizer.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\organizer.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\organizer.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\graph\adjacency_matrix.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\graph\adjacency_matrix.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\graph\fwd.hpp(6,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\organizer.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\graph\flow.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\graph\flow.hpp(13,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\graph\flow.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\graph\flow.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\graph\flow.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\graph\flow.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\graph\flow.hpp(18,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820: "entt::compressed_pair<std::vector<size_t,std::allocator<size_t>>,entt::identity>": 基类 "entt::internal::compressed_pair_element<Second,1,void>" 后添加了 "7" 字节填充
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         with
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Second=entt::identity
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\entity\organizer.hpp(120,7):
+          在编译类模板“entt::basic_organizer”时
+          D:\vcpkg\installed\x64-windows\include\entt\entity\organizer.hpp(433,10):
+          查看对正在编译的 类 模板 实例化“entt::basic_flow<std::allocator<entt::id_type>>”的引用
+          D:\vcpkg\installed\x64-windows\include\entt\graph\flow.hpp(123,69):
+          查看对正在编译的 类 模板 实例化“entt::dense_set<entt::id_type,entt::identity,std::equal_to<void>,std::allocator<entt::id_type>>”的引用
+          D:\vcpkg\installed\x64-windows\include\entt\container\dense_set.hpp(923,52):
+          查看对正在编译的 类 模板 实例化“entt::compressed_pair<std::vector<size_t,std::allocator<size_t>>,entt::identity>”的引用
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820: "entt::compressed_pair<std::vector<std::pair<size_t,Type>,std::allocator<std::pair<size_t,Type>>>,std::equal_to<void>>": 基类 "entt::internal::compressed_pair_element<Second,1,void>" 后添加了 "7" 字节填充
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         with
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Type=entt::id_type
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         and
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Second=std::equal_to<void>
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\container\dense_set.hpp(924,55):
+          查看对正在编译的 类 模板 实例化“entt::compressed_pair<std::vector<std::pair<size_t,Type>,std::allocator<std::pair<size_t,Type>>>,std::equal_to<void>>”的引用
+          with
+          [
+              Type=entt::id_type
+          ]
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_set.hpp(925,11): warning C4820: "entt::dense_set<entt::id_type,entt::identity,std::equal_to<void>,std::allocator<entt::id_type>>": 数据成员 "entt::dense_set<entt::id_type,entt::identity,std::equal_to<void>,std::allocator<entt::id_type>>::threshold" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820: "entt::compressed_pair<std::vector<entt::internal::dense_map_node<Key,Type>,std::allocator<entt::internal::dense_map_node<Key,Type>>>,std::equal_to<void>>": 基类 "entt::internal::compressed_pair_element<Second,1,void>" 后添加了 "7" 字节填充
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         with
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Key=entt::id_type,
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Type=std::vector<std::pair<size_t,bool>,std::allocator<std::pair<size_t,bool>>>
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         and
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Second=std::equal_to<void>
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\graph\flow.hpp(345,25):
+          查看对正在编译的 类 模板 实例化“entt::dense_map<entt::id_type,std::vector<std::pair<size_t,bool>,std::allocator<std::pair<size_t,bool>>>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const entt::id_type,std::vector<std::pair<size_t,bool>,std::allocator<std::pair<size_t,bool>>>>>>”的引用
+          D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1055,55):
+          查看对正在编译的 类 模板 实例化“entt::compressed_pair<std::vector<entt::internal::dense_map_node<Key,Type>,std::allocator<entt::internal::dense_map_node<Key,Type>>>,std::equal_to<void>>”的引用
+          with
+          [
+              Key=entt::id_type,
+              Type=std::vector<std::pair<size_t,bool>,std::allocator<std::pair<size_t,bool>>>
+          ]
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820: "entt::dense_map<entt::id_type,std::vector<std::pair<size_t,bool>,std::allocator<std::pair<size_t,bool>>>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const entt::id_type,std::vector<std::pair<size_t,bool>,std::allocator<std::pair<size_t,bool>>>>>>": 数据成员 "entt::dense_map<entt::id_type,std::vector<std::pair<size_t,bool>,std::allocator<std::pair<size_t,bool>>>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const entt::id_type,std::vector<std::pair<size_t,bool>,std::allocator<std::pair<size_t,bool>>>>>>::threshold" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(18,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(19,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(20,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(21,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(22,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(23,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\snapshot.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\snapshot.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\snapshot.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\locator\locator.hpp(6,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\container.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\container.hpp(18,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\container.hpp(19,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\context.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\context.hpp(6,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\context.hpp(7,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820: "entt::compressed_pair<std::vector<entt::internal::dense_map_node<Key,Type>,std::allocator<entt::internal::dense_map_node<Key,Type>>>,std::equal_to<void>>": 基类 "entt::internal::compressed_pair_element<Second,1,void>" 后添加了 "7" 字节填充
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         with
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Key=entt::id_type,
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Type=std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>>
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         and
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Second=std::equal_to<void>
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\meta\context.hpp(18,67):
+          查看对正在编译的 类 模板 实例化“entt::dense_map<entt::id_type,std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const Key,Type>>>”的引用
+          with
+          [
+              Key=entt::id_type,
+              Type=std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>>
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1055,55):
+          查看对正在编译的 类 模板 实例化“entt::compressed_pair<std::vector<entt::internal::dense_map_node<Key,Type>,std::allocator<entt::internal::dense_map_node<Key,Type>>>,std::equal_to<void>>”的引用
+          with
+          [
+              Key=entt::id_type,
+              Type=std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>>
+          ]
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820: "entt::dense_map<entt::id_type,std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const Key,Type>>>": 数据成员 "entt::dense_map<entt::id_type,std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const Key,Type>>>::threshold" 后添加了 "4" 字节填充
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820:         with
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820:             Key=entt::id_type,
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820:             Type=std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>>
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820:         ]
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(13,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(13,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(66,13): warning C4820: "entt::internal::meta_custom_node": 数据成员 "entt::internal::meta_custom_node::type" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(71,13): warning C4820: "entt::internal::meta_base_node": 数据成员 "entt::internal::meta_base_node::type" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(77,13): warning C4820: "entt::internal::meta_conv_node": 数据成员 "entt::internal::meta_conv_node::type" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(84,13): warning C4820: "entt::internal::meta_ctor_node": 数据成员 "entt::internal::meta_ctor_node::id" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(93,13): warning C4820: "entt::internal::meta_data_node": 数据成员 "entt::internal::meta_data_node::id" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(95,17): warning C4820: "entt::internal::meta_data_node": 数据成员 "entt::internal::meta_data_node::traits" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(107,13): warning C4820: "entt::internal::meta_func_node": 数据成员 "entt::internal::meta_func_node::id" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(109,17): warning C4820: "entt::internal::meta_func_node": 数据成员 "entt::internal::meta_func_node::traits" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(104,8): warning C4625: “entt::internal::meta_func_node”: 已将复制构造函数隐式定义为“已删除”
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(104,8): warning C4626: “entt::internal::meta_func_node”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(138,13): warning C4820: "entt::internal::meta_type_node": 数据成员 "entt::internal::meta_type_node::id" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(140,17): warning C4820: "entt::internal::meta_type_node": 数据成员 "entt::internal::meta_type_node::traits" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(134,8): warning C4625: “entt::internal::meta_type_node”: 已将复制构造函数隐式定义为“已删除”
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(134,8): warning C4626: “entt::internal::meta_type_node”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8): warning C4625: “entt::internal::dense_map_node<Key,Type>”: 已将复制构造函数隐式定义为“已删除”
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8): warning C4625:         with
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8): warning C4625:         [
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8): warning C4625:             Key=entt::id_type,
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8): warning C4625:             Type=std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>>
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8): warning C4625:         ]
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(274,35):
+          查看对正在编译的 类 模板 实例化“entt::internal::dense_map_iterator<std::_Vector_const_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>>”的引用
+          with
+          [
+              _Ty=entt::internal::dense_map_node<entt::id_type,std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>>>
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(62,67):
+          查看对正在编译的 类 模板 实例化“entt::internal::dense_map_node<Key,Type>”的引用
+          with
+          [
+              Key=entt::id_type,
+              Type=std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>>
+          ]
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8): warning C4626: “entt::internal::dense_map_node<Key,Type>”: 已将赋值运算符隐式定义为“已删除”
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8): warning C4626:         with
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8): warning C4626:         [
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8): warning C4626:             Key=entt::id_type,
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8): warning C4626:             Type=std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>>
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(30,8): warning C4626:         ]
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C4626: “entt::input_iterator_pointer<std::pair<const unsigned int &,const std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>> &>>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\meta\node.hpp(275,42):
+          查看对正在编译的 类 模板 实例化“entt::input_iterator_pointer<std::pair<const unsigned int &,const std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>> &>>”的引用
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C5027: “entt::input_iterator_pointer<std::pair<const unsigned int &,const std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>> &>>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\range.hpp(7,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\range.hpp(8,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(88,10): warning C4820: "entt::meta_sequence_container": 数据成员 "entt::meta_sequence_container::const_only" 后添加了 "7" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(155,10): warning C4820: "entt::meta_associative_container": 数据成员 "entt::meta_associative_container::const_only" 后添加了 "7" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(13,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\resolve.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\resolve.hpp(6,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\utility.hpp(8,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\utility.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(112,9): warning C4820: "entt::internal::basic_meta_factory::traits::<lambda_1>": 数据成员 "entt::internal::basic_meta_factory::traits::<lambda_1>::unset" 后添加了 "3" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C4626: “entt::input_iterator_pointer<std::pair<const unsigned int &,std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>> &>>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(138,126):
+          查看对正在编译的 类 模板 实例化“entt::input_iterator_pointer<std::pair<const unsigned int &,std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>> &>>”的引用
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C5027: “entt::input_iterator_pointer<std::pair<const unsigned int &,std::unique_ptr<entt::internal::meta_type_node,std::default_delete<entt::internal::meta_type_node>> &>>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\template.hpp(6,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\poly\poly.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\poly\poly.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\poly\poly.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\process\process.hpp(8,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\process\process.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\process\scheduler.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\process\scheduler.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\resource\cache.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\resource\cache.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\resource\cache.hpp(13,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\resource\cache.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\resource\cache.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\dispatcher.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\dispatcher.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\dispatcher.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\dispatcher.hpp(13,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\dispatcher.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\emitter.hpp(7,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\emitter.hpp(8,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\emitter.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\emitter.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\emitter.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Engine\Engine\Runtime\Entity.h(27,16): warning C4820: "Pitaya::Engine::Entity": 数据成员 "Pitaya::Engine::Entity::entityId" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Engine\Engine\Runtime\Entity.h(21,40): warning C4458: “entityId”的声明隐藏了类成员
+  (编译源文件“main.cpp”)
+      D:\Pitaya\Engine\Engine\Runtime\Entity.h(27,16):
+      参见“Pitaya::Engine::Entity::entityId”的声明
+  
+D:\Pitaya\Engine\Engine\Runtime\GameObject.h(24,22): warning C5038: 数据成员“Pitaya::Engine::GameObject::scene”将在 数据成员“Pitaya::Engine::GameObject::name”后初始化
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Engine\Engine\Runtime\GameObject.h(41,42): warning C4458: “name”的声明隐藏了类成员
+  (编译源文件“main.cpp”)
+      D:\Pitaya\Engine\Engine\Runtime\GameObject.h(67,15):
+      参见“Pitaya::Engine::GameObject::name”的声明
+  
+D:\Pitaya\Engine\Engine\Runtime\GameObject.h(45,31): warning C4458: “scene”的声明隐藏了类成员
+  (编译源文件“main.cpp”)
+      D:\Pitaya\Engine\Engine\Runtime\GameObject.h(68,10):
+      参见“Pitaya::Engine::GameObject::scene”的声明
+  
+D:\Pitaya\Engine\Engine\Runtime\GameObject.h(61,39): warning C4100: 'child': 未引用的参数
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\setup.hpp(43,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int2_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int2_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\scalar_int_sized.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint2_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint2_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\scalar_uint_sized.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int3_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int3_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint3_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint3_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double4_precision.hpp(6,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int4_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int4_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint4_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint4_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double2x2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_mat2x2.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double2x3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double2x3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float2x3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float2x3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double2x4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double2x4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float2x4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float2x4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double3x2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double3x2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float3x2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float3x2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double3x3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_mat3x3.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double3x3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float3x3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float3x3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double3x4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double3x4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float3x4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float3x4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double4x2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double4x2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float4x2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float4x2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double4x3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double4x3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float4x3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float4x3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double4x4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_mat4x4.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double4x4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float4x4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float4x4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_matrix.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_geometric.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_exponential.inl(4,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_geometric.inl(2,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_common.inl(4,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double2x2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float2x2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float2x2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(4,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\matrix_transform.hpp(24,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\matrix_transform.hpp(25,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\matrix_transform.hpp(26,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\matrix_transform.hpp(27,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\matrix_transform.hpp(28,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_projection.hpp(23,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\constants.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\scalar_constants.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_projection.hpp(24,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_projection.hpp(25,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_projection.hpp(26,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\matrix_transform.hpp(29,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_clip_space.hpp(23,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_clip_space.hpp(24,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_clip_space.hpp(25,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\matrix_transform.hpp(30,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_transform.hpp(23,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_transform.hpp(24,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_transform.hpp(25,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_transform.hpp(26,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\matrix_transform.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\matrix_transform.inl(2,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\matrix_transform.inl(3,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(37,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(18,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(19,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_relational.hpp(21,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_relational.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_relational.inl(2,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_relational.inl(3,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_relational.inl(4,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(20,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_common.hpp(24,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_common.hpp(25,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_geometric.hpp(18,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_geometric.hpp(19,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_geometric.hpp(20,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_common.hpp(26,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_common.hpp(27,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_common.hpp(28,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(21,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_float.hpp(23,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_quat.hpp(7,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_quat.hpp(8,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_quat.hpp(9,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_quat.hpp(10,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_quat.hpp(11,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_quat.hpp(12,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_relational.hpp(20,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_quat.hpp(13,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_quat.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_quat.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_quat.inl(2,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_quat.inl(3,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_quat.inl(4,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(22,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_float_precision.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(23,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_double.hpp(23,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(24,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_double_precision.hpp(14,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(25,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(26,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(27,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_trigonometric.hpp(21,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_trigonometric.hpp(22,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(28,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_transform.hpp(21,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_transform.hpp(22,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\quaternion_transform.hpp(23,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(29,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(30,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(31,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.hpp(32,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.inl(2,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\quaternion.inl(3,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\epsilon.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\epsilon.hpp(18,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\epsilon.inl(4,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\epsilon.inl(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(38,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\vec1.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool1.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\vec1.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool1_precision.hpp(13,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\vec1.hpp(18,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float1.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\vec1.hpp(19,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float1_precision.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\vec1.hpp(20,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double1.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\vec1.hpp(21,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double1_precision.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\vec1.hpp(22,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int1.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\vec1.hpp(23,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int1_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int1_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\vec1.hpp(24,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint1.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\vec1.hpp(25,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint1_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint1_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(39,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(40,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(41,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(42,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(43,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(44,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(45,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(46,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(47,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(48,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(49,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\type_ptr.hpp(50,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtx\euler_angles.hpp(19,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtx\compatibility.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtx\compatibility.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Engine\Engine\Runtime\Transform.h(26,8): warning C4820: "Pitaya::Engine::Transform": 数据成员 "Pitaya::Engine::Transform::isDirty" 后添加了 "3" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820: "entt::compressed_pair<std::vector<entt::internal::dense_map_node<Key,Type>,std::allocator<entt::internal::dense_map_node<Key,Type>>>,std::equal_to<void>>": 基类 "entt::internal::compressed_pair_element<Second,1,void>" 后添加了 "7" 字节填充
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         with
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Key=entt::id_type,
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Type=std::shared_ptr<entt::basic_sparse_set<entt::entity,std::allocator<entt::entity>>>
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         and
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Second=std::equal_to<void>
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Runtime\Scene.h(99,18):
+          查看对正在编译的 类 模板 实例化“entt::basic_registry<entt::entity,std::allocator<Entity>>”的引用
+          with
+          [
+              Entity=entt::entity
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(318,105):
+          查看对正在编译的 类 模板 实例化“entt::dense_map<entt::id_type,std::shared_ptr<entt::basic_sparse_set<entt::entity,std::allocator<Entity>>>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const entt::id_type,std::shared_ptr<entt::basic_sparse_set<Entity,std::allocator<Entity>>>>>>”的引用
+          with
+          [
+              Entity=entt::entity
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1055,55):
+          查看对正在编译的 类 模板 实例化“entt::compressed_pair<std::vector<entt::internal::dense_map_node<Key,Type>,std::allocator<entt::internal::dense_map_node<Key,Type>>>,std::equal_to<void>>”的引用
+          with
+          [
+              Key=entt::id_type,
+              Type=std::shared_ptr<entt::basic_sparse_set<entt::entity,std::allocator<entt::entity>>>
+          ]
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820: "entt::dense_map<entt::id_type,std::shared_ptr<entt::basic_sparse_set<entt::entity,std::allocator<Entity>>>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const entt::id_type,std::shared_ptr<entt::basic_sparse_set<Entity,std::allocator<Entity>>>>>>": 数据成员 "entt::dense_map<entt::id_type,std::shared_ptr<entt::basic_sparse_set<entt::entity,std::allocator<Entity>>>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const entt::id_type,std::shared_ptr<entt::basic_sparse_set<Entity,std::allocator<Entity>>>>>>::threshold" 后添加了 "4" 字节填充
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820:         with
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820:             Entity=entt::entity
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820:         ]
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820: "entt::compressed_pair<std::vector<entt::internal::dense_map_node<Key,Type>,std::allocator<entt::internal::dense_map_node<Key,Type>>>,std::equal_to<void>>": 基类 "entt::internal::compressed_pair_element<Second,1,void>" 后添加了 "7" 字节填充
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         with
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Key=entt::id_type,
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Type=entt::basic_any<0,8>
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         and
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Second=std::equal_to<void>
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(1231,13):
+          查看对正在编译的 类 模板 实例化“entt::internal::registry_context<std::allocator<Entity>>”的引用
+          with
+          [
+              Entity=entt::entity
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(226,82):
+          查看对正在编译的 类 模板 实例化“entt::dense_map<entt::id_type,entt::basic_any<0,8>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const entt::id_type,entt::basic_any<0,8>>>>”的引用
+          D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1055,55):
+          查看对正在编译的 类 模板 实例化“entt::compressed_pair<std::vector<entt::internal::dense_map_node<Key,Type>,std::allocator<entt::internal::dense_map_node<Key,Type>>>,std::equal_to<void>>”的引用
+          with
+          [
+              Key=entt::id_type,
+              Type=entt::basic_any<0,8>
+          ]
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820: "entt::dense_map<entt::id_type,entt::basic_any<0,8>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const entt::id_type,entt::basic_any<0,8>>>>": 数据成员 "entt::dense_map<entt::id_type,entt::basic_any<0,8>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const entt::id_type,entt::basic_any<0,8>>>>::threshold" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820: "entt::compressed_pair<std::vector<entt::internal::dense_map_node<Key,Type>,std::allocator<entt::internal::dense_map_node<Key,Type>>>,std::equal_to<void>>": 基类 "entt::internal::compressed_pair_element<Second,1,void>" 后添加了 "7" 字节填充
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         with
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Key=entt::id_type,
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Type=std::shared_ptr<entt::internal::group_descriptor>
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         and
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:             Second=std::equal_to<void>
+D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8): warning C4820:         ]
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\compressed_pair.hpp(46,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(1233,26):
+          查看对正在编译的 类 模板 实例化“entt::dense_map<entt::id_type,std::shared_ptr<entt::internal::group_descriptor>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const entt::id_type,std::shared_ptr<entt::internal::group_descriptor>>>>”的引用
+          D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1055,55):
+          查看对正在编译的 类 模板 实例化“entt::compressed_pair<std::vector<entt::internal::dense_map_node<Key,Type>,std::allocator<entt::internal::dense_map_node<Key,Type>>>,std::equal_to<void>>”的引用
+          with
+          [
+              Key=entt::id_type,
+              Type=std::shared_ptr<entt::internal::group_descriptor>
+          ]
+  
+D:\vcpkg\installed\x64-windows\include\entt\container\dense_map.hpp(1056,11): warning C4820: "entt::dense_map<entt::id_type,std::shared_ptr<entt::internal::group_descriptor>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const entt::id_type,std::shared_ptr<entt::internal::group_descriptor>>>>": 数据成员 "entt::dense_map<entt::id_type,std::shared_ptr<entt::internal::group_descriptor>,entt::identity,std::equal_to<void>,std::allocator<std::pair<const entt::id_type,std::shared_ptr<entt::internal::group_descriptor>>>>::threshold" 后添加了 "4" 字节填充
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\sparse_set.hpp(1108,21): warning C4820: "entt::basic_sparse_set<entt::entity,std::allocator<Entity>>": 数据成员 "entt::basic_sparse_set<entt::entity,std::allocator<Entity>>::mode" 后添加了 "7" 字节填充
+D:\vcpkg\installed\x64-windows\include\entt\entity\sparse_set.hpp(1108,21): warning C4820:         with
+D:\vcpkg\installed\x64-windows\include\entt\entity\sparse_set.hpp(1108,21): warning C4820:         [
+D:\vcpkg\installed\x64-windows\include\entt\entity\sparse_set.hpp(1108,21): warning C4820:             Entity=entt::entity
+D:\vcpkg\installed\x64-windows\include\entt\entity\sparse_set.hpp(1108,21): warning C4820:         ]
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\entity\sparse_set.hpp(1108,21):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(1234,5):
+          查看对正在编译的 别名 模板 实例化“entt::basic_registry<entt::entity,std::allocator<Entity>>::storage_for_type<entt::entity>”的引用
+          with
+          [
+              Entity=entt::entity
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(327,139):
+          查看对正在编译的 类 模板 实例化“entt::storage_for<entt::entity,Entity,std::allocator<Entity>>”的引用
+          with
+          [
+              Entity=entt::entity
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\entity\fwd.hpp(261,33):
+          查看对正在编译的 别名 模板 实例化“entt::storage_type_t<entt::entity,Entity,Allocator>”的引用
+          with
+          [
+              Entity=entt::entity,
+              Allocator=std::allocator<entt::entity>
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\entity\fwd.hpp(250,56):
+          查看对正在编译的 类 模板 实例化“entt::storage_type<entt::entity,Entity,Allocator,void>”的引用
+          with
+          [
+              Entity=entt::entity,
+              Allocator=std::allocator<entt::entity>
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\entity\fwd.hpp(228,18):
+          查看对正在编译的 别名 模板 实例化“entt::sigh_mixin<entt::basic_storage<Type,Entity,Allocator,void>>”的引用
+          with
+          [
+              Type=entt::entity,
+              Entity=entt::entity,
+              Allocator=std::allocator<entt::entity>
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\entity\fwd.hpp(85,73):
+          查看对正在编译的 类 模板 实例化“entt::basic_storage<Type,Entity,Allocator,void>”的引用
+          with
+          [
+              Type=entt::entity,
+              Entity=entt::entity,
+              Allocator=std::allocator<entt::entity>
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\entity\storage.hpp(979,14):
+          查看对正在编译的 类 模板 实例化“entt::basic_sparse_set<entt::entity,std::allocator<Entity>>”的引用
+          with
+          [
+              Entity=entt::entity
+          ]
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C4626: “entt::input_iterator_pointer<std::pair<const unsigned int &,std::shared_ptr<entt::basic_sparse_set<entt::entity,std::allocator<Entity>>> &>>”: 已将赋值运算符隐式定义为“已删除”
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C4626:         with
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C4626:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C4626:             Entity=entt::entity
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C4626:         ]
+  (编译源文件“main.cpp”)
+      D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Runtime\Scene.h(33,25):
+          查看对正在编译的函数 模板 实例化“decltype(auto) entt::basic_registry<entt::entity,std::allocator<Entity>>::emplace<Pitaya::Engine::Transform,Pitaya::Engine::GameObject*&>(const entt::entity,Pitaya::Engine::GameObject *&)”的引用
+          with
+          [
+              Entity=entt::entity
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(610,16):
+          查看对正在编译的函数 模板 实例化“auto &entt::basic_registry<entt::entity,std::allocator<Entity>>::assure<Pitaya::Engine::Transform>(const entt::id_type)”的引用
+          with
+          [
+              Entity=entt::entity
+          ]
+          D:\vcpkg\installed\x64-windows\include\entt\entity\registry.hpp(258,17):
+          查看对正在编译的 类 模板 实例化“entt::input_iterator_pointer<std::pair<const unsigned int &,std::shared_ptr<entt::basic_sparse_set<entt::entity,std::allocator<Entity>>> &>>”的引用
+          with
+          [
+              Entity=entt::entity
+          ]
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C5027: “entt::input_iterator_pointer<std::pair<const unsigned int &,std::shared_ptr<entt::basic_sparse_set<entt::entity,std::allocator<Entity>>> &>>”: 已将移动赋值运算符隐式定义为“已删除”
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C5027:         with
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C5027:         [
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C5027:             Entity=entt::entity
+D:\vcpkg\installed\x64-windows\include\entt\core\iterator.hpp(16,8): warning C5027:         ]
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Core\Identifier\UID.h(14,24): warning C4514: “Pitaya::Core::UID::operator ==”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Core\Identifier\UID.h(18,24): warning C4514: “Pitaya::Core::UID::operator !=”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Core\Identifier\UID.h(22,24): warning C4514: “Pitaya::Core::UID::operator <”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Core\Identifier\UID.h(27,28): warning C4514: “Pitaya::Core::UID::operator bool”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Core\Identifier\UID.h(36,31): warning C4514: “Pitaya::Core::UID::SetValue”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Core\Identifier\UID.h(68,16): warning C4514: “std::hash<Pitaya::Core::UID>::operator ()”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Engine\Engine\Runtime\Object.h(13,28): warning C4514: “Pitaya::Engine::Object::GetUID”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(300,44): warning C4514: “entt::literals::operator ""_hs”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\hashed_string.hpp(309,45): warning C4514: “entt::literals::operator ""_hws”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\type_info.hpp(174,46): warning C4514: “entt::type_info::name”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\type_info.hpp(200,30): warning C4514: “entt::operator !=”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\type_info.hpp(221,30): warning C4514: “entt::operator <=”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\type_info.hpp(232,30): warning C4514: “entt::operator >”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\core\type_info.hpp(243,30): warning C4514: “entt::operator >=”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\entity.hpp(222,34): warning C4514: “entt::null_t::operator ==”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\entity.hpp(231,34): warning C4514: “entt::null_t::operator !=”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\entity.hpp(302,34): warning C4514: “entt::tombstone_t::operator ==”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\entity\entity.hpp(311,34): warning C4514: “entt::tombstone_t::operator !=”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\sigh.hpp(233,5): warning C4514: “entt::connection::connection”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\sigh.hpp(279,5): warning C4514: “entt::scoped_connection::scoped_connection”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\sigh.hpp(289,5): warning C4514: “entt::scoped_connection::scoped_connection”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\sigh.hpp(293,6): warning C4514: “entt::scoped_connection::~scoped_connection”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\sigh.hpp(308,24): warning C4514: “entt::scoped_connection::operator =”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\sigh.hpp(318,24): warning C4514: “entt::scoped_connection::operator =”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\sigh.hpp(327,28): warning C4514: “entt::scoped_connection::operator bool”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\signal\sigh.hpp(332,10): warning C4514: “entt::scoped_connection::release”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(299,5): warning C4514: “entt::meta_any::meta_any”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(340,15): warning C4514: “entt::meta_any::operator =”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(540,10): warning C4514: “entt::meta_any::reset”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(550,43): warning C4514: “entt::meta_any::as_sequence_container”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(557,43): warning C4514: “entt::meta_any::as_sequence_container”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(567,46): warning C4514: “entt::meta_any::as_associative_container”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(574,46): warning C4514: “entt::meta_any::as_associative_container”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(585,28): warning C4514: “entt::meta_any::operator *”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(602,24): warning C4514: “entt::meta_any::operator !=”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(628,35): warning C4514: “entt::meta_any::context”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(700,5): warning C4514: “entt::meta_handle::meta_handle”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(728,28): warning C4514: “entt::meta_handle::operator bool”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(736,29): warning C4514: “entt::meta_handle::operator ->”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(741,78): warning C4514: “entt::meta_handle::operator ->”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(811,31): warning C4514: “entt::meta_data::name”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(827,24): warning C4514: “entt::meta_data::is_const”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(835,24): warning C4514: “entt::meta_data::is_static”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(888,31): warning C4514: “entt::meta_data::custom”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(920,27): warning C4514: “entt::operator !=”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(951,31): warning C4514: “entt::meta_func::name”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(967,24): warning C4514: “entt::meta_func::is_const”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(975,24): warning C4514: “entt::meta_func::is_static”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1026,31): warning C4514: “entt::meta_func::custom”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1034,29): warning C4514: “entt::meta_func::next”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1039,28): warning C4514: “entt::meta_func::operator bool”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1054,27): warning C4514: “entt::operator !=”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1138,5): warning C4514: “entt::meta_type::meta_type”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1161,31): warning C4514: “entt::meta_type::name”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1169,29): warning C4514: “entt::meta_type::size_of”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1186,24): warning C4514: “entt::meta_type::is_integral”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1194,24): warning C4514: “entt::meta_type::is_signed”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1202,24): warning C4514: “entt::meta_type::is_array”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1218,24): warning C4514: “entt::meta_type::is_class”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1226,24): warning C4514: “entt::meta_type::is_pointer”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1235,29): warning C4514: “entt::meta_type::remove_pointer”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1243,24): warning C4514: “entt::meta_type::is_pointer_like”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1251,24): warning C4514: “entt::meta_type::is_sequence_container”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1259,24): warning C4514: “entt::meta_type::is_associative_container”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1267,24): warning C4514: “entt::meta_type::is_template_specialization”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1283,29): warning C4514: “entt::meta_type::template_type”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1292,29): warning C4514: “entt::meta_type::template_arg”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1301,24): warning C4514: “entt::meta_type::can_cast”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1333,114): warning C4514: “entt::meta_type::base”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1342,114): warning C4514: “entt::meta_type::data”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1362,114): warning C4514: “entt::meta_type::func”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1373,29): warning C4514: “entt::meta_type::func”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1416,28): warning C4514: “entt::meta_type::from_void”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1425,28): warning C4514: “entt::meta_type::from_void”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1511,31): warning C4514: “entt::meta_type::custom”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1531,27): warning C4514: “entt::operator !=”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1555,41): warning C4514: “entt::meta_any::get”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1559,41): warning C4514: “entt::meta_any::get”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1606,23): warning C4514: “entt::meta_any::assign”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1615,23): warning C4514: “entt::meta_any::assign”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1619,43): warning C4514: “entt::meta_data::type”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1623,43): warning C4514: “entt::meta_data::arg”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1627,43): warning C4514: “entt::meta_func::ret”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1631,43): warning C4514: “entt::meta_func::arg”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1661,20): warning C4514: “entt::meta_sequence_container::meta_iterator::operator ++”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1671,20): warning C4514: “entt::meta_sequence_container::meta_iterator::operator --”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1675,19): warning C4514: “entt::meta_sequence_container::meta_iterator::operator --”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1687,27): warning C4514: “entt::meta_sequence_container::meta_iterator::operator ->”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1691,28): warning C4514: “entt::meta_sequence_container::meta_iterator::operator bool”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1709,27): warning C4514: “entt::operator !=”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1746,20): warning C4514: “entt::meta_associative_container::meta_iterator::operator ++”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1750,19): warning C4514: “entt::meta_associative_container::meta_iterator::operator ++”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1762,27): warning C4514: “entt::meta_associative_container::meta_iterator::operator ->”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1766,28): warning C4514: “entt::meta_associative_container::meta_iterator::operator bool”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1780,27): warning C4514: “entt::operator !=”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1789,57): warning C4514: “entt::meta_sequence_container::value_type”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1797,82): warning C4514: “entt::meta_sequence_container::size”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1806,38): warning C4514: “entt::meta_sequence_container::resize”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1814,38): warning C4514: “entt::meta_sequence_container::clear”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1823,38): warning C4514: “entt::meta_sequence_container::reserve”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1839,81): warning C4514: “entt::meta_sequence_container::end”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1849,67): warning C4514: “entt::meta_sequence_container::insert”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1864,67): warning C4514: “entt::meta_sequence_container::erase”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1873,56): warning C4514: “entt::meta_sequence_container::operator []”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1883,47): warning C4514: “entt::meta_sequence_container::operator bool”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1891,60): warning C4514: “entt::meta_associative_container::key_type”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1899,60): warning C4514: “entt::meta_associative_container::mapped_type”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1904,60): warning C4514: “entt::meta_associative_container::value_type”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1909,88): warning C4514: “entt::meta_associative_container::size”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1914,41): warning C4514: “entt::meta_associative_container::clear”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1919,41): warning C4514: “entt::meta_associative_container::reserve”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1924,87): warning C4514: “entt::meta_associative_container::begin”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1929,87): warning C4514: “entt::meta_associative_container::end”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1939,41): warning C4514: “entt::meta_associative_container::insert”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1950,74): warning C4514: “entt::meta_associative_container::erase”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1959,87): warning C4514: “entt::meta_associative_container::find”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\meta.hpp(1967,50): warning C4514: “entt::meta_associative_container::operator bool”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\resolve.hpp(50,110): warning C4514: “entt::resolve”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\resolve.hpp(75,32): warning C4514: “entt::resolve”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\resolve.hpp(96,32): warning C4514: “entt::resolve”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(57,10): warning C4514: “entt::internal::basic_meta_factory::type”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(84,10): warning C4514: “entt::internal::basic_meta_factory::data”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(96,10): warning C4514: “entt::internal::basic_meta_factory::func”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(109,10): warning C4514: “entt::internal::basic_meta_factory::traits”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(123,10): warning C4514: “entt::internal::basic_meta_factory::custom”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(134,5): warning C4514: “entt::internal::basic_meta_factory::basic_meta_factory”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(540,13): warning C4514: “entt::meta_reset”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\vcpkg\installed\x64-windows\include\entt\meta\factory.hpp(585,13): warning C4514: “entt::meta_reset”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_common.inl(34,39): warning C4514: “glm::abs”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_common.inl(665,25): warning C4514: “glm::floatBitsToInt”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_common.inl(684,26): warning C4514: “glm::floatBitsToUint”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_common.inl(703,27): warning C4514: “glm::intBitsToFloat”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_common.inl(722,27): warning C4514: “glm::uintBitsToFloat”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_half.inl(19,3): warning C4514: “glm::detail::uif32::uif32”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_half.inl(23,3): warning C4514: “glm::detail::uif32::uif32”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(9,26): warning C4514: “glm::packUnorm2x16”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(25,26): warning C4514: “glm::unpackUnorm2x16”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(38,26): warning C4514: “glm::packSnorm2x16”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(54,26): warning C4514: “glm::unpackSnorm2x16”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(67,26): warning C4514: “glm::packUnorm4x8”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(85,26): warning C4514: “glm::unpackUnorm4x8”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(98,26): warning C4514: “glm::packSnorm4x8”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(116,31): warning C4514: “glm::unpackSnorm4x8”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(129,28): warning C4514: “glm::packDouble2x32”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(143,27): warning C4514: “glm::unpackDouble2x32”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(156,26): warning C4514: “glm::packHalf2x16”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(170,26): warning C4514: “glm::unpackHalf2x16”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_integer.inl(178,26): warning C4514: “glm::uaddCarry”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_integer.inl(196,26): warning C4514: “glm::usubBorrow”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_integer.inl(215,26): warning C4514: “glm::umulExtended”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_integer.inl(231,26): warning C4514: “glm::imulExtended”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_float.hpp(24,3): warning C4514: “glm::detail::float_t<float>::float_t”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_float.hpp(26,26): warning C4514: “glm::detail::float_t<float>::operator =”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_float.hpp(33,22): warning C4514: “glm::detail::float_t<float>::negative”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_float.hpp(34,26): warning C4514: “glm::detail::float_t<float>::mantissa”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_float.hpp(35,26): warning C4514: “glm::detail::float_t<float>::exponent”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_float.hpp(47,3): warning C4514: “glm::detail::float_t<double>::float_t”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_float.hpp(49,26): warning C4514: “glm::detail::float_t<double>::operator =”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_float.hpp(56,22): warning C4514: “glm::detail::float_t<double>::negative”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_float.hpp(57,26): warning C4514: “glm::detail::float_t<double>::mantissa”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_float.hpp(58,26): warning C4514: “glm::detail::float_t<double>::exponent”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\epsilon.inl(10,26): warning C4514: “glm::epsilonEqual”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\epsilon.inl(21,26): warning C4514: “glm::epsilonEqual”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\epsilon.inl(44,26): warning C4514: “glm::epsilonNotEqual”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\gtc\epsilon.inl(50,26): warning C4514: “glm::epsilonNotEqual”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\Engine\Engine\Runtime\Scene.h(23,21): warning C4514: “Pitaya::Engine::Scene::CreateGameObject”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_vec4.hpp(101,27): warning C4514: “glm::vec<4,float,glm::packed_highp>::vec”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_vec3.hpp(103,27): warning C4514: “glm::vec<3,float,glm::packed_highp>::vec”: 未引用的内联函数已移除
+  (编译源文件“main.cpp”)
   
 MSVCRT.lib(initializers.obj) : warning LNK4098: 默认库“libcmt.lib”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
   正在生成代码
-  103 of 1195 functions ( 8.6%) were compiled, the rest were copied from previous compilation.
-    11 functions were new in current compilation
-    66 functions had inline decision re-evaluated but remain unchanged
+  0 of 1479 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
 glew32s.lib(glew.obj) : warning LNK4099: 未找到 PDB“vc120.pdb”(使用“glew32s.lib(glew.obj)”或在“D:\Pitaya\exe\x64\Release\vc120.pdb”中寻找)；正在链接对象，如同没有调试信息一样
   Application.vcxproj -> D:\Pitaya\exe\x64\Release\Pitaya.exe

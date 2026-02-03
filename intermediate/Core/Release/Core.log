@@ -53,137 +53,61 @@ D:\Pitaya\Core\Event\Event.cpp(4,9): warning C4464: 相对包含路径包括 "..
 D:\Pitaya\Core\Utility\Utility.h(3,9): warning C4464: 相对包含路径包括 ".."
   (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Identifier\UID.h(18,24): warning C4514: “Pitaya::Core::UID::operator !=”: 未引用的内联函数已移除
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winbase.h(7940,5): warning C5039: “TpSetCallbackCleanupGroup”: 可能引发函数的指针或引用传递到 -EHc 下的外部 "C" 函数。如果此函数引发异常，则可能发生未定义的行为。
   (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Identifier\UID.h(22,24): warning C4514: “Pitaya::Core::UID::operator <”: 未引用的内联函数已移除
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(2200,23): warning C4668: 没有将“NTDDI_WIN11_DT”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Identifier\UID.h(27,28): warning C4514: “Pitaya::Core::UID::operator bool”: 未引用的内联函数已移除
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11434,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Identifier\UID.h(36,31): warning C4514: “Pitaya::Core::UID::SetValue”: 未引用的内联函数已移除
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11440,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Event\EventAPI.h(26,5): warning C4514: “Pitaya::Core::Event::Args::Window::FramebufferResetSizeEventArgs::FramebufferResetSizeEventArgs”: 未引用的内联函数已移除
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11445,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Event\EventAPI.h(34,5): warning C4514: “Pitaya::Core::Event::Args::Window::DropFileEventArgs::DropFileEventArgs”: 未引用的内联函数已移除
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11450,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Event\EventAPI.h(46,5): warning C4514: “Pitaya::Core::Event::Args::Input::MouseCurrsorMoveEventArgs::MouseCurrsorMoveEventArgs”: 未引用的内联函数已移除
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11457,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Event\EventAPI.h(54,5): warning C4514: “Pitaya::Core::Event::Args::Input::MouseScrollEventArgs::MouseScrollEventArgs”: 未引用的内联函数已移除
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11478,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Event\EventAPI.h(62,5): warning C4514: “Pitaya::Core::Event::Args::Input::KeyDownEventArgs::KeyDownEventArgs”: 未引用的内联函数已移除
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11484,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Event\EventAPI.h(72,5): warning C4514: “Pitaya::Core::Event::Args::Input::MouseButtonEventArgs::MouseButtonEventArgs”: 未引用的内联函数已移除
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11492,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Event\EventAPI.h(84,3): warning C4514: “Pitaya::Core::Event::Event::Event”: 未引用的内联函数已移除
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11496,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Event/Event.cpp”)
   
-  EventAPI.cpp
-D:\Pitaya\Core\Event\Event.h(3,9): warning C4464: 相对包含路径包括 ".."
-  (编译源文件“Event/EventAPI.cpp”)
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11500,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量值
-  (编译源文件“Event/EventAPI.cpp”)
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11505,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
-  (编译源文件“Event/EventAPI.cpp”)
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16838,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Event\Event.h(4,9): warning C4464: 相对包含路径包括 ".."
-  (编译源文件“Event/EventAPI.cpp”)
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16987,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Event\Event.h(21,3): warning C4820: "Pitaya::Core::Event::EventManager": 数据成员 "Pitaya::Core::Event::EventManager::isReleased" 后添加了 "7" 字节填充
-  (编译源文件“Event/EventAPI.cpp”)
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17000,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Event\EventAPI.h(3,9): warning C4464: 相对包含路径包括 ".."
-  (编译源文件“Event/EventAPI.cpp”)
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Event/Event.cpp”)
   
-D:\Pitaya\Core\Event\EventAPI.h(4,9): warning C4464: 相对包含路径包括 ".."
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(36,49): warning C4458: “value”的声明隐藏了类成员
-  (编译源文件“Event/EventAPI.cpp”)
-      D:\Pitaya\Core\Identifier\UID.h(57,18):
-      参见“Pitaya::Core::UID::value”的声明
-  
-D:\Pitaya\Core\Event\EventAPI.h(37,9): warning C4820: "Pitaya::Core::Event::Args::Window::DropFileEventArgs": 数据成员 "Pitaya::Core::Event::Args::Window::DropFileEventArgs::count" 后添加了 "4" 字节填充
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(77,9): warning C4820: "Pitaya::Core::Event::Args::Input::MouseButtonEventArgs": 数据成员 "Pitaya::Core::Event::Args::Input::MouseButtonEventArgs::mods" 后添加了 "4" 字节填充
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(87,40): warning C4820: "Pitaya::Core::Event::Event": 数据成员 "Pitaya::Core::Event::Event::type" 后添加了 "7" 字节填充
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(82,9): warning C4626: “Pitaya::Core::Event::Event”: 已将赋值运算符隐式定义为“已删除”
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(82,9): warning C5027: “Pitaya::Core::Event::Event”: 已将移动赋值运算符隐式定义为“已删除”
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(102,19): warning C4820: "Pitaya::Core::Event::EventToken": 数据成员 "Pitaya::Core::Event::EventToken::type" 后添加了 "7" 字节填充
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(91,9): warning C4626: “Pitaya::Core::Event::EventToken”: 已将赋值运算符隐式定义为“已删除”
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(91,9): warning C5027: “Pitaya::Core::Event::EventToken”: 已将移动赋值运算符隐式定义为“已删除”
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\Event.h(21,3): warning C4514: “Pitaya::Core::Event::EventManager::~EventManager”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(18,24): warning C4514: “Pitaya::Core::UID::operator !=”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(22,24): warning C4514: “Pitaya::Core::UID::operator <”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(27,28): warning C4514: “Pitaya::Core::UID::operator bool”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(36,31): warning C4514: “Pitaya::Core::UID::SetValue”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(47,20): warning C4514: “Pitaya::Core::UID::Next”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(26,5): warning C4514: “Pitaya::Core::Event::Args::Window::FramebufferResetSizeEventArgs::FramebufferResetSizeEventArgs”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(34,5): warning C4514: “Pitaya::Core::Event::Args::Window::DropFileEventArgs::DropFileEventArgs”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(46,5): warning C4514: “Pitaya::Core::Event::Args::Input::MouseCurrsorMoveEventArgs::MouseCurrsorMoveEventArgs”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(54,5): warning C4514: “Pitaya::Core::Event::Args::Input::MouseScrollEventArgs::MouseScrollEventArgs”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(62,5): warning C4514: “Pitaya::Core::Event::Args::Input::KeyDownEventArgs::KeyDownEventArgs”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(72,5): warning C4514: “Pitaya::Core::Event::Args::Input::MouseButtonEventArgs::MouseButtonEventArgs”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(84,3): warning C4514: “Pitaya::Core::Event::Event::Event”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(93,3): warning C4514: “Pitaya::Core::Event::EventToken::EventToken”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(96,8): warning C4514: “Pitaya::Core::Event::EventToken::operator ==”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
-  
-D:\Pitaya\Core\Event\EventAPI.h(115,15): warning C4514: “std::hash<Pitaya::Core::Event::EventToken>::operator ()”: 未引用的内联函数已移除
-  (编译源文件“Event/EventAPI.cpp”)
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\combaseapi.h(177,9): warning C4005: “DECLARE_INTERFACE”: 宏重定义
+  (编译源文件“Event/Event.cpp”)
+      D:\Pitaya\Core\Define\Define.h(94,9):
+      参见“DECLARE_INTERFACE”的前一个定义
   
   Log.cpp
 D:\Pitaya\Core\Log\Log.h(3,9): warning C4464: 相对包含路径包括 ".."
@@ -251,7 +175,7 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\combaseapi.h(177,9): warning C4005: “DECLARE_INTERFACE”: 宏重定义
   (编译源文件“Log/Log.cpp”)
-      D:\Pitaya\Core\Define\Define.h(80,9):
+      D:\Pitaya\Core\Define\Define.h(94,9):
       参见“DECLARE_INTERFACE”的前一个定义
   
 D:\Pitaya\Core\Log\Log.h(32,13): warning C4820: "Pitaya::Core::Log::LogManager::LogMessage": 数据成员 "Pitaya::Core::Log::LogManager::LogMessage::level" 后添加了 "7" 字节填充
@@ -260,7 +184,7 @@ D:\Pitaya\Core\Log\Log.h(32,13): warning C4820: "Pitaya::Core::Log::LogManager::
 D:\Pitaya\Core\Log\Log.h(27,3): warning C4820: "Pitaya::Core::Log::LogManager": 数据成员 "Pitaya::Core::Log::LogManager::isReleased" 后添加了 "6" 字节填充
   (编译源文件“Log/Log.cpp”)
   
-D:\Pitaya\Core\Log\Log.h(78,21): warning C4820: "Pitaya::Core::Log::LogManager": 数据成员 "Pitaya::Core::Log::LogManager::isRunning" 后添加了 "7" 字节填充
+D:\Pitaya\Core\Log\Log.h(61,21): warning C4820: "Pitaya::Core::Log::LogManager": 数据成员 "Pitaya::Core::Log::LogManager::isRunning" 后添加了 "7" 字节填充
   (编译源文件“Log/Log.cpp”)
   
 D:\Pitaya\Core\Log\Log.cpp(3,9): warning C4464: 相对包含路径包括 ".."
@@ -284,144 +208,5 @@ D:\Pitaya\Core\Log\Logapi.h(3,9): warning C4464: 相对包含路径包括 ".."
   
 D:\Pitaya\Core\Thread\thread.h(41,3): warning C4820: "Pitaya::Core::Thread::ThreadManager": 数据成员 "Pitaya::Core::Thread::ThreadManager::isReleased" 后添加了 "6" 字节填充
   (编译源文件“Log/Log.cpp”)
-  
-  LogAPI.cpp
-D:\Pitaya\Core\Log\Logapi.h(3,9): warning C4464: 相对包含路径包括 ".."
-  (编译源文件“Log/LogAPI.cpp”)
-  
-D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量值
-  (编译源文件“Log/LogAPI.cpp”)
-  
-D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-D:\Pitaya\Core\Log\Log.h(3,9): warning C4464: 相对包含路径包括 ".."
-  (编译源文件“Log/LogAPI.cpp”)
-  
-D:\Pitaya\Core\Log\Log.h(4,9): warning C4464: 相对包含路径包括 ".."
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winbase.h(7940,5): warning C5039: “TpSetCallbackCleanupGroup”: 可能引发函数的指针或引用传递到 -EHc 下的外部 "C" 函数。如果此函数引发异常，则可能发生未定义的行为。
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(2200,23): warning C4668: 没有将“NTDDI_WIN11_DT”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11434,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11440,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11445,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11450,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11457,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11478,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11484,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11492,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11496,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11500,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11505,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16838,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16987,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17000,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
-  (编译源文件“Log/LogAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\combaseapi.h(177,9): warning C4005: “DECLARE_INTERFACE”: 宏重定义
-  (编译源文件“Log/LogAPI.cpp”)
-      D:\Pitaya\Core\Define\Define.h(80,9):
-      参见“DECLARE_INTERFACE”的前一个定义
-  
-D:\Pitaya\Core\Log\Log.h(32,13): warning C4820: "Pitaya::Core::Log::LogManager::LogMessage": 数据成员 "Pitaya::Core::Log::LogManager::LogMessage::level" 后添加了 "7" 字节填充
-  (编译源文件“Log/LogAPI.cpp”)
-  
-D:\Pitaya\Core\Log\Log.h(27,3): warning C4820: "Pitaya::Core::Log::LogManager": 数据成员 "Pitaya::Core::Log::LogManager::isReleased" 后添加了 "6" 字节填充
-  (编译源文件“Log/LogAPI.cpp”)
-  
-D:\Pitaya\Core\Log\Log.h(78,21): warning C4820: "Pitaya::Core::Log::LogManager": 数据成员 "Pitaya::Core::Log::LogManager::isRunning" 后添加了 "7" 字节填充
-  (编译源文件“Log/LogAPI.cpp”)
-  
-  Thread.cpp
-D:\Pitaya\Core\Thread\thread.h(3,9): warning C4464: 相对包含路径包括 ".."
-  (编译源文件“Thread/Thread.cpp”)
-  
-D:\Pitaya\Core\Thread\thread.h(4,9): warning C4464: 相对包含路径包括 ".."
-  (编译源文件“Thread/Thread.cpp”)
-  
-D:\Pitaya\Core\Log\Logapi.h(3,9): warning C4464: 相对包含路径包括 ".."
-  (编译源文件“Thread/Thread.cpp”)
-  
-D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量值
-  (编译源文件“Thread/Thread.cpp”)
-  
-D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
-  (编译源文件“Thread/Thread.cpp”)
-  
-D:\Pitaya\Core\Thread\thread.h(41,3): warning C4820: "Pitaya::Core::Thread::ThreadManager": 数据成员 "Pitaya::Core::Thread::ThreadManager::isReleased" 后添加了 "6" 字节填充
-  (编译源文件“Thread/Thread.cpp”)
-  
-D:\Pitaya\Core\Thread\thread.h(78,22): warning C4514: “Pitaya::Core::Thread::ThreadManager::RegisterThread”: 未引用的内联函数已移除
-  (编译源文件“Thread/Thread.cpp”)
-  
-D:\Pitaya\Core\Thread\thread.h(86,15): warning C4514: “Pitaya::Core::Thread::ThreadManager::UnregisterThread”: 未引用的内联函数已移除
-  (编译源文件“Thread/Thread.cpp”)
-  
-D:\Pitaya\Core\Thread\thread.h(102,22): warning C4514: “Pitaya::Core::Thread::ThreadManager::GetThreadName”: 未引用的内联函数已移除
-  (编译源文件“Thread/Thread.cpp”)
-  
-  Utility.cpp
-D:\Pitaya\Core\Utility\Utility.h(3,9): warning C4464: 相对包含路径包括 ".."
-  (编译源文件“Utility/Utility.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(36,49): warning C4458: “value”的声明隐藏了类成员
-  (编译源文件“Utility/Utility.cpp”)
-      D:\Pitaya\Core\Identifier\UID.h(57,18):
-      参见“Pitaya::Core::UID::value”的声明
-  
-D:\Pitaya\Core\Identifier\UID.h(14,24): warning C4514: “Pitaya::Core::UID::operator ==”: 未引用的内联函数已移除
-  (编译源文件“Utility/Utility.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(18,24): warning C4514: “Pitaya::Core::UID::operator !=”: 未引用的内联函数已移除
-  (编译源文件“Utility/Utility.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(22,24): warning C4514: “Pitaya::Core::UID::operator <”: 未引用的内联函数已移除
-  (编译源文件“Utility/Utility.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(27,28): warning C4514: “Pitaya::Core::UID::operator bool”: 未引用的内联函数已移除
-  (编译源文件“Utility/Utility.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(36,31): warning C4514: “Pitaya::Core::UID::SetValue”: 未引用的内联函数已移除
-  (编译源文件“Utility/Utility.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(47,20): warning C4514: “Pitaya::Core::UID::Next”: 未引用的内联函数已移除
-  (编译源文件“Utility/Utility.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(68,16): warning C4514: “std::hash<Pitaya::Core::UID>::operator ()”: 未引用的内联函数已移除
-  (编译源文件“Utility/Utility.cpp”)
   
   Core.vcxproj -> D:\Pitaya\library\x64\Release\Core.lib

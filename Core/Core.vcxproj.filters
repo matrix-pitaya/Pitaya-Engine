@@ -71,8 +71,5 @@
     <ClCompile Include="Thread\Thread.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Utility\Utility.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,5 +1,4 @@
 #include"Engine.h"
-#include"Config.h"
 
 #include"../Physics/Backend/Bullet/BulletPhysics.h"
 #include"../Renderer/Backend/OpenGL/OpenGLRenderer.h"
@@ -21,7 +20,7 @@ bool Pitaya::Engine::Engine::Initialize()
 
 	physics->Initialize();
 	renderer->Bind(window);
-	window->Initialize(1080, 720, "Pitaya");
+	window->Initialize(config.WindowWidth, config.WindowHeight, config.Name.c_str());
 	renderer->Initialize();
 	
 	isInitialized = true;
@@ -83,7 +82,7 @@ void Pitaya::Engine::Engine::Release()
 bool Pitaya::Engine::Engine::BindEngineModelBackendAPI()
 {
 	//  ≈‰‰÷»æAPI
-	switch (rendererAPI)
+	switch (config.RendererAPI)
 	{
 		case Pitaya::Engine::Renderer::RendererAPI::OpenGL:
 			renderer = new Pitaya::Engine::Renderer::OpenGLRenderer();
@@ -95,7 +94,7 @@ bool Pitaya::Engine::Engine::BindEngineModelBackendAPI()
 	}
 
 	//  ≈‰ŒÔ¿ÌAPI
-	switch (physicsAPI)
+	switch (config.PhysicsAPI)
 	{
 		case Pitaya::Engine::Physics::PhysicsAPI::Bullet:
 			physics = new Pitaya::Engine::Physics::BulletPhysics();

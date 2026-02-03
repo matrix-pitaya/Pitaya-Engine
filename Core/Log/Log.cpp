@@ -12,13 +12,12 @@ void Pitaya::Core::Log::LogManager::Bootstrap()
 		return;
 	}
 
-	const std::string& path = GetExeDir() + "log.txt";
+	const std::string& path = Pitaya::Core::Utility::GetExeDir() + fileName;
 	ofs.open(path, std::ios::out | std::ios::trunc);
 	if (!ofs.is_open())
 	{
 		throw std::runtime_error("Open Log File Fail! Path: " + path);
 	}
-
 	logThread = std::thread(&LogManager::LogThread, this);
 
 	isBootstraped = true;

@@ -2,52 +2,69 @@
 
 #include"Enum/Enum.h"
 
-#include"Object.h"
-
-#include"entt/entt.hpp"
+#include"Entity.h"
 
 #include<vector>
+
+namespace Pitaya::Core
+{
+	template<typename T>
+	class ObjectPool;
+}
 
 namespace Pitaya::Engine
 {
 	class Scene;
-	class GameObject : public Object
+	class GameObject : public Entity
 	{
-		DEFAULT_COPY_AND_MOVE_PRIVATE(GameObject)
+		DEFAULT_COPY_AND_MOVE_PUBLIC(GameObject)
 
-		friend entt::storage<GameObject>;
-	private:
-		GameObject(Scene* scene, const std::string& name = "GameObject", entt::entity entityId = entt::null)
-			:scene(scene), name(name) , entityId(entityId){}
+	public:
+		GameObject(entt::entity entityId = entt::null, const std::string& name = "GameObject", Scene* scene = nullptr)
+			:Entity(entityId),scene(scene), name(name){}
 		~GameObject() override = default;
 
 	public:
+		inline bool IsValid()
+		{
+			return uid.IsValid() && (entityId != entt::null) && (scene != nullptr);
+		}
+		inline void Reset() noexcept
+		{
+			uid = Pitaya::Core::UID::Invalid;
+			entityId = entt::null;
+			name = "GameObject";
+			scene = nullptr;
+
+			//TODO 清空父节点、字节点
+		}
+		inline void SetName(const std::string& name) noexcept
+		{
+			this->name = name;
+		}
+		inline void SetScene(Scene* scene) noexcept
+		{
+			this->scene = scene;
+		}
+		
+	public:
+		inline GameObject* GetParent()
+		{
+			//TODO
+			return nullptr;
+		}
 		inline std::vector<GameObject*> GetChildren()
 		{
 			//TODO 通过Transform实现
 			return {};
 		}
-		inline entt::entity GetEntityId() const noexcept
+		inline bool RemoveChild(GameObject* child)
 		{
-			return entityId;
-		}
-		inline void SetEntityId(entt::entity entityId) noexcept
-		{
-			this->entityId = entityId;
+			return true;
 		}
 
 	private:
 		std::string name = "GameObject";
 		Scene* scene = nullptr;
-		entt::entity entityId = entt::null;
 	};
-}
-
-namespace entt 
-{
-	template<> 
-	struct component_traits<Pitaya::Engine::GameObject> 
-	{
-		static constexpr bool in_place_delete = true; 
-	}; 
 }

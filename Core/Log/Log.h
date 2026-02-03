@@ -51,23 +51,6 @@ namespace Pitaya::Core::Log
 				default:							return "";
 			}
 		}
-		inline std::string GetExeDir()
-		{
-#ifdef _WIN32
-			char path[MAX_PATH] = { 0 };
-			GetModuleFileNameA(NULL, path, MAX_PATH);
-			std::string fullPath(path);
-			size_t pos = fullPath.find_last_of("\\/");
-			return (std::string::npos == pos) ? "" : fullPath.substr(0, pos + 1);
-#else
-			char path[1024] = { 0 };
-			ssize_t count = readlink("/proc/self/exe", path, sizeof(path));
-			if (count == -1) return "";
-			std::string fullPath(path, count);
-			size_t pos = fullPath.find_last_of("/");
-			return (std::string::npos == pos) ? "" : fullPath.substr(0, pos + 1);
-#endif
-		}
 
 	private:
 		std::ofstream ofs;
@@ -76,5 +59,6 @@ namespace Pitaya::Core::Log
 		std::condition_variable cond;
 		std::thread logThread;
 		std::atomic<bool> isRunning = true;
+		static inline constexpr const char* fileName = "log.txt";
 	};
 }

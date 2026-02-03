@@ -94,7 +94,7 @@
     <ClCompile>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Engine\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -102,8 +102,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)thirdparty\ASSIMP\lib\;$(SolutionDir)thirdparty\GLEW\lib\Release\x64\;$(SolutionDir)thirdparty\GLFW\lib\;$(SolutionDir)thirdparty\bullet\lib;$(SolutionDir)library\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glfw3.lib;Opengl32.lib;assimp-vc143-mt.lib;Core.lib;Engine.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)thirdparty\ASSIMP\lib\;$(SolutionDir)thirdparty\GLEW\lib\Release\x64\;$(SolutionDir)thirdparty\GLFW\lib\;$(SolutionDir)thirdparty\bullet\lib\;$(SolutionDir)thirdparty\yaml\lib\;$(SolutionDir)library\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;Opengl32.lib;assimp-vc143-mt.lib;Core.lib;Engine.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -112,7 +112,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Engine\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -120,15 +120,15 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)thirdparty\ASSIMP\lib\;$(SolutionDir)thirdparty\GLEW\lib\Release\x64\;$(SolutionDir)thirdparty\GLFW\lib\;$(SolutionDir)thirdparty\bullet\lib;$(SolutionDir)library\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glfw3.lib;Opengl32.lib;assimp-vc143-mt.lib;Core.lib;Engine.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)thirdparty\ASSIMP\lib\;$(SolutionDir)thirdparty\GLEW\lib\Release\x64\;$(SolutionDir)thirdparty\GLFW\lib\;$(SolutionDir)thirdparty\bullet\lib\;$(SolutionDir)thirdparty\yaml\lib\;$(SolutionDir)library\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;Opengl32.lib;assimp-vc143-mt.lib;Core.lib;Engine.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Engine\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -136,8 +136,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)thirdparty\ASSIMP\lib\;$(SolutionDir)thirdparty\GLEW\lib\Release\x64\;$(SolutionDir)thirdparty\GLFW\lib\;$(SolutionDir)thirdparty\bullet\lib;$(SolutionDir)library\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glfw3.lib;Opengl32.lib;assimp-vc143-mt.lib;Core.lib;Engine.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)thirdparty\ASSIMP\lib\;$(SolutionDir)thirdparty\GLEW\lib\Release\x64\;$(SolutionDir)thirdparty\GLFW\lib\;$(SolutionDir)thirdparty\bullet\lib\;$(SolutionDir)thirdparty\yaml\lib\;$(SolutionDir)library\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;Opengl32.lib;assimp-vc143-mt.lib;Core.lib;Engine.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -146,7 +146,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Engine\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -154,8 +154,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)thirdparty\ASSIMP\lib\;$(SolutionDir)thirdparty\GLEW\lib\Release\x64\;$(SolutionDir)thirdparty\GLFW\lib\;$(SolutionDir)thirdparty\bullet\lib;$(SolutionDir)library\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glfw3.lib;Opengl32.lib;assimp-vc143-mt.lib;Core.lib;Engine.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)thirdparty\ASSIMP\lib\;$(SolutionDir)thirdparty\GLEW\lib\Release\x64\;$(SolutionDir)thirdparty\GLFW\lib\;$(SolutionDir)thirdparty\bullet\lib\;$(SolutionDir)thirdparty\yaml\lib\;$(SolutionDir)library\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;Opengl32.lib;assimp-vc143-mt.lib;Core.lib;Engine.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

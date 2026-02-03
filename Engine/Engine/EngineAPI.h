@@ -8,6 +8,11 @@ namespace Pitaya::Engine
 	int Execute();
 }
 
+namespace Pitaya::Engine::Config
+{
+	size_t GetMaxFixupdataExecuteTimes();
+}
+
 namespace Pitaya::Engine::Time
 {
 	extern const float& delta;

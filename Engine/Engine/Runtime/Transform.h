@@ -11,10 +11,9 @@ namespace Pitaya::Engine
 {
 	class Transform : public Component
 	{
-		DEFAULT_COPY_AND_MOVE_PRIVATE(Transform)
+		DEFAULT_COPY_AND_MOVE_PUBLIC(Transform)
 
-		friend entt::storage<Transform>;
-	private:
+	public:
 		Transform(GameObject* gameobject) 
 			:Component(gameobject) {}
 		~Transform() override = default;
@@ -25,14 +24,5 @@ namespace Pitaya::Engine
 		glm::vec3 scale = glm::vec3(1.0f);
 
 		bool isDirty = true;
-	};
-}
-
-namespace entt
-{
-	template<>
-	struct component_traits<Pitaya::Engine::Transform>
-	{
-		static constexpr bool in_place_delete = true;
 	};
 }
