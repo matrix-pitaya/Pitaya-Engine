@@ -2,6 +2,18 @@
 
 IMPLEMENT_SINGLETON_CLASS(Pitaya::Core::Thread, ThreadManager)
 
+void Pitaya::Core::Thread::ThreadManager::Bootstrap()
+{
+	if (isBootstraped)
+	{
+		return;
+	}
+
+	//×¢²áÖ÷Ïß³Ì
+	map.emplace(ThreadToken(std::this_thread::get_id()), ThreadInfo("Main"));
+
+	isBootstraped = true;
+}
 void Pitaya::Core::Thread::ThreadManager::Release()
 {
 	if (isReleased)

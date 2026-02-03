@@ -1,12 +1,115 @@
 #pragma once
 
+#include"../Define/Define.h"
+
 #include<queue>
 #include<unordered_set>
 #include<functional>
 #include<stdexcept>
+#include<memory_resource>
+
+#define OBJECTPOOL_VERSION_NEW
 
 namespace Pitaya::Core
 {
+#ifdef OBJECTPOOL_VERSION_NEW
+    template<typename T>
+    class ObjectPool
+    {
+		DELETE_COPY_AND_MOVE(ObjectPool)
+
+    public:
+		ObjectPool(std::function<void(T*)> OnGet = nullptr, std::function<void(T*)> OnRelease = nullptr, size_t count = 0)
+			: OnGet(std::move(OnGet)), OnRelease(std::move(OnRelease)), pool(), idleObjects(&pool), activeObjects(&pool)
+        {
+            idleObjects.reserve(count);
+            for (size_t i = 0; i < count; ++i)
+            {
+                idleObjects.emplace_back(new (pool.allocate(sizeof(T), alignof(T))) T());
+            }
+        }
+        ~ObjectPool()
+        {
+			for (T* object : activeObjects)
+			{
+				if (OnRelease)
+				{
+					OnRelease(object);
+				}
+				
+                object->~T();
+				object = nullptr;
+            }
+			activeObjects.clear();
+
+            for (T* object : idleObjects)
+            {
+				if (OnRelease)
+				{
+					OnRelease(object);
+				}
+
+                object->~T();
+				object = nullptr;
+            }
+			idleObjects.clear();
+        }
+
+        inline T* Get()
+        {
+            T* object = nullptr;
+            if (idleObjects.empty())
+            {
+				object = new (pool.allocate(sizeof(T), alignof(T))) T();
+            }
+            else
+            {
+				object = idleObjects.back();
+                idleObjects.pop_back();
+            }
+
+			if (OnGet)
+			{
+				OnGet(object);
+			}
+
+            activeObjects.insert(object);
+            return object;
+        }
+		inline void Release(T* object)
+        {
+			if (!object)
+			{
+				return;
+			}
+
+            auto iterator = activeObjects.find(object);
+            if (iterator == activeObjects.end())
+            {
+                throw std::runtime_error("ObjectPool::Release: Object not managed by this pool!");
+            }
+
+			if (OnRelease)
+			{
+				OnRelease(object);
+			}
+
+            activeObjects.erase(iterator);
+            idleObjects.push_back(object);
+        }
+
+    private:
+        std::function<void(T*)> OnGet;
+        std::function<void(T*)> OnRelease;
+
+        std::pmr::unsynchronized_pool_resource pool;
+
+        std::pmr::vector<T*> idleObjects;
+        std::pmr::unordered_set<T*> activeObjects;
+    };
+#endif 
+
+#ifdef OBJECTPOOL_VERSION_OLD
 	template<typename T>
 	class ObjectPool
 	{
@@ -47,10 +150,10 @@ namespace Pitaya::Core
 			}
 			check.clear();
 		}
-        ObjectPool(const ObjectPool&) = delete;
-        ObjectPool& operator=(const ObjectPool&) = delete;
-        ObjectPool(ObjectPool&&) = delete;
-        ObjectPool& operator=(ObjectPool&&) = delete;
+		ObjectPool(const ObjectPool&) = delete;
+		ObjectPool& operator=(const ObjectPool&) = delete;
+		ObjectPool(ObjectPool&&) = delete;
+		ObjectPool& operator=(ObjectPool&&) = delete;
 
 		T* Get()
 		{
@@ -106,4 +209,5 @@ namespace Pitaya::Core
 		std::function<void(T*)> OnGet;
 		std::function<void(T*)> OnRelease;
 	};
+#endif
 }

@@ -39,9 +39,6 @@
     <ClInclude Include="Engine\Interface\Window.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Runtime\Entity.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Runtime\Object.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -54,7 +51,7 @@
     <ClInclude Include="Engine\Runtime\RigidBody.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Runtime\Transfom.h">
+    <ClInclude Include="Engine\Runtime\Transform.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Physics\Backend\Bullet\BulletPhysics.h">
@@ -94,6 +91,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Window\Backend\OpenGL\OpenGLWindow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Runtime\ECS.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

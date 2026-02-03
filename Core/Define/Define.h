@@ -1,5 +1,19 @@
 #pragma once
 
+#ifndef DELETE_COPY
+#define DELETE_COPY(Class)					  \
+private:									  \
+	Class(const Class&) = delete;             \
+	Class& operator=(const Class&) = delete;  
+#endif
+
+#ifndef DELETE_MOVE
+#define DELETE_MOVE(Class)					  \
+private:									  \
+	Class(Class&&) = delete;				   \
+	Class& operator=(Class&&) = delete;  
+#endif
+
 #ifndef DELETE_COPY_AND_MOVE
 #define DELETE_COPY_AND_MOVE(Class)			  \
 private:									  \
@@ -9,8 +23,35 @@ private:									  \
 	Class& operator=(Class&&) = delete;
 #endif
 
-#ifndef Default_Constructor_Destructor_Move_Copy
-#define Default_Constructor_Destructor_Move_Copy(Class) \
+#ifndef DEFAULT_COPY_AND_MOVE_PRIVATE
+#define DEFAULT_COPY_AND_MOVE_PRIVATE(Class)		    \
+private:												\
+	Class(const Class&) = default;						\
+	Class(Class&&) = default;							\
+	Class& operator=(const Class&) = default;			\
+	Class& operator=(Class&&) = default;
+#endif
+
+#ifndef DEFAULT_COPY_AND_MOVE_PROTECTED
+#define DEFAULT_COPY_AND_MOVE_PROTECTED(Class)		    \
+protected:												\
+	Class(const Class&) = default;						\
+	Class(Class&&) = default;							\
+	Class& operator=(const Class&) = default;			\
+	Class& operator=(Class&&) = default;
+#endif
+
+#ifndef DEFAULT_COPY_AND_MOVE_PUBLIC
+#define DEFAULT_COPY_AND_MOVE_PUBLIC(Class)		    \
+public:												\
+	Class(const Class&) = default;					\
+	Class(Class&&) = default;						\
+	Class& operator=(const Class&) = default;		\
+	Class& operator=(Class&&) = default;
+#endif
+
+#ifndef DEFAULT_CONSTRUCTOR_DESTRUCTOR_MOVE_COPY
+#define DEFAULT_CONSTRUCTOR_DESTRUCTOR_MOVE_COPY(Class) \
 public:													\
 	Class() = default;									\
 	~Class() = default;									\
@@ -20,8 +61,8 @@ public:													\
 	Class& operator=(Class&&) = default;
 #endif
 
-#ifndef Default_Constructor_VirtualDestructor_Move_Copy
-#define Default_Constructor_VirtualDestructor_Move_Copy(Class)  \
+#ifndef DEFAULT_CONSTRUCTOR_VIRTUALDESTRUCTOR_MOVE_COPY
+#define DEFAULT_CONSTRUCTOR_VIRTUALDESTRUCTOR_MOVE_COPY(Class)  \
 public:															\
 	Class() = default;											\
 	virtual ~Class() = default;									\

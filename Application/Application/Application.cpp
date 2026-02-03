@@ -14,7 +14,6 @@ int Pitaya::Application::Execute()
 {
 	try
 	{
-		Pitaya::Core::Thread::RegisterThread("Main", std::this_thread::get_id());
 		return Engine::Execute();
 	}
 	catch (const std::exception& e)

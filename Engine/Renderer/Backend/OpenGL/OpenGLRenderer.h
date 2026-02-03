@@ -79,7 +79,7 @@ namespace Pitaya::Engine::Renderer
 
 	public:
 		OpenGLRenderer() = default;
-		~OpenGLRenderer() { Release(); }
+		~OpenGLRenderer() override { Release(); }
 
 		bool Initialize() override;
 		void Release() override;

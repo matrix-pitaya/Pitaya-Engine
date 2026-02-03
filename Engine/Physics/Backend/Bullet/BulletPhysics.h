@@ -10,7 +10,7 @@ namespace Pitaya::Engine::Physics
 
 	public:
 		BulletPhysics() = default;
-		~BulletPhysics() = default;
+		~BulletPhysics() override = default;
 
 		bool Initialize() override;
 		void Release() override;

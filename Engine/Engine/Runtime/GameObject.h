@@ -1,73 +1,53 @@
 #pragma once
 
 #include"Enum/Enum.h"
-#include"Transfom.h"
 
-#include<memory>
+#include"Object.h"
+
+#include"entt/entt.hpp"
+
 #include<vector>
 
 namespace Pitaya::Engine
 {
+	class Scene;
 	class GameObject : public Object
 	{
-		DELETE_COPY_AND_MOVE(GameObject)
+		DEFAULT_COPY_AND_MOVE_PRIVATE(GameObject)
+
+		friend entt::storage<GameObject>;
+	private:
+		GameObject(Scene* scene, const std::string& name = "GameObject", entt::entity entityId = entt::null)
+			:scene(scene), name(name) , entityId(entityId){}
+		~GameObject() override = default;
 
 	public:
-		GameObject(const std::string& name = "GameObject")
-			:name(name) 
+		inline std::vector<GameObject*> GetChildren()
 		{
-			components[static_cast<size_t>(Pitaya::Engine::ComponentType::Transform)] = &transform;
+			//TODO 通过Transform实现
+			return {};
 		}
-		~GameObject()
+		inline entt::entity GetEntityId() const noexcept
 		{
-			for (auto& component : components)
-			{
-				if (component == nullptr || typeid(*component) == typeid(Transform))
-				{
-					continue;
-				}
-
-				//Engine::DestoryComponent(component);
-				component = nullptr;
-			}
-			components.clear();
+			return entityId;
 		}
-
-		template<typename T>
-		T* GetComponent() 
+		inline void SetEntityId(entt::entity entityId) noexcept
 		{
-			return static_cast<T*>(components[static_cast<size_t>(T::Type)]);
-		}
-
-		template<typename T, typename... Args>
-		T* AddComponent(Args&&... args) 
-		{
-			size_t index = static_cast<size_t>(T::Type);
-			if (components[index])
-			{
-				return static_cast<T*>(components[index]);
-			}
-				
-			T* component = Engine::CreateComponent<T>(this, std::forward<Args>(args)...);
-			components[index] = component;
-			return component;
+			this->entityId = entityId;
 		}
 
 	private:
 		std::string name = "GameObject";
-		Pitaya::Engine::Transform transform = Pitaya::Engine::Transform(this);
-		std::vector<Component*> components = std::vector<Component*>(static_cast<size_t>(Pitaya::Engine::ComponentType::Count), nullptr);
+		Scene* scene = nullptr;
+		entt::entity entityId = entt::null;
 	};
 }
 
-/*
-* TODO
-if constexpr (T::Type == itaya::Engine::ComponentType::RigidBody)
+namespace entt 
 {
-	//component = Engine::CreateRigidBody(this, std::forward<Args>(args)...);
+	template<> 
+	struct component_traits<Pitaya::Engine::GameObject> 
+	{
+		static constexpr bool in_place_delete = true; 
+	}; 
 }
-else if constexpr (T::Type == itaya::Engine::ComponentType::MeshRenderer)
-{
-	//component = Engine::CreateMeshRenderer(this, std::forward<Args>(args)...)
-}
-*/

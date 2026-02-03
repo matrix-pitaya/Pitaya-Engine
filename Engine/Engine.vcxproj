@@ -88,12 +88,12 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include;$(SolutionDir)thirdparty\entt\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -102,14 +102,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include;$(SolutionDir)thirdparty\entt\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,12 +118,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include;$(SolutionDir)thirdparty\entt\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,14 +132,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include;$(SolutionDir)thirdparty\entt\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,11 +156,11 @@
     <ClInclude Include="Engine\Internal\Input\Input.h" />
     <ClInclude Include="Engine\Internal\Time\Time.h" />
     <ClInclude Include="Engine\Runtime\Component.h" />
-    <ClInclude Include="Engine\Runtime\Entity.h" />
+    <ClInclude Include="Engine\Runtime\ECS.h" />
     <ClInclude Include="Engine\Runtime\GameObject.h" />
     <ClInclude Include="Engine\Runtime\Object.h" />
     <ClInclude Include="Engine\Runtime\RigidBody.h" />
-    <ClInclude Include="Engine\Runtime\Transfom.h" />
+    <ClInclude Include="Engine\Runtime\Transform.h" />
     <ClInclude Include="Physics\Backend\Bullet\BulletPhysics.h" />
     <ClInclude Include="Renderer\Backend\imgui\imconfig.h" />
     <ClInclude Include="Renderer\Backend\imgui\imgui.h" />

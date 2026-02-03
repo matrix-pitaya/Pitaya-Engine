@@ -5,12 +5,11 @@ D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量�
 D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
   (编译源文件“Application/Application.cpp”)
   
-  main.cpp
 MSVCRT.lib(initializers.obj) : warning LNK4098: 默认库“libcmt.lib”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
   正在生成代码
-  230 of 1191 functions (19.3%) were compiled, the rest were copied from previous compilation.
-    7 functions were new in current compilation
-    89 functions had inline decision re-evaluated but remain unchanged
+  103 of 1195 functions ( 8.6%) were compiled, the rest were copied from previous compilation.
+    11 functions were new in current compilation
+    66 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
 glew32s.lib(glew.obj) : warning LNK4099: 未找到 PDB“vc120.pdb”(使用“glew32s.lib(glew.obj)”或在“D:\Pitaya\exe\x64\Release\vc120.pdb”中寻找)；正在链接对象，如同没有调试信息一样
   Application.vcxproj -> D:\Pitaya\exe\x64\Release\Pitaya.exe

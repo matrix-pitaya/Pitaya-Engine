@@ -51,6 +51,9 @@
     <ClInclude Include="Identifier\UID.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Identifier\GUID.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Event\Event.cpp">

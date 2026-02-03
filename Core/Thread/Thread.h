@@ -38,7 +38,7 @@ namespace Pitaya::Core::Thread
 
 	class ThreadManager
 	{
-		DECLARE_SINGLETON_CLASS_R(ThreadManager)
+		DECLARE_SINGLETON_CLASS_RB(ThreadManager)
 
 	private:
 		struct ThreadInfo
@@ -111,6 +111,6 @@ namespace Pitaya::Core::Thread
 		}
 
 	private:
-		std::unordered_map<ThreadToken, ThreadInfo,Core::Thread::ThreadToken::Hash> map;
+		std::unordered_map<ThreadToken, ThreadInfo, Core::Thread::ThreadToken::Hash> map;
 	};
 }
