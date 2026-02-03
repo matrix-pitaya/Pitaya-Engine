@@ -7,6 +7,7 @@
 
 #include<fstream>
 #include<string>
+#include<filesystem>
 
 namespace Pitaya::Engine
 {
@@ -33,7 +34,7 @@ namespace Pitaya::Engine::Config
 	private:
 		inline void Load()
 		{
-			const std::string& path = Pitaya::Core::Utility::GetExeDir() + fileName;
+			std::filesystem::path path = std::filesystem::path(Pitaya::Core::Utility::GetExeDir()) / fileName;
 			std::ifstream fin = std::ifstream(path);
 			if (!fin.is_open())
 			{
@@ -118,7 +119,7 @@ namespace Pitaya::Engine::Config
 			config["Window"]["Width"] = WindowWidth;
 			config["Window"]["Height"] = WindowHeight;
 
-			const std::string& path = Pitaya::Core::Utility::GetExeDir() + fileName;
+			std::filesystem::path path = std::filesystem::path(Pitaya::Core::Utility::GetExeDir()) / fileName;
 			std::ofstream fout = std::ofstream(path);
 			if (fout.is_open())
 			{

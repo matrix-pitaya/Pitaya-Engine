@@ -3,6 +3,8 @@
 #include"../Utility/Utility.h"
 #include"../Thread/Threadapi.h"
 
+#include<filesystem>
+
 IMPLEMENT_SINGLETON_CLASS(Pitaya::Core::Log, LogManager)
 
 void Pitaya::Core::Log::LogManager::Bootstrap()
@@ -12,11 +14,11 @@ void Pitaya::Core::Log::LogManager::Bootstrap()
 		return;
 	}
 
-	const std::string& path = Pitaya::Core::Utility::GetExeDir() + fileName;
+	std::filesystem::path path = std::filesystem::path(Pitaya::Core::Utility::GetExeDir()) / fileName;
 	ofs.open(path, std::ios::out | std::ios::trunc);
 	if (!ofs.is_open())
 	{
-		throw std::runtime_error("Open Log File Fail! Path: " + path);
+		throw std::runtime_error("Open Log File Fail! Path: " + path.string());
 	}
 	logThread = std::thread(&LogManager::LogThread, this);
 
