@@ -88,13 +88,9 @@ namespace Pitaya::Engine
             ecsRegistry.view<T...>().each(std::forward<Func>(func));
         }
         template<typename... Get, typename... Exclude, typename Func>
-        void ViewForEachWithFiltered(entt::exclude_t<Exclude...>, Func&& func)
+        void ViewForEachWithFiltered(entt::exclude_t<Exclude...> ex, Func&& func)
         {
-            auto view = ecsRegistry.view<Get...>(entt::exclude<Exclude...>);
-            for (auto entity : view)
-            {
-                func(view.template get<Get>(entity)...);
-            }
+            ecsRegistry.view<Get...>(ex).each(std::forward<Func>(func));
         }
 
 	private:

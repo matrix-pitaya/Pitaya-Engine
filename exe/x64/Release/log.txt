@@ -1,2 +1,2 @@
-[2026-02-03 20:42:11][Info][Main]Render线程被注册!
-[2026-02-03 20:42:13][Debug][Main]Render线程被回收
+[2026-02-03 20:54:54][Info][Main]Render线程被注册!
+[2026-02-03 20:54:58][Debug][Main]Render线程被回收

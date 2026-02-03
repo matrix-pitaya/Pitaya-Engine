@@ -138,7 +138,7 @@ namespace Pitaya::Engine::Config
 		Pitaya::Engine::Renderer::RendererAPI RendererAPI = Pitaya::Engine::Renderer::RendererAPI::OpenGL;
 
 		//Window
-		int WindowWidth = 1080;
+		int WindowWidth = 1280;
 		int WindowHeight = 720;
 
 	private:
