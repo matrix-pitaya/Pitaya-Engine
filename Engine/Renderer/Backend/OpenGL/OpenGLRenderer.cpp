@@ -1,47 +1,34 @@
 #include"OpenGLRenderer.h"
 
-#include"Log/LogAPI.h"
+#include"../../Engine/Engine/Engine.h"
+#include"../../Engine/Engine/EngineAPI.h"
 
 #include<stdexcept>
 #include<string>
 
 bool Pitaya::Engine::Renderer::OpenGLRenderer::Initialize()
 {
-	if (isInitialized)
-	{
-		return false;
-	}
-
 	if (!window)
 	{
 		std::runtime_error("Renderer module missing!");
 		return false;
 	}
 
-	renderThreadToken = Core::Thread::RegisterThread("Render", &Pitaya::Engine::Renderer::OpenGLRenderer::RenderThread, this);
-
-	isInitialized = true;
+	renderThreadToken = Pitaya::Engine::Engine::Instance().RegisterThread("Render", &Pitaya::Engine::Renderer::OpenGLRenderer::RenderThread, this);
 	return true;
 }
 void Pitaya::Engine::Renderer::OpenGLRenderer::Release()
 {
-	if (isReleased)
-	{
-		return;
-	}
-
 	isRunning = false;
 	cond.notify_one();
-	Core::Thread::UnregisterThread(renderThreadToken);
-
-	isReleased = true;
+	Pitaya::Engine::Engine::Instance().UnregisterThread(renderThreadToken);
 }
 bool Pitaya::Engine::Renderer::OpenGLRenderer::InitOpenGLContext()
 {
 	openGLWindow = reinterpret_cast<GLFWwindow*>(window->GetNativeWindow());
 	if (!openGLWindow)
 	{
-		Core::Log::Log(Core::Log::LogLevel::Error,"OpenGL Window Get Fail!");
+		Pitaya::Engine::Log::LogError("OpenGL Window Get Fail!");
 		return false;
 	}
 

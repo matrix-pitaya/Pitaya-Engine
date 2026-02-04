@@ -2,6 +2,14 @@
 
 #include<thread>
 
+bool Pitaya::Engine::Internal::Time::Initialize()
+{
+	return true;
+}
+void Pitaya::Engine::Internal::Time::Release()
+{
+
+}
 void Pitaya::Engine::Internal::Time::Tick()
 {
 	tick = std::chrono::steady_clock::now();

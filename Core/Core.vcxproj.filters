@@ -18,28 +18,10 @@
     <ClInclude Include="Enum\Enum.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Event\Event.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Event\EventAPI.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Log\Console.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Log\Log.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Log\LogAPI.h">
+    <ClInclude Include="Console\Console.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ObjectPool\ObjectPool.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Thread\Thread.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Thread\ThreadAPI.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Utility\Utility.h">
@@ -56,16 +38,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Event\Event.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Event\EventAPI.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Log\Log.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Log\LogAPI.cpp">
+    <ClCompile Include="Console\Console.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

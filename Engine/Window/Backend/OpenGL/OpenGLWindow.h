@@ -19,7 +19,7 @@ namespace Pitaya::Engine::Window
 		friend class Pitaya::Engine::Engine;
 	private:
 		OpenGLWindow() = default;
-		~OpenGLWindow() override { Release(); }
+		~OpenGLWindow() override = default;
 
 	public:
 		OpenGLWindow(const OpenGLWindow&) = delete;
@@ -30,7 +30,6 @@ namespace Pitaya::Engine::Window
 	public:
 		bool Initialize(int width,int height, const char* title) override;
 		void Release() override;
-		bool GetKeyDown(Pitaya::Engine::Input::KeyCode keyCode) const override;
 		bool IsClose() const override;
 		void ClearFrameBuffer() const override;
 		void PollEvents() const override;
@@ -44,7 +43,7 @@ namespace Pitaya::Engine::Window
 		static void FramebufferResetSizeCallback(GLFWwindow* window, int width, int height);
 		static void MouseCursorMoveCallback(GLFWwindow* window, double xPosition, double yPosition);
 		static void MouseScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
-		static void KeyDownCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 		static void WindowCloseCallback(GLFWwindow* window);
 		static void DropFileCallback(GLFWwindow* window, int count, const char** paths);

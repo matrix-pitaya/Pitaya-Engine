@@ -153,7 +153,10 @@
     <ClInclude Include="Engine\Interface\Physics.h" />
     <ClInclude Include="Engine\Interface\Renderer.h" />
     <ClInclude Include="Engine\Interface\Window.h" />
+    <ClInclude Include="Engine\Internal\Event\Event.h" />
     <ClInclude Include="Engine\Internal\Input\Input.h" />
+    <ClInclude Include="Engine\Internal\Log\Log.h" />
+    <ClInclude Include="Engine\Internal\Thread\Thread.h" />
     <ClInclude Include="Engine\Internal\Time\Time.h" />
     <ClInclude Include="Engine\Runtime\Component.h" />
     <ClInclude Include="Engine\Runtime\Entity.h" />
@@ -179,7 +182,10 @@
   <ItemGroup>
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\EngineAPI.cpp" />
+    <ClCompile Include="Engine\Internal\Event\Event.cpp" />
     <ClCompile Include="Engine\Internal\Input\Input.cpp" />
+    <ClCompile Include="Engine\Internal\Log\Log.cpp" />
+    <ClCompile Include="Engine\Internal\Thread\Thread.cpp" />
     <ClCompile Include="Engine\Internal\Time\Time.cpp" />
     <ClCompile Include="Physics\Backend\Bullet\BulletPhysics.cpp" />
     <ClCompile Include="Physics\Backend\Bullet\BulletPhysicsWorld.cpp" />

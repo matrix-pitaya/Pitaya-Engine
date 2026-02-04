@@ -1,1 +1,56 @@
-﻿  Core.vcxproj -> D:\Pitaya\library\x64\Debug\Core.lib
+﻿  Console.cpp
+D:\Pitaya\Core\Console\Console.h(3,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winbase.h(7940,5): warning C5039: “TpSetCallbackCleanupGroup”: 可能引发函数的指针或引用传递到 -EHc 下的外部 "C" 函数。如果此函数引发异常，则可能发生未定义的行为。
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(2200,23): warning C4668: 没有将“NTDDI_WIN11_DT”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11434,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11440,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11445,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11450,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11457,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11478,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11484,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11492,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11496,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11500,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11505,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16838,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16987,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17000,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Console/Console.cpp”)
+  
+  Core.vcxproj -> D:\Pitaya\library\x64\Debug\Core.lib

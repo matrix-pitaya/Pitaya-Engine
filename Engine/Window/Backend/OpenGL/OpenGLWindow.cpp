@@ -1,13 +1,10 @@
 #include"OpenGLWindow.h"
-#include"Event/EventAPI.h"
+
+#include"../../Engine/Engine/EngineAPI.h"
+#include"../../Engine/Engine/Internal/Event/Event.h"
 
 bool Pitaya::Engine::Window::OpenGLWindow::Initialize(int width, int height, const char* title)
 {
-	if (isInitialized)
-	{
-		return false;
-	}
-
 	//GLFW¿â
 	if (glfwInit() != GLFW_TRUE)
 	{
@@ -35,7 +32,7 @@ bool Pitaya::Engine::Window::OpenGLWindow::Initialize(int width, int height, con
 	glfwSetFramebufferSizeCallback(window, FramebufferResetSizeCallback);
 	glfwSetCursorPosCallback(window, MouseCursorMoveCallback);
 	glfwSetScrollCallback(window, MouseScrollCallback);
-	glfwSetKeyCallback(window, KeyDownCallback);
+	glfwSetKeyCallback(window, KeyCallback);
 	glfwSetMouseButtonCallback(window, MouseButtonCallback);
 	glfwSetWindowCloseCallback(window, WindowCloseCallback);
 	glfwSetDropCallback(window, DropFileCallback);
@@ -55,49 +52,10 @@ bool Pitaya::Engine::Window::OpenGLWindow::Initialize(int width, int height, con
 	this->width = width;
 	this->height = height;
 
-	isInitialized = true;
 	return true;
 }
 void Pitaya::Engine::Window::OpenGLWindow::Release()
 {
-	if (isReleased)
-	{
-		return;
-	}
-
-	isReleased = true;
-}
-bool Pitaya::Engine::Window::OpenGLWindow::GetKeyDown(Pitaya::Engine::Input::KeyCode keyCode) const
-{
-	switch (keyCode)
-	{
-		case Pitaya::Engine::Input::KeyCode::W:
-			return glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS;
-
-		case Pitaya::Engine::Input::KeyCode::A:
-			return glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
-
-		case Pitaya::Engine::Input::KeyCode::S:
-			return glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS;
-
-		case Pitaya::Engine::Input::KeyCode::D:
-			return glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
-
-		case Pitaya::Engine::Input::KeyCode::Mouse0:
-			return glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
-
-		case Pitaya::Engine::Input::KeyCode::Mouse1:
-			return glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS;
-
-		case Pitaya::Engine::Input::KeyCode::Mouse2:
-			return glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
-
-		case Pitaya::Engine::Input::KeyCode::ESC:
-			return glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS;
-
-		default:
-			return false;
-	}
 }
 bool Pitaya::Engine::Window::OpenGLWindow::IsClose() const
 {
@@ -143,44 +101,44 @@ void Pitaya::Engine::Window::OpenGLWindow::FramebufferResetSizeCallback(GLFWwind
 	
 	if ((width > 0) && (height > 0))
 	{
-		Core::Event::Args::Window::FramebufferResetSizeEventArgs args = Core::Event::Args::Window::FramebufferResetSizeEventArgs(width, height);
-		Core::Event::Event event = Core::Event::Event(Core::Event::EventType::WindowFramebufferResetSize, args);
-		Core::Event::Emit(event);
+		Pitaya::Engine::Event::Args::Window::FramebufferResetSizeEventArgs args = Pitaya::Engine::Event::Args::Window::FramebufferResetSizeEventArgs(width, height);
+		Pitaya::Engine::Event::Event event = Pitaya::Engine::Event::Event(Pitaya::Engine::Event::EventType::WindowFramebufferResetSize, args);
+		Pitaya::Engine::Event::Emit(event);
 	}
 }
 void Pitaya::Engine::Window::OpenGLWindow::MouseCursorMoveCallback(GLFWwindow* glfwWindow, double xPosition, double yPosition)
 {
-	Core::Event::Args::Input::MouseCurrsorMoveEventArgs args = Core::Event::Args::Input::MouseCurrsorMoveEventArgs(xPosition, yPosition);
-	Core::Event::Event event = Core::Event::Event(Core::Event::EventType::MouseCurrsorMove, args);
-	Core::Event::Emit(event);
+	Pitaya::Engine::Event::Args::Input::MouseCurrsorMoveEventArgs args = Pitaya::Engine::Event::Args::Input::MouseCurrsorMoveEventArgs(xPosition, yPosition);
+	Pitaya::Engine::Event::Event event = Pitaya::Engine::Event::Event(Pitaya::Engine::Event::EventType::MouseCurrsorMove, args);
+	Pitaya::Engine::Event::Emit(event);
 }
 void Pitaya::Engine::Window::OpenGLWindow::MouseScrollCallback(GLFWwindow* glfwWindow, double xOffset, double yOffset)
 {
-	Core::Event::Args::Input::MouseScrollEventArgs args = Core::Event::Args::Input::MouseScrollEventArgs(xOffset, yOffset);
-	Core::Event::Event event = Core::Event::Event(Core::Event::EventType::MouseScroll, args);
-	Core::Event::Emit(event);
+	Pitaya::Engine::Event::Args::Input::MouseScrollEventArgs args = Pitaya::Engine::Event::Args::Input::MouseScrollEventArgs(xOffset, yOffset);
+	Pitaya::Engine::Event::Event event = Pitaya::Engine::Event::Event(Pitaya::Engine::Event::EventType::MouseScroll, args);
+	Pitaya::Engine::Event::Emit(event);
 }
-void Pitaya::Engine::Window::OpenGLWindow::KeyDownCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void Pitaya::Engine::Window::OpenGLWindow::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	Core::Event::Args::Input::KeyDownEventArgs args = Core::Event::Args::Input::KeyDownEventArgs(key, scancode, action, mods);
-	Core::Event::Event event = Core::Event::Event(Core::Event::EventType::KeyDown, args);
-	Core::Event::Emit(event);
+	Pitaya::Engine::Event::Args::Input::KeyEventArgs args = Pitaya::Engine::Event::Args::Input::KeyEventArgs(key, scancode, action, mods);
+	Pitaya::Engine::Event::Event event = Pitaya::Engine::Event::Event(Pitaya::Engine::Event::EventType::Key, args);
+	Pitaya::Engine::Event::Emit(event);
 }
 void Pitaya::Engine::Window::OpenGLWindow::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-	Core::Event::Args::Input::MouseButtonEventArgs args = Core::Event::Args::Input::MouseButtonEventArgs(button, action, mods);
-	Core::Event::Event event = Core::Event::Event(Core::Event::EventType::MouseButton, args);
-	Core::Event::Emit(event);
+	Pitaya::Engine::Event::Args::Input::MouseButtonEventArgs args = Pitaya::Engine::Event::Args::Input::MouseButtonEventArgs(button, action, mods);
+	Pitaya::Engine::Event::Event event = Pitaya::Engine::Event::Event(Pitaya::Engine::Event::EventType::MouseButton, args);
+	Pitaya::Engine::Event::Emit(event);
 }
 void Pitaya::Engine::Window::OpenGLWindow::WindowCloseCallback(GLFWwindow* window)
 {
-	Core::Event::Args::Window::CloseEventArgs args = Core::Event::Args::Window::CloseEventArgs();
-	Core::Event::Event event = Core::Event::Event(Core::Event::EventType::WindowClose, args);
-	Core::Event::Emit(event);
+	Pitaya::Engine::Event::Args::Window::CloseEventArgs args = Pitaya::Engine::Event::Args::Window::CloseEventArgs();
+	Pitaya::Engine::Event::Event event = Pitaya::Engine::Event::Event(Pitaya::Engine::Event::EventType::WindowClose, args);
+	Pitaya::Engine::Event::Emit(event);
 }
 void Pitaya::Engine::Window::OpenGLWindow::DropFileCallback(GLFWwindow* window, int count, const char** paths)
 {
-	Core::Event::Args::Window::DropFileEventArgs args = Core::Event::Args::Window::DropFileEventArgs(count, paths);
-	Core::Event::Event event = Core::Event::Event(Core::Event::EventType::DropFile, args);
-	Core::Event::Emit(event);
+	Pitaya::Engine::Event::Args::Window::DropFileEventArgs args = Pitaya::Engine::Event::Args::Window::DropFileEventArgs(count, paths);
+	Pitaya::Engine::Event::Event event = Pitaya::Engine::Event::Event(Pitaya::Engine::Event::EventType::DropFile, args);
+	Pitaya::Engine::Event::Emit(event);
 }

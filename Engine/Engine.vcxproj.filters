@@ -99,6 +99,15 @@
     <ClInclude Include="Engine\Runtime\Entity.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Internal\Log\Log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Internal\Thread\Thread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Internal\Event\Event.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Engine.cpp">
@@ -144,6 +153,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Physics\Backend\Bullet\BulletPhysicsWorld.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Internal\Event\Event.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Internal\Log\Log.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Internal\Thread\Thread.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

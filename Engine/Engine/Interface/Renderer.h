@@ -26,7 +26,5 @@ namespace Pitaya::Engine::Interface
 
 	protected:
 		Pitaya::Engine::Interface::Window* window = nullptr;
-		bool isInitialized = false;
-		bool isReleased = false;
 	};
 }

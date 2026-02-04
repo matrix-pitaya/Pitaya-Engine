@@ -1,1 +1,1410 @@
-﻿  Engine.vcxproj -> D:\Pitaya\library\x64\Debug\Engine.lib
+﻿  Engine.cpp
+D:\Pitaya\Engine\Engine\Interface\Window.h(30,8): warning C4820: "Pitaya::Engine::Interface::Window": 数据成员 "Pitaya::Engine::Interface::Window::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(30,8): warning C4820: "Pitaya::Engine::Interface::Renderer": 数据成员 "Pitaya::Engine::Interface::Renderer::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(22,55): warning C4458: “window”的声明隐藏了类成员
+  (编译源文件“Engine/Engine.cpp”)
+      D:\Pitaya\Engine\Engine\Interface\Renderer.h(28,38):
+      参见“Pitaya::Engine::Interface::Renderer::window”的声明
+  
+D:\Pitaya\Engine\Engine\Interface\Physics.h(22,8): warning C4820: "Pitaya::Engine::Interface::Physics": 数据成员 "Pitaya::Engine::Interface::Physics::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Time\Time.h(38,9): warning C4820: "Pitaya::Engine::Internal::Time": 数据成员 "Pitaya::Engine::Internal::Time::targetFrameTime" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Core\Utility\Utility.h(3,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Core\Identifier\UID.h(36,49): warning C4458: “value”的声明隐藏了类成员
+  (编译源文件“Engine/Engine.cpp”)
+      D:\Pitaya\Core\Identifier\UID.h(57,18):
+      参见“Pitaya::Core::UID::value”的声明
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winbase.h(7940,5): warning C5039: “TpSetCallbackCleanupGroup”: 可能引发函数的指针或引用传递到 -EHc 下的外部 "C" 函数。如果此函数引发异常，则可能发生未定义的行为。
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(2200,23): warning C4668: 没有将“NTDDI_WIN11_DT”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11434,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11440,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11445,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11450,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11457,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11478,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11484,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11492,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11496,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11500,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11505,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16838,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16987,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17000,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Log\Log.h(37,34): warning C4820: "Pitaya::Engine::Internal::Log::LogMessage": 数据成员 "Pitaya::Engine::Internal::Log::LogMessage::level" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Log\Log.h(84,21): warning C4820: "Pitaya::Engine::Internal::Log": 数据成员 "Pitaya::Engine::Internal::Log::isRunning" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Log\Log.h(87,8): warning C4820: "Pitaya::Engine::Internal::Log": 数据成员 "Pitaya::Engine::Internal::Log::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(44,9): warning C4820: "Pitaya::Engine::Event::Args::Window::DropFileEventArgs": 数据成员 "Pitaya::Engine::Event::Args::Window::DropFileEventArgs::count" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(84,9): warning C4820: "Pitaya::Engine::Event::Args::Input::MouseButtonEventArgs": 数据成员 "Pitaya::Engine::Event::Args::Input::MouseButtonEventArgs::mods" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(95,42): warning C4820: "Pitaya::Engine::Event::Event": 数据成员 "Pitaya::Engine::Event::Event::type" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(89,9): warning C4626: “Pitaya::Engine::Event::Event”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(89,9): warning C5027: “Pitaya::Engine::Event::Event”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(110,19): warning C4820: "Pitaya::Engine::Event::EventToken": 数据成员 "Pitaya::Engine::Event::EventToken::type" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(99,9): warning C4626: “Pitaya::Engine::Event::EventToken”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(99,9): warning C5027: “Pitaya::Engine::Event::EventToken”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+  
+  Defining YAML_CPP_API for DLL import
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\parser.h(85,28): warning C4251: “YAML::Parser::m_pScanner”:“std::unique_ptr<YAML::Scanner,std::default_delete<YAML::Scanner>>”需要有 dll 接口以供“YAML::Parser”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
+      参见“std::unique_ptr<YAML::Scanner,std::default_delete<YAML::Scanner>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\parser.h(86,31): warning C4251: “YAML::Parser::m_pDirectives”:“std::unique_ptr<YAML::Directives,std::default_delete<YAML::Directives>>”需要有 dll 接口以供“YAML::Parser”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
+      参见“std::unique_ptr<YAML::Directives,std::default_delete<YAML::Directives>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\binary.h(65,30): warning C4251: “YAML::Binary::m_data”:“std::vector<unsigned char,std::allocator<unsigned char>>”需要有 dll 接口以供“YAML::Binary”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<unsigned char,std::allocator<unsigned char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\emittermanip.h(103,15): warning C4820: "YAML::_Tag": 数据成员 "YAML::_Tag::type" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\ostream_wrapper.h(49,29): warning C4251: “YAML::ostream_wrapper::m_buffer”:“std::vector<char,std::allocator<char>>”需要有 dll 接口以供“YAML::ostream_wrapper”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<char,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\ostream_wrapper.h(54,8): warning C4820: "YAML::ostream_wrapper": 数据成员 "YAML::ostream_wrapper::m_comment" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\emitter.h(132,33): warning C4251: “YAML::Emitter::m_pState”:“std::unique_ptr<YAML::EmitterState,std::default_delete<YAML::EmitterState>>”需要有 dll 接口以供“YAML::Emitter”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
+      参见“std::unique_ptr<YAML::EmitterState,std::default_delete<YAML::EmitterState>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(162,15): warning C4251: “YAML::Exception::msg”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::Exception”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(161,8): warning C4820: "YAML::Exception": 数据成员 "YAML::Exception::mark" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(153,44): warning C4275: 非 dll 接口 class“std::runtime_error”用作 dll 接口 class“YAML::Exception”的基
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\stdexcept(100,30):
+      参见“std::runtime_error”的声明
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(153,20):
+      参见“YAML::Exception”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\node.h(135,15): warning C4251: “YAML::Node::m_invalidKey”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::Node”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\node.h(133,8): warning C4820: "YAML::Node": 数据成员 "YAML::Node::m_isValid" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\node.h(136,40): warning C4251: “YAML::Node::m_pMemory”:“std::shared_ptr<YAML::detail::memory_holder>”需要有 dll 接口以供“YAML::Node”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(1565,7):
+      参见“std::shared_ptr<YAML::detail::memory_holder>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\memory.h(31,9): warning C4251: “YAML::detail::memory::m_nodes”:“std::set<YAML::detail::shared_node,std::less<YAML::detail::shared_node>,std::allocator<YAML::detail::shared_node>>”需要有 dll 接口以供“YAML::detail::memory”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\set(51,7):
+      参见“std::set<YAML::detail::shared_node,std::less<YAML::detail::shared_node>,std::allocator<YAML::detail::shared_node>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\memory.h(42,17): warning C4251: “YAML::detail::memory_holder::m_pMemory”:“std::shared_ptr<YAML::detail::memory>”需要有 dll 接口以供“YAML::detail::memory_holder”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(1565,7):
+      参见“std::shared_ptr<YAML::detail::memory>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33): warning C4820: "YAML::detail::node_iterator_base<YAML::detail::node>": 数据成员 "YAML::detail::node_iterator_base<YAML::detail::node>::m_type" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\iterator.h(23,7):
+          在编译类模板“YAML::detail::iterator_base”时
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\iterator.h(90,13):
+          查看对正在编译的 类 模板 实例化“YAML::detail::node_iterator_base<YAML::detail::node>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(101,8): warning C4820: "YAML::detail::node_data": 数据成员 "YAML::detail::node_data::m_isDefined" 后添加了 "3" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(104,15): warning C4251: “YAML::detail::node_data::m_tag”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(103,19): warning C4820: "YAML::detail::node_data": 数据成员 "YAML::detail::node_data::m_type" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(108,15): warning C4251: “YAML::detail::node_data::m_scalar”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(105,23): warning C4820: "YAML::detail::node_data": 数据成员 "YAML::detail::node_data::m_style" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(112,12): warning C4251: “YAML::detail::node_data::m_sequence”:“std::vector<YAML::detail::node *,std::allocator<YAML::detail::node *>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<YAML::detail::node *,std::allocator<YAML::detail::node *>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(118,12): warning C4251: “YAML::detail::node_data::m_map”:“std::vector<std::pair<YAML::detail::node *,YAML::detail::node *>,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<std::pair<YAML::detail::node *,YAML::detail::node *>,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(122,20): warning C4251: “YAML::detail::node_data::m_undefinedPairs”:“std::list<YAML::detail::node_data::kv_pair,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/Engine.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\list(769,7):
+      参见“std::list<YAML::detail::node_data::kv_pair,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33): warning C4820: "YAML::detail::node_iterator_base<const YAML::detail::node>": 数据成员 "YAML::detail::node_iterator_base<const YAML::detail::node>::m_type" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_ref.h(43,23):
+          查看对正在编译的 类 模板 实例化“YAML::detail::node_iterator_base<const YAML::detail::node>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(138,8): warning C4626: “YAML::as_if<std::string,void>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(138,8): warning C5027: “YAML::as_if<std::string,void>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(224,1): warning C4365: “=”: 从“int”转换到“unsigned short”，有符号/无符号不匹配
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(230,1): warning C4365: “=”: 从“int”转换到“unsigned char”，有符号/无符号不匹配
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(168,33): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::RendererAPI" 后添加了 "2" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(172,7): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::WindowHeight" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(129,4): warning C4061: 枚举 "Pitaya::Engine::Physics::API" 的开关中的枚举器 "Pitaya::Engine::Physics::API::Unknown" 未由事例标签显式处理
+  (编译源文件“Engine/Engine.cpp”)
+      D:\Pitaya\Core\Enum\Enum.h(97,13):
+      参见“Pitaya::Engine::Physics::API”的声明
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(141,4): warning C4061: 枚举 "Pitaya::Engine::Renderer::API" 的开关中的枚举器 "Pitaya::Engine::Renderer::API::Unknown" 未由事例标签显式处理
+  (编译源文件“Engine/Engine.cpp”)
+      D:\Pitaya\Core\Enum\Enum.h(82,13):
+      参见“Pitaya::Engine::Renderer::API”的声明
+  
+D:\Pitaya\Engine\Engine\Engine.h(180,35): warning C4820: "Pitaya::Engine::Engine": 数据成员 "Pitaya::Engine::Engine::input" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Engine.h(128,63): warning C4458: “event”的声明隐藏了类成员
+  (编译源文件“Engine/Engine.cpp”)
+      D:\Pitaya\Engine\Engine\Engine.h(182,35):
+      参见“Pitaya::Engine::Engine::event”的声明
+  
+D:\Pitaya\Engine\Engine\Engine.cpp(3,9): warning C4464: 相对包含路径包括 ".."
+D:\Pitaya\Engine\Physics\Backend\Bullet\BulletPhysics.h(3,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Engine.cpp(4,9): warning C4464: 相对包含路径包括 ".."
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(5,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(6,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\GLFW\include\GLFW\glfw3.h(2073,18): warning C4820: "GLFWgammaramp": 数据成员 "GLFWgammaramp::size" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\GLFW\include\GLFW\glfw3.h(2118,19): warning C4820: "GLFWgamepadstate": 数据成员 "GLFWgamepadstate::buttons" 后添加了 "1" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(47,43): warning C4820: "Pitaya::Engine::Renderer::OpenGLRenderer::DrawcallCmdParser::DrawcallCmd": 数据成员 "Pitaya::Engine::Renderer::OpenGLRenderer::DrawcallCmdParser::DrawcallCmd::renderQueue" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(113,21): warning C4820: "Pitaya::Engine::Renderer::OpenGLRenderer": 数据成员 "Pitaya::Engine::Renderer::OpenGLRenderer::isRunning" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(116,39): warning C4820: "Pitaya::Engine::Renderer::OpenGLRenderer": 数据成员 "Pitaya::Engine::Renderer::OpenGLRenderer::renderThreadToken" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Engine.cpp(5,9): warning C4464: 相对包含路径包括 ".."
+D:\Pitaya\Engine\Window\Backend\OpenGL\OpenGLWindow.h(5,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\Engine\Engine\Engine.cpp(80,2): warning C4061: 枚举 "Pitaya::Engine::Renderer::API" 的开关中的枚举器 "Pitaya::Engine::Renderer::API::Unknown" 未由事例标签显式处理
+      D:\Pitaya\Core\Enum\Enum.h(82,13):
+      参见“Pitaya::Engine::Renderer::API”的声明
+  
+D:\Pitaya\Engine\Engine\Engine.cpp(91,2): warning C4061: 枚举 "Pitaya::Engine::Physics::API" 的开关中的枚举器 "Pitaya::Engine::Physics::API::Unknown" 未由事例标签显式处理
+      D:\Pitaya\Core\Enum\Enum.h(97,13):
+      参见“Pitaya::Engine::Physics::API”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: “YAML::as_if<std::string,std::string>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(52,19):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,std::string>(const S &) const”的引用
+          with
+          [
+              T=std::string,
+              S=std::string
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<std::string,std::string>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C5027: “YAML::as_if<std::string,std::string>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “YAML::as_if<size_t,size_t>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(65,39):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<size_t,size_t>(const S &) const”的引用
+          with
+          [
+              T=size_t,
+              S=size_t
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<size_t,size_t>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C5027: “YAML::as_if<size_t,size_t>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: “YAML::as_if<std::string,char [7]>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(69,30):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,char[7]>(const S (&)) const”的引用
+          with
+          [
+              T=std::string,
+              S=char [7]
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<std::string,char [7]>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C5027: “YAML::as_if<std::string,char [7]>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “YAML::as_if<int,int>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(103,26):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<int,int>(const S &) const”的引用
+          with
+          [
+              T=int,
+              S=int
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<int,int>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C5027: “YAML::as_if<int,int>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Engine.cpp”)
+  
+  EngineAPI.cpp
+D:\Pitaya\Engine\Engine\Interface\Window.h(30,8): warning C4820: "Pitaya::Engine::Interface::Window": 数据成员 "Pitaya::Engine::Interface::Window::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(30,8): warning C4820: "Pitaya::Engine::Interface::Renderer": 数据成员 "Pitaya::Engine::Interface::Renderer::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(22,55): warning C4458: “window”的声明隐藏了类成员
+  (编译源文件“Engine/EngineAPI.cpp”)
+      D:\Pitaya\Engine\Engine\Interface\Renderer.h(28,38):
+      参见“Pitaya::Engine::Interface::Renderer::window”的声明
+  
+D:\Pitaya\Engine\Engine\Interface\Physics.h(22,8): warning C4820: "Pitaya::Engine::Interface::Physics": 数据成员 "Pitaya::Engine::Interface::Physics::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Time\Time.h(38,9): warning C4820: "Pitaya::Engine::Internal::Time": 数据成员 "Pitaya::Engine::Internal::Time::targetFrameTime" 后添加了 "4" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Core\Utility\Utility.h(3,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Core\Identifier\UID.h(36,49): warning C4458: “value”的声明隐藏了类成员
+  (编译源文件“Engine/EngineAPI.cpp”)
+      D:\Pitaya\Core\Identifier\UID.h(57,18):
+      参见“Pitaya::Core::UID::value”的声明
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winbase.h(7940,5): warning C5039: “TpSetCallbackCleanupGroup”: 可能引发函数的指针或引用传递到 -EHc 下的外部 "C" 函数。如果此函数引发异常，则可能发生未定义的行为。
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(2200,23): warning C4668: 没有将“NTDDI_WIN11_DT”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11434,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11440,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11445,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11450,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11457,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11478,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11484,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11492,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11496,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11500,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11505,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16838,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16987,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17000,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Log\Log.h(37,34): warning C4820: "Pitaya::Engine::Internal::Log::LogMessage": 数据成员 "Pitaya::Engine::Internal::Log::LogMessage::level" 后添加了 "7" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Log\Log.h(84,21): warning C4820: "Pitaya::Engine::Internal::Log": 数据成员 "Pitaya::Engine::Internal::Log::isRunning" 后添加了 "7" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Log\Log.h(87,8): warning C4820: "Pitaya::Engine::Internal::Log": 数据成员 "Pitaya::Engine::Internal::Log::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(44,9): warning C4820: "Pitaya::Engine::Event::Args::Window::DropFileEventArgs": 数据成员 "Pitaya::Engine::Event::Args::Window::DropFileEventArgs::count" 后添加了 "4" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(84,9): warning C4820: "Pitaya::Engine::Event::Args::Input::MouseButtonEventArgs": 数据成员 "Pitaya::Engine::Event::Args::Input::MouseButtonEventArgs::mods" 后添加了 "4" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(95,42): warning C4820: "Pitaya::Engine::Event::Event": 数据成员 "Pitaya::Engine::Event::Event::type" 后添加了 "7" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(89,9): warning C4626: “Pitaya::Engine::Event::Event”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(89,9): warning C5027: “Pitaya::Engine::Event::Event”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(110,19): warning C4820: "Pitaya::Engine::Event::EventToken": 数据成员 "Pitaya::Engine::Event::EventToken::type" 后添加了 "7" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(99,9): warning C4626: “Pitaya::Engine::Event::EventToken”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(99,9): warning C5027: “Pitaya::Engine::Event::EventToken”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+  Defining YAML_CPP_API for DLL import
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\parser.h(85,28): warning C4251: “YAML::Parser::m_pScanner”:“std::unique_ptr<YAML::Scanner,std::default_delete<YAML::Scanner>>”需要有 dll 接口以供“YAML::Parser”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
+      参见“std::unique_ptr<YAML::Scanner,std::default_delete<YAML::Scanner>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\parser.h(86,31): warning C4251: “YAML::Parser::m_pDirectives”:“std::unique_ptr<YAML::Directives,std::default_delete<YAML::Directives>>”需要有 dll 接口以供“YAML::Parser”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
+      参见“std::unique_ptr<YAML::Directives,std::default_delete<YAML::Directives>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\binary.h(65,30): warning C4251: “YAML::Binary::m_data”:“std::vector<unsigned char,std::allocator<unsigned char>>”需要有 dll 接口以供“YAML::Binary”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<unsigned char,std::allocator<unsigned char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\emittermanip.h(103,15): warning C4820: "YAML::_Tag": 数据成员 "YAML::_Tag::type" 后添加了 "4" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\ostream_wrapper.h(49,29): warning C4251: “YAML::ostream_wrapper::m_buffer”:“std::vector<char,std::allocator<char>>”需要有 dll 接口以供“YAML::ostream_wrapper”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<char,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\ostream_wrapper.h(54,8): warning C4820: "YAML::ostream_wrapper": 数据成员 "YAML::ostream_wrapper::m_comment" 后添加了 "7" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\emitter.h(132,33): warning C4251: “YAML::Emitter::m_pState”:“std::unique_ptr<YAML::EmitterState,std::default_delete<YAML::EmitterState>>”需要有 dll 接口以供“YAML::Emitter”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
+      参见“std::unique_ptr<YAML::EmitterState,std::default_delete<YAML::EmitterState>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(162,15): warning C4251: “YAML::Exception::msg”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::Exception”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(161,8): warning C4820: "YAML::Exception": 数据成员 "YAML::Exception::mark" 后添加了 "4" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(153,44): warning C4275: 非 dll 接口 class“std::runtime_error”用作 dll 接口 class“YAML::Exception”的基
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\stdexcept(100,30):
+      参见“std::runtime_error”的声明
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(153,20):
+      参见“YAML::Exception”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\node.h(135,15): warning C4251: “YAML::Node::m_invalidKey”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::Node”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\node.h(133,8): warning C4820: "YAML::Node": 数据成员 "YAML::Node::m_isValid" 后添加了 "7" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\node.h(136,40): warning C4251: “YAML::Node::m_pMemory”:“std::shared_ptr<YAML::detail::memory_holder>”需要有 dll 接口以供“YAML::Node”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(1565,7):
+      参见“std::shared_ptr<YAML::detail::memory_holder>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\memory.h(31,9): warning C4251: “YAML::detail::memory::m_nodes”:“std::set<YAML::detail::shared_node,std::less<YAML::detail::shared_node>,std::allocator<YAML::detail::shared_node>>”需要有 dll 接口以供“YAML::detail::memory”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\set(51,7):
+      参见“std::set<YAML::detail::shared_node,std::less<YAML::detail::shared_node>,std::allocator<YAML::detail::shared_node>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\memory.h(42,17): warning C4251: “YAML::detail::memory_holder::m_pMemory”:“std::shared_ptr<YAML::detail::memory>”需要有 dll 接口以供“YAML::detail::memory_holder”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(1565,7):
+      参见“std::shared_ptr<YAML::detail::memory>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33): warning C4820: "YAML::detail::node_iterator_base<YAML::detail::node>": 数据成员 "YAML::detail::node_iterator_base<YAML::detail::node>::m_type" 后添加了 "4" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\iterator.h(23,7):
+          在编译类模板“YAML::detail::iterator_base”时
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\iterator.h(90,13):
+          查看对正在编译的 类 模板 实例化“YAML::detail::node_iterator_base<YAML::detail::node>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(101,8): warning C4820: "YAML::detail::node_data": 数据成员 "YAML::detail::node_data::m_isDefined" 后添加了 "3" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(104,15): warning C4251: “YAML::detail::node_data::m_tag”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(103,19): warning C4820: "YAML::detail::node_data": 数据成员 "YAML::detail::node_data::m_type" 后添加了 "4" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(108,15): warning C4251: “YAML::detail::node_data::m_scalar”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(105,23): warning C4820: "YAML::detail::node_data": 数据成员 "YAML::detail::node_data::m_style" 后添加了 "4" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(112,12): warning C4251: “YAML::detail::node_data::m_sequence”:“std::vector<YAML::detail::node *,std::allocator<YAML::detail::node *>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<YAML::detail::node *,std::allocator<YAML::detail::node *>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(118,12): warning C4251: “YAML::detail::node_data::m_map”:“std::vector<std::pair<YAML::detail::node *,YAML::detail::node *>,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<std::pair<YAML::detail::node *,YAML::detail::node *>,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(122,20): warning C4251: “YAML::detail::node_data::m_undefinedPairs”:“std::list<YAML::detail::node_data::kv_pair,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/EngineAPI.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\list(769,7):
+      参见“std::list<YAML::detail::node_data::kv_pair,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33): warning C4820: "YAML::detail::node_iterator_base<const YAML::detail::node>": 数据成员 "YAML::detail::node_iterator_base<const YAML::detail::node>::m_type" 后添加了 "4" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_ref.h(43,23):
+          查看对正在编译的 类 模板 实例化“YAML::detail::node_iterator_base<const YAML::detail::node>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(138,8): warning C4626: “YAML::as_if<std::string,void>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(138,8): warning C5027: “YAML::as_if<std::string,void>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(224,1): warning C4365: “=”: 从“int”转换到“unsigned short”，有符号/无符号不匹配
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(230,1): warning C4365: “=”: 从“int”转换到“unsigned char”，有符号/无符号不匹配
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(168,33): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::RendererAPI" 后添加了 "2" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(172,7): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::WindowHeight" 后添加了 "4" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(129,4): warning C4061: 枚举 "Pitaya::Engine::Physics::API" 的开关中的枚举器 "Pitaya::Engine::Physics::API::Unknown" 未由事例标签显式处理
+  (编译源文件“Engine/EngineAPI.cpp”)
+      D:\Pitaya\Core\Enum\Enum.h(97,13):
+      参见“Pitaya::Engine::Physics::API”的声明
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(141,4): warning C4061: 枚举 "Pitaya::Engine::Renderer::API" 的开关中的枚举器 "Pitaya::Engine::Renderer::API::Unknown" 未由事例标签显式处理
+  (编译源文件“Engine/EngineAPI.cpp”)
+      D:\Pitaya\Core\Enum\Enum.h(82,13):
+      参见“Pitaya::Engine::Renderer::API”的声明
+  
+D:\Pitaya\Engine\Engine\Engine.h(180,35): warning C4820: "Pitaya::Engine::Engine": 数据成员 "Pitaya::Engine::Engine::input" 后添加了 "7" 字节填充
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\Engine\Engine\Engine.h(128,63): warning C4458: “event”的声明隐藏了类成员
+  (编译源文件“Engine/EngineAPI.cpp”)
+      D:\Pitaya\Engine\Engine\Engine.h(182,35):
+      参见“Pitaya::Engine::Engine::event”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: “YAML::as_if<std::string,std::string>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(52,19):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,std::string>(const S &) const”的引用
+          with
+          [
+              T=std::string,
+              S=std::string
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<std::string,std::string>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C5027: “YAML::as_if<std::string,std::string>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “YAML::as_if<size_t,size_t>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(65,39):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<size_t,size_t>(const S &) const”的引用
+          with
+          [
+              T=size_t,
+              S=size_t
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<size_t,size_t>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C5027: “YAML::as_if<size_t,size_t>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: “YAML::as_if<std::string,char [7]>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(69,30):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,char[7]>(const S (&)) const”的引用
+          with
+          [
+              T=std::string,
+              S=char [7]
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<std::string,char [7]>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C5027: “YAML::as_if<std::string,char [7]>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “YAML::as_if<int,int>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(103,26):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<int,int>(const S &) const”的引用
+          with
+          [
+              T=int,
+              S=int
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<int,int>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C5027: “YAML::as_if<int,int>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/EngineAPI.cpp”)
+  
+  Input.cpp
+D:\Pitaya\Engine\Engine\Internal\Input\Input.cpp(3,9): warning C4464: 相对包含路径包括 ".."
+D:\Pitaya\Engine\Engine\Interface\Window.h(30,8): warning C4820: "Pitaya::Engine::Interface::Window": 数据成员 "Pitaya::Engine::Interface::Window::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(30,8): warning C4820: "Pitaya::Engine::Interface::Renderer": 数据成员 "Pitaya::Engine::Interface::Renderer::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(22,55): warning C4458: “window”的声明隐藏了类成员
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      D:\Pitaya\Engine\Engine\Interface\Renderer.h(28,38):
+      参见“Pitaya::Engine::Interface::Renderer::window”的声明
+  
+D:\Pitaya\Engine\Engine\Interface\Physics.h(22,8): warning C4820: "Pitaya::Engine::Interface::Physics": 数据成员 "Pitaya::Engine::Interface::Physics::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Time\Time.h(38,9): warning C4820: "Pitaya::Engine::Internal::Time": 数据成员 "Pitaya::Engine::Internal::Time::targetFrameTime" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Core\Utility\Utility.h(3,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Core\Identifier\UID.h(36,49): warning C4458: “value”的声明隐藏了类成员
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      D:\Pitaya\Core\Identifier\UID.h(57,18):
+      参见“Pitaya::Core::UID::value”的声明
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winbase.h(7940,5): warning C5039: “TpSetCallbackCleanupGroup”: 可能引发函数的指针或引用传递到 -EHc 下的外部 "C" 函数。如果此函数引发异常，则可能发生未定义的行为。
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(2200,23): warning C4668: 没有将“NTDDI_WIN11_DT”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11434,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11440,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11445,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11450,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11457,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11478,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11484,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11492,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11496,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11500,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11505,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16838,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16987,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17000,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Log\Log.h(37,34): warning C4820: "Pitaya::Engine::Internal::Log::LogMessage": 数据成员 "Pitaya::Engine::Internal::Log::LogMessage::level" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Log\Log.h(84,21): warning C4820: "Pitaya::Engine::Internal::Log": 数据成员 "Pitaya::Engine::Internal::Log::isRunning" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Log\Log.h(87,8): warning C4820: "Pitaya::Engine::Internal::Log": 数据成员 "Pitaya::Engine::Internal::Log::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(44,9): warning C4820: "Pitaya::Engine::Event::Args::Window::DropFileEventArgs": 数据成员 "Pitaya::Engine::Event::Args::Window::DropFileEventArgs::count" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(84,9): warning C4820: "Pitaya::Engine::Event::Args::Input::MouseButtonEventArgs": 数据成员 "Pitaya::Engine::Event::Args::Input::MouseButtonEventArgs::mods" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(95,42): warning C4820: "Pitaya::Engine::Event::Event": 数据成员 "Pitaya::Engine::Event::Event::type" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(89,9): warning C4626: “Pitaya::Engine::Event::Event”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(89,9): warning C5027: “Pitaya::Engine::Event::Event”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(110,19): warning C4820: "Pitaya::Engine::Event::EventToken": 数据成员 "Pitaya::Engine::Event::EventToken::type" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(99,9): warning C4626: “Pitaya::Engine::Event::EventToken”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(99,9): warning C5027: “Pitaya::Engine::Event::EventToken”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+  Defining YAML_CPP_API for DLL import
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\parser.h(85,28): warning C4251: “YAML::Parser::m_pScanner”:“std::unique_ptr<YAML::Scanner,std::default_delete<YAML::Scanner>>”需要有 dll 接口以供“YAML::Parser”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
+      参见“std::unique_ptr<YAML::Scanner,std::default_delete<YAML::Scanner>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\parser.h(86,31): warning C4251: “YAML::Parser::m_pDirectives”:“std::unique_ptr<YAML::Directives,std::default_delete<YAML::Directives>>”需要有 dll 接口以供“YAML::Parser”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
+      参见“std::unique_ptr<YAML::Directives,std::default_delete<YAML::Directives>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\binary.h(65,30): warning C4251: “YAML::Binary::m_data”:“std::vector<unsigned char,std::allocator<unsigned char>>”需要有 dll 接口以供“YAML::Binary”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<unsigned char,std::allocator<unsigned char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\emittermanip.h(103,15): warning C4820: "YAML::_Tag": 数据成员 "YAML::_Tag::type" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\ostream_wrapper.h(49,29): warning C4251: “YAML::ostream_wrapper::m_buffer”:“std::vector<char,std::allocator<char>>”需要有 dll 接口以供“YAML::ostream_wrapper”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<char,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\ostream_wrapper.h(54,8): warning C4820: "YAML::ostream_wrapper": 数据成员 "YAML::ostream_wrapper::m_comment" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\emitter.h(132,33): warning C4251: “YAML::Emitter::m_pState”:“std::unique_ptr<YAML::EmitterState,std::default_delete<YAML::EmitterState>>”需要有 dll 接口以供“YAML::Emitter”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
+      参见“std::unique_ptr<YAML::EmitterState,std::default_delete<YAML::EmitterState>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(162,15): warning C4251: “YAML::Exception::msg”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::Exception”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(161,8): warning C4820: "YAML::Exception": 数据成员 "YAML::Exception::mark" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(153,44): warning C4275: 非 dll 接口 class“std::runtime_error”用作 dll 接口 class“YAML::Exception”的基
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\stdexcept(100,30):
+      参见“std::runtime_error”的声明
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(153,20):
+      参见“YAML::Exception”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\node.h(135,15): warning C4251: “YAML::Node::m_invalidKey”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::Node”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\node.h(133,8): warning C4820: "YAML::Node": 数据成员 "YAML::Node::m_isValid" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\node.h(136,40): warning C4251: “YAML::Node::m_pMemory”:“std::shared_ptr<YAML::detail::memory_holder>”需要有 dll 接口以供“YAML::Node”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(1565,7):
+      参见“std::shared_ptr<YAML::detail::memory_holder>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\memory.h(31,9): warning C4251: “YAML::detail::memory::m_nodes”:“std::set<YAML::detail::shared_node,std::less<YAML::detail::shared_node>,std::allocator<YAML::detail::shared_node>>”需要有 dll 接口以供“YAML::detail::memory”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\set(51,7):
+      参见“std::set<YAML::detail::shared_node,std::less<YAML::detail::shared_node>,std::allocator<YAML::detail::shared_node>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\memory.h(42,17): warning C4251: “YAML::detail::memory_holder::m_pMemory”:“std::shared_ptr<YAML::detail::memory>”需要有 dll 接口以供“YAML::detail::memory_holder”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(1565,7):
+      参见“std::shared_ptr<YAML::detail::memory>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33): warning C4820: "YAML::detail::node_iterator_base<YAML::detail::node>": 数据成员 "YAML::detail::node_iterator_base<YAML::detail::node>::m_type" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\iterator.h(23,7):
+          在编译类模板“YAML::detail::iterator_base”时
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\iterator.h(90,13):
+          查看对正在编译的 类 模板 实例化“YAML::detail::node_iterator_base<YAML::detail::node>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(101,8): warning C4820: "YAML::detail::node_data": 数据成员 "YAML::detail::node_data::m_isDefined" 后添加了 "3" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(104,15): warning C4251: “YAML::detail::node_data::m_tag”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(103,19): warning C4820: "YAML::detail::node_data": 数据成员 "YAML::detail::node_data::m_type" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(108,15): warning C4251: “YAML::detail::node_data::m_scalar”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(105,23): warning C4820: "YAML::detail::node_data": 数据成员 "YAML::detail::node_data::m_style" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(112,12): warning C4251: “YAML::detail::node_data::m_sequence”:“std::vector<YAML::detail::node *,std::allocator<YAML::detail::node *>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<YAML::detail::node *,std::allocator<YAML::detail::node *>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(118,12): warning C4251: “YAML::detail::node_data::m_map”:“std::vector<std::pair<YAML::detail::node *,YAML::detail::node *>,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<std::pair<YAML::detail::node *,YAML::detail::node *>,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(122,20): warning C4251: “YAML::detail::node_data::m_undefinedPairs”:“std::list<YAML::detail::node_data::kv_pair,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\list(769,7):
+      参见“std::list<YAML::detail::node_data::kv_pair,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33): warning C4820: "YAML::detail::node_iterator_base<const YAML::detail::node>": 数据成员 "YAML::detail::node_iterator_base<const YAML::detail::node>::m_type" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_ref.h(43,23):
+          查看对正在编译的 类 模板 实例化“YAML::detail::node_iterator_base<const YAML::detail::node>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(138,8): warning C4626: “YAML::as_if<std::string,void>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(138,8): warning C5027: “YAML::as_if<std::string,void>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(224,1): warning C4365: “=”: 从“int”转换到“unsigned short”，有符号/无符号不匹配
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(230,1): warning C4365: “=”: 从“int”转换到“unsigned char”，有符号/无符号不匹配
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(168,33): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::RendererAPI" 后添加了 "2" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(172,7): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::WindowHeight" 后添加了 "4" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(129,4): warning C4061: 枚举 "Pitaya::Engine::Physics::API" 的开关中的枚举器 "Pitaya::Engine::Physics::API::Unknown" 未由事例标签显式处理
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      D:\Pitaya\Core\Enum\Enum.h(97,13):
+      参见“Pitaya::Engine::Physics::API”的声明
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(141,4): warning C4061: 枚举 "Pitaya::Engine::Renderer::API" 的开关中的枚举器 "Pitaya::Engine::Renderer::API::Unknown" 未由事例标签显式处理
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      D:\Pitaya\Core\Enum\Enum.h(82,13):
+      参见“Pitaya::Engine::Renderer::API”的声明
+  
+D:\Pitaya\Engine\Engine\Engine.h(180,35): warning C4820: "Pitaya::Engine::Engine": 数据成员 "Pitaya::Engine::Engine::input" 后添加了 "7" 字节填充
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\Engine\Engine\Engine.h(128,63): warning C4458: “event”的声明隐藏了类成员
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      D:\Pitaya\Engine\Engine\Engine.h(182,35):
+      参见“Pitaya::Engine::Engine::event”的声明
+  
+D:\Pitaya\Engine\Engine\Internal\Input\Input.cpp(13,81): warning C4100: 'keyCode': 未引用的参数
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: “YAML::as_if<std::string,std::string>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(52,19):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,std::string>(const S &) const”的引用
+          with
+          [
+              T=std::string,
+              S=std::string
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<std::string,std::string>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C5027: “YAML::as_if<std::string,std::string>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “YAML::as_if<size_t,size_t>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(65,39):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<size_t,size_t>(const S &) const”的引用
+          with
+          [
+              T=size_t,
+              S=size_t
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<size_t,size_t>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C5027: “YAML::as_if<size_t,size_t>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: “YAML::as_if<std::string,char [7]>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(69,30):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,char[7]>(const S (&)) const”的引用
+          with
+          [
+              T=std::string,
+              S=char [7]
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<std::string,char [7]>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C5027: “YAML::as_if<std::string,char [7]>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “YAML::as_if<int,int>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(103,26):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<int,int>(const S &) const”的引用
+          with
+          [
+              T=int,
+              S=int
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<int,int>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C5027: “YAML::as_if<int,int>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Engine/Internal/Input/Input.cpp”)
+  
+  OpenGLRenderer.cpp
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(5,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Interface\Window.h(30,8): warning C4820: "Pitaya::Engine::Interface::Window": 数据成员 "Pitaya::Engine::Interface::Window::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(30,8): warning C4820: "Pitaya::Engine::Interface::Renderer": 数据成员 "Pitaya::Engine::Interface::Renderer::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(22,55): warning C4458: “window”的声明隐藏了类成员
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      D:\Pitaya\Engine\Engine\Interface\Renderer.h(28,38):
+      参见“Pitaya::Engine::Interface::Renderer::window”的声明
+  
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(6,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\GLFW\include\GLFW\glfw3.h(2073,18): warning C4820: "GLFWgammaramp": 数据成员 "GLFWgammaramp::size" 后添加了 "4" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\GLFW\include\GLFW\glfw3.h(2118,19): warning C4820: "GLFWgamepadstate": 数据成员 "GLFWgamepadstate::buttons" 后添加了 "1" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(47,43): warning C4820: "Pitaya::Engine::Renderer::OpenGLRenderer::DrawcallCmdParser::DrawcallCmd": 数据成员 "Pitaya::Engine::Renderer::OpenGLRenderer::DrawcallCmdParser::DrawcallCmd::renderQueue" 后添加了 "7" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(113,21): warning C4820: "Pitaya::Engine::Renderer::OpenGLRenderer": 数据成员 "Pitaya::Engine::Renderer::OpenGLRenderer::isRunning" 后添加了 "7" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(116,39): warning C4820: "Pitaya::Engine::Renderer::OpenGLRenderer": 数据成员 "Pitaya::Engine::Renderer::OpenGLRenderer::renderThreadToken" 后添加了 "4" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.cpp(3,9): warning C4464: 相对包含路径包括 ".."
+D:\Pitaya\Engine\Engine\Interface\Physics.h(22,8): warning C4820: "Pitaya::Engine::Interface::Physics": 数据成员 "Pitaya::Engine::Interface::Physics::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Time\Time.h(38,9): warning C4820: "Pitaya::Engine::Internal::Time": 数据成员 "Pitaya::Engine::Internal::Time::targetFrameTime" 后添加了 "4" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Core\Utility\Utility.h(3,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Core\Identifier\UID.h(36,49): warning C4458: “value”的声明隐藏了类成员
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      D:\Pitaya\Core\Identifier\UID.h(57,18):
+      参见“Pitaya::Core::UID::value”的声明
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\shared\minwindef.h(130,9): warning C4005: “APIENTRY”: 宏重定义
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      D:\Pitaya\thirdparty\GLFW\include\GLFW\glfw3.h(123,11):
+      参见“APIENTRY”的前一个定义
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winbase.h(7940,5): warning C5039: “TpSetCallbackCleanupGroup”: 可能引发函数的指针或引用传递到 -EHc 下的外部 "C" 函数。如果此函数引发异常，则可能发生未定义的行为。
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(2200,23): warning C4668: 没有将“NTDDI_WIN11_DT”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11434,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11440,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11445,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11450,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11457,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11478,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11484,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11492,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11496,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11500,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11505,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16838,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16987,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17000,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Log\Log.h(37,34): warning C4820: "Pitaya::Engine::Internal::Log::LogMessage": 数据成员 "Pitaya::Engine::Internal::Log::LogMessage::level" 后添加了 "7" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Log\Log.h(84,21): warning C4820: "Pitaya::Engine::Internal::Log": 数据成员 "Pitaya::Engine::Internal::Log::isRunning" 后添加了 "7" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Log\Log.h(87,8): warning C4820: "Pitaya::Engine::Internal::Log": 数据成员 "Pitaya::Engine::Internal::Log::isReleased" 后添加了 "6" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(44,9): warning C4820: "Pitaya::Engine::Event::Args::Window::DropFileEventArgs": 数据成员 "Pitaya::Engine::Event::Args::Window::DropFileEventArgs::count" 后添加了 "4" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(84,9): warning C4820: "Pitaya::Engine::Event::Args::Input::MouseButtonEventArgs": 数据成员 "Pitaya::Engine::Event::Args::Input::MouseButtonEventArgs::mods" 后添加了 "4" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(95,42): warning C4820: "Pitaya::Engine::Event::Event": 数据成员 "Pitaya::Engine::Event::Event::type" 后添加了 "7" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(89,9): warning C4626: “Pitaya::Engine::Event::Event”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(89,9): warning C5027: “Pitaya::Engine::Event::Event”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(110,19): warning C4820: "Pitaya::Engine::Event::EventToken": 数据成员 "Pitaya::Engine::Event::EventToken::type" 后添加了 "7" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(99,9): warning C4626: “Pitaya::Engine::Event::EventToken”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Internal\Event\Event.h(99,9): warning C5027: “Pitaya::Engine::Event::EventToken”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+  Defining YAML_CPP_API for DLL import
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\parser.h(85,28): warning C4251: “YAML::Parser::m_pScanner”:“std::unique_ptr<YAML::Scanner,std::default_delete<YAML::Scanner>>”需要有 dll 接口以供“YAML::Parser”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
+      参见“std::unique_ptr<YAML::Scanner,std::default_delete<YAML::Scanner>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\parser.h(86,31): warning C4251: “YAML::Parser::m_pDirectives”:“std::unique_ptr<YAML::Directives,std::default_delete<YAML::Directives>>”需要有 dll 接口以供“YAML::Parser”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
+      参见“std::unique_ptr<YAML::Directives,std::default_delete<YAML::Directives>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\binary.h(65,30): warning C4251: “YAML::Binary::m_data”:“std::vector<unsigned char,std::allocator<unsigned char>>”需要有 dll 接口以供“YAML::Binary”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<unsigned char,std::allocator<unsigned char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\emittermanip.h(103,15): warning C4820: "YAML::_Tag": 数据成员 "YAML::_Tag::type" 后添加了 "4" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\ostream_wrapper.h(49,29): warning C4251: “YAML::ostream_wrapper::m_buffer”:“std::vector<char,std::allocator<char>>”需要有 dll 接口以供“YAML::ostream_wrapper”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<char,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\ostream_wrapper.h(54,8): warning C4820: "YAML::ostream_wrapper": 数据成员 "YAML::ostream_wrapper::m_comment" 后添加了 "7" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\emitter.h(132,33): warning C4251: “YAML::Emitter::m_pState”:“std::unique_ptr<YAML::EmitterState,std::default_delete<YAML::EmitterState>>”需要有 dll 接口以供“YAML::Emitter”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
+      参见“std::unique_ptr<YAML::EmitterState,std::default_delete<YAML::EmitterState>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(162,15): warning C4251: “YAML::Exception::msg”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::Exception”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(161,8): warning C4820: "YAML::Exception": 数据成员 "YAML::Exception::mark" 后添加了 "4" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(153,44): warning C4275: 非 dll 接口 class“std::runtime_error”用作 dll 接口 class“YAML::Exception”的基
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\stdexcept(100,30):
+      参见“std::runtime_error”的声明
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\exceptions.h(153,20):
+      参见“YAML::Exception”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\node.h(135,15): warning C4251: “YAML::Node::m_invalidKey”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::Node”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\node.h(133,8): warning C4820: "YAML::Node": 数据成员 "YAML::Node::m_isValid" 后添加了 "7" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\node.h(136,40): warning C4251: “YAML::Node::m_pMemory”:“std::shared_ptr<YAML::detail::memory_holder>”需要有 dll 接口以供“YAML::Node”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(1565,7):
+      参见“std::shared_ptr<YAML::detail::memory_holder>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\memory.h(31,9): warning C4251: “YAML::detail::memory::m_nodes”:“std::set<YAML::detail::shared_node,std::less<YAML::detail::shared_node>,std::allocator<YAML::detail::shared_node>>”需要有 dll 接口以供“YAML::detail::memory”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\set(51,7):
+      参见“std::set<YAML::detail::shared_node,std::less<YAML::detail::shared_node>,std::allocator<YAML::detail::shared_node>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\memory.h(42,17): warning C4251: “YAML::detail::memory_holder::m_pMemory”:“std::shared_ptr<YAML::detail::memory>”需要有 dll 接口以供“YAML::detail::memory_holder”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(1565,7):
+      参见“std::shared_ptr<YAML::detail::memory>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33): warning C4820: "YAML::detail::node_iterator_base<YAML::detail::node>": 数据成员 "YAML::detail::node_iterator_base<YAML::detail::node>::m_type" 后添加了 "4" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\iterator.h(23,7):
+          在编译类模板“YAML::detail::iterator_base”时
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\iterator.h(90,13):
+          查看对正在编译的 类 模板 实例化“YAML::detail::node_iterator_base<YAML::detail::node>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(101,8): warning C4820: "YAML::detail::node_data": 数据成员 "YAML::detail::node_data::m_isDefined" 后添加了 "3" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(104,15): warning C4251: “YAML::detail::node_data::m_tag”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(103,19): warning C4820: "YAML::detail::node_data": 数据成员 "YAML::detail::node_data::m_type" 后添加了 "4" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(108,15): warning C4251: “YAML::detail::node_data::m_scalar”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(105,23): warning C4820: "YAML::detail::node_data": 数据成员 "YAML::detail::node_data::m_style" 后添加了 "4" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(112,12): warning C4251: “YAML::detail::node_data::m_sequence”:“std::vector<YAML::detail::node *,std::allocator<YAML::detail::node *>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<YAML::detail::node *,std::allocator<YAML::detail::node *>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(118,12): warning C4251: “YAML::detail::node_data::m_map”:“std::vector<std::pair<YAML::detail::node *,YAML::detail::node *>,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<std::pair<YAML::detail::node *,YAML::detail::node *>,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_data.h(122,20): warning C4251: “YAML::detail::node_data::m_undefinedPairs”:“std::list<YAML::detail::node_data::kv_pair,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”需要有 dll 接口以供“YAML::detail::node_data”的客户端使用
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\list(769,7):
+      参见“std::list<YAML::detail::node_data::kv_pair,std::allocator<std::pair<YAML::detail::node *,YAML::detail::node *>>>”的声明
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33): warning C4820: "YAML::detail::node_iterator_base<const YAML::detail::node>": 数据成员 "YAML::detail::node_iterator_base<const YAML::detail::node>::m_type" 后添加了 "4" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_iterator.h(170,33):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\detail\node_ref.h(43,23):
+          查看对正在编译的 类 模板 实例化“YAML::detail::node_iterator_base<const YAML::detail::node>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(138,8): warning C4626: “YAML::as_if<std::string,void>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(138,8): warning C5027: “YAML::as_if<std::string,void>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(224,1): warning C4365: “=”: 从“int”转换到“unsigned short”，有符号/无符号不匹配
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(230,1): warning C4365: “=”: 从“int”转换到“unsigned char”，有符号/无符号不匹配
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(168,33): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::RendererAPI" 后添加了 "2" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(172,7): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::WindowHeight" 后添加了 "4" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(129,4): warning C4061: 枚举 "Pitaya::Engine::Physics::API" 的开关中的枚举器 "Pitaya::Engine::Physics::API::Unknown" 未由事例标签显式处理
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      D:\Pitaya\Core\Enum\Enum.h(97,13):
+      参见“Pitaya::Engine::Physics::API”的声明
+  
+D:\Pitaya\Engine\Engine\Config\Config.h(141,4): warning C4061: 枚举 "Pitaya::Engine::Renderer::API" 的开关中的枚举器 "Pitaya::Engine::Renderer::API::Unknown" 未由事例标签显式处理
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      D:\Pitaya\Core\Enum\Enum.h(82,13):
+      参见“Pitaya::Engine::Renderer::API”的声明
+  
+D:\Pitaya\Engine\Engine\Engine.h(180,35): warning C4820: "Pitaya::Engine::Engine": 数据成员 "Pitaya::Engine::Engine::input" 后添加了 "7" 字节填充
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\Engine\Engine\Engine.h(128,63): warning C4458: “event”的声明隐藏了类成员
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      D:\Pitaya\Engine\Engine\Engine.h(182,35):
+      参见“Pitaya::Engine::Engine::event”的声明
+  
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.cpp(4,9): warning C4464: 相对包含路径包括 ".."
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.cpp(18,21): warning C4834: 放弃具有 [[nodiscard]] 属性的函数的返回值
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: “YAML::as_if<std::string,std::string>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(52,19):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,std::string>(const S &) const”的引用
+          with
+          [
+              T=std::string,
+              S=std::string
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<std::string,std::string>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C5027: “YAML::as_if<std::string,std::string>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “YAML::as_if<size_t,size_t>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(65,39):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<size_t,size_t>(const S &) const”的引用
+          with
+          [
+              T=size_t,
+              S=size_t
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<size_t,size_t>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C5027: “YAML::as_if<size_t,size_t>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: “YAML::as_if<std::string,char [7]>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(69,30):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,char[7]>(const S (&)) const”的引用
+          with
+          [
+              T=std::string,
+              S=char [7]
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<std::string,char [7]>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C5027: “YAML::as_if<std::string,char [7]>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “YAML::as_if<int,int>”: 已将赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+      D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\Pitaya\Engine\Engine\Config\Config.h(103,26):
+          查看对正在编译的函数 模板 实例化“T YAML::Node::as<int,int>(const S &) const”的引用
+          with
+          [
+              T=int,
+              S=int
+          ]
+          D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(163,21):
+          查看对正在编译的 类 模板 实例化“YAML::as_if<int,int>”的引用
+  
+D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C5027: “YAML::as_if<int,int>”: 已将移动赋值运算符隐式定义为“已删除”
+  (编译源文件“Renderer/Backend/OpenGL/OpenGLRenderer.cpp”)
+  
+  正在生成代码...
+D:\Pitaya\Engine\Engine\Internal\Thread\Thread.h(121,1): warning C4172: 返回局部变量的地址或临时 
+D:\Pitaya\Engine\Engine\Internal\Thread\Thread.h(121,1): warning C4172: 返回局部变量的地址或临时 
+D:\Pitaya\Engine\Engine\Engine.cpp(93,1): warning C4715: “Pitaya::Engine::Engine::BindEngineModelBackendAPI”: 不是所有的控件路径都返回值
+  Engine.vcxproj -> D:\Pitaya\library\x64\Debug\Engine.lib

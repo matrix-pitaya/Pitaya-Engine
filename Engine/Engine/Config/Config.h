@@ -60,20 +60,20 @@ namespace Pitaya::Engine::Config
 			//Physics
 			if (auto node = config["Physics"])
 			{
-				if (auto value = node["MaxFixupdataExecuteTimes"])
+				if (auto value = node["MaxFixupdateExecuteTimes"])
 				{
-					MaxFixupdataExecuteTimes = value.as<size_t>(MaxFixupdataExecuteTimes);
+					MaxFixupdateExecuteTimes = value.as<size_t>(MaxFixupdateExecuteTimes);
 				}
 				if (auto value = node["API"])
 				{
 					std::string api = value.as<std::string>("Bullet");
 					if (api == "Bullet")
 					{
-						PhysicsAPI = Pitaya::Engine::Physics::PhysicsAPI::Bullet;
+						PhysicsAPI = Pitaya::Engine::Physics::API::Bullet;
 					}
 					else
 					{
-						PhysicsAPI = Pitaya::Engine::Physics::PhysicsAPI::Bullet;
+						PhysicsAPI = Pitaya::Engine::Physics::API::Bullet;
 					}
 				}
 			}
@@ -86,11 +86,11 @@ namespace Pitaya::Engine::Config
 					std::string api = value.as<std::string>("OpenGL");
 					if (api == "OpenGL")
 					{
-						RendererAPI = Pitaya::Engine::Renderer::RendererAPI::OpenGL;
+						RendererAPI = Pitaya::Engine::Renderer::API::OpenGL;
 					}
 					else
 					{
-						RendererAPI = Pitaya::Engine::Renderer::RendererAPI::OpenGL;
+						RendererAPI = Pitaya::Engine::Renderer::API::OpenGL;
 					}
 				}
 			}
@@ -116,10 +116,10 @@ namespace Pitaya::Engine::Config
 			config["Engine"]["Version"] = Version;
 
 			//Physics
-			config["Physics"]["MaxFixupdataExecuteTimes"] = MaxFixupdataExecuteTimes;
+			config["Physics"]["MaxFixupdateExecuteTimes"] = MaxFixupdateExecuteTimes;
 			switch (PhysicsAPI)
 			{
-				case Pitaya::Engine::Physics::PhysicsAPI::Bullet:
+				case Pitaya::Engine::Physics::API::Bullet:
 					config["Physics"]["API"] = "Bullet";
 					break;
 				
@@ -131,7 +131,7 @@ namespace Pitaya::Engine::Config
 			//Renderer
 			switch (RendererAPI)
 			{
-				case Pitaya::Engine::Renderer::RendererAPI::OpenGL:
+				case Pitaya::Engine::Renderer::API::OpenGL:
 					config["Renderer"]["API"] = "OpenGL";
 					break;
 
@@ -161,11 +161,11 @@ namespace Pitaya::Engine::Config
 		std::string Version = "1.0";
 
 		//Physics
-		size_t MaxFixupdataExecuteTimes = 5;
-		Pitaya::Engine::Physics::PhysicsAPI PhysicsAPI = Pitaya::Engine::Physics::PhysicsAPI::Bullet;
+		size_t MaxFixupdateExecuteTimes = 5;
+		Pitaya::Engine::Physics::API PhysicsAPI = Pitaya::Engine::Physics::API::Bullet;
 
 		//Renderer
-		Pitaya::Engine::Renderer::RendererAPI RendererAPI = Pitaya::Engine::Renderer::RendererAPI::OpenGL;
+		Pitaya::Engine::Renderer::API RendererAPI = Pitaya::Engine::Renderer::API::OpenGL;
 
 		//Window
 		int WindowWidth = 1280;

@@ -22,7 +22,11 @@ namespace Pitaya::Engine::Internal
 		Time& operator=(const Time&) = delete;
 		Time(Time&&) = delete;
 		Time& operator=(Time&&) = delete;
-		
+
+	private:
+		bool Initialize();
+		void Release();
+
 	private:
 		void Tick();
 		void FrameSync();

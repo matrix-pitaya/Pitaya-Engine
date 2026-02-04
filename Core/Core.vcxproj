@@ -148,24 +148,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Enum\Enum.h" />
-    <ClInclude Include="Event\Event.h" />
-    <ClInclude Include="Event\EventAPI.h" />
     <ClInclude Include="Identifier\GUID.h" />
     <ClInclude Include="Identifier\UID.h" />
-    <ClInclude Include="Log\Console.h" />
-    <ClInclude Include="Log\Log.h" />
-    <ClInclude Include="Log\LogAPI.h" />
+    <ClInclude Include="Console\Console.h" />
     <ClInclude Include="ObjectPool\ObjectPool.h" />
     <ClInclude Include="Singleton\Singleton.h" />
-    <ClInclude Include="Thread\Thread.h" />
-    <ClInclude Include="Thread\ThreadAPI.h" />
     <ClInclude Include="Utility\Utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Event\Event.cpp" />
-    <ClCompile Include="Event\EventAPI.cpp" />
-    <ClCompile Include="Log\Log.cpp" />
-    <ClCompile Include="Log\LogAPI.cpp" />
+    <ClCompile Include="Console\Console.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

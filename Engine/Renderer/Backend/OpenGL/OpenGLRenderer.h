@@ -3,8 +3,7 @@
 #include"Enum/Enum.h"
 
 #include"../../Engine/Engine/Interface/Renderer.h"
-
-#include"Thread/ThreadAPI.h"
+#include"../../Engine/Engine/Internal/Thread/Thread.h"
 
 #include<atomic>
 #include<condition_variable>
@@ -28,7 +27,7 @@ namespace Pitaya::Engine::Renderer
 		friend class Pitaya::Engine::Engine;
 	private:
 		OpenGLRenderer() = default;
-		~OpenGLRenderer() override { Release(); }
+		~OpenGLRenderer() override = default;
 
 	public:
 		OpenGLRenderer(const OpenGLRenderer&) = delete;
@@ -114,7 +113,7 @@ namespace Pitaya::Engine::Renderer
 		std::atomic<bool> isRunning = false;
 		std::mutex mutex;
 
-		Core::Thread::ThreadToken renderThreadToken;
+		Pitaya::Engine::Thread::ThreadToken renderThreadToken;
 
 		DrawcallCmdParser drawcallCmdParser;
 

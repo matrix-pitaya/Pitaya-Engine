@@ -14,7 +14,7 @@ namespace Pitaya::Engine::Physics
 		friend class Pitaya::Engine::Engine;
 	private:
 		BulletPhysics() = default;
-		~BulletPhysics() override { Release(); }
+		~BulletPhysics() override = default;
 
 	public:
 		BulletPhysics(const BulletPhysics&) = delete;

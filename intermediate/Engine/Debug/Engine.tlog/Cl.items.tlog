@@ -1,6 +1,9 @@
 D:\Pitaya\Engine\Engine\Engine.cpp;D:\Pitaya\intermediate\Engine\Debug\Engine.obj
 D:\Pitaya\Engine\Engine\EngineAPI.cpp;D:\Pitaya\intermediate\Engine\Debug\EngineAPI.obj
+D:\Pitaya\Engine\Engine\Internal\Event\Event.cpp;D:\Pitaya\intermediate\Engine\Debug\Event.obj
 D:\Pitaya\Engine\Engine\Internal\Input\Input.cpp;D:\Pitaya\intermediate\Engine\Debug\Input.obj
+D:\Pitaya\Engine\Engine\Internal\Log\Log.cpp;D:\Pitaya\intermediate\Engine\Debug\Log.obj
+D:\Pitaya\Engine\Engine\Internal\Thread\Thread.cpp;D:\Pitaya\intermediate\Engine\Debug\Thread.obj
 D:\Pitaya\Engine\Engine\Internal\Time\Time.cpp;D:\Pitaya\intermediate\Engine\Debug\Time.obj
 D:\Pitaya\Engine\Physics\Backend\Bullet\BulletPhysics.cpp;D:\Pitaya\intermediate\Engine\Debug\BulletPhysics.obj
 D:\Pitaya\Engine\Physics\Backend\Bullet\BulletPhysicsWorld.cpp;D:\Pitaya\intermediate\Engine\Debug\BulletPhysicsWorld.obj

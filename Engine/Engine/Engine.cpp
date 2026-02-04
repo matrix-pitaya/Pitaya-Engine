@@ -4,6 +4,8 @@
 #include"../Renderer/Backend/OpenGL/OpenGLRenderer.h"
 #include"../Window/Backend/OpenGL/OpenGLWindow.h"
 
+#include"Console/Console.h"
+
 bool Pitaya::Engine::Engine::Initialize()
 {
 	if (!BindEngineModelBackendAPI() || !CheckEngineModelBackendBindIsSuccess())
@@ -11,6 +13,9 @@ bool Pitaya::Engine::Engine::Initialize()
 		return false;
 	}
 
+	input.Initialize();
+	thread.Initialize();
+	log.Initialize();
 	physics->Initialize();
 	renderer->Bind(window);
 	window->Initialize(config.WindowWidth, config.WindowHeight, config.Name.c_str());
@@ -22,14 +27,12 @@ bool Pitaya::Engine::Engine::IsRunning()
 {
 	return !window->IsClose();
 }
-void Pitaya::Engine::Engine::Input()
-{
-	input.Listen();
-}
 void Pitaya::Engine::Engine::Tick()
 {
 	time.Tick();
+	input.PrepareNewFrame();
 	window->PollEvents();
+	input.UpdateSnapshots();
 }
 void Pitaya::Engine::Engine::Fixupdata()
 {
@@ -61,34 +64,44 @@ void Pitaya::Engine::Engine::FrameSync()
 }
 void Pitaya::Engine::Engine::Release()
 {
-	delete physics;
+	renderer->Release();
 	delete renderer;
+	renderer = nullptr;
+
+	physics->Release();
+	delete physics;
+	physics = nullptr;
+
+	log.Release();
+	thread.Release();
+	input.Release();
 }
 bool Pitaya::Engine::Engine::BindEngineModelBackendAPI()
 {
 	//  ≈‰‰÷»æAPI
 	switch (config.RendererAPI)
 	{
-		case Pitaya::Engine::Renderer::RendererAPI::OpenGL:
+		case Pitaya::Engine::Renderer::API::OpenGL:
 			renderer = new Pitaya::Engine::Renderer::OpenGLRenderer();
 			window = new Pitaya::Engine::Window::OpenGLWindow();
 			break;
 
 		default:
-			throw std::exception("Unknow Renderer Backend API");
+			throw std::exception("Unknown Renderer Backend API");
 	}
 
 	//  ≈‰ŒÔ¿ÌAPI
 	switch (config.PhysicsAPI)
 	{
-		case Pitaya::Engine::Physics::PhysicsAPI::Bullet:
+		case Pitaya::Engine::Physics::API::Bullet:
 			physics = new Pitaya::Engine::Physics::BulletPhysics();
 			break;
 
 		default:
-			throw std::exception("Unknow Physics Backend API");
+			throw std::exception("Unknown Physics Backend API");
 	}
 
+	return true;
 }
 bool Pitaya::Engine::Engine::CheckEngineModelBackendBindIsSuccess()
 {
