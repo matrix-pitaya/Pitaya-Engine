@@ -1,7 +1,7 @@
 #pragma once
 
 #include"../Enum/Enum.h"
-#include"../Define/Define.h"
+#include"../Singleton/Singleton.h"
 
 #include<functional>
 #include<unordered_map>
@@ -16,9 +16,19 @@ namespace Pitaya::Core::Event
 	struct Event;
 	struct EventToken;
 
-	class EventManager
+	class EventManager : public Pitaya::Core::Singleton<EventManager>
 	{
-		DECLARE_SINGLETON_CLASS_R(EventManager)
+		friend class Pitaya::Core::Singleton<EventManager>;
+	private:
+		EventManager() = default;
+		~EventManager() = default;
+
+	public:
+		EventManager(const EventManager&) = delete;
+		EventManager& operator=(const EventManager&) = delete;
+		EventManager(EventManager&&) = delete;
+		EventManager& operator=(EventManager&&) = delete;
+
 	public:
 		Core::Event::EventToken Subscribe(::Pitaya::Core::Event::EventType type, std::function<void(const ::Pitaya::Core::Event::Event&)> function);
 		bool UnSubscribe(const ::Pitaya::Core::Event::EventToken& eventToken);

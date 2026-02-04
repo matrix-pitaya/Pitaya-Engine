@@ -1,6 +1,5 @@
 #pragma once
 
-#include"Define/Define.h"
 #include"Identifier/UID.h"
 #include"ObjectPool/ObjectPool.h"
 
@@ -13,8 +12,6 @@ namespace Pitaya::Engine
 {
 	class Scene
 	{
-		DELETE_COPY_AND_MOVE(Scene)
-
 	private:
 		Scene() = default;
 		~Scene() = default;

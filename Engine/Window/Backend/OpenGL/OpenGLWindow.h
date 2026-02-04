@@ -1,6 +1,5 @@
 #pragma once
 
-#include"Define/Define.h"
 #include"Enum/Enum.h"
 
 #include"../../Engine/Engine/Interface/Window.h"
@@ -8,16 +7,27 @@
 #include<GL/glew.h>
 #include<GLFW/glfw3.h>
 
+namespace Pitaya::Engine
+{
+	class Engine;
+}
+
 namespace Pitaya::Engine::Window
 {
 	class OpenGLWindow : public Pitaya::Engine::Interface::Window
 	{
-		DELETE_COPY_AND_MOVE(OpenGLWindow)
+		friend class Pitaya::Engine::Engine;
+	private:
+		OpenGLWindow() = default;
+		~OpenGLWindow() override { Release(); }
 
 	public:
-		OpenGLWindow();
-		~OpenGLWindow();
+		OpenGLWindow(const OpenGLWindow&) = delete;
+		OpenGLWindow& operator=(const OpenGLWindow&) = delete;
+		OpenGLWindow(OpenGLWindow&&) = delete;
+		OpenGLWindow& operator=(OpenGLWindow&&) = delete;
 
+	public:
 		bool Initialize(int width,int height, const char* title) override;
 		void Release() override;
 		bool GetKeyDown(Pitaya::Engine::Input::KeyCode keyCode) const override;

@@ -6,7 +6,7 @@
 
 void Pitaya::Core::Log::Log(LogLevel level, const std::string& message)
 {
-	Pitaya::Core::Log::LogManager::Instance.Log(level, message);
+	Pitaya::Core::Log::LogManager::Instance().Log(level, message);
 }
 void Pitaya::Core::Log::PopupMessageBox(const std::string& title, const std::string& message)
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../Define/Define.h"
+#include"../Singleton/Singleton.h"
 #include"../Log/Logapi.h"
 
 #include<string>
@@ -15,9 +15,8 @@ namespace Pitaya::Core::Thread
 	{
 		friend class ThreadManager;
 
-		ThreadToken() = default;
-		ThreadToken(std::thread::id id)
-			:id(id) {}
+		explicit ThreadToken(std::thread::id id = std::thread::id())
+					:id(id) {}
 
 		bool operator==(const ThreadToken& other) const noexcept
 		{
@@ -36,10 +35,9 @@ namespace Pitaya::Core::Thread
 		};
 	};
 
-	class ThreadManager
+	class ThreadManager : public Pitaya::Core::Singleton<ThreadManager>
 	{
-		DECLARE_SINGLETON_CLASS_RB(ThreadManager)
-
+		friend class Pitaya::Core::Singleton<ThreadManager>;
 	private:
 		struct ThreadInfo
 		{
@@ -64,6 +62,24 @@ namespace Pitaya::Core::Thread
 			std::string name;
 			std::optional<std::thread> thread;
 		};
+
+	private:
+		ThreadManager()
+		{
+			//注册主线程
+			map.emplace(ThreadToken(std::this_thread::get_id()), ThreadInfo("Main"));
+		}
+		~ThreadManager()
+		{
+			//通过容器中的ThreadInfo回收线程
+			map.clear();
+		}
+
+	public:
+		ThreadManager(const ThreadManager&) = delete;
+		ThreadManager& operator=(const ThreadManager&) = delete;
+		ThreadManager(ThreadManager&&) = delete;
+		ThreadManager& operator=(ThreadManager&&) = delete;
 
 	public:
 		template<class Function, class... Args>

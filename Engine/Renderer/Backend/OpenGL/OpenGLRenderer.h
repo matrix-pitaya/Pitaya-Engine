@@ -1,6 +1,5 @@
 #pragma once
 
-#include"Define/Define.h"
 #include"Enum/Enum.h"
 
 #include"../../Engine/Engine/Interface/Renderer.h"
@@ -17,17 +16,29 @@
 #include<GL/glew.h>
 #include<GLFW/glfw3.h>
 
+namespace Pitaya::Engine
+{
+	class Engine;
+}
+
 namespace Pitaya::Engine::Renderer
 {
-	class OpenGLRenderer :public Pitaya::Engine::Interface::Renderer
+	class OpenGLRenderer : public Pitaya::Engine::Interface::Renderer
 	{
-		DELETE_COPY_AND_MOVE(OpenGLRenderer)
+		friend class Pitaya::Engine::Engine;
+	private:
+		OpenGLRenderer() = default;
+		~OpenGLRenderer() override { Release(); }
+
+	public:
+		OpenGLRenderer(const OpenGLRenderer&) = delete;
+		OpenGLRenderer& operator=(const OpenGLRenderer&) = delete;
+		OpenGLRenderer(OpenGLRenderer&&) = delete;
+		OpenGLRenderer& operator=(OpenGLRenderer&&) = delete;
 
 	private:
 		class DrawcallCmdParser
 		{
-			DELETE_COPY_AND_MOVE(DrawcallCmdParser)
-
 		private:
 			struct DrawcallCmd
 			{
@@ -41,6 +52,10 @@ namespace Pitaya::Engine::Renderer
 		public:
 			DrawcallCmdParser() = default;
 			~DrawcallCmdParser() = default;
+			DrawcallCmdParser(const DrawcallCmdParser&) = delete;
+			DrawcallCmdParser& operator=(const DrawcallCmdParser&) = delete;
+			DrawcallCmdParser(DrawcallCmdParser&&) = delete;
+			DrawcallCmdParser& operator=(DrawcallCmdParser&&) = delete;
 
 			inline void ParseCmd()
 			{
@@ -78,9 +93,6 @@ namespace Pitaya::Engine::Renderer
 		};
 
 	public:
-		OpenGLRenderer() = default;
-		~OpenGLRenderer() override { Release(); }
-
 		bool Initialize() override;
 		void Release() override;
 		void Render() override;

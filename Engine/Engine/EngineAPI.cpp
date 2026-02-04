@@ -3,23 +3,23 @@
 
 int Pitaya::Engine::Execute()
 {
-	return Pitaya::Engine::Engine::Instance.Execute();
+	return Pitaya::Engine::Engine::Instance().Execute();
 }
 
 size_t Pitaya::Engine::Config::GetMaxFixupdataExecuteTimes()
 {
-	return Pitaya::Engine::Engine::Instance.GetMaxFixupdataExecuteTimes();
+	return Pitaya::Engine::Engine::Instance().GetMaxFixupdataExecuteTimes();
 }
 
-const float& Pitaya::Engine::Time::delta = Pitaya::Engine::Engine::Engine::Instance.GetDeltaTime();
-const float& Pitaya::Engine::Time::fixdelta = Pitaya::Engine::Engine::Engine::Instance.GetFixdeltaTime();
-const float& Pitaya::Engine::Time::unscaledDeltaTime = Pitaya::Engine::Engine::Engine::Instance.GetUnscaledDeltaTime();
-float& Pitaya::Engine::Time::scale = Pitaya::Engine::Engine::Engine::Instance.GetTimeScale();
+const float& Pitaya::Engine::Time::delta = Pitaya::Engine::Engine::Engine::Instance().GetDeltaTime();
+const float& Pitaya::Engine::Time::fixdelta = Pitaya::Engine::Engine::Engine::Instance().GetFixdeltaTime();
+const float& Pitaya::Engine::Time::unscaledDeltaTime = Pitaya::Engine::Engine::Engine::Instance().GetUnscaledDeltaTime();
+float& Pitaya::Engine::Time::scale = Pitaya::Engine::Engine::Engine::Instance().GetTimeScale();
 float Pitaya::Engine::Time::Seconds()
 {
-	return Pitaya::Engine::Engine::Instance.GetSecondsTime();
+	return Pitaya::Engine::Engine::Instance().GetSecondsTime();
 }
 int64_t Pitaya::Engine::Time::Milliseconds()
 {
-	return Pitaya::Engine::Engine::Instance.GetMillisecondsTime();
+	return Pitaya::Engine::Engine::Instance().GetMillisecondsTime();
 }

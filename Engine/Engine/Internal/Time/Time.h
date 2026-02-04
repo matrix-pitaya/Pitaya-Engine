@@ -1,7 +1,5 @@
 #pragma once
 
-#include"Define/Define.h"
-
 #include<chrono>
 #include<cstdint>
 
@@ -14,7 +12,16 @@ namespace Pitaya::Engine::Internal
 {
 	class Time
 	{
-		DECLARE_ENGINE_SUBSYSTEM(Time)
+		friend class Pitaya::Engine::Engine;
+	private:
+		Time() = default;
+		~Time() = default;
+
+	public:
+		Time(const Time&) = delete;
+		Time& operator=(const Time&) = delete;
+		Time(Time&&) = delete;
+		Time& operator=(Time&&) = delete;
 		
 	private:
 		void Tick();

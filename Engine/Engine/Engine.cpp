@@ -4,15 +4,8 @@
 #include"../Renderer/Backend/OpenGL/OpenGLRenderer.h"
 #include"../Window/Backend/OpenGL/OpenGLWindow.h"
 
-IMPLEMENT_SINGLETON_CLASS(Pitaya::Engine, Engine);
-
 bool Pitaya::Engine::Engine::Initialize()
 {
-	if (isInitialized)
-	{
-		return false;
-	}
-
 	if (!BindEngineModelBackendAPI() || !CheckEngineModelBackendBindIsSuccess())
 	{
 		return false;
@@ -23,7 +16,6 @@ bool Pitaya::Engine::Engine::Initialize()
 	window->Initialize(config.WindowWidth, config.WindowHeight, config.Name.c_str());
 	renderer->Initialize();
 	
-	isInitialized = true;
 	return true;
 }
 bool Pitaya::Engine::Engine::IsRunning()
@@ -69,15 +61,8 @@ void Pitaya::Engine::Engine::FrameSync()
 }
 void Pitaya::Engine::Engine::Release()
 {
-	if (isReleased)
-	{
-		return;
-	}
-
 	delete physics;
 	delete renderer;
-
-	isReleased = true;
 }
 bool Pitaya::Engine::Engine::BindEngineModelBackendAPI()
 {

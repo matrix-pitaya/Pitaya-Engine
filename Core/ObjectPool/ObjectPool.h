@@ -1,7 +1,5 @@
 #pragma once
 
-#include"../Define/Define.h"
-
 #include<queue>
 #include<unordered_set>
 #include<functional>
@@ -16,8 +14,6 @@ namespace Pitaya::Core
     template<typename T>
     class ObjectPool
     {
-		DELETE_COPY_AND_MOVE(ObjectPool)
-
     public:
 		ObjectPool(std::function<void(T*)> OnGet = nullptr, std::function<void(T*)> OnRelease = nullptr, size_t count = 0)
 			: OnGet(std::move(OnGet)), OnRelease(std::move(OnRelease)), pool(), idleObjects(&pool), activeObjects(&pool)
@@ -54,7 +50,12 @@ namespace Pitaya::Core
             }
 			idleObjects.clear();
         }
+		ObjectPool(const ObjectPool&) = delete;
+		ObjectPool& operator=(const ObjectPool&) = delete;
+		ObjectPool(ObjectPool&&) = delete;
+		ObjectPool& operator=(ObjectPool&&) = delete;
 
+	public:
         inline T* Get()
         {
             T* object = nullptr;

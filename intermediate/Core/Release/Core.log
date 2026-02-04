@@ -11,6 +11,17 @@ D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量�
 D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
   (编译源文件“Log/Log.cpp”)
   
+D:\Pitaya\Core\Log\Log.h(5,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Log/Log.cpp”)
+  
+D:\Pitaya\Core\Utility\Utility.h(3,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Log/Log.cpp”)
+  
+D:\Pitaya\Core\Identifier\UID.h(36,49): warning C4458: “value”的声明隐藏了类成员
+  (编译源文件“Log/Log.cpp”)
+      D:\Pitaya\Core\Identifier\UID.h(57,18):
+      参见“Pitaya::Core::UID::value”的声明
+  
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winbase.h(7940,5): warning C5039: “TpSetCallbackCleanupGroup”: 可能引发函数的指针或引用传递到 -EHc 下的外部 "C" 函数。如果此函数引发异常，则可能发生未定义的行为。
   (编译源文件“Log/Log.cpp”)
   
@@ -62,29 +73,13 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17000,
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Log/Log.cpp”)
   
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\combaseapi.h(177,9): warning C4005: “DECLARE_INTERFACE”: 宏重定义
-  (编译源文件“Log/Log.cpp”)
-      D:\Pitaya\Core\Define\Define.h(94,9):
-      参见“DECLARE_INTERFACE”的前一个定义
-  
-D:\Pitaya\Core\Log\Log.h(32,13): warning C4820: "Pitaya::Core::Log::LogManager::LogMessage": 数据成员 "Pitaya::Core::Log::LogManager::LogMessage::level" 后添加了 "7" 字节填充
+D:\Pitaya\Core\Log\Log.h(33,13): warning C4820: "Pitaya::Core::Log::LogManager::LogMessage": 数据成员 "Pitaya::Core::Log::LogManager::LogMessage::level" 后添加了 "7" 字节填充
   (编译源文件“Log/Log.cpp”)
   
-D:\Pitaya\Core\Log\Log.h(27,3): warning C4820: "Pitaya::Core::Log::LogManager": 数据成员 "Pitaya::Core::Log::LogManager::isReleased" 后添加了 "6" 字节填充
-  (编译源文件“Log/Log.cpp”)
-  
-D:\Pitaya\Core\Log\Log.h(61,21): warning C4820: "Pitaya::Core::Log::LogManager": 数据成员 "Pitaya::Core::Log::LogManager::isRunning" 后添加了 "7" 字节填充
+D:\Pitaya\Core\Log\Log.h(93,21): warning C4820: "Pitaya::Core::Log::LogManager": 数据成员 "Pitaya::Core::Log::LogManager::isRunning" 后添加了 "7" 字节填充
   (编译源文件“Log/Log.cpp”)
   
 D:\Pitaya\Core\Log\Log.cpp(3,9): warning C4464: 相对包含路径包括 ".."
-D:\Pitaya\Core\Utility\Utility.h(3,9): warning C4464: 相对包含路径包括 ".."
-  (编译源文件“Log/Log.cpp”)
-  
-D:\Pitaya\Core\Identifier\UID.h(36,49): warning C4458: “value”的声明隐藏了类成员
-  (编译源文件“Log/Log.cpp”)
-      D:\Pitaya\Core\Identifier\UID.h(57,18):
-      参见“Pitaya::Core::UID::value”的声明
-  
 D:\Pitaya\Core\Log\Log.cpp(4,9): warning C4464: 相对包含路径包括 ".."
 D:\Pitaya\Core\Thread\thread.h(3,9): warning C4464: 相对包含路径包括 ".."
   (编译源文件“Log/Log.cpp”)
@@ -95,7 +90,88 @@ D:\Pitaya\Core\Thread\thread.h(4,9): warning C4464: 相对包含路径包括 "..
 D:\Pitaya\Core\Log\Logapi.h(3,9): warning C4464: 相对包含路径包括 ".."
   (编译源文件“Log/Log.cpp”)
   
-D:\Pitaya\Core\Thread\thread.h(41,3): warning C4820: "Pitaya::Core::Thread::ThreadManager": 数据成员 "Pitaya::Core::Thread::ThreadManager::isReleased" 后添加了 "6" 字节填充
-  (编译源文件“Log/Log.cpp”)
+  LogAPI.cpp
+D:\Pitaya\Core\Log\Logapi.h(3,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Log/LogAPI.cpp”)
+  
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量值
+  (编译源文件“Log/LogAPI.cpp”)
+  
+D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+D:\Pitaya\Core\Log\Log.h(3,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Log/LogAPI.cpp”)
+  
+D:\Pitaya\Core\Log\Log.h(4,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Log/LogAPI.cpp”)
+  
+D:\Pitaya\Core\Log\Log.h(5,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Log/LogAPI.cpp”)
+  
+D:\Pitaya\Core\Utility\Utility.h(3,9): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Log/LogAPI.cpp”)
+  
+D:\Pitaya\Core\Identifier\UID.h(36,49): warning C4458: “value”的声明隐藏了类成员
+  (编译源文件“Log/LogAPI.cpp”)
+      D:\Pitaya\Core\Identifier\UID.h(57,18):
+      参见“Pitaya::Core::UID::value”的声明
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winbase.h(7940,5): warning C5039: “TpSetCallbackCleanupGroup”: 可能引发函数的指针或引用传递到 -EHc 下的外部 "C" 函数。如果此函数引发异常，则可能发生未定义的行为。
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(2200,23): warning C4668: 没有将“NTDDI_WIN11_DT”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11434,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11440,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11445,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11450,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11457,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11478,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_TH2”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11484,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11492,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11496,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11500,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(11505,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16838,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS3”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(16987,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17000,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS4”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
+  (编译源文件“Log/LogAPI.cpp”)
+  
+D:\Pitaya\Core\Log\Log.h(33,13): warning C4820: "Pitaya::Core::Log::LogManager::LogMessage": 数据成员 "Pitaya::Core::Log::LogManager::LogMessage::level" 后添加了 "7" 字节填充
+  (编译源文件“Log/LogAPI.cpp”)
+  
+D:\Pitaya\Core\Log\Log.h(93,21): warning C4820: "Pitaya::Core::Log::LogManager": 数据成员 "Pitaya::Core::Log::LogManager::isRunning" 后添加了 "7" 字节填充
+  (编译源文件“Log/LogAPI.cpp”)
   
   Core.vcxproj -> D:\Pitaya\library\x64\Release\Core.lib

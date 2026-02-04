@@ -2,8 +2,6 @@
 
 #include"Engine/EngineAPI.h"
 
-#include"Thread/ThreadAPI.h"
-
 #include"Log/LogAPI.h"
 #include"Log/Console.h"
 

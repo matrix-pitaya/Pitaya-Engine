@@ -1,12 +1,16 @@
 #pragma once
 
-#include"Define/Define.h"
-
 namespace Pitaya::Engine::Interface
 {
 	class Physics
 	{
-		DECLARE_INTERFACE(Physics)
+	public:
+		Physics() = default;
+		virtual ~Physics() = default;
+		Physics(const Physics&) = delete;
+		Physics& operator=(const Physics&) = delete;
+		Physics(Physics&&) = delete;
+		Physics& operator=(Physics&&) = delete;
 
 	public:
 		virtual bool Initialize() = 0;

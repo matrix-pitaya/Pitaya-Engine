@@ -5,24 +5,21 @@ D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量�
 D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
   (编译源文件“Engine/Engine.cpp”)
   
-D:\Pitaya\Engine\Engine\Interface\Window.h(25,8): warning C4820: "Pitaya::Engine::Interface::Window": 数据成员 "Pitaya::Engine::Interface::Window::isReleased" 后添加了 "6" 字节填充
+D:\Pitaya\Engine\Engine\Interface\Window.h(30,8): warning C4820: "Pitaya::Engine::Interface::Window": 数据成员 "Pitaya::Engine::Interface::Window::isReleased" 后添加了 "6" 字节填充
   (编译源文件“Engine/Engine.cpp”)
   
-D:\Pitaya\Engine\Engine\Interface\Renderer.h(26,8): warning C4820: "Pitaya::Engine::Interface::Renderer": 数据成员 "Pitaya::Engine::Interface::Renderer::isReleased" 后添加了 "6" 字节填充
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(30,8): warning C4820: "Pitaya::Engine::Interface::Renderer": 数据成员 "Pitaya::Engine::Interface::Renderer::isReleased" 后添加了 "6" 字节填充
   (编译源文件“Engine/Engine.cpp”)
   
-D:\Pitaya\Engine\Engine\Interface\Renderer.h(18,55): warning C4458: “window”的声明隐藏了类成员
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(22,55): warning C4458: “window”的声明隐藏了类成员
   (编译源文件“Engine/Engine.cpp”)
-      D:\Pitaya\Engine\Engine\Interface\Renderer.h(24,38):
+      D:\Pitaya\Engine\Engine\Interface\Renderer.h(28,38):
       参见“Pitaya::Engine::Interface::Renderer::window”的声明
   
-D:\Pitaya\Engine\Engine\Interface\Physics.h(18,8): warning C4820: "Pitaya::Engine::Interface::Physics": 数据成员 "Pitaya::Engine::Interface::Physics::isReleased" 后添加了 "6" 字节填充
+D:\Pitaya\Engine\Engine\Interface\Physics.h(22,8): warning C4820: "Pitaya::Engine::Interface::Physics": 数据成员 "Pitaya::Engine::Interface::Physics::isReleased" 后添加了 "6" 字节填充
   (编译源文件“Engine/Engine.cpp”)
   
-D:\Pitaya\Engine\Engine\Internal\Input\Input.h(17,3): warning C4820: "Pitaya::Engine::Internal::Input": 数据成员 "Pitaya::Engine::Internal::Input::isReleased" 后添加了 "6" 字节填充
-  (编译源文件“Engine/Engine.cpp”)
-  
-D:\Pitaya\Engine\Engine\Internal\Time\Time.h(17,3): warning C4820: "Pitaya::Engine::Internal::Time": 数据成员 "Pitaya::Engine::Internal::Time::isReleased" 后添加了 "2" 字节填充
+D:\Pitaya\Engine\Engine\Internal\Time\Time.h(38,9): warning C4820: "Pitaya::Engine::Internal::Time": 数据成员 "Pitaya::Engine::Internal::Time::targetFrameTime" 后添加了 "4" 字节填充
   (编译源文件“Engine/Engine.cpp”)
   
 D:\Pitaya\Core\Utility\Utility.h(3,9): warning C4464: 相对包含路径包括 ".."
@@ -84,11 +81,7 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17000,
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Engine/Engine.cpp”)
   
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\combaseapi.h(177,9): warning C4005: “DECLARE_INTERFACE”: 宏重定义
-  (编译源文件“Engine/Engine.cpp”)
-      D:\Pitaya\Core\Define\Define.h(94,9):
-      参见“DECLARE_INTERFACE”的前一个定义
-  
+  Defining YAML_CPP_API for DLL import
 D:\Pitaya\thirdparty\yaml\include\yaml-cpp\parser.h(85,28): warning C4251: “YAML::Parser::m_pScanner”:“std::unique_ptr<YAML::Scanner,std::default_delete<YAML::Scanner>>”需要有 dll 接口以供“YAML::Parser”的客户端使用
   (编译源文件“Engine/Engine.cpp”)
       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
@@ -99,7 +92,6 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\parser.h(86,31): warning C4251: “YA
       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\memory(3347,7):
       参见“std::unique_ptr<YAML::Directives,std::default_delete<YAML::Directives>>”的声明
   
-  Defining YAML_CPP_API for DLL import
 D:\Pitaya\thirdparty\yaml\include\yaml-cpp\binary.h(65,30): warning C4251: “YAML::Binary::m_data”:“std::vector<unsigned char,std::allocator<unsigned char>>”需要有 dll 接口以供“YAML::Binary”的客户端使用
   (编译源文件“Engine/Engine.cpp”)
       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
@@ -221,13 +213,10 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(224,1): warning C4365:
 D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(230,1): warning C4365: “=”: 从“int”转换到“unsigned char”，有符号/无符号不匹配
   (编译源文件“Engine/Engine.cpp”)
   
-D:\Pitaya\Engine\Engine\Config\Config.h(139,41): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::RendererAPI" 后添加了 "2" 字节填充
+D:\Pitaya\Engine\Engine\Config\Config.h(168,41): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::RendererAPI" 后添加了 "2" 字节填充
   (编译源文件“Engine/Engine.cpp”)
   
-D:\Pitaya\Engine\Engine\Config\Config.h(143,7): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::WindowHeight" 后添加了 "4" 字节填充
-  (编译源文件“Engine/Engine.cpp”)
-  
-D:\Pitaya\Engine\Engine\Engine.h(19,3): warning C4820: "Pitaya::Engine::Engine": 数据成员 "Pitaya::Engine::Engine::isReleased" 后添加了 "6" 字节填充
+D:\Pitaya\Engine\Engine\Config\Config.h(172,7): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::WindowHeight" 后添加了 "4" 字节填充
   (编译源文件“Engine/Engine.cpp”)
   
 D:\Pitaya\Engine\Engine\Engine.cpp(3,9): warning C4464: 相对包含路径包括 ".."
@@ -235,7 +224,7 @@ D:\Pitaya\Engine\Physics\Backend\Bullet\BulletPhysics.h(3,9): warning C4464: 相
   (编译源文件“Engine/Engine.cpp”)
   
 D:\Pitaya\Engine\Engine\Engine.cpp(4,9): warning C4464: 相对包含路径包括 ".."
-D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(6,9): warning C4464: 相对包含路径包括 ".."
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(5,9): warning C4464: 相对包含路径包括 ".."
   (编译源文件“Engine/Engine.cpp”)
   
 D:\Pitaya\Core\Thread\thread.h(3,9): warning C4464: 相对包含路径包括 ".."
@@ -247,33 +236,30 @@ D:\Pitaya\Core\Thread\thread.h(4,9): warning C4464: 相对包含路径包括 "..
 D:\Pitaya\Core\Log\Logapi.h(3,9): warning C4464: 相对包含路径包括 ".."
   (编译源文件“Engine/Engine.cpp”)
   
-D:\Pitaya\Core\Thread\thread.h(41,3): warning C4820: "Pitaya::Core::Thread::ThreadManager": 数据成员 "Pitaya::Core::Thread::ThreadManager::isReleased" 后添加了 "6" 字节填充
-  (编译源文件“Engine/Engine.cpp”)
-  
 D:\Pitaya\thirdparty\GLFW\include\GLFW\glfw3.h(2073,18): warning C4820: "GLFWgammaramp": 数据成员 "GLFWgammaramp::size" 后添加了 "4" 字节填充
   (编译源文件“Engine/Engine.cpp”)
   
 D:\Pitaya\thirdparty\GLFW\include\GLFW\glfw3.h(2118,19): warning C4820: "GLFWgamepadstate": 数据成员 "GLFWgamepadstate::buttons" 后添加了 "1" 字节填充
   (编译源文件“Engine/Engine.cpp”)
   
-D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(37,43): warning C4820: "Pitaya::Engine::Renderer::OpenGLRenderer::DrawcallCmdParser::DrawcallCmd": 数据成员 "Pitaya::Engine::Renderer::OpenGLRenderer::DrawcallCmdParser::DrawcallCmd::renderQueue" 后添加了 "7" 字节填充
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(46,43): warning C4820: "Pitaya::Engine::Renderer::OpenGLRenderer::DrawcallCmdParser::DrawcallCmd": 数据成员 "Pitaya::Engine::Renderer::OpenGLRenderer::DrawcallCmdParser::DrawcallCmd::renderQueue" 后添加了 "7" 字节填充
   (编译源文件“Engine/Engine.cpp”)
   
-D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(102,21): warning C4820: "Pitaya::Engine::Renderer::OpenGLRenderer": 数据成员 "Pitaya::Engine::Renderer::OpenGLRenderer::isRunning" 后添加了 "7" 字节填充
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(112,21): warning C4820: "Pitaya::Engine::Renderer::OpenGLRenderer": 数据成员 "Pitaya::Engine::Renderer::OpenGLRenderer::isRunning" 后添加了 "7" 字节填充
   (编译源文件“Engine/Engine.cpp”)
   
-D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(105,29): warning C4820: "Pitaya::Engine::Renderer::OpenGLRenderer": 数据成员 "Pitaya::Engine::Renderer::OpenGLRenderer::renderThreadToken" 后添加了 "4" 字节填充
+D:\Pitaya\Engine\Renderer\Backend\OpenGL\OpenGLRenderer.h(115,29): warning C4820: "Pitaya::Engine::Renderer::OpenGLRenderer": 数据成员 "Pitaya::Engine::Renderer::OpenGLRenderer::renderThreadToken" 后添加了 "4" 字节填充
   (编译源文件“Engine/Engine.cpp”)
   
 D:\Pitaya\Engine\Engine\Engine.cpp(5,9): warning C4464: 相对包含路径包括 ".."
-D:\Pitaya\Engine\Window\Backend\OpenGL\OpenGLWindow.h(6,9): warning C4464: 相对包含路径包括 ".."
+D:\Pitaya\Engine\Window\Backend\OpenGL\OpenGLWindow.h(5,9): warning C4464: 相对包含路径包括 ".."
   (编译源文件“Engine/Engine.cpp”)
   
 D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: “YAML::as_if<std::string,std::string>”: 已将赋值运算符隐式定义为“已删除”
   (编译源文件“Engine/Engine.cpp”)
       D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
       模板实例化上下文(最早的实例化上下文)为
-          D:\Pitaya\Engine\Engine\Config\Config.h(48,25):
+          D:\Pitaya\Engine\Engine\Config\Config.h(52,19):
           查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,std::string>(const S &) const”的引用
           with
           [
@@ -290,7 +276,7 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “
   (编译源文件“Engine/Engine.cpp”)
       D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
       模板实例化上下文(最早的实例化上下文)为
-          D:\Pitaya\Engine\Engine\Config\Config.h(54,65):
+          D:\Pitaya\Engine\Engine\Config\Config.h(65,39):
           查看对正在编译的函数 模板 实例化“T YAML::Node::as<size_t,size_t>(const S &) const”的引用
           with
           [
@@ -307,7 +293,7 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: �
   (编译源文件“Engine/Engine.cpp”)
       D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
       模板实例化上下文(最早的实例化上下文)为
-          D:\Pitaya\Engine\Engine\Config\Config.h(55,35):
+          D:\Pitaya\Engine\Engine\Config\Config.h(69,30):
           查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,char[7]>(const S (&)) const”的引用
           with
           [
@@ -324,7 +310,7 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “
   (编译源文件“Engine/Engine.cpp”)
       D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
       模板实例化上下文(最早的实例化上下文)为
-          D:\Pitaya\Engine\Engine\Config\Config.h(83,33):
+          D:\Pitaya\Engine\Engine\Config\Config.h(103,26):
           查看对正在编译的函数 模板 实例化“T YAML::Node::as<int,int>(const S &) const”的引用
           with
           [
@@ -344,24 +330,21 @@ D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量�
 D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
   (编译源文件“Engine/EngineAPI.cpp”)
   
-D:\Pitaya\Engine\Engine\Interface\Window.h(25,8): warning C4820: "Pitaya::Engine::Interface::Window": 数据成员 "Pitaya::Engine::Interface::Window::isReleased" 后添加了 "6" 字节填充
+D:\Pitaya\Engine\Engine\Interface\Window.h(30,8): warning C4820: "Pitaya::Engine::Interface::Window": 数据成员 "Pitaya::Engine::Interface::Window::isReleased" 后添加了 "6" 字节填充
   (编译源文件“Engine/EngineAPI.cpp”)
   
-D:\Pitaya\Engine\Engine\Interface\Renderer.h(26,8): warning C4820: "Pitaya::Engine::Interface::Renderer": 数据成员 "Pitaya::Engine::Interface::Renderer::isReleased" 后添加了 "6" 字节填充
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(30,8): warning C4820: "Pitaya::Engine::Interface::Renderer": 数据成员 "Pitaya::Engine::Interface::Renderer::isReleased" 后添加了 "6" 字节填充
   (编译源文件“Engine/EngineAPI.cpp”)
   
-D:\Pitaya\Engine\Engine\Interface\Renderer.h(18,55): warning C4458: “window”的声明隐藏了类成员
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(22,55): warning C4458: “window”的声明隐藏了类成员
   (编译源文件“Engine/EngineAPI.cpp”)
-      D:\Pitaya\Engine\Engine\Interface\Renderer.h(24,38):
+      D:\Pitaya\Engine\Engine\Interface\Renderer.h(28,38):
       参见“Pitaya::Engine::Interface::Renderer::window”的声明
   
-D:\Pitaya\Engine\Engine\Interface\Physics.h(18,8): warning C4820: "Pitaya::Engine::Interface::Physics": 数据成员 "Pitaya::Engine::Interface::Physics::isReleased" 后添加了 "6" 字节填充
+D:\Pitaya\Engine\Engine\Interface\Physics.h(22,8): warning C4820: "Pitaya::Engine::Interface::Physics": 数据成员 "Pitaya::Engine::Interface::Physics::isReleased" 后添加了 "6" 字节填充
   (编译源文件“Engine/EngineAPI.cpp”)
   
-D:\Pitaya\Engine\Engine\Internal\Input\Input.h(17,3): warning C4820: "Pitaya::Engine::Internal::Input": 数据成员 "Pitaya::Engine::Internal::Input::isReleased" 后添加了 "6" 字节填充
-  (编译源文件“Engine/EngineAPI.cpp”)
-  
-D:\Pitaya\Engine\Engine\Internal\Time\Time.h(17,3): warning C4820: "Pitaya::Engine::Internal::Time": 数据成员 "Pitaya::Engine::Internal::Time::isReleased" 后添加了 "2" 字节填充
+D:\Pitaya\Engine\Engine\Internal\Time\Time.h(38,9): warning C4820: "Pitaya::Engine::Internal::Time": 数据成员 "Pitaya::Engine::Internal::Time::targetFrameTime" 后添加了 "4" 字节填充
   (编译源文件“Engine/EngineAPI.cpp”)
   
 D:\Pitaya\Core\Utility\Utility.h(3,9): warning C4464: 相对包含路径包括 ".."
@@ -422,11 +405,6 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17000,
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Engine/EngineAPI.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\combaseapi.h(177,9): warning C4005: “DECLARE_INTERFACE”: 宏重定义
-  (编译源文件“Engine/EngineAPI.cpp”)
-      D:\Pitaya\Core\Define\Define.h(94,9):
-      参见“DECLARE_INTERFACE”的前一个定义
   
   Defining YAML_CPP_API for DLL import
 D:\Pitaya\thirdparty\yaml\include\yaml-cpp\parser.h(85,28): warning C4251: “YAML::Parser::m_pScanner”:“std::unique_ptr<YAML::Scanner,std::default_delete<YAML::Scanner>>”需要有 dll 接口以供“YAML::Parser”的客户端使用
@@ -560,20 +538,17 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(224,1): warning C4365:
 D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(230,1): warning C4365: “=”: 从“int”转换到“unsigned char”，有符号/无符号不匹配
   (编译源文件“Engine/EngineAPI.cpp”)
   
-D:\Pitaya\Engine\Engine\Config\Config.h(139,41): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::RendererAPI" 后添加了 "2" 字节填充
+D:\Pitaya\Engine\Engine\Config\Config.h(168,41): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::RendererAPI" 后添加了 "2" 字节填充
   (编译源文件“Engine/EngineAPI.cpp”)
   
-D:\Pitaya\Engine\Engine\Config\Config.h(143,7): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::WindowHeight" 后添加了 "4" 字节填充
-  (编译源文件“Engine/EngineAPI.cpp”)
-  
-D:\Pitaya\Engine\Engine\Engine.h(19,3): warning C4820: "Pitaya::Engine::Engine": 数据成员 "Pitaya::Engine::Engine::isReleased" 后添加了 "6" 字节填充
+D:\Pitaya\Engine\Engine\Config\Config.h(172,7): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::WindowHeight" 后添加了 "4" 字节填充
   (编译源文件“Engine/EngineAPI.cpp”)
   
 D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: “YAML::as_if<std::string,std::string>”: 已将赋值运算符隐式定义为“已删除”
   (编译源文件“Engine/EngineAPI.cpp”)
       D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
       模板实例化上下文(最早的实例化上下文)为
-          D:\Pitaya\Engine\Engine\Config\Config.h(48,25):
+          D:\Pitaya\Engine\Engine\Config\Config.h(52,19):
           查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,std::string>(const S &) const”的引用
           with
           [
@@ -590,7 +565,7 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “
   (编译源文件“Engine/EngineAPI.cpp”)
       D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
       模板实例化上下文(最早的实例化上下文)为
-          D:\Pitaya\Engine\Engine\Config\Config.h(54,65):
+          D:\Pitaya\Engine\Engine\Config\Config.h(65,39):
           查看对正在编译的函数 模板 实例化“T YAML::Node::as<size_t,size_t>(const S &) const”的引用
           with
           [
@@ -607,7 +582,7 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: �
   (编译源文件“Engine/EngineAPI.cpp”)
       D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
       模板实例化上下文(最早的实例化上下文)为
-          D:\Pitaya\Engine\Engine\Config\Config.h(55,35):
+          D:\Pitaya\Engine\Engine\Config\Config.h(69,30):
           查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,char[7]>(const S (&)) const”的引用
           with
           [
@@ -624,7 +599,7 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “
   (编译源文件“Engine/EngineAPI.cpp”)
       D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
       模板实例化上下文(最早的实例化上下文)为
-          D:\Pitaya\Engine\Engine\Config\Config.h(83,33):
+          D:\Pitaya\Engine\Engine\Config\Config.h(103,26):
           查看对正在编译的函数 模板 实例化“T YAML::Node::as<int,int>(const S &) const”的引用
           with
           [
@@ -644,25 +619,22 @@ D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4309: “初始化”: 截断常量�
 D:\Pitaya\Core\Enum\Enum.h(46,3): warning C4369: “Pitaya::Core::Event::EventType”: 枚举数的值“-1”不能表示为“unsigned char”，值是“-1”
   (编译源文件“Engine/Internal/Input/Input.cpp”)
   
-D:\Pitaya\Engine\Engine\Internal\Input\input.h(17,3): warning C4820: "Pitaya::Engine::Internal::Input": 数据成员 "Pitaya::Engine::Internal::Input::isReleased" 后添加了 "6" 字节填充
-  (编译源文件“Engine/Internal/Input/Input.cpp”)
-  
 D:\Pitaya\Engine\Engine\Internal\Input\Input.cpp(3,9): warning C4464: 相对包含路径包括 ".."
-D:\Pitaya\Engine\Engine\Interface\Window.h(25,8): warning C4820: "Pitaya::Engine::Interface::Window": 数据成员 "Pitaya::Engine::Interface::Window::isReleased" 后添加了 "6" 字节填充
+D:\Pitaya\Engine\Engine\Interface\Window.h(30,8): warning C4820: "Pitaya::Engine::Interface::Window": 数据成员 "Pitaya::Engine::Interface::Window::isReleased" 后添加了 "6" 字节填充
   (编译源文件“Engine/Internal/Input/Input.cpp”)
   
-D:\Pitaya\Engine\Engine\Interface\Renderer.h(26,8): warning C4820: "Pitaya::Engine::Interface::Renderer": 数据成员 "Pitaya::Engine::Interface::Renderer::isReleased" 后添加了 "6" 字节填充
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(30,8): warning C4820: "Pitaya::Engine::Interface::Renderer": 数据成员 "Pitaya::Engine::Interface::Renderer::isReleased" 后添加了 "6" 字节填充
   (编译源文件“Engine/Internal/Input/Input.cpp”)
   
-D:\Pitaya\Engine\Engine\Interface\Renderer.h(18,55): warning C4458: “window”的声明隐藏了类成员
+D:\Pitaya\Engine\Engine\Interface\Renderer.h(22,55): warning C4458: “window”的声明隐藏了类成员
   (编译源文件“Engine/Internal/Input/Input.cpp”)
-      D:\Pitaya\Engine\Engine\Interface\Renderer.h(24,38):
+      D:\Pitaya\Engine\Engine\Interface\Renderer.h(28,38):
       参见“Pitaya::Engine::Interface::Renderer::window”的声明
   
-D:\Pitaya\Engine\Engine\Interface\Physics.h(18,8): warning C4820: "Pitaya::Engine::Interface::Physics": 数据成员 "Pitaya::Engine::Interface::Physics::isReleased" 后添加了 "6" 字节填充
+D:\Pitaya\Engine\Engine\Interface\Physics.h(22,8): warning C4820: "Pitaya::Engine::Interface::Physics": 数据成员 "Pitaya::Engine::Interface::Physics::isReleased" 后添加了 "6" 字节填充
   (编译源文件“Engine/Internal/Input/Input.cpp”)
   
-D:\Pitaya\Engine\Engine\Internal\Time\Time.h(17,3): warning C4820: "Pitaya::Engine::Internal::Time": 数据成员 "Pitaya::Engine::Internal::Time::isReleased" 后添加了 "2" 字节填充
+D:\Pitaya\Engine\Engine\Internal\Time\Time.h(38,9): warning C4820: "Pitaya::Engine::Internal::Time": 数据成员 "Pitaya::Engine::Internal::Time::targetFrameTime" 后添加了 "4" 字节填充
   (编译源文件“Engine/Internal/Input/Input.cpp”)
   
 D:\Pitaya\Core\Utility\Utility.h(3,9): warning C4464: 相对包含路径包括 ".."
@@ -723,11 +695,6 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17000,
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winioctl.h(17229,22): warning C4668: 没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“#if/#elif”
   (编译源文件“Engine/Internal/Input/Input.cpp”)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\combaseapi.h(177,9): warning C4005: “DECLARE_INTERFACE”: 宏重定义
-  (编译源文件“Engine/Internal/Input/Input.cpp”)
-      D:\Pitaya\Core\Define\Define.h(94,9):
-      参见“DECLARE_INTERFACE”的前一个定义
   
   Defining YAML_CPP_API for DLL import
 D:\Pitaya\thirdparty\yaml\include\yaml-cpp\parser.h(85,28): warning C4251: “YAML::Parser::m_pScanner”:“std::unique_ptr<YAML::Scanner,std::default_delete<YAML::Scanner>>”需要有 dll 接口以供“YAML::Parser”的客户端使用
@@ -861,20 +828,17 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(224,1): warning C4365:
 D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\convert.h(230,1): warning C4365: “=”: 从“int”转换到“unsigned char”，有符号/无符号不匹配
   (编译源文件“Engine/Internal/Input/Input.cpp”)
   
-D:\Pitaya\Engine\Engine\Config\Config.h(139,41): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::RendererAPI" 后添加了 "2" 字节填充
+D:\Pitaya\Engine\Engine\Config\Config.h(168,41): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::RendererAPI" 后添加了 "2" 字节填充
   (编译源文件“Engine/Internal/Input/Input.cpp”)
   
-D:\Pitaya\Engine\Engine\Config\Config.h(143,7): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::WindowHeight" 后添加了 "4" 字节填充
-  (编译源文件“Engine/Internal/Input/Input.cpp”)
-  
-D:\Pitaya\Engine\Engine\Engine.h(19,3): warning C4820: "Pitaya::Engine::Engine": 数据成员 "Pitaya::Engine::Engine::isReleased" 后添加了 "6" 字节填充
+D:\Pitaya\Engine\Engine\Config\Config.h(172,7): warning C4820: "Pitaya::Engine::Config::Config": 数据成员 "Pitaya::Engine::Config::Config::WindowHeight" 后添加了 "4" 字节填充
   (编译源文件“Engine/Internal/Input/Input.cpp”)
   
 D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: “YAML::as_if<std::string,std::string>”: 已将赋值运算符隐式定义为“已删除”
   (编译源文件“Engine/Internal/Input/Input.cpp”)
       D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
       模板实例化上下文(最早的实例化上下文)为
-          D:\Pitaya\Engine\Engine\Config\Config.h(48,25):
+          D:\Pitaya\Engine\Engine\Config\Config.h(52,19):
           查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,std::string>(const S &) const”的引用
           with
           [
@@ -891,7 +855,7 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “
   (编译源文件“Engine/Internal/Input/Input.cpp”)
       D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
       模板实例化上下文(最早的实例化上下文)为
-          D:\Pitaya\Engine\Engine\Config\Config.h(54,65):
+          D:\Pitaya\Engine\Engine\Config\Config.h(65,39):
           查看对正在编译的函数 模板 实例化“T YAML::Node::as<size_t,size_t>(const S &) const”的引用
           with
           [
@@ -908,7 +872,7 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8): warning C4626: �
   (编译源文件“Engine/Internal/Input/Input.cpp”)
       D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(108,8):
       模板实例化上下文(最早的实例化上下文)为
-          D:\Pitaya\Engine\Engine\Config\Config.h(55,35):
+          D:\Pitaya\Engine\Engine\Config\Config.h(69,30):
           查看对正在编译的函数 模板 实例化“T YAML::Node::as<std::string,char[7]>(const S (&)) const”的引用
           with
           [
@@ -925,7 +889,7 @@ D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8): warning C4626: “
   (编译源文件“Engine/Internal/Input/Input.cpp”)
       D:\Pitaya\thirdparty\yaml\include\yaml-cpp\node\impl.h(92,8):
       模板实例化上下文(最早的实例化上下文)为
-          D:\Pitaya\Engine\Engine\Config\Config.h(83,33):
+          D:\Pitaya\Engine\Engine\Config\Config.h(103,26):
           查看对正在编译的函数 模板 实例化“T YAML::Node::as<int,int>(const S &) const”的引用
           with
           [

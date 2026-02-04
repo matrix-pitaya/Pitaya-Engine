@@ -147,7 +147,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Define\Define.h" />
     <ClInclude Include="Enum\Enum.h" />
     <ClInclude Include="Event\Event.h" />
     <ClInclude Include="Event\EventAPI.h" />
@@ -157,6 +156,7 @@
     <ClInclude Include="Log\Log.h" />
     <ClInclude Include="Log\LogAPI.h" />
     <ClInclude Include="ObjectPool\ObjectPool.h" />
+    <ClInclude Include="Singleton\Singleton.h" />
     <ClInclude Include="Thread\Thread.h" />
     <ClInclude Include="Thread\ThreadAPI.h" />
     <ClInclude Include="Utility\Utility.h" />
@@ -166,7 +166,6 @@
     <ClCompile Include="Event\EventAPI.cpp" />
     <ClCompile Include="Log\Log.cpp" />
     <ClCompile Include="Log\LogAPI.cpp" />
-    <ClCompile Include="Thread\Thread.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

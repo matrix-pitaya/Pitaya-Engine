@@ -1,6 +1,5 @@
 #pragma once
 
-#include"Define/Define.h"
 #include"Utility/Utility.h"
 
 #include<yaml-cpp/yaml.h>
@@ -18,8 +17,6 @@ namespace Pitaya::Engine::Config
 {
 	struct Config
 	{
-		DELETE_COPY_AND_MOVE(Config)
-
 		friend class Pitaya::Engine::Engine;
 	private:
 		Config()
@@ -30,12 +27,17 @@ namespace Pitaya::Engine::Config
 		{
 			Save();
 		}
+		Config(const Config&) = delete;
+		Config& operator=(const Config&) = delete;
+		Config(Config&&) = delete;
+		Config& operator=(Config&&) = delete;
 
 	private:
 		inline void Load()
 		{
 			std::filesystem::path path = std::filesystem::path(Pitaya::Core::Utility::GetExeDir()) / fileName;
-			std::ifstream fin = std::ifstream(path);
+			std::ifstream fin;
+			fin.open(path);
 			if (!fin.is_open())
 			{
 				return;
@@ -45,43 +47,65 @@ namespace Pitaya::Engine::Config
 			//Engine
 			if (auto node = config["Engine"])
 			{
-				Name = node["Name"].as<std::string>(Name);
+				if (auto value = node["Name"])
+				{
+					Name = value.as<std::string>(Name);
+				}
+				if (auto value = node["Version"])
+				{
+					Version = value.as<std::string>(Version);
+				}
 			}
 
 			//Physics
 			if (auto node = config["Physics"])
 			{
-				MaxFixupdataExecuteTimes = node["MaxFixupdataExecuteTimes"].as<size_t>(MaxFixupdataExecuteTimes);
-				std::string api = node["API"].as<std::string>("Bullet");
-				if (api == "Bullet")
+				if (auto value = node["MaxFixupdataExecuteTimes"])
 				{
-					PhysicsAPI = Pitaya::Engine::Physics::PhysicsAPI::Bullet;
+					MaxFixupdataExecuteTimes = value.as<size_t>(MaxFixupdataExecuteTimes);
 				}
-				else
+				if (auto value = node["API"])
 				{
-					PhysicsAPI = Pitaya::Engine::Physics::PhysicsAPI::Bullet;
+					std::string api = value.as<std::string>("Bullet");
+					if (api == "Bullet")
+					{
+						PhysicsAPI = Pitaya::Engine::Physics::PhysicsAPI::Bullet;
+					}
+					else
+					{
+						PhysicsAPI = Pitaya::Engine::Physics::PhysicsAPI::Bullet;
+					}
 				}
 			}
 
 			//Renderer
 			if (auto node = config["Renderer"])
 			{
-				std::string api = node["API"].as<std::string>("OpenGL");
-				if (api == "OpenGL")
+				if (auto value = node["API"])
 				{
-					RendererAPI = Pitaya::Engine::Renderer::RendererAPI::OpenGL;
-				}
-				else
-				{
-					RendererAPI = Pitaya::Engine::Renderer::RendererAPI::OpenGL;
+					std::string api = value.as<std::string>("OpenGL");
+					if (api == "OpenGL")
+					{
+						RendererAPI = Pitaya::Engine::Renderer::RendererAPI::OpenGL;
+					}
+					else
+					{
+						RendererAPI = Pitaya::Engine::Renderer::RendererAPI::OpenGL;
+					}
 				}
 			}
 
 			//Window
 			if (auto node = config["Window"])
 			{
-				WindowWidth = node["Width"].as<int>(WindowWidth);
-				WindowHeight = node["Height"].as<int>(WindowHeight);
+				if (auto value = node["Width"])
+				{
+					WindowWidth = value.as<int>(WindowWidth);
+				}
+				if (auto value = node["Height"])
+				{
+					WindowHeight = value.as<int>(WindowHeight);
+				}
 			}
 		}
 		inline void Save()
@@ -89,6 +113,7 @@ namespace Pitaya::Engine::Config
 			YAML::Node config;
 			//Engine
 			config["Engine"]["Name"] = Name;
+			config["Engine"]["Version"] = Version;
 
 			//Physics
 			config["Physics"]["MaxFixupdataExecuteTimes"] = MaxFixupdataExecuteTimes;
@@ -120,16 +145,20 @@ namespace Pitaya::Engine::Config
 			config["Window"]["Height"] = WindowHeight;
 
 			std::filesystem::path path = std::filesystem::path(Pitaya::Core::Utility::GetExeDir()) / fileName;
-			std::ofstream fout = std::ofstream(path);
+			std::ofstream fout;
+			fout.open(path, std::ios::out | std::ios::trunc);
 			if (fout.is_open())
 			{
 				fout << config;
 			}
+			fout.flush();
+			fout.close();
 		}
 
 	public:
 		//Engine
 		std::string Name = "Pitaya";
+		std::string Version = "1.0";
 
 		//Physics
 		size_t MaxFixupdataExecuteTimes = 5;

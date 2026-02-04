@@ -1,13 +1,18 @@
 #pragma once
 
-#include"Define/Define.h"
 #include"Enum/Enum.h"
 
 namespace Pitaya::Engine::Interface
 {
 	class Window
 	{
-		DECLARE_INTERFACE(Window)
+	public:
+		Window() = default;
+		virtual ~Window() = default;
+		Window(const Window&) = delete;
+		Window& operator=(const Window&) = delete;
+		Window(Window&&) = delete;
+		Window& operator=(Window&&) = delete;
 
 	public:
 		virtual bool Initialize(int width, int height, const char* title) = 0;

@@ -1,13 +1,18 @@
 #pragma once
 
-#include"Define/Define.h"
 #include"Identifier/UID.h"
 
 namespace Pitaya::Engine
 {
 	class Object
 	{
-		DEFAULT_CONSTRUCTOR_VIRTUALDESTRUCTOR_MOVE_COPY(Object)
+	public:
+		Object() = default;
+		~Object() = default;
+		Object(const Object&) = default;
+		Object& operator=(const Object&) = default;
+		Object(Object&&) = default;
+		Object& operator=(Object&&) = default;
 
 	public:
 		inline Pitaya::Core::UID GetUID() const noexcept

@@ -8,11 +8,10 @@ namespace Pitaya::Engine
 {
 	class Entity : public Object
 	{
-		DEFAULT_COPY_AND_MOVE_PUBLIC(Entity)
 	public:
 		Entity(entt::entity entityId = entt::null)
 			:entityId(entityId) {}
-		virtual ~Entity() = default;
+		~Entity() = default;
 
 		inline entt::entity GetEntityId() const noexcept
 		{

@@ -2,16 +2,27 @@
 
 #include"../../Engine/Engine/Interface/Physics.h"
 
+namespace Pitaya::Engine
+{
+	class Engine;
+}
+
 namespace Pitaya::Engine::Physics
 {
 	class BulletPhysics : public Pitaya::Engine::Interface::Physics
 	{
-		DELETE_COPY_AND_MOVE(BulletPhysics)
+		friend class Pitaya::Engine::Engine;
+	private:
+		BulletPhysics() = default;
+		~BulletPhysics() override { Release(); }
 
 	public:
-		BulletPhysics() = default;
-		~BulletPhysics() override = default;
+		BulletPhysics(const BulletPhysics&) = delete;
+		BulletPhysics& operator=(const BulletPhysics&) = delete;
+		BulletPhysics(BulletPhysics&&) = delete;
+		BulletPhysics& operator=(BulletPhysics&&) = delete;
 
+	public:
 		bool Initialize() override;
 		void Release() override;
 		void OnFixupdata() override;

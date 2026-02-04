@@ -3,18 +3,6 @@
 
 #include"../Utility/Utility.h"
 
-IMPLEMENT_SINGLETON_CLASS(Pitaya::Core::Event, EventManager)
-
-void Pitaya::Core::Event::EventManager::Release()
-{
-	if (isReleased)
-	{
-		return;
-	}
-
-	isReleased = true;
-}
-
 Pitaya::Core::Event::EventToken Pitaya::Core::Event::EventManager::Subscribe(Pitaya::Core::Event::EventType type, std::function<void(const Pitaya::Core::Event::Event&)> function)
 {
 	if (function == nullptr)

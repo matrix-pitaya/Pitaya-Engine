@@ -11,12 +11,10 @@ namespace Pitaya::Engine
 {
 	class Transform : public Component
 	{
-		DEFAULT_COPY_AND_MOVE_PUBLIC(Transform)
-
 	public:
 		Transform(GameObject* gameobject) 
 			:Component(gameobject) {}
-		~Transform() override = default;
+		~Transform() = default;
 
 	private:
 		glm::vec3 position = glm::vec3(0.0f);

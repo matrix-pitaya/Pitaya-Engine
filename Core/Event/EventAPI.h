@@ -90,7 +90,7 @@ namespace Pitaya::Core::Event
 
 	struct EventToken
 	{
-		EventToken(UID uid, EventType type)
+		EventToken(UID uid = UID::Invalid, EventType type = EventType::Invalid)
 			:uid(uid), type(type) {}
 
 		bool operator==(const EventToken& other) const noexcept

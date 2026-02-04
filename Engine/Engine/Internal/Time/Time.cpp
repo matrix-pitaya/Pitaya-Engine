@@ -2,25 +2,6 @@
 
 #include<thread>
 
-bool Pitaya::Engine::Internal::Time::Initialize()
-{
-	if (isInitialized)
-	{
-		return false;
-	}
-
-	isInitialized = true;
-	return true;
-}
-void Pitaya::Engine::Internal::Time::Release()
-{
-	if (isReleased)
-	{
-		return;
-	}
-
-	isReleased = true;
-}
 void Pitaya::Engine::Internal::Time::Tick()
 {
 	tick = std::chrono::steady_clock::now();

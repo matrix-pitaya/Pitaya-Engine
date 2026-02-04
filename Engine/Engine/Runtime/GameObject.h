@@ -17,12 +17,10 @@ namespace Pitaya::Engine
 	class Scene;
 	class GameObject : public Entity
 	{
-		DEFAULT_COPY_AND_MOVE_PUBLIC(GameObject)
-
 	public:
 		GameObject(entt::entity entityId = entt::null, const std::string& name = "GameObject", Scene* scene = nullptr)
 			:Entity(entityId),scene(scene), name(name){}
-		~GameObject() override = default;
+		~GameObject() = default;
 
 	public:
 		inline bool IsValid()

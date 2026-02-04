@@ -1,12 +1,6 @@
 #include"OpenGLWindow.h"
 #include"Event/EventAPI.h"
 
-Pitaya::Engine::Window::OpenGLWindow::OpenGLWindow() = default;
-Pitaya::Engine::Window::OpenGLWindow::~OpenGLWindow()
-{
-	Release();
-}
-
 bool Pitaya::Engine::Window::OpenGLWindow::Initialize(int width, int height, const char* title)
 {
 	if (isInitialized)
@@ -73,32 +67,32 @@ void Pitaya::Engine::Window::OpenGLWindow::Release()
 
 	isReleased = true;
 }
-bool Pitaya::Engine::Window::OpenGLWindow::GetKeyDown(Engine::Input::KeyCode keyCode) const
+bool Pitaya::Engine::Window::OpenGLWindow::GetKeyDown(Pitaya::Engine::Input::KeyCode keyCode) const
 {
 	switch (keyCode)
 	{
-		case Engine::Input::KeyCode::W:
+		case Pitaya::Engine::Input::KeyCode::W:
 			return glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS;
 
-		case Engine::Input::KeyCode::A:
+		case Pitaya::Engine::Input::KeyCode::A:
 			return glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
 
-		case Engine::Input::KeyCode::S:
+		case Pitaya::Engine::Input::KeyCode::S:
 			return glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS;
 
-		case Engine::Input::KeyCode::D:
+		case Pitaya::Engine::Input::KeyCode::D:
 			return glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
 
-		case Engine::Input::KeyCode::Mouse0:
+		case Pitaya::Engine::Input::KeyCode::Mouse0:
 			return glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
 
-		case Engine::Input::KeyCode::Mouse1:
+		case Pitaya::Engine::Input::KeyCode::Mouse1:
 			return glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS;
 
-		case Engine::Input::KeyCode::Mouse2:
+		case Pitaya::Engine::Input::KeyCode::Mouse2:
 			return glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
 
-		case Engine::Input::KeyCode::ESC:
+		case Pitaya::Engine::Input::KeyCode::ESC:
 			return glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS;
 
 		default:

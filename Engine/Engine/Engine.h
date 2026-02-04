@@ -1,7 +1,7 @@
 #pragma once
 
-#include"Define/Define.h"
 #include"Enum/Enum.h"
+#include"Singleton/Singleton.h"
 
 #include"Interface/Renderer.h"
 #include"Interface/Physics.h"
@@ -14,9 +14,18 @@
 
 namespace Pitaya::Engine
 {
-	class Engine
+	class Engine : public Pitaya::Core::Singleton<Engine>
 	{
-		DECLARE_SINGLETON_CLASS_RI(Engine);
+		friend class Pitaya::Core::Singleton<Pitaya::Engine::Engine>;
+	private:
+		Engine() = default;
+		~Engine() = default;
+
+	public:
+		Engine(const Engine&) = delete;
+		Engine& operator=(const Engine&) = delete;
+		Engine(Engine&&) = delete;
+		Engine& operator=(Engine&&) = delete;
 
 	public:
 		inline int Execute()
@@ -44,7 +53,11 @@ namespace Pitaya::Engine
 		}
 
 #pragma region Input
-		inline bool GetKeyDown(Pitaya::Engine::Input::KeyCode keyCode) const noexcept
+		
+#pragma endregion
+
+#pragma region Window
+		inline bool GetKeyDownByWindow(Pitaya::Engine::Input::KeyCode keyCode) const noexcept
 		{
 			return window->GetKeyDown(keyCode);
 		}
@@ -85,6 +98,7 @@ namespace Pitaya::Engine
 #pragma endregion
 
 	private:
+		bool Initialize();
 		bool IsRunning();
 		void Input();
 		void Tick();
@@ -95,6 +109,7 @@ namespace Pitaya::Engine
 		void Renderer();
 		void EndOfFrame();
 		void FrameSync();
+		void Release();
 
 	private:
 		bool BindEngineModelBackendAPI();
