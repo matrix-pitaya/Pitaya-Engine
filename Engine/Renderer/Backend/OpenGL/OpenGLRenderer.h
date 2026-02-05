@@ -2,8 +2,8 @@
 
 #include"Enum/Enum.h"
 
-#include"../../Engine/Engine/Interface/Renderer.h"
-#include"../../Engine/Engine/Internal/Thread/Thread.h"
+#include<Engine/Interface/Renderer.h>
+#include<Engine/API/Thread.h>
 
 #include<atomic>
 #include<condition_variable>

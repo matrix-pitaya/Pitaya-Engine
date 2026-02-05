@@ -1,5 +1,6 @@
-#include"Log.h"
-#include"../../Engine.h"
+#include<Engine/Internal/Log/Log.h>
+
+#include<Engine/Internal/Thread/Thread.h>
 
 bool Pitaya::Engine::Internal::Log::Initialize()
 {
@@ -9,19 +10,22 @@ bool Pitaya::Engine::Internal::Log::Initialize()
 	{
 		throw std::runtime_error("Open Log File Fail! Path: " + path.string());
 	}
-	logThreadToken = Pitaya::Engine::Engine::Instance().RegisterThread("Log", &Pitaya::Engine::Internal::Log::LogThread, this);
+	logThreadToken = Pitaya::Engine::Thread::GetThreadModel()->RegisterThread("Log", &Pitaya::Engine::Internal::Log::LogThread, this);
 	return true;
 }
 void Pitaya::Engine::Internal::Log::Release()
 {
 	isRunning = false;
 	cond.notify_one();
-	Pitaya::Engine::Engine::Instance().UnregisterThread(logThreadToken);
-	ofs.close();
+	Pitaya::Engine::Thread::GetThreadModel()->UnregisterThread(logThreadToken);
 	while (!queue.empty())
 	{
+		const LogMessage& logMessage = queue.front();
+		ofs << "[" << (logMessage.time) << "][" << LogLevelToString(logMessage.level) << "][" << logMessage.thread << "]" << logMessage.message << std::endl;
 		queue.pop();
 	}
+	ofs.flush();
+	ofs.close();
 }
 void Pitaya::Engine::Internal::Log::LogThread()
 {

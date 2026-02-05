@@ -1,8 +1,8 @@
-#include"Application.h"
+#include<Application/Application.h>
 
-#include"Engine/EngineAPI.h"
-
-#include"Console/Console.h"
+#include<Engine/API/Engine/Bootstrap.h>
+#include<Engine/API/Log/Log.h>
+#include<Console/Console.h>
 
 #include<exception>
 #include<stdexcept>

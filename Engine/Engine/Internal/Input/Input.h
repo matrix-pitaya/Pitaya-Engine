@@ -1,7 +1,8 @@
 #pragma once
 
 #include"Enum/Enum.h"
-#include"../../EngineAPI.h"
+
+#include<Engine/API/Event.h>
 
 #include<vector>
 
@@ -38,6 +39,8 @@ namespace Pitaya::Engine::Internal
 		{
 			currentFrameState = hardwareState;
 		}
+
+	public:
 		inline bool IsKeyDown(Pitaya::Engine::Input::KeyCode keyCode) const noexcept
 		{ 
 			return (keyCode != Pitaya::Engine::Input::KeyCode::Unknown) ? 

@@ -93,7 +93,8 @@
       <PreprocessorDefinitions>GLEW_STATIC;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\yaml\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\yaml\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -109,7 +110,8 @@
       <PreprocessorDefinitions>GLEW_STATIC;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\yaml\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\yaml\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,7 +125,8 @@
       <PreprocessorDefinitions>GLEW_STATIC;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\yaml\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\yaml\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,7 +142,8 @@
       <PreprocessorDefinitions>GLEW_STATIC;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\yaml\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Core\;$(SolutionDir)Interface\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\ASSIMP\include\;$(SolutionDir)thirdparty\bullet\include\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\yaml\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,9 +151,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\API\Bootstrap.h" />
+    <ClInclude Include="Engine\API\Config.h" />
+    <ClInclude Include="Engine\API\Event.h" />
+    <ClInclude Include="Engine\API\Log.h" />
+    <ClInclude Include="Engine\API\Thread.h" />
+    <ClInclude Include="Engine\API\Time.h" />
     <ClInclude Include="Engine\Config\Config.h" />
     <ClInclude Include="Engine\Engine.h" />
-    <ClInclude Include="Engine\EngineAPI.h" />
     <ClInclude Include="Engine\Interface\Physics.h" />
     <ClInclude Include="Engine\Interface\Renderer.h" />
     <ClInclude Include="Engine\Interface\Window.h" />
@@ -166,22 +175,27 @@
     <ClInclude Include="Engine\Runtime\Scene.h" />
     <ClInclude Include="Engine\Runtime\Transform.h" />
     <ClInclude Include="Physics\Backend\Bullet\BulletPhysics.h" />
-    <ClInclude Include="Renderer\Backend\imgui\imconfig.h" />
-    <ClInclude Include="Renderer\Backend\imgui\imgui.h" />
-    <ClInclude Include="Renderer\Backend\imgui\imgui_impl_glfw.h" />
-    <ClInclude Include="Renderer\Backend\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="Renderer\Backend\imgui\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="Renderer\Backend\imgui\imgui_internal.h" />
-    <ClInclude Include="Renderer\Backend\imgui\imstb_rectpack.h" />
-    <ClInclude Include="Renderer\Backend\imgui\imstb_textedit.h" />
-    <ClInclude Include="Renderer\Backend\imgui\imstb_truetype.h" />
+    <ClInclude Include="Engine\Editor\imgui\imconfig.h" />
+    <ClInclude Include="Engine\Editor\imgui\imgui.h" />
+    <ClInclude Include="Engine\Editor\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="Engine\Editor\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="Engine\Editor\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="Engine\Editor\imgui\imgui_internal.h" />
+    <ClInclude Include="Engine\Editor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="Engine\Editor\imgui\imstb_textedit.h" />
+    <ClInclude Include="Engine\Editor\imgui\imstb_truetype.h" />
     <ClInclude Include="Renderer\Backend\OpenGL\OpenGLRenderer.h" />
-    <ClInclude Include="Renderer\Backend\stbimage\stb_image.h" />
-    <ClInclude Include="Window\Backend\OpenGL\OpenGLWindow.h" />
+    <ClInclude Include="Renderer\Runtime\stbimage\stb_image.h" />
+    <ClInclude Include="Window\Platform\GLFW\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\API\Bootstrap.cpp" />
+    <ClCompile Include="Engine\API\Config.cpp" />
+    <ClCompile Include="Engine\API\Event.cpp" />
+    <ClCompile Include="Engine\API\Log.cpp" />
+    <ClCompile Include="Engine\API\Thread.cpp" />
+    <ClCompile Include="Engine\API\Time.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
-    <ClCompile Include="Engine\EngineAPI.cpp" />
     <ClCompile Include="Engine\Internal\Event\Event.cpp" />
     <ClCompile Include="Engine\Internal\Input\Input.cpp" />
     <ClCompile Include="Engine\Internal\Log\Log.cpp" />
@@ -189,15 +203,15 @@
     <ClCompile Include="Engine\Internal\Time\Time.cpp" />
     <ClCompile Include="Physics\Backend\Bullet\BulletPhysics.cpp" />
     <ClCompile Include="Physics\Backend\Bullet\BulletPhysicsWorld.cpp" />
-    <ClCompile Include="Renderer\Backend\imgui\imgui.cpp" />
-    <ClCompile Include="Renderer\Backend\imgui\imgui_draw.cpp" />
-    <ClCompile Include="Renderer\Backend\imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="Renderer\Backend\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="Renderer\Backend\imgui\imgui_tables.cpp" />
-    <ClCompile Include="Renderer\Backend\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Engine\Editor\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\Editor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Engine\Editor\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Engine\Editor\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Engine\Editor\imgui\imgui_tables.cpp" />
+    <ClCompile Include="Engine\Editor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Renderer\Backend\OpenGL\OpenGLRenderer.cpp" />
-    <ClCompile Include="Renderer\Backend\stbimage\stb_image.cpp" />
-    <ClCompile Include="Window\Backend\OpenGL\OpenGLWindow.cpp" />
+    <ClCompile Include="Renderer\Runtime\stbimage\stb_image.cpp" />
+    <ClCompile Include="Window\Platform\GLFW\GLFWWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

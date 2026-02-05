@@ -1,6 +1,6 @@
 #include"Thread.h"
 
-#include"../../EngineAPI.h"
+#include<Engine/API/Thread.h>
 
 bool Pitaya::Engine::Internal::Thread::Initialize()
 {
@@ -11,7 +11,7 @@ bool Pitaya::Engine::Internal::Thread::Initialize()
 void Pitaya::Engine::Internal::Thread::Release()
 {
 	//通过容器中的ThreadInfo回收线程
-	map.clear(); 
+	//map.clear(); //日志线程最后处理
 }
 
 Pitaya::Engine::Internal::Thread::ThreadInfo::~ThreadInfo()

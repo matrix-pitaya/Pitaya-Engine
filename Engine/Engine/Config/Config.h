@@ -106,6 +106,18 @@ namespace Pitaya::Engine::Config
 				{
 					WindowHeight = value.as<int>(WindowHeight);
 				}
+				if (auto value = node["Platform"])
+				{
+					std::string api = value.as<std::string>("Platform");
+					if (api == "GLFW")
+					{
+						WindowPlatform = Pitaya::Engine::Window::Platform::GLFW;
+					}
+					else
+					{
+						WindowPlatform = Pitaya::Engine::Window::Platform::GLFW;
+					}
+				}
 			}
 		}
 		inline void Save()
@@ -141,6 +153,7 @@ namespace Pitaya::Engine::Config
 			}
 			
 			//Window
+			config["Window"]["Platform"] = "GLFW";
 			config["Window"]["Width"] = WindowWidth;
 			config["Window"]["Height"] = WindowHeight;
 
@@ -168,6 +181,7 @@ namespace Pitaya::Engine::Config
 		Pitaya::Engine::Renderer::API RendererAPI = Pitaya::Engine::Renderer::API::OpenGL;
 
 		//Window
+		Pitaya::Engine::Window::Platform WindowPlatform = Pitaya::Engine::Window::Platform::GLFW;
 		int WindowWidth = 1280;
 		int WindowHeight = 720;
 

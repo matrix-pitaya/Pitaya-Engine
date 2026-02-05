@@ -128,6 +128,16 @@ namespace Pitaya::Engine::Input
 	};
 }
 
+namespace Pitaya::Engine::Window
+{
+	enum class Platform : uint8_t
+	{
+		GLFW = 0,
+
+		Unknown
+	};
+}
+
 namespace Pitaya::Engine::Renderer
 {
 	enum class API : uint8_t

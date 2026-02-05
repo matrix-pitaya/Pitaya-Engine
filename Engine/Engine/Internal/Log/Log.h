@@ -3,7 +3,7 @@
 #include<Enum/Enum.h>
 #include<Utility/Utility.h>
 
-#include"../../EngineAPI.h"
+#include<Engine/API/Thread.h>
 
 #include<fstream>
 #include<sstream>
@@ -55,7 +55,7 @@ namespace Pitaya::Engine::Internal
 		bool Initialize();
 		void Release();
 
-	private:
+	public:
 		void LogInfo(const std::string& message);
 		void LogDebug(const std::string& message);
 		void LogWarning(const std::string& message);

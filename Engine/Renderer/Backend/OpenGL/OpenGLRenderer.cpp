@@ -1,7 +1,7 @@
 #include"OpenGLRenderer.h"
 
-#include"../../Engine/Engine/Engine.h"
-#include"../../Engine/Engine/EngineAPI.h"
+#include<Engine/Internal/Thread/Thread.h>
+#include<Engine/API/Log.h>
 
 #include<stdexcept>
 #include<string>
@@ -14,14 +14,14 @@ bool Pitaya::Engine::Renderer::OpenGLRenderer::Initialize()
 		return false;
 	}
 
-	renderThreadToken = Pitaya::Engine::Engine::Instance().RegisterThread("Render", &Pitaya::Engine::Renderer::OpenGLRenderer::RenderThread, this);
+	renderThreadToken = Pitaya::Engine::Thread::GetThreadModel()->RegisterThread("Render", &Pitaya::Engine::Renderer::OpenGLRenderer::RenderThread, this);
 	return true;
 }
 void Pitaya::Engine::Renderer::OpenGLRenderer::Release()
 {
 	isRunning = false;
 	cond.notify_one();
-	Pitaya::Engine::Engine::Instance().UnregisterThread(renderThreadToken);
+	Pitaya::Engine::Thread::GetThreadModel()->UnregisterThread(renderThreadToken);
 }
 bool Pitaya::Engine::Renderer::OpenGLRenderer::InitOpenGLContext()
 {

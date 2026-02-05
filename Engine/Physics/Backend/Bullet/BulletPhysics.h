@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../../Engine/Engine/Interface/Physics.h"
+#include<Engine/Interface/Physics.h>
 
 namespace Pitaya::Engine
 {
@@ -22,7 +22,7 @@ namespace Pitaya::Engine::Physics
 		BulletPhysics(BulletPhysics&&) = delete;
 		BulletPhysics& operator=(BulletPhysics&&) = delete;
 
-	public:
+	private:
 		bool Initialize() override;
 		void Release() override;
 		void OnFixupdata() override;

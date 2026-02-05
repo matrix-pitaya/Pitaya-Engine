@@ -1,19 +1,25 @@
 #pragma once
 
-#include"Enum/Enum.h"
-#include"Singleton/Singleton.h"
+#include<Enum/Enum.h>
+#include<Singleton/Singleton.h>
 
-#include"Interface/Renderer.h"
-#include"Interface/Physics.h"
-#include"Interface/Window.h"
+#include<Engine/Config/Config.h>
 
-#include"Internal/Input/Input.h"
-#include"Internal/Time/Time.h"
-#include"Internal/Log/Log.h"
-#include"Internal/Event/Event.h"
-#include"Internal/Thread/Thread.h"
+namespace Pitaya::Engine::Interface
+{
+	class Renderer;
+	class Physics;
+	class Window;
+}
 
-#include"Config/Config.h"
+namespace Pitaya::Engine::Internal
+{
+	class Input;
+	class Time;
+	class Event;
+	class Log;
+	class Thread;
+}
 
 namespace Pitaya::Engine
 {
@@ -54,104 +60,31 @@ namespace Pitaya::Engine
 			return 0;
 		}
 
-#pragma region Input
-		
-#pragma endregion
+		inline Pitaya::Engine::Internal::Input* GetInputModel() const noexcept
+		{
+			return input;
+		}
+		inline Pitaya::Engine::Internal::Time* GetTimeModel() const noexcept
+		{
+			return time;
+		}
+		inline Pitaya::Engine::Internal::Event* GetEventModel() const noexcept
+		{
+			return event;
+		}
+		inline Pitaya::Engine::Internal::Log* GetLogModel() const noexcept
+		{
+			return log;
+		}
+		inline Pitaya::Engine::Internal::Thread* GetThreadModel() const noexcept
+		{
+			return thread;
+		}
 
-#pragma region Window
-
-#pragma endregion
-
-#pragma region Time
-		inline const float& GetDeltaTime() const noexcept
+		inline Pitaya::Engine::Config::Config& GetConfigModel() noexcept
 		{
-			return time.delta;
+			return config;
 		}
-		inline const float& GetFixdeltaTime() const noexcept
-		{
-			return time.fixdelta;
-		}
-		inline const float& GetUnscaledDeltaTime() const noexcept
-		{
-			return time.unscaledDeltaTime;
-		}
-		inline float& GetTimeScale() noexcept
-		{
-			return time.scale;
-		}
-		inline float GetSecondsTime() noexcept
-		{
-			return time.Seconds();
-		}
-		inline int64_t GetMillisecondsTime() noexcept
-		{
-			return time.Milliseconds();
-		}
-#pragma endregion
-
-#pragma region Config
-		inline size_t GetMaxFixupdataExecuteTimes() const noexcept
-		{
-			return config.MaxFixupdateExecuteTimes;
-		}
-#pragma endregion
-
-#pragma region Log
-		inline void LogInfo(const std::string& message) noexcept
-		{
-			log.LogInfo(message);
-		}
-		inline void LogDebug(const std::string& message) noexcept
-		{
-			log.LogDebug(message);
-		}
-		inline void LogWarning(const std::string& message) noexcept
-		{
-			log.LogWarning(message);
-		}
-		inline void LogError(const std::string& message) noexcept 
-		{
-			log.LogError(message);
-		}
-#pragma endregion
-
-#pragma region Event
-		inline Pitaya::Engine::Event::EventToken SubscribeEvent(::Pitaya::Engine::Event::EventType type, std::function<void(const ::Pitaya::Engine::Event::Event&)> function) noexcept
-		{
-			return event.Subscribe(type, std::move(function));
-		}
-		inline bool UnSubscribeEvent(const ::Pitaya::Engine::Event::EventToken& eventToken) noexcept
-		{
-			return event.UnSubscribe(eventToken);
-		}
-		inline void EmitEvent(const ::Pitaya::Engine::Event::Event& event) noexcept
-		{
-			this->event.Emit(event);
-		}
-#pragma endregion
-
-#pragma region Thread
-		template<class Function, class... Args>
-		inline Pitaya::Engine::Thread::ThreadToken RegisterThread(const std::string& name, Function&& f, Args&&... args) noexcept 
-		{
-			log.LogDebug(name + "线程被注册!");
-			return thread.RegisterThread(name, std::forward<Function>(f), std::forward<Args>(args)...);
-		}
-		inline Pitaya::Engine::Thread::ThreadToken RegisterThread(const std::string& name, std::thread::id id) noexcept
-		{
-			log.LogDebug(name + "线程被注册!");
-			return thread.RegisterThread(name, id);
-		}
-		inline bool UnregisterThread(Pitaya::Engine::Thread::ThreadToken threadToken) noexcept
-		{
-			log.LogDebug(thread.GetThreadName(threadToken.id) + "线程被解除!");
-			return thread.UnregisterThread(threadToken);;
-		}
-		inline const std::string& GetThreadName(const std::thread::id& id)
-		{
-			return thread.GetThreadName(id);
-		}
-#pragma endregion
 
 	private:
 		bool Initialize();
@@ -167,19 +100,19 @@ namespace Pitaya::Engine
 		void Release();
 
 	private:
-		bool BindEngineModelBackendAPI();
-		bool CheckEngineModelBackendBindIsSuccess();
+		bool CreateEngineModel();
+		bool CheckEngineModel();
 
 	private:
 		Pitaya::Engine::Interface::Renderer* renderer = nullptr;
 		Pitaya::Engine::Interface::Physics* physics = nullptr;
 		Pitaya::Engine::Interface::Window* window = nullptr;
 
-		Pitaya::Engine::Internal::Input input;
-		Pitaya::Engine::Internal::Time time;
-		Pitaya::Engine::Internal::Event event;
-		Pitaya::Engine::Internal::Log log;
-		Pitaya::Engine::Internal::Thread thread;
+		Pitaya::Engine::Internal::Input* input = nullptr;
+		Pitaya::Engine::Internal::Time* time = nullptr;
+		Pitaya::Engine::Internal::Event* event = nullptr;
+		Pitaya::Engine::Internal::Log* log = nullptr;
+		Pitaya::Engine::Internal::Thread* thread = nullptr;
 		//coroutine
 		//game
 		//camera

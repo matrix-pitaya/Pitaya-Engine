@@ -1,6 +1,7 @@
 #pragma once
 
-#include"../Engine/Engine/EngineAPI.h"
+#include<Engine/API/Thread.h>
+#include<Engine/API/Log.h>
 
 #include<string>
 #include<unordered_map>
@@ -50,10 +51,11 @@ namespace Pitaya::Engine::Internal
 		bool Initialize();
 		void Release();
 
-	private:
+	public:
 		template<class Function, class... Args>
 		inline Pitaya::Engine::Thread::ThreadToken RegisterThread(const std::string& name, Function&& f, Args&&... args)
 		{
+			Pitaya::Engine::Log::LogInfo(name + "线程被注册!");
 			ThreadInfo threadInfo = ThreadInfo(name, std::forward<Function>(f), std::forward<Args>(args)...);
 			Pitaya::Engine::Thread::ThreadToken threadToken = Pitaya::Engine::Thread::ThreadToken(threadInfo.thread ? threadInfo.thread->get_id() : std::thread::id());
 			map.emplace(threadToken, std::move(threadInfo));
@@ -61,6 +63,7 @@ namespace Pitaya::Engine::Internal
 		}
 		inline Pitaya::Engine::Thread::ThreadToken RegisterThread(const std::string& name, std::thread::id id)
 		{
+			Pitaya::Engine::Log::LogInfo(name + "线程被注册!");
 			ThreadInfo threadInfo = ThreadInfo(name);
 			Pitaya::Engine::Thread::ThreadToken threadToken = Pitaya::Engine::Thread::ThreadToken(id);
 			map.emplace(threadToken, std::move(threadInfo));
@@ -74,6 +77,7 @@ namespace Pitaya::Engine::Internal
 				return false;
 			}
 
+			Pitaya::Engine::Log::LogInfo(GetThreadName(threadToken.id) + "线程被解除!");
 			if (iterator->second.thread->joinable())
 			{
 				iterator->second.thread->join();

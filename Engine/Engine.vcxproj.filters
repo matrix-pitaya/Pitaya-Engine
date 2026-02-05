@@ -21,9 +21,6 @@
     <ClInclude Include="Engine\Engine.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\EngineAPI.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Internal\Input\Input.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -57,40 +54,40 @@
     <ClInclude Include="Physics\Backend\Bullet\BulletPhysics.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Backend\imgui\imconfig.h">
+    <ClInclude Include="Engine\Editor\imgui\imconfig.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Backend\imgui\imgui.h">
+    <ClInclude Include="Engine\Editor\imgui\imgui.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Backend\imgui\imgui_impl_glfw.h">
+    <ClInclude Include="Engine\Editor\imgui\imgui_impl_glfw.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Backend\imgui\imgui_impl_opengl3.h">
+    <ClInclude Include="Engine\Editor\imgui\imgui_impl_opengl3.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Backend\imgui\imgui_impl_opengl3_loader.h">
+    <ClInclude Include="Engine\Editor\imgui\imgui_impl_opengl3_loader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Backend\imgui\imgui_internal.h">
+    <ClInclude Include="Engine\Editor\imgui\imgui_internal.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Backend\imgui\imstb_rectpack.h">
+    <ClInclude Include="Engine\Editor\imgui\imstb_rectpack.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Backend\imgui\imstb_textedit.h">
+    <ClInclude Include="Engine\Editor\imgui\imstb_textedit.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Backend\imgui\imstb_truetype.h">
+    <ClInclude Include="Engine\Editor\imgui\imstb_truetype.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Backend\stbimage\stb_image.h">
+    <ClInclude Include="Renderer\Runtime\stbimage\stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\Backend\OpenGL\OpenGLRenderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Window\Backend\OpenGL\OpenGLWindow.h">
+    <ClInclude Include="Window\Platform\GLFW\GLFWWindow.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Runtime\Scene.h">
@@ -108,12 +105,27 @@
     <ClInclude Include="Engine\Internal\Event\Event.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\API\Bootstrap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\API\Log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\API\Config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\API\Thread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\API\Event.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\API\Time.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Engine.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\EngineAPI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Internal\Input\Input.cpp">
@@ -125,31 +137,31 @@
     <ClCompile Include="Physics\Backend\Bullet\BulletPhysics.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Backend\imgui\imgui.cpp">
+    <ClCompile Include="Engine\Editor\imgui\imgui.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Backend\imgui\imgui_draw.cpp">
+    <ClCompile Include="Engine\Editor\imgui\imgui_draw.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Backend\imgui\imgui_impl_glfw.cpp">
+    <ClCompile Include="Engine\Editor\imgui\imgui_impl_glfw.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Backend\imgui\imgui_impl_opengl3.cpp">
+    <ClCompile Include="Engine\Editor\imgui\imgui_impl_opengl3.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Backend\imgui\imgui_tables.cpp">
+    <ClCompile Include="Engine\Editor\imgui\imgui_tables.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Backend\imgui\imgui_widgets.cpp">
+    <ClCompile Include="Engine\Editor\imgui\imgui_widgets.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Backend\stbimage\stb_image.cpp">
+    <ClCompile Include="Renderer\Runtime\stbimage\stb_image.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\Backend\OpenGL\OpenGLRenderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Window\Backend\OpenGL\OpenGLWindow.cpp">
+    <ClCompile Include="Window\Platform\GLFW\GLFWWindow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Physics\Backend\Bullet\BulletPhysicsWorld.cpp">
@@ -162,6 +174,24 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Internal\Thread\Thread.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\API\Bootstrap.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\API\Log.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\API\Config.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\API\Thread.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\API\Event.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\API\Time.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

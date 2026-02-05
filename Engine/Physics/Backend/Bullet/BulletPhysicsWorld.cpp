@@ -1,8 +1,9 @@
 #pragma once
 
-#include"Enum/Enum.h"
+#include<Enum/Enum.h>
 
-#include"../../../Engine/EngineAPI.h"
+#include<Engine/API/Time.h>
+#include<Engine/API/Config.h>
 
 #include<btBulletDynamicsCommon.h>
 #include<BulletCollision/CollisionDispatch/btCollisionDispatcherMt.h>
@@ -279,7 +280,7 @@ namespace Pitaya::Engine::Physics
         }
         inline void Simulation()
         {
-            dynamicsWorld->stepSimulation(Engine::Time::delta, Engine::Config::GetMaxFixupdataExecuteTimes(), Engine::Time::fixdelta);
+            dynamicsWorld->stepSimulation(Engine::Time::delta(), Engine::Config::GetMaxFixupdataExecuteTimes(), Engine::Time::Fixdelta());
         }
         inline bool RaycastClosest(const btVector3& from, const btVector3& to, btCollisionWorld::ClosestRayResultCallback& resultOut)
         {

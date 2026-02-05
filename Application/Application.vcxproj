@@ -97,7 +97,8 @@
       <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Engine\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Core\;$(SolutionDir)Engine\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -115,7 +116,8 @@
       <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Engine\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Core\;$(SolutionDir)Engine\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,7 +133,8 @@
       <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Engine\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Core\;$(SolutionDir)Engine\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,7 +152,8 @@
       <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Core\;$(SolutionDir)Engine\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Core\;$(SolutionDir)Engine\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -6,7 +6,7 @@
 #include<functional>
 #include<unordered_map>
 
-#include "../../EngineAPI.h"
+#include<Engine/API/Event.h>
 
 namespace Pitaya::Engine
 {
@@ -32,7 +32,7 @@ namespace Pitaya::Engine::Internal
 		bool Initialize();
 		void Release();
 
-	private:
+	public:
 		Pitaya::Engine::Event::EventToken Subscribe(::Pitaya::Engine::Event::EventType type, std::function<void(const ::Pitaya::Engine::Event::Event&)> function) noexcept;
 		bool UnSubscribe(const ::Pitaya::Engine::Event::EventToken& eventToken) noexcept;
 		void Emit(const ::Pitaya::Engine::Event::Event& event) noexcept;
