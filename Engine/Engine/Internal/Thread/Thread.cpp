@@ -1,6 +1,4 @@
-#include"Thread.h"
-
-#include<Engine/API/Thread.h>
+#include<Engine/Internal/Thread/Thread.h>
 
 bool Pitaya::Engine::Internal::Thread::Initialize()
 {

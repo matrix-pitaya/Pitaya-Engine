@@ -1,6 +1,6 @@
-#include"GLFWWindow.h"
+#include<Window/Platform/GLFW/GLFWWindow.h>
 
-#include<Engine/API/Event.h>
+#include<Engine/API/Event/Event.h>
 
 bool Pitaya::Engine::Window::GLFWWindow::Initialize(int width, int height, const char* title)
 {

@@ -3,7 +3,7 @@
 #include<Enum/Enum.h>
 #include<Utility/Utility.h>
 
-#include<Engine/API/Thread.h>
+#include<Engine/API/Thread/Thread.h>
 
 #include<fstream>
 #include<sstream>

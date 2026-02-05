@@ -2,8 +2,8 @@
 
 #include<Enum/Enum.h>
 
-#include<Engine/API/Time.h>
-#include<Engine/API/Config.h>
+#include<Engine/API/Time/Time.h>
+#include<Engine/API/Config/Config.h>
 
 #include<btBulletDynamicsCommon.h>
 #include<BulletCollision/CollisionDispatch/btCollisionDispatcherMt.h>

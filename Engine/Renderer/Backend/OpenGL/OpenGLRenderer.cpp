@@ -1,7 +1,7 @@
-#include"OpenGLRenderer.h"
+#include<Renderer/Backend/OpenGL/OpenGLRenderer.h>
 
 #include<Engine/Internal/Thread/Thread.h>
-#include<Engine/API/Log.h>
+#include<Engine/API/Log/Log.h>
 
 #include<stdexcept>
 #include<string>

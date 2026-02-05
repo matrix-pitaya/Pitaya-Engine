@@ -1,7 +1,7 @@
 #pragma once
 
-#include<Engine/API/Thread.h>
-#include<Engine/API/Log.h>
+#include<Engine/API/Thread/Thread.h>
+#include<Engine/API/Log/Log.h>
 
 #include<string>
 #include<unordered_map>

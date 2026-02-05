@@ -151,12 +151,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\API\Bootstrap.h" />
-    <ClInclude Include="Engine\API\Config.h" />
-    <ClInclude Include="Engine\API\Event.h" />
-    <ClInclude Include="Engine\API\Log.h" />
-    <ClInclude Include="Engine\API\Thread.h" />
-    <ClInclude Include="Engine\API\Time.h" />
+    <ClInclude Include="Engine\API\Engine\Bootstrap.h" />
+    <ClInclude Include="Engine\API\Config\Config.h" />
+    <ClInclude Include="Engine\API\Event\Event.h" />
+    <ClInclude Include="Engine\API\Log\Log.h" />
+    <ClInclude Include="Engine\API\Thread\Thread.h" />
+    <ClInclude Include="Engine\API\Time\Time.h" />
     <ClInclude Include="Engine\Config\Config.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\Interface\Physics.h" />
@@ -189,12 +189,12 @@
     <ClInclude Include="Window\Platform\GLFW\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\API\Bootstrap.cpp" />
-    <ClCompile Include="Engine\API\Config.cpp" />
-    <ClCompile Include="Engine\API\Event.cpp" />
-    <ClCompile Include="Engine\API\Log.cpp" />
-    <ClCompile Include="Engine\API\Thread.cpp" />
-    <ClCompile Include="Engine\API\Time.cpp" />
+    <ClCompile Include="Engine\API\Engine\Bootstrap.cpp" />
+    <ClCompile Include="Engine\API\Config\Config.cpp" />
+    <ClCompile Include="Engine\API\Event\Event.cpp" />
+    <ClCompile Include="Engine\API\Log\Log.cpp" />
+    <ClCompile Include="Engine\API\Thread\Thread.cpp" />
+    <ClCompile Include="Engine\API\Time\Time.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\Internal\Event\Event.cpp" />
     <ClCompile Include="Engine\Internal\Input\Input.cpp" />

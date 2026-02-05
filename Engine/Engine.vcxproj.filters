@@ -105,22 +105,22 @@
     <ClInclude Include="Engine\Internal\Event\Event.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\API\Bootstrap.h">
+    <ClInclude Include="Engine\API\Engine\Bootstrap.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\API\Log.h">
+    <ClInclude Include="Engine\API\Log\Log.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\API\Config.h">
+    <ClInclude Include="Engine\API\Config\Config.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\API\Thread.h">
+    <ClInclude Include="Engine\API\Thread\Thread.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\API\Event.h">
+    <ClInclude Include="Engine\API\Event\Event.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\API\Time.h">
+    <ClInclude Include="Engine\API\Time\Time.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -176,22 +176,22 @@
     <ClCompile Include="Engine\Internal\Thread\Thread.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\API\Bootstrap.cpp">
+    <ClCompile Include="Engine\API\Engine\Bootstrap.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\API\Log.cpp">
+    <ClCompile Include="Engine\API\Log\Log.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\API\Config.cpp">
+    <ClCompile Include="Engine\API\Config\Config.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\API\Thread.cpp">
+    <ClCompile Include="Engine\API\Thread\Thread.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\API\Event.cpp">
+    <ClCompile Include="Engine\API\Event\Event.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\API\Time.cpp">
+    <ClCompile Include="Engine\API\Time\Time.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

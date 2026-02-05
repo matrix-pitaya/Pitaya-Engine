@@ -1,9 +1,9 @@
 #pragma once
 
-#include"Enum/Enum.h"
+#include<Enum/Enum.h>
 
 #include<Engine/Interface/Renderer.h>
-#include<Engine/API/Thread.h>
+#include<Engine/API/Thread/Thread.h>
 
 #include<atomic>
 #include<condition_variable>
