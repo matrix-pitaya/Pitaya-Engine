@@ -167,6 +167,11 @@
     <ClInclude Include="Engine\Internal\Log\Log.h" />
     <ClInclude Include="Engine\Internal\Thread\Thread.h" />
     <ClInclude Include="Engine\Internal\Time\Time.h" />
+    <ClInclude Include="Renderer\Backend\OpenGL\Shader\OpenGLShader.h" />
+    <ClInclude Include="Renderer\Backend\OpenGL\Vertex\OpenGLElementBuffer.h" />
+    <ClInclude Include="Renderer\Backend\OpenGL\Vertex\OpenGLVertexArray.h" />
+    <ClInclude Include="Renderer\Backend\OpenGL\Vertex\OpenGLVertexBuffer.h" />
+    <ClInclude Include="Renderer\Runtime\Component\Camera\Camera.h" />
     <ClInclude Include="Engine\Runtime\Component.h" />
     <ClInclude Include="Engine\Runtime\Entity.h" />
     <ClInclude Include="Engine\Runtime\GameObject.h" />
@@ -185,7 +190,23 @@
     <ClInclude Include="Engine\Editor\imgui\imstb_textedit.h" />
     <ClInclude Include="Engine\Editor\imgui\imstb_truetype.h" />
     <ClInclude Include="Renderer\Backend\OpenGL\OpenGLRenderer.h" />
-    <ClInclude Include="Renderer\Runtime\stbimage\stb_image.h" />
+    <ClInclude Include="Renderer\Runtime\Component\Camera\CameraSnapshot.h" />
+    <ClInclude Include="Renderer\Runtime\Component\Camera\CameraState.h" />
+    <ClInclude Include="Renderer\Runtime\Command\BeginPassCommand.h" />
+    <ClInclude Include="Renderer\Runtime\Command\DrawCommand.h" />
+    <ClInclude Include="Renderer\Runtime\Command\EndPassCommand.h" />
+    <ClInclude Include="Renderer\Runtime\Command\ImGuiDrawCommand.h" />
+    <ClInclude Include="Renderer\Runtime\Command\SwapBufferCommand.h" />
+    <ClInclude Include="Renderer\Runtime\Component\MeshRenderer\MeshRenderer.h" />
+    <ClInclude Include="Renderer\Runtime\Mesh\Mesh.h" />
+    <ClInclude Include="Renderer\Runtime\Mesh\SubMesh.h" />
+    <ClInclude Include="Renderer\Runtime\Shader\Shader.h" />
+    <ClInclude Include="Renderer\Runtime\StbImage\stb_image.h" />
+    <ClInclude Include="Renderer\Runtime\Layout\BufferElement.h" />
+    <ClInclude Include="Renderer\Runtime\Layout\BufferLayout.h" />
+    <ClInclude Include="Renderer\Runtime\Vertex\ElementBuffer.h" />
+    <ClInclude Include="Renderer\Runtime\Vertex\VertexArray.h" />
+    <ClInclude Include="Renderer\Runtime\Vertex\VertexBuffer.h" />
     <ClInclude Include="Window\Platform\GLFW\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
@@ -210,7 +231,7 @@
     <ClCompile Include="Engine\Editor\imgui\imgui_tables.cpp" />
     <ClCompile Include="Engine\Editor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Renderer\Backend\OpenGL\OpenGLRenderer.cpp" />
-    <ClCompile Include="Renderer\Runtime\stbimage\stb_image.cpp" />
+    <ClCompile Include="Renderer\Runtime\StbImage\stb_image.cpp" />
     <ClCompile Include="Window\Platform\GLFW\GLFWWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,19 +2,6 @@
 
 #include<cstdint>
 
-namespace Pitaya::Core
-{
-	enum class Color : uint8_t
-	{
-		White,
-		Black,
-		Red,
-		Green,
-		Yellow,
-		Blue
-	};
-}
-
 namespace Pitaya::Engine
 {
 	enum class ComponentType : uint8_t
@@ -87,8 +74,8 @@ namespace Pitaya::Engine::Input
 		Semicolon,		//∑÷∫≈
 		Equal,			//µ»”⁄∫≈
 		
-		BracketLeft,	//◊Û÷–¿®∫≈
-		BracketRight,	//”“÷–¿®∫≈
+		LeftBracket,	//◊Û÷–¿®∫≈
+		RightBracket,	//”“÷–¿®∫≈
 		
 		Comma,			//∂∫∫≈
 		Escape,			//ESC
@@ -149,7 +136,35 @@ namespace Pitaya::Engine::Renderer
 
 	enum class RenderQueue : uint8_t
 	{
-		A, B, C
+		A, B, C, Opaque
+	};
+
+	enum class RenderCommandType : uint8_t
+	{
+		BeginPass = 0, 
+		EndPass,
+		Draw, 
+		SwapBuffer, 
+		ImGuiDraw,
+
+		Unknown
+	};
+
+	enum class ShaderDataType : uint8_t
+	{
+		Float = 0, 
+		Float2, 
+		Float3, 
+		Float4, 
+		Mat3,
+		Mat4, 
+		Int, 
+		Int2, 
+		Int3, 
+		Int4, 
+		Bool,
+
+		Unknown
 	};
 }
 

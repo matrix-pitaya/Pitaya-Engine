@@ -36,6 +36,9 @@
     <ClInclude Include="Singleton\Singleton.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Color\Color.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Console\Console.cpp">

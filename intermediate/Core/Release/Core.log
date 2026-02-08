@@ -1,5 +1,257 @@
 ﻿  Console.cpp
-D:\Pitaya\Core\Console\Console.h(3,9): warning C4464: 相对包含路径包括 ".."
+D:\Pitaya\thirdparty\glm\detail\setup.hpp(43,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int2_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int2_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\scalar_int_sized.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint2_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint2_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\scalar_uint_sized.hpp(15,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int3_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int3_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint3_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint3_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_bool4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_float4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_double4_precision.hpp(6,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int4_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_int4_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint4_sized.hpp(16,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\vector_uint4_sized.hpp(17,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double2x2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_mat2x2.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double2x3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double2x3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float2x3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float2x3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double2x4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double2x4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float2x4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float2x4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double3x2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double3x2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float3x2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float3x2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double3x3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_mat3x3.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double3x3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float3x3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float3x3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double3x4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double3x4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float3x4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float3x4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double4x2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double4x2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float4x2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float4x2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double4x3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double4x3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float4x3.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float4x3_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double4x4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\type_mat4x4.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double4x4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float4x4.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float4x4_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_matrix.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_geometric.inl(1,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_exponential.inl(4,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_geometric.inl(2,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_common.inl(4,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_double2x2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float2x2.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\ext\matrix_float2x2_precision.hpp(5,10): warning C4464: 相对包含路径包括 ".."
+  (编译源文件“Console/Console.cpp”)
+  
+D:\Pitaya\thirdparty\glm\detail\func_packing.inl(4,10): warning C4464: 相对包含路径包括 ".."
   (编译源文件“Console/Console.cpp”)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\winbase.h(7940,5): warning C5039: “TpSetCallbackCleanupGroup”: 可能引发函数的指针或引用传递到 -EHc 下的外部 "C" 函数。如果此函数引发异常，则可能发生未定义的行为。

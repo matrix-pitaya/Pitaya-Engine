@@ -9,7 +9,17 @@ bool Pitaya::Engine::Internal::Thread::Initialize()
 void Pitaya::Engine::Internal::Thread::Release()
 {
 	//通过容器中的ThreadInfo回收线程
-	//map.clear(); //日志线程最后处理
+	auto iterator = map.begin();
+	while (iterator != map.end())
+	{
+		if (iterator->second.name == "Main" || iterator->second.name == "Log")
+		{
+			iterator++;
+			continue;
+		}
+
+		iterator = map.erase(iterator);
+	}
 }
 
 Pitaya::Engine::Internal::Thread::ThreadInfo::~ThreadInfo()

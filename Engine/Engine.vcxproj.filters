@@ -81,7 +81,7 @@
     <ClInclude Include="Engine\Editor\imgui\imstb_truetype.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Runtime\stbimage\stb_image.h">
+    <ClInclude Include="Renderer\Runtime\StbImage\stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\Backend\OpenGL\OpenGLRenderer.h">
@@ -123,6 +123,69 @@
     <ClInclude Include="Engine\API\Time\Time.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Component\Camera\Camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Component\Camera\CameraSnapshot.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Component\Camera\CameraState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Command\BeginPassCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Command\DrawCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Command\EndPassCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Command\ImGuiDrawCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Command\SwapBufferCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Vertex\VertexArray.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Vertex\VertexBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Vertex\ElementBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Mesh\SubMesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Mesh\Mesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Component\MeshRenderer\MeshRenderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Backend\OpenGL\Vertex\OpenGLElementBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Backend\OpenGL\Vertex\OpenGLVertexArray.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Backend\OpenGL\Vertex\OpenGLVertexBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Layout\BufferElement.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Layout\BufferLayout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Runtime\Shader\Shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Backend\OpenGL\Shader\OpenGLShader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Engine.cpp">
@@ -155,7 +218,7 @@
     <ClCompile Include="Engine\Editor\imgui\imgui_widgets.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Runtime\stbimage\stb_image.cpp">
+    <ClCompile Include="Renderer\Runtime\StbImage\stb_image.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\Backend\OpenGL\OpenGLRenderer.cpp">

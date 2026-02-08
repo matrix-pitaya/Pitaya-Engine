@@ -41,20 +41,23 @@ namespace Pitaya::Engine::Internal
 		}
 
 	public:
-		inline bool IsKeyDown(Pitaya::Engine::Input::KeyCode keyCode) const noexcept
+		inline bool GetKeyDown(Pitaya::Engine::Input::KeyCode keyCode) const noexcept
 		{ 
 			return (keyCode != Pitaya::Engine::Input::KeyCode::Unknown) ? 
 				currentFrameState[static_cast<size_t>(keyCode)] : false;
 		}
-		inline bool IsKeyPressed(Pitaya::Engine::Input::KeyCode keyCode) const noexcept
+		inline bool GetKeyPressed(Pitaya::Engine::Input::KeyCode keyCode) const noexcept
 		{
 			return (keyCode != Pitaya::Engine::Input::KeyCode::Unknown) ? 
 				(currentFrameState[static_cast<size_t>(keyCode)] && !previousFrameState[static_cast<size_t>(keyCode)]) : false;
 		}
-		inline bool IsKeyReleased(Pitaya::Engine::Input::KeyCode keyCode) const noexcept
+		inline bool GetKeyReleased(Pitaya::Engine::Input::KeyCode keyCode) const noexcept
 		{
-			return (keyCode != Pitaya::Engine::Input::KeyCode::Unknown) ? (!currentFrameState[(size_t)keyCode] && previousFrameState[(size_t)keyCode]) : false;
+			return (keyCode != Pitaya::Engine::Input::KeyCode::Unknown) ?
+				(!currentFrameState[(size_t)keyCode] && previousFrameState[(size_t)keyCode]) : false;
 		}
+
+	private:
 		inline void ProcessKeyEvent(const Pitaya::Engine::Event::Event& event)
 		{
 			if (event.type != Pitaya::Engine::Event::EventType::Key)
@@ -63,10 +66,9 @@ namespace Pitaya::Engine::Internal
 			}
 
 			const Pitaya::Engine::Event::Args::Input::KeyEventArgs& args = static_cast<const Pitaya::Engine::Event::Args::Input::KeyEventArgs&>(event.args);
-			Pitaya::Engine::Input::KeyCode keyCode = IntToKeyCode(args.key);
-			if (keyCode != Pitaya::Engine::Input::KeyCode::Unknown)
+			if (args.keycode != Pitaya::Engine::Input::KeyCode::Unknown)
 			{
-				hardwareState[static_cast<size_t>(keyCode)] = args.action == 1;
+				hardwareState[static_cast<size_t>(args.keycode)] = (args.action == 1);
 			}
 		}
 		inline void ProcessMouseButtonEvent(const Pitaya::Engine::Event::Event& event)
@@ -77,15 +79,10 @@ namespace Pitaya::Engine::Internal
 			}
 
 			const Pitaya::Engine::Event::Args::Input::MouseButtonEventArgs& args = static_cast<const Pitaya::Engine::Event::Args::Input::MouseButtonEventArgs&>(event.args);
-			Pitaya::Engine::Input::KeyCode keyCode = IntToKeyCode(args.button);
-			if (keyCode != Pitaya::Engine::Input::KeyCode::Unknown)
+			if (args.button != Pitaya::Engine::Input::KeyCode::Unknown)
 			{
-				hardwareState[static_cast<size_t>(keyCode)] = args.action == 1;
+				hardwareState[static_cast<size_t>(args.button)] = (args.action == 1);
 			}
-		}
-		inline Pitaya::Engine::Input::KeyCode IntToKeyCode(int key) const noexcept
-		{
-			return (key < 0 || key >= 512) ? Pitaya::Engine::Input::KeyCode::Unknown : map[key];
 		}
 
 	private:
@@ -95,7 +92,5 @@ namespace Pitaya::Engine::Internal
 		std::vector<bool> currentFrameState = std::vector<bool>(static_cast<size_t>(Pitaya::Engine::Input::KeyCode::Unknown), false);
 		std::vector<bool> previousFrameState = std::vector<bool>(static_cast<size_t>(Pitaya::Engine::Input::KeyCode::Unknown), false);
 		std::vector<bool> hardwareState = std::vector<bool>(static_cast<size_t>(Pitaya::Engine::Input::KeyCode::Unknown), false);
-
-		std::vector<Pitaya::Engine::Input::KeyCode> map = std::vector<Pitaya::Engine::Input::KeyCode>(512, Pitaya::Engine::Input::KeyCode::Unknown);
 	};
 }

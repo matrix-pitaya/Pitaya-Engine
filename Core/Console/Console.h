@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../Enum/Enum.h"
+#include<Color/Color.h>
 
 #include<cstdarg>
 #include<cstdio>
@@ -23,22 +23,19 @@ namespace Pitaya::Core::Console
     inline void Print(Core::Color color, const char* fmt, ...)
     {
 #ifdef DEBUG_VERSION
-        const char* colorCode = "\033[0m";
-        switch (color)
-        {
-            case Core::Color::White:    colorCode = "\033[37m"; break;
-            case Core::Color::Black:    colorCode = "\033[30m"; break;
-            case Core::Color::Green:    colorCode = "\033[32m"; break;
-            case Core::Color::Red:      colorCode = "\033[31m"; break;
-            case Core::Color::Yellow:   colorCode = "\033[33m"; break;
-            case Core::Color::Blue:     colorCode = "\033[34m"; break;
-            default:                    colorCode = "\033[0m";  break;
-        }
+        int r = static_cast<int>(color.r * 255.0f);
+        int g = static_cast<int>(color.g * 255.0f);
+        int b = static_cast<int>(color.b * 255.0f);
+
+        char colorCode[32] = {};
+        snprintf(colorCode, sizeof(colorCode), "\033[38;2;%d;%d;%dm", r, g, b);
+
         char buffer[1024] = {};
         va_list args;
         va_start(args, fmt);
         vsnprintf(buffer, sizeof(buffer), fmt, args);
         va_end(args);
+
         printf("%s%s\033[0m\n", colorCode, buffer);
 #endif
     }

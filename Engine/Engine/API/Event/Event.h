@@ -61,22 +61,20 @@ namespace Pitaya::Engine::Event
 			};
 			struct KeyEventArgs : public Pitaya::Engine::Event::Args::EventArgs
 			{
-				KeyEventArgs(int key, int scancode, int action, int mods)
-					:key(key), scancode(scancode), action(action), mods(mods) {
-				}
+				KeyEventArgs(Pitaya::Engine::Input::KeyCode keycode, int scancode, int action, int mods)
+					:keycode(keycode), scancode(scancode), action(action), mods(mods) {}
 
-				int key = 0;
+				Pitaya::Engine::Input::KeyCode keycode = Pitaya::Engine::Input::KeyCode::Unknown;
 				int scancode = 0;
 				int action = 0;
 				int mods = 0;
 			};
 			struct MouseButtonEventArgs : public Pitaya::Engine::Event::Args::EventArgs
 			{
-				MouseButtonEventArgs(int button, int action, int mods)
-					:button(button), action(action), mods(mods) {
-				}
+				MouseButtonEventArgs(Pitaya::Engine::Input::KeyCode button, bool action, int mods)
+					:button(button), action(action), mods(mods) {}
 
-				int button = 0;
+				Pitaya::Engine::Input::KeyCode button = Pitaya::Engine::Input::KeyCode::Unknown;
 				int action = 0;
 				int mods = 0;
 			};
@@ -86,8 +84,7 @@ namespace Pitaya::Engine::Event
 	struct EventToken
 	{
 		EventToken(Pitaya::Core::UID uid = Pitaya::Core::UID::Invalid, EventType type = EventType::Invalid)
-			:uid(uid), type(type) {
-		}
+			:uid(uid), type(type) {}
 		EventToken(const EventToken&) = default;
 		EventToken& operator=(const EventToken&) = default;
 
@@ -96,8 +93,8 @@ namespace Pitaya::Engine::Event
 			return uid == other.uid;
 		}
 
-		Pitaya::Core::UID uid;
-		EventType type;
+		Pitaya::Core::UID uid = Pitaya::Core::UID::Invalid;
+		EventType type = EventType::Invalid;
 	};
 	struct Event
 	{

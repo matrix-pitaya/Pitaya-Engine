@@ -1,5 +1,9 @@
 #include<Renderer/Backend/OpenGL/OpenGLRenderer.h>
 
+#include<Renderer/Backend/OpenGL/Vertex/OpenGLVertexArray.h>
+#include<Renderer/Backend/OpenGL/Vertex/OpenGLVertexBuffer.h>
+#include<Renderer/Backend/OpenGL/Vertex/OpenGLElementBuffer.h>
+
 #include<Engine/Internal/Thread/Thread.h>
 #include<Engine/API/Log/Log.h>
 
@@ -22,32 +26,35 @@ void Pitaya::Engine::Renderer::OpenGLRenderer::Release()
 	isRunning = false;
 	cond.notify_one();
 	Pitaya::Engine::Thread::GetThreadModel()->UnregisterThread(renderThreadToken);
+	glfwWindow = nullptr;
+}
+void Pitaya::Engine::Renderer::OpenGLRenderer::SwapBuffer() const
+{
+	glfwSwapBuffers(glfwWindow);
 }
 bool Pitaya::Engine::Renderer::OpenGLRenderer::InitOpenGLContext()
 {
-	openGLWindow = reinterpret_cast<GLFWwindow*>(window->GetNativeWindow());
-	if (!openGLWindow)
+	glfwWindow = reinterpret_cast<GLFWwindow*>(window->GetNativeWindow());
+	if (!glfwWindow)
 	{
 		Pitaya::Engine::Log::LogError("OpenGL Window Get Fail!");
 		return false;
 	}
 
 	//创建OpenGL上下文
-	glfwMakeContextCurrent(openGLWindow);
+	glfwMakeContextCurrent(glfwWindow);
 
 	//初始化GLEW
 	if (glewInit() != GLEW_OK)
 	{
-		glfwDestroyWindow(openGLWindow); //销毁窗口
-		glfwTerminate(); //卸载GLFW库
 		return false;
 	}
 
-	glEnable(GL_DEPTH_TEST);	//开启深度测试
+	glEnable(GL_DEPTH_TEST);					//开启深度测试
 	glDepthFunc(GL_LEQUAL);
 	glDepthMask(GL_TRUE);
-	glEnable(GL_CULL_FACE);		//开启面剔除
-	glEnable(GL_STENCIL_TEST);	//开启模板测试
+	glEnable(GL_CULL_FACE);						//开启面剔除
+	glEnable(GL_STENCIL_TEST);					//开启模板测试
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);			//设置总是通过模板测试
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);	//设置更新模板缓冲区方式
 	glStencilMask(0xFF);						//设置允许写入模板缓冲区
@@ -56,11 +63,6 @@ bool Pitaya::Engine::Renderer::OpenGLRenderer::InitOpenGLContext()
 
 	isRunning = true;
 	return true;
-}
-void Pitaya::Engine::Renderer::OpenGLRenderer::ProcessRenderCmd()
-{
-	//Core::Log::Log(Core::Log::LogLevel::Debug, "渲染线程执行drawcallcmd" + std::to_string(renderCmd.DrawcallCmdCount()));
-	drawcallCmdParser.ParseCmd();
 }
 void Pitaya::Engine::Renderer::OpenGLRenderer::RenderThread()
 {
@@ -72,54 +74,66 @@ void Pitaya::Engine::Renderer::OpenGLRenderer::RenderThread()
 	while (true)
 	{
 		std::unique_lock<std::mutex> lock(mutex);
-		cond.wait(lock, [this] { return drawcallCmdParser.IsRemainCmd() || !isRunning; });
+		cond.wait(lock, [this] { return !back.empty() || !isRunning; });
 
-		ProcessRenderCmd();
-		if (!drawcallCmdParser.IsRemainCmd() && !isRunning)
+		ParseCommand();
+		if (back.empty() && !isRunning)
 		{
 			break;
 		}
 	}
 }
-
-void Pitaya::Engine::Renderer::OpenGLRenderer::Render()
+void Pitaya::Engine::Renderer::OpenGLRenderer::BeginRenderFrame()
 {
-	if (!isRunning)
+	//清空失效的渲染命令
+	front.clear();
+	front.reserve(64 * 1024);
+}
+void Pitaya::Engine::Renderer::OpenGLRenderer::EndRenderFrame()
+{
+	//结束当前渲染帧 提交交换buffer的命令
+	PushCommandToFrontBuffer(Pitaya::Engine::Renderer::RenderCommandType::SwapBuffer, SwapBufferCommand());
+	
+	//交换渲染缓冲区
 	{
-		return;
-	}
-
-	{	//准备drawcall命令
 		std::lock_guard<std::mutex> lock(mutex);
-		drawcallCmdParser.ClearDrawcallCmd();
-		BeginFrame();
-		DrawFrame();
-		EndFrame();
+		std::swap(front, back);
 	}
 
-	//Core::Log::Log(Core::Log::LogLevel::Debug, "主线程提交DrawcallCmd");
-
-	//唤醒渲染线程
+	//唤醒渲染线程工作
 	cond.notify_one();
 }
-void Pitaya::Engine::Renderer::OpenGLRenderer::BeginFrame()
+void Pitaya::Engine::Renderer::OpenGLRenderer::BeginPass(const Pitaya::Engine::Renderer::CameraSnapshot& cameraSnapshot)
 {
-	//TODO 更新本帧Camera的快照
-
-	//TODO 渲染阴影贴图
-
-	//TODO 切换到窗口帧帧率缓冲区
-	//准备渲染 清空窗口帧缓冲区
-	drawcallCmdParser.AddDrawcallCmd(Pitaya::Engine::Renderer::RenderQueue::A, [this]() {window->ClearFrameBuffer(); });
+	BeginPassCommand beginPassCommand;
+	beginPassCommand.ClearColor = glm::vec4(0.1f, 0.2f, 0.3f, 1.0f);
+	beginPassCommand.ClearDepth = true;
+	beginPassCommand.ClearStencil = true;
+	PushCommandToFrontBuffer(Pitaya::Engine::Renderer::RenderCommandType::BeginPass, beginPassCommand);
 }
-void Pitaya::Engine::Renderer::OpenGLRenderer::DrawFrame()
+void Pitaya::Engine::Renderer::OpenGLRenderer::EndPass()
 {
-	//TODO 场景绘制
+	std::sort(pass.begin(), pass.end(),
+		[](const DrawCommand& a, const DrawCommand& b) {return a.SortKey > b.SortKey; });
+	for (auto& cmmand : pass)
+	{
+		PushCommandToFrontBuffer(Pitaya::Engine::Renderer::RenderCommandType::Draw, cmmand);
+	}
+	pass.clear();
 }
-void Pitaya::Engine::Renderer::OpenGLRenderer::EndFrame()
+void Pitaya::Engine::Renderer::OpenGLRenderer::Submit()
 {
-	//TOOD 场景后处理
 
-	//TODO UI绘制
-	drawcallCmdParser.AddDrawcallCmd(Pitaya::Engine::Renderer::RenderQueue::C, [this]() {window->SwapBuffer(); });
+}
+Pitaya::Engine::Renderer::VertexArray* Pitaya::Engine::Renderer::OpenGLRenderer::CreateVertexArray()
+{
+	return new OpenGLVertexArray();
+}
+Pitaya::Engine::Renderer::VertexBuffer* Pitaya::Engine::Renderer::OpenGLRenderer::CreateVertexBuffer(float* vertices, uint32_t size)
+{
+	return new OpenGLVertexBuffer(vertices, size);
+}
+Pitaya::Engine::Renderer::ElementBuffer* Pitaya::Engine::Renderer::OpenGLRenderer::CreateElementBuffer(uint32_t* indices, uint32_t count)
+{
+	return new OpenGLElementBuffer(indices, count);
 }

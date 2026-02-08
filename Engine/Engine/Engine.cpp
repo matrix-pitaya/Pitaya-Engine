@@ -23,8 +23,8 @@ bool Pitaya::Engine::Engine::Initialize()
 	thread->Initialize();
 	log->Initialize();
 	physics->Initialize();
-	renderer->Bind(window);
 	window->Initialize(config.WindowWidth, config.WindowHeight, config.Name.c_str());
+	renderer->Bind(window);
 	renderer->Initialize();
 	
 	return true;
@@ -46,7 +46,19 @@ void Pitaya::Engine::Engine::Fixupdata()
 }
 void Pitaya::Engine::Engine::Updata()
 {
-
+	//TODO GetKeyDown不能一直返回true
+	if (input->GetKeyDown(Pitaya::Engine::Input::KeyCode::A))
+	{
+		Pitaya::Core::Console::Print(Core::Color::Yellow,"A Down");
+	}
+	if (input->GetKeyPressed(Pitaya::Engine::Input::KeyCode::A))
+	{
+		Pitaya::Core::Console::Print(Core::Color::Green, "A Prese");
+	}
+	if (input->GetKeyReleased(Pitaya::Engine::Input::KeyCode::A))
+	{
+		Pitaya::Core::Console::Print(Core::Color::Blue, "A Released");
+	}
 }
 void Pitaya::Engine::Engine::CoroutineSchedule()
 {
@@ -58,7 +70,28 @@ void Pitaya::Engine::Engine::Lateupdata()
 }
 void Pitaya::Engine::Engine::Renderer()
 {
-	renderer->Render();
+	renderer->BeginRenderFrame();
+
+
+	renderer->BeginPass(Pitaya::Engine::Renderer::CameraSnapshot());
+	//auto meshRenderers = scene->GetMeshRenderer();
+	//auto cameraStates = scene->GetCameraState()
+	//for(auto cameraState : cameraStates)
+	//{
+	//	 renderer->BeginPass(cameraState->GetCameraSnapshot());
+	//   for(auto meshRenderer : meshRenderers)
+	//   {
+	//	    if(!cameraState.CanView(meshRenderer->GetAABB()))
+	//	    {
+	//			continue;
+	//		}
+	//      
+	//      renderer->Submit();
+	//   }
+	//	 renderer->EndPass();
+	//}
+
+	renderer->EndRenderFrame();
 }
 void Pitaya::Engine::Engine::EndOfFrame()
 {
