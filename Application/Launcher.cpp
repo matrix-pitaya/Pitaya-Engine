@@ -66,20 +66,23 @@ namespace
 
 	void UnMountEngineAllHook()
 	{
-		//MOUNT_BEGINFRAME_HOOK(nullptr, nullptr)
-		//MOUNT_BEGINFRAME_HOOK(nullptr, nullptr)
-		//MOUNT_FIXEDUPDATE_HOOK(nullptr, nullptr)
-		//MOUNT_UPDATE_HOOK(nullptr, nullptr)
-		//MOUNT_LATEUPDATE_HOOK(nullptr, nullptr)
-		//MOUNT_ENDFRAME_HOOK(nullptr, nullptr)
-		//MOUNT_POSTRENDERERINTIALIZE_HOOK(nullptr, nullptr)
-		//MOUNT_POSTRENDERERRELEASE_HOOK(nullptr, nullptr)
-		//MOUNT_POSTRENDERERPARSECOMMAND_HOOK(nullptr, nullptr)
-		//MOUNT_POSTRENDERERSWAPBUFFER_HOOK(nullptr, nullptr)
-		//MOUNT_POSTRENDERCONTEXTINITIALIZED_HOOK(nullptr, nullptr)
-		//MOUNT_PRERENDERCONTEXTINRELEASED_HOOK(nullptr, nullptr)
-		//MOUNT_SHOULDWAKEUPRENDERTHREAD_HOOK(nullptr, nullptr)
-		//MOUNT_POSTCHRONOMETERTICK_HOOK(nullptr, nullptr)
+		MOUNT_PREBEGINFRAME_HOOK(nullptr, nullptr)
+		MOUNT_PREFIXEDUPDATE_HOOK(nullptr, nullptr)
+		MOUNT_PREUPDATE_HOOK(nullptr, nullptr)
+		MOUNT_PRELATEUPDATE_HOOK(nullptr, nullptr)
+		MOUNT_PREENDFRAME_HOOK(nullptr, nullptr)
+		MOUNT_POSTRENDERERINTIALIZE_HOOK(nullptr, nullptr)
+		MOUNT_POSTRENDERERRELEASE_HOOK(nullptr, nullptr)
+		MOUNT_POSTRENDERERPARSECOMMAND_HOOK(nullptr, nullptr)
+		MOUNT_POSTRENDERERSWAPBUFFER_HOOK(nullptr, nullptr)
+		MOUNT_POSTRENDERERBEGINRENDERFRAME_HOOK(nullptr, nullptr)
+		MOUNT_PRERENDERERENDRENDERFRAME_HOOK(nullptr, nullptr)
+		MOUNT_POSTRENDERCONTEXTINITIALIZED_HOOK(nullptr, nullptr)
+		MOUNT_PRERENDERCONTEXTINRELEASED_HOOK(nullptr, nullptr)
+		MOUNT_PRERENDERPIPELINEEXECUTE_HOOK(nullptr, nullptr)
+		MOUNT_SHOULDWAKEUPRENDERTHREAD_HOOK(nullptr, nullptr)
+		MOUNT_POSTCHRONOMETERTICK_HOOK(nullptr, nullptr)
+		MOUNT_POSTLOG_HOOK(nullptr, nullptr)
 	}
 
 	HMODULE editordll = nullptr;
@@ -94,6 +97,11 @@ namespace
 			auto func = reinterpret_cast<void(ENGINE_CALL *)()>(GetProcAddress(editordll, "MountEngineHook"));
 			if (func) { func(); }
 		}
+
+
+
+		//TODO 模拟dll加载，将Editor设置为导出dll后移除
+		Pitaya::Engine::EditorMountHook();	
 	}
 	void FreeEditordll()
 	{
@@ -124,7 +132,7 @@ int Pitaya::Application::Execute(int argc, char** argv)
 	try
 	{
 		SetUnhandledExceptionFilter(CrashFilter); 
-		LoadEditordll();	Pitaya::Engine::EditorMountHook();	//TODO 模拟dll加载，将Editor设置为导出dll后移除
+		LoadEditordll();	
 		int32_t exitcode = Pitaya::Engine::Execute(argc, argv); 
 		FreeEditordll();
 		GenerateMemoryAnalysisFile();

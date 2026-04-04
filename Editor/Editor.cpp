@@ -67,23 +67,23 @@ void Pitaya::Editor::Editor::OnMouseCurrsorMove(const Pitaya::Event::Event& even
 
 void Pitaya::Editor::Editor::MountEngineHook()
 {
-	MOUNT_BEGINFRAME_HOOK([]()
+	MOUNT_PREBEGINFRAME_HOOK([]()
 		{
 			Pitaya::Editor::Editor::Instance().BeginFrame();
 		},"Editor::BeginFrame")
-	MOUNT_FIXEDUPDATE_HOOK([]()
+	MOUNT_PREFIXEDUPDATE_HOOK([]()
 		{
 			Pitaya::Editor::Editor::Instance().FixedUpdate();
 		},"Editor::FixUpdate")
-	MOUNT_UPDATE_HOOK([]()
+	MOUNT_PREUPDATE_HOOK([]()
 		{
 			Pitaya::Editor::Editor::Instance().Updata();
 		}, "Editor::Update")
-	MOUNT_LATEUPDATE_HOOK([]()
+	MOUNT_PRELATEUPDATE_HOOK([]()
 		{
 			Pitaya::Editor::Editor::Instance().LateUpdate();
 		}, "Editor::LateUpdate")
-	MOUNT_ENDFRAME_HOOK([]()
+	MOUNT_PREENDFRAME_HOOK([]()
 		{
 			Pitaya::Editor::Editor::Instance().EndFrame();
 		}, "Editor::EndFrame")

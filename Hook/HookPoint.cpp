@@ -1,11 +1,11 @@
 #include<Hook/HookPoint.h>
 
 //Lifecycle
-Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_BeginFrame;
-Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_FixedUpdate;
-Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_Update;
-Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_LateUpdate;
-Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_EndFrame;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PreBeginFrame;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PreFixedUpdate;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PreUpdate;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PreLateUpdate;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PreEndFrame;
 			    
 //Renderer
 Pitaya::Engine::Hook<void(ENGINE_CALL)(void*)> Pitaya::Engine::Hook_PostRendererInitialize;

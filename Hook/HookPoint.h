@@ -11,11 +11,11 @@ namespace Pitaya::Render { class RenderPipeline; }
 namespace Pitaya::Engine
 {
 	//Lifecycle
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_BeginFrame;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_FixedUpdate;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_Update;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_LateUpdate;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_EndFrame;
+	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreBeginFrame;
+	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreFixedUpdate;
+	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreUpdate;
+	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreLateUpdate;
+	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreEndFrame;
 							
 	//Renderer
 	ENGINE_API extern Hook<void(ENGINE_CALL)(void*)> Hook_PostRendererInitialize;

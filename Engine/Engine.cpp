@@ -416,22 +416,22 @@ bool Pitaya::Engine::Engine::IsRunning() const
 }
 void Pitaya::Engine::Engine::BeginFrame()
 {
-	INVOKE_BEGINFRAME_HOOK
+	INVOKE_PREBEGINFRAME_HOOK
 	modules.BeginFrame();
 }
 void Pitaya::Engine::Engine::FixedUpdate()
 {
-	INVOKE_FIXEDUPDATE_HOOK
+	INVOKE_PREFIXEDUPDATE_HOOK
 	modules.FixedUpdate();
 }
 void Pitaya::Engine::Engine::Update()
 {
-	INVOKE_UPDATE_HOOK
+	INVOKE_PREUPDATE_HOOK
 	modules.Update();
 }
 void Pitaya::Engine::Engine::LateUpdate()
 {
-	INVOKE_LATEUPDATE_HOOK
+	INVOKE_PRELATEUPDATE_HOOK
 	modules.LateUpdate();
 }
 void Pitaya::Engine::Engine::Render()
@@ -440,7 +440,7 @@ void Pitaya::Engine::Engine::Render()
 }
 void Pitaya::Engine::Engine::EndFrame()
 {
-	INVOKE_ENDFRAME_HOOK
+	INVOKE_PREENDFRAME_HOOK
 	modules.EndFrame();
 }
 void Pitaya::Engine::Engine::FrameSync()
