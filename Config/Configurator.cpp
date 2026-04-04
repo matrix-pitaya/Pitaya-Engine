@@ -11,13 +11,13 @@ void Pitaya::Config::Configurator::Release()
 }
 bool Pitaya::Config::Configurator::Import(Pitaya::Core::PassKey<Pitaya::Engine::Engine>)
 {
-	std::filesystem::path path = std::filesystem::path(Pitaya::Core::GetExeDir()) / fileName;
+	const std::filesystem::path path = Pitaya::Core::GetExecutableDirectory() / fileName;
 	if (!std::filesystem::exists(path)) { return false; }
 	return info.DeserializeFromFile(path, Pitaya::Serialize::API::YAML);
 }
 bool Pitaya::Config::Configurator::Export(Pitaya::Core::PassKey<Pitaya::Engine::Engine>)
 {
-	std::filesystem::path path = std::filesystem::path(Pitaya::Core::GetExeDir()) / fileName;
+	const std::filesystem::path path = Pitaya::Core::GetExecutableDirectory() / fileName;
 	return info.SerializeToFile(path, Pitaya::Serialize::API::YAML);
 }
 

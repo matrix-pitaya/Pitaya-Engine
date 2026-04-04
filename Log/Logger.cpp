@@ -9,7 +9,7 @@
 
 bool Pitaya::Log::Logger::Initialize()
 {
-	const std::filesystem::path path = std::filesystem::path(Pitaya::Core::GetExeDir()) / fileName;
+	const std::filesystem::path path = Pitaya::Core::GetExecutableDirectory() / fileName;
 	ofs.open(path, std::ios::out | std::ios::trunc);
 	if (!ofs.is_open()) { throw std::runtime_error("Open Log File Fail! Path: " + path.string()); }
 	front.reserve(1024 * 16);

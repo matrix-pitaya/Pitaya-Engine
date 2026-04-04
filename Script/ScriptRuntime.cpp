@@ -64,7 +64,7 @@ void Pitaya::Script::ScriptRuntime::EndFrame()
 bool Pitaya::Script::ScriptRuntime::MonoVM::Initialize()
 {
 	//设置底层库目录
-	const std::filesystem::path exedir = std::filesystem::path(Pitaya::Core::GetExeDir());
+	const std::filesystem::path exedir = Pitaya::Core::GetExecutableDirectory();
 	std::filesystem::path monoLibPath = exedir / "resource" / "mono" / "lib";
 	std::filesystem::path monoEtcPath = exedir / "resource" / "mono" / "etc";
 	std::filesystem::path gamelogicPath = exedir / "bin" / "GameLogic.dll";

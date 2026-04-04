@@ -2,13 +2,12 @@
 
 #include<windows.h>
 
-std::string Pitaya::Core::GetExeDir()
+std::filesystem::path Pitaya::Core::GetExecutableDirectory()
 {
 	char path[MAX_PATH] = { 0 };
 	GetModuleFileNameA(NULL, path, MAX_PATH);
-	std::string fullPath(path);
-	size_t pos = fullPath.find_last_of("\\/");
-	return (std::string::npos == pos) ? "" : fullPath.substr(0, pos + 1);
+	std::filesystem::path exePath(path);
+	return exePath.parent_path();
 }
 bool Pitaya::Core::ReadFileToString(const std::filesystem::path& filepath, std::string& out)
 {
