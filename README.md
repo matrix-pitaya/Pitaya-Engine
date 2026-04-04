@@ -80,7 +80,7 @@ Pitaya 采用严格的分层架构，确保核心逻辑与底层实现解耦：
     确保构建配置设为`Release` (x64)。
     
 4.  **运行项目:**
-    将 `Application` 设为启动项目并按 `F5` 运行。
+    右键重新生成解决方案并将 `thirdparty/mimalloc/dll` 中的 `mimalloc.dll` 和 `mimalloc-redirect.dll` 拷贝到exe目录下，返回 `VS` 将 `Application` 设为启动项目并按 `F5` 运行。
 
 ---
 
