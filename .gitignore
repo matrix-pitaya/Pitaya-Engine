@@ -1,0 +1,38 @@
+# 编译输出目录
+bin/
+obj/
+
+# 编译产物目录
+library/
+intermediate/
+exe/
+
+#VS C/C++编辑器配置文件
+CppProperties.json
+
+# 用户本地配置
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.cache
+
+# 调试/临时文件
+*.pdb
+*.ipch
+*.db
+*.sqlite
+*.log
+*.tlog
+*.iobj
+*.ipdb
+*.lastbuildstate
+
+# IDE配置
+.vs/
+.vscode/
+.DS_Store
+
+# 大文件
+resource/
+thirdparty/
