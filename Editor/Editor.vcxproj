@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="API\def.h" />
+    <ClInclude Include="API\func.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Common\EngineState.h" />
     <ClInclude Include="Common\FuncTable.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="GUI\Panel\ViewportPanel.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="API\func.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="GUI\ImGui\Backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="GUI\ImGui\Backends\imgui_impl_opengl3.cpp" />

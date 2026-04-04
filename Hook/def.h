@@ -18,22 +18,6 @@
 
 
 
-#define UNMOUNT_BEGINFRAME_HOOK Pitaya::Engine::HookFunc_BeginFrame = nullptr;
-#define UNMOUNT_FIXEDUPDATE_HOOK Pitaya::Engine::HookFunc_FixedUpdate = nullptr;
-#define UNMOUNT_UPDATE_HOOK Pitaya::Engine::HookFunc_Update = nullptr;
-#define UNMOUNT_LATEUPDATE_HOOK Pitaya::Engine::HookFunc_LateUpdate = nullptr;
-#define UNMOUNT_ENDFRAME_HOOK Pitaya::Engine::HookFunc_EndFrame = nullptr;
-#define UNMOUNT_POSTRENDERERINTIALIZE_HOOK Pitaya::Engine::HookFunc_PostRendererInitialize = nullptr;
-#define UNMOUNT_POSTRENDERERRELEASE_HOOK Pitaya::Engine::HookFunc_PostRendererRelease = nullptr;
-#define UNMOUNT_POSTRENDERERPARSECOMMAND_HOOK Pitaya::Engine::HookFunc_PostRendererParseCommand = nullptr;
-#define UNMOUNT_POSTRENDERERSWAPBUFFER_HOOK Pitaya::Engine::HookFunc_PostRendererSwapBuffer = nullptr;
-#define UNMOUNT_POSTRENDERCONTEXTINITIALIZED_HOOK Pitaya::Engine::HookFunc_PostRenderContextInitialized = nullptr;
-#define UNMOUNT_PRERENDERCONTEXTINRELEASED_HOOK Pitaya::Engine::HookFunc_PreRenderContextRelease = nullptr;
-#define UNMOUNT_SHOULDWAKEUPRENDERTHREAD_HOOK Pitaya::Engine::HookFunc_ShouldWakeupRenderThread = nullptr;
-#define UNMOUNT_POSTCHRONOMETERTICK_HOOK Pitaya::Engine::HookFunc_PostChronometerTick = nullptr;
-
-
-
 #define INVOKE_BEGINFRAME_HOOK if(Pitaya::Engine::HookFunc_BeginFrame) { Pitaya::Engine::HookFunc_BeginFrame(); }
 #define INVOKE_FIXEDUPDATE_HOOK if(Pitaya::Engine::HookFunc_FixedUpdate) { Pitaya::Engine::HookFunc_FixedUpdate(); }
 #define INVOKE_UPDATE_HOOK if(Pitaya::Engine::HookFunc_Update) { Pitaya::Engine::HookFunc_Update(); }
@@ -47,6 +31,7 @@
 #define INVOKE_PRERENDERCONTEXTINRELEASED_HOOK if(Pitaya::Engine::HookFunc_PreRenderContextRelease) { Pitaya::Engine::HookFunc_PreRenderContextRelease(); }
 #define INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK (Pitaya::Engine::HookFunc_ShouldWakeupRenderThread ? Pitaya::Engine::HookFunc_ShouldWakeupRenderThread() : false)
 #define INVOKE_POSTCHRONOMETERTICK_HOOK if(Pitaya::Engine::HookFunc_PostChronometerTick) { Pitaya::Engine::HookFunc_PostChronometerTick(); }
+
 
 
 #include<cstdio>
