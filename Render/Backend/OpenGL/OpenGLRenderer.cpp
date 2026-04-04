@@ -2,11 +2,6 @@
 #include<GPU/Common/BindPoint.h>
 #include<Log/Common/FuncTable.h>
 
-#ifdef PITAYA_EDITOR
-#include<Editor/GUI/ImGui/imgui.h>
-#include<Editor/GUI/ImGui/backends/imgui_impl_opengl3.h>
-#endif
-
 #include<stdexcept>
 #include<string>
 

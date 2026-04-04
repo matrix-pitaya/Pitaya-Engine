@@ -11,28 +11,28 @@ namespace Pitaya::Render { class RenderPipeline; }
 namespace Pitaya::Engine
 {
 	//Lifecycle
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreBeginFrame;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreFixedUpdate;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreUpdate;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreLateUpdate;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreEndFrame;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreBeginFrame;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreFixedUpdate;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreUpdate;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreLateUpdate;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreEndFrame;
 							
 	//Renderer
-	ENGINE_API extern Hook<void(ENGINE_CALL)(void*)> Hook_PostRendererInitialize;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PostRendererRelease;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PostRendererParseCommand;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PostRendererSwapBuffer;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PostRendererBeginRenderFrame;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreRendereEndRenderFrame;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PostRenderContextInitialized;
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreRenderContextRelease;
-	ENGINE_API extern Hook<void(ENGINE_CALL)(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Render::RenderPipeline*)> Hook_PreRenderPipelineExecute;
-	ENGINE_API extern Hook<bool(ENGINE_CALL)()> Hook_ShouldWakeupRenderThread;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)(void*)> Hook_PostRendererInitialize;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PostRendererRelease;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PostRendererParseCommand;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PostRendererSwapBuffer;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PostRendererBeginRenderFrame;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreRendereEndRenderFrame;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PostRenderContextInitialized;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PreRenderContextRelease;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Render::RenderPipeline*)> Hook_PreRenderPipelineExecute;
+	extern "C" ENGINE_API extern Hook<bool(ENGINE_CALL)()> Hook_ShouldWakeupRenderThread;
 
 	//Time
-	ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PostChronometerTick;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Hook_PostChronometerTick;
 	
 	//Log
-	ENGINE_API extern Hook<void(ENGINE_CALL)(Pitaya::Log::LogLevel, std::string_view)> Hook_PostLog;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)(Pitaya::Log::LogLevel, std::string_view)> Hook_PostLog;
 }
 

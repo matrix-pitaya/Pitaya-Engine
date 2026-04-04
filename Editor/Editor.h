@@ -1,16 +1,13 @@
 #pragma once
 
 #include<Core/PassKey/PassKey.h>
-#include<Core/Allocate/Allocate.h>
-#include<Context/Common/Module.h>
+#include<Editor/API/def.h>
 #include<Editor/Camera/Camera.h>
 #include<Editor/GUI/GUI.h>
 #include<Editor/Profiler/Profiler.h>
 
 #include<Event/Common/Event.h>
 #include<Log/Common/LogLevel.h>
-
-#include<Editor/Common/EngineState.h>
 
 namespace Pitaya::Editor
 {
@@ -55,12 +52,6 @@ namespace Pitaya::Editor
 			return profiler;
 		}
 
-	public:
-		inline Pitaya::Editor::EngineState GetEngineState() const noexcept
-		{
-			return engineState;
-		}
-
 	private:
 		void OnMouseScroll(const Pitaya::Event::Event&);
 		void OnMouseCurrsorMove(const Pitaya::Event::Event&);
@@ -79,9 +70,12 @@ namespace Pitaya::Editor
 		Pitaya::Editor::GUI gui;
 		Pitaya::Editor::Camera camera;
 		Pitaya::Editor::Profiler profiler;
-		Pitaya::Editor::EngineState engineState = EngineState::Edit;
 
 		Pitaya::Event::EventToken mouseScrollToken;
 		Pitaya::Event::EventToken mouseCurrsorMoveToken;
 	};
 }
+
+
+template<>
+EDITOR_API Pitaya::Editor::Editor& EDITOR_CALL Pitaya::Core::Singleton<Pitaya::Editor::Editor>::Instance();

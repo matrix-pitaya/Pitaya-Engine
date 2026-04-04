@@ -74,13 +74,13 @@ namespace Pitaya::Engine
 		}
 
 	private:
-		float (*Ondelta)() noexcept = nullptr;
-		float (*OnFixdelta)() noexcept = nullptr;
-		float (*OnUnscaledDelta)() noexcept = nullptr;
-		float (*OnTimeScale)() noexcept = nullptr;
-		float (*OnFramerate)() noexcept = nullptr;
-		double (*OnSeconds)() noexcept = nullptr;
-		int64_t(*OnMilliseconds)() noexcept = nullptr;
+		float (ENGINE_CALL *Ondelta)() noexcept = nullptr;
+		float (ENGINE_CALL *OnFixdelta)() noexcept = nullptr;
+		float (ENGINE_CALL *OnUnscaledDelta)() noexcept = nullptr;
+		float (ENGINE_CALL *OnTimeScale)() noexcept = nullptr;
+		float (ENGINE_CALL *OnFramerate)() noexcept = nullptr;
+		double (ENGINE_CALL *OnSeconds)() noexcept = nullptr;
+		int64_t (ENGINE_CALL*OnMilliseconds)() noexcept = nullptr;
 	};
 }
 

@@ -62,11 +62,11 @@ namespace Pitaya::Engine
 		}
 
 	private:
-		Pitaya::Render::API(*OnGetRenderAPI)() noexcept = nullptr;
-		size_t(*OnGetMaxFixupdataExecuteTimes)() noexcept = nullptr;
-		uint32_t (*OnGetMaxInstancesCount)() noexcept = nullptr;
-		uint32_t (*OnGetMaxBonesPerInstance)() noexcept = nullptr;
-		bool(*OnGetEnableVSync)() noexcept = nullptr;
+		Pitaya::Render::API (ENGINE_CALL *OnGetRenderAPI)() noexcept = nullptr;
+		size_t (ENGINE_CALL *OnGetMaxFixupdataExecuteTimes)() noexcept = nullptr;
+		uint32_t (ENGINE_CALL*OnGetMaxInstancesCount)() noexcept = nullptr;
+		uint32_t (ENGINE_CALL *OnGetMaxBonesPerInstance)() noexcept = nullptr;
+		bool (ENGINE_CALL *OnGetEnableVSync)() noexcept = nullptr;
 	};
 }
 

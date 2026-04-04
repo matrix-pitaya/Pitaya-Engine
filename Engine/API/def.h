@@ -2,9 +2,9 @@
 
 #if defined(PITAYA_DLL_BUILD)
 	#ifdef ENGINE_EXPORT
-		#define ENGINE_API extern "C" __declspec(dllexport)
+		#define ENGINE_API __declspec(dllexport)
 	#else
-		#define ENGINE_API extern "C" __declspec(dllimport)
+		#define ENGINE_API __declspec(dllimport)
 	#endif
 #else
 	#define ENGINE_API

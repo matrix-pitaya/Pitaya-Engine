@@ -4,5 +4,5 @@
 
 namespace Pitaya::Editor
 {
-	EDITOR_API void EDITOR_CALL MountEngineHook();
+	extern "C" EDITOR_API void EDITOR_CALL MountEngineHook();
 }

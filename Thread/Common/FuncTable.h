@@ -56,10 +56,10 @@ namespace Pitaya::Engine
 		}
 
 	private:
-		Pitaya::Core::Thread::Identifier(*OnRegisterThread)(std::string_view, void(*)(void*, void*), void*, void*) = nullptr;
-		bool (*OnUnregisterThread)(Pitaya::Core::Thread::Identifier) noexcept = nullptr;
-		std::string(*OnGetThreadName)(Pitaya::Core::Thread::Identifier) noexcept = nullptr;
-		bool (*OnGetThreadIsRunning)(Pitaya::Core::Thread::Identifier) noexcept = nullptr;
+		Pitaya::Core::Thread::Identifier (ENGINE_CALL *OnRegisterThread)(std::string_view, void(*)(void*, void*), void*, void*) = nullptr;
+		bool (ENGINE_CALL *OnUnregisterThread)(Pitaya::Core::Thread::Identifier) noexcept = nullptr;
+		std::string (ENGINE_CALL *OnGetThreadName)(Pitaya::Core::Thread::Identifier) noexcept = nullptr;
+		bool (ENGINE_CALL *OnGetThreadIsRunning)(Pitaya::Core::Thread::Identifier) noexcept = nullptr;
 	};
 }
 

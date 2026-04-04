@@ -12,8 +12,6 @@ namespace Pitaya::Render
         Transparent   = 1 << 1,
         UI            = 1 << 2,
 
-#if PITAYA_EDITOR
         EditorOnly    = 1 << 31 
-#endif
     };
 }

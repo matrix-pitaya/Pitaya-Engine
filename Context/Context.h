@@ -1,6 +1,7 @@
 #pragma once
 
 #include<Core/Singleton/Singleton.h>
+#include<Engine/API/def.h>
 #include<stdexcept>
 #include<type_traits>
 
@@ -223,3 +224,6 @@ namespace Pitaya::Engine
 		FuncTables funcTables;
 	};
 }
+
+template<>
+ENGINE_API Pitaya::Engine::Context& ENGINE_CALL Pitaya::Core::Singleton<Pitaya::Engine::Context>::Instance();

@@ -3,8 +3,55 @@
 #include<Hook/def.h>
 #include<Render/RenderPipeline.h>
 
-#include<Time/Common/FuncTable.h>
+#include<Time/Common/FuncTable.h> 
 
+void Pitaya::Editor::Editor::MountEngineHook()
+{
+	MOUNT_PREBEGINFRAME_HOOK([]() { Pitaya::Editor::Editor::Instance().BeginFrame(); }, "Editor::BeginFrame")
+	MOUNT_PREFIXEDUPDATE_HOOK([]() { Pitaya::Editor::Editor::Instance().FixedUpdate(); }, "Editor::FixUpdate")
+	MOUNT_PREUPDATE_HOOK([]() { Pitaya::Editor::Editor::Instance().Updata(); }, "Editor::Update")
+	MOUNT_PRELATEUPDATE_HOOK([]() { Pitaya::Editor::Editor::Instance().LateUpdate(); }, "Editor::LateUpdate")
+	MOUNT_PREENDFRAME_HOOK([]() { Pitaya::Editor::Editor::Instance().EndFrame(); }, "Editor::EndFrame")
+	MOUNT_POSTRENDERERINTIALIZE_HOOK([](void* nativeWindow) {Pitaya::Editor::Editor::Instance().Initialize(nativeWindow); }, "Editor::Initialize")
+	MOUNT_POSTRENDERERRELEASE_HOOK([]() { Pitaya::Editor::Editor::Instance().Release(); }, "Editor::Release")
+	MOUNT_POSTRENDERCONTEXTINITIALIZED_HOOK([]() { Pitaya::Editor::Editor::Instance().InitializeForRender(); }, "Editor::InitializeForRender")
+	MOUNT_PRERENDERCONTEXTINRELEASED_HOOK([]() { Pitaya::Editor::Editor::Instance().ReleaseForRender(); }, "Editor::ReleaseForRender")
+	MOUNT_POSTRENDERERSWAPBUFFER_HOOK([]() {Pitaya::Editor::Editor::Instance().gui.drawer.SwapBuffer(Pitaya::Core::PassKey<Pitaya::Editor::Editor>()); }, "Editor::GUI::SwapBuffer")
+	MOUNT_PRERENDERERENDRENDERFRAME_HOOK([]() { Pitaya::Editor::Editor::Instance().gui.drawer.CreateFrontDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>()); }, "Editor::GUI::CreateFrontDrawData")
+	MOUNT_POSTRENDERERBEGINRENDERFRAME_HOOK([]() { Pitaya::Editor::Editor::Instance().gui.drawer.ReleaseFrontDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>()); }, "Editor::GUI::ReleaseFrontDrawData")
+	MOUNT_SHOULDWAKEUPRENDERTHREAD_HOOK([]() -> bool { return Pitaya::Editor::Editor::Instance().gui.drawer.HasRenderDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>()); }, "Editor::GUI::HasRenderDrawData")
+	MOUNT_PRERENDERPIPELINEEXECUTE_HOOK([](Pitaya::Core::PassKey<Pitaya::Engine::Engine> passkey, Pitaya::Render::RenderPipeline* renderPipeline)
+		{
+			//提交EditorCamera
+			if (Pitaya::Editor::Editor::Instance().gui.sceneViewportPanel.GetIsVisable() && Pitaya::Editor::Editor::Instance().camera.IsRenderTargetReady())
+			{
+				//TODO 增加特殊网格对象 天空盒对象
+				//renderPipeline->AddRenderObject();
+				renderPipeline->AddRenderPass(passkey,
+					Pitaya::Editor::Editor::Instance().camera.GetCameraSnapshot(), Pitaya::Editor::Editor::Instance().camera.GetRenderTarget(),
+					Pitaya::Editor::Editor::Instance().camera.GetPostProcessSettings(), Pitaya::Editor::Editor::Instance().camera.GetCullingMask());
+			}
+
+			//提交UI
+			Pitaya::Editor::Editor::Instance().gui.NewFrame();
+		}, "Editor::SubmitCameraPass | Editor::GUI::NewFrame")
+	MOUNT_POSTRENDERERPARSECOMMAND_HOOK([]()
+	{
+		Pitaya::Editor::Editor::Instance().gui.drawer.Draw(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
+		Pitaya::Editor::Editor::Instance().gui.drawer.ReleaseBackDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
+	}, "Editor::GUI::Draw | Editor::GUI::ReleaseBackDrawData")
+	MOUNT_POSTCHRONOMETERTICK_HOOK([]()
+		{
+			//TODO 通过Engine.dll 导出API获取
+			Pitaya::Editor::Editor::Instance().profiler.SetTimeState({ Pitaya::Time::delta() ,Pitaya::Time::Fixdelta() ,Pitaya::Time::UnscaledDelta() ,
+				Pitaya::Time::TimeScale(),Pitaya::Time::Framerate() ,Pitaya::Time::Seconds() , Pitaya::Time::Milliseconds() });
+		}, "Editor::Profiler::UploadTimeState")
+	MOUNT_POSTLOG_HOOK([](Pitaya::Log::LogLevel level, std::string_view message)
+		{
+			//TODO 根据设置决定是否同步Log到Console
+			Pitaya::Editor::Editor::Instance().gui.consolePanel.Console(level, message);
+		}, "Editor::GUI::Console")
+}
 bool Pitaya::Editor::Editor::Initialize(void* nativeWindow)
 {
 	mouseScrollToken = Pitaya::Event::Subscribe(
@@ -65,92 +112,10 @@ void Pitaya::Editor::Editor::OnMouseCurrsorMove(const Pitaya::Event::Event& even
 	if (gui.sceneViewportPanel.GetIsFocused()) { camera.OnMouseCurrsorMove(args); }
 }
 
-void Pitaya::Editor::Editor::MountEngineHook()
+
+template<>
+Pitaya::Editor::Editor& EDITOR_CALL Pitaya::Core::Singleton<Pitaya::Editor::Editor>::Instance()
 {
-	MOUNT_PREBEGINFRAME_HOOK([]()
-		{
-			Pitaya::Editor::Editor::Instance().BeginFrame();
-		},"Editor::BeginFrame")
-	MOUNT_PREFIXEDUPDATE_HOOK([]()
-		{
-			Pitaya::Editor::Editor::Instance().FixedUpdate();
-		},"Editor::FixUpdate")
-	MOUNT_PREUPDATE_HOOK([]()
-		{
-			Pitaya::Editor::Editor::Instance().Updata();
-		}, "Editor::Update")
-	MOUNT_PRELATEUPDATE_HOOK([]()
-		{
-			Pitaya::Editor::Editor::Instance().LateUpdate();
-		}, "Editor::LateUpdate")
-	MOUNT_PREENDFRAME_HOOK([]()
-		{
-			Pitaya::Editor::Editor::Instance().EndFrame();
-		}, "Editor::EndFrame")
-	MOUNT_POSTCHRONOMETERTICK_HOOK([]()
-		{
-			//TODO 通过Engine.dll 导出API获取
-			Pitaya::Editor::Editor::Instance().profiler.SetTimeState({ Pitaya::Time::delta() ,Pitaya::Time::Fixdelta() ,Pitaya::Time::UnscaledDelta() ,
-				Pitaya::Time::TimeScale(),Pitaya::Time::Framerate() ,Pitaya::Time::Seconds() , Pitaya::Time::Milliseconds() });
-		},"Editor::Profiler::UploadTimeState")
-	MOUNT_POSTRENDERERINTIALIZE_HOOK([](void* arg)
-		{
-			Pitaya::Editor::Editor::Instance().Initialize(arg);
-		},"Editor::Initialize")
-	MOUNT_POSTRENDERERRELEASE_HOOK([]()
-		{
-			Pitaya::Editor::Editor::Instance().Release();
-		},"Editor::Release")
-	MOUNT_POSTRENDERCONTEXTINITIALIZED_HOOK([]()
-		{
-			Pitaya::Editor::Editor::Instance().InitializeForRender();
-		},"Editor::InitializeForRender")
-	MOUNT_PRERENDERCONTEXTINRELEASED_HOOK([]()
-		{
-			Pitaya::Editor::Editor::Instance().ReleaseForRender();
-		},"Editor::ReleaseForRender")
-	MOUNT_PRERENDERPIPELINEEXECUTE_HOOK([](Pitaya::Core::PassKey<Pitaya::Engine::Engine> passkey,Pitaya::Render::RenderPipeline* renderPipeline)
-		{
-			//提交EditorCamera
-			if (Pitaya::Editor::Editor::Instance().gui.sceneViewportPanel.GetIsVisable() && Pitaya::Editor::Editor::Instance().camera.IsRenderTargetReady())
-			{
-				//TODO 增加特殊网格对象 天空盒对象
-				//renderPipeline->AddRenderObject();
-				renderPipeline->AddRenderPass(passkey,
-					Pitaya::Editor::Editor::Instance().camera.GetCameraSnapshot(), Pitaya::Editor::Editor::Instance().camera.GetRenderTarget(),
-					Pitaya::Editor::Editor::Instance().camera.GetPostProcessSettings(), Pitaya::Editor::Editor::Instance().camera.GetCullingMask());
-			}
-
-			//提交UI
-			Pitaya::Editor::Editor::Instance().gui.NewFrame();
-		},"Editor::SubmitCameraPass | Editor::GUI::NewFrame")
-	MOUNT_POSTLOG_HOOK([](Pitaya::Log::LogLevel level, std::string_view message)
-		{
-			//TODO 根据设置决定是否同步Log到Console
-			Pitaya::Editor::Editor::Instance().gui.consolePanel.Console(level, message);
-		},"Editor::GUI::Console")
-
-
-	MOUNT_POSTRENDERERSWAPBUFFER_HOOK([]()
-		{
-			Pitaya::Editor::Editor::Instance().gui.drawer.SwapBuffer(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
-		}, "Editor::GUI::SwapBuffer")
-	MOUNT_PRERENDERERENDRENDERFRAME_HOOK([]()
-		{
-			Pitaya::Editor::Editor::Instance().gui.drawer.CreateFrontDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
-		},"Editor::GUI::CreateFrontDrawData")
-	MOUNT_POSTRENDERERBEGINRENDERFRAME_HOOK([]()
-		{
-			Pitaya::Editor::Editor::Instance().gui.drawer.ReleaseFrontDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
-		},"Editor::GUI::ReleaseFrontDrawData")
-	MOUNT_SHOULDWAKEUPRENDERTHREAD_HOOK([]() -> bool
-		{
-			return Pitaya::Editor::Editor::Instance().gui.drawer.HasRenderDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
-		},"Editor::GUI::HasRenderDrawData")
-	MOUNT_POSTRENDERERPARSECOMMAND_HOOK([]()
-		{
-			Pitaya::Editor::Editor::Instance().gui.drawer.Draw(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
-			Pitaya::Editor::Editor::Instance().gui.drawer.ReleaseBackDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
-		},"Editor::GUI::Draw | Editor::GUI::ReleaseBackDrawData")
+	static Pitaya::Editor::Editor instance;
+	return instance;
 }
-

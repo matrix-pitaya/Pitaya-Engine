@@ -33,11 +33,6 @@ void Pitaya::Render::RenderPipeline::Execute(Pitaya::Core::PassKey<Pitaya::Engin
 
 	//提交渲染视图
 	SubmitRenderGraph(renderer);
-	
-#ifdef PITAYA_EDITOR
-	//提交编辑器GUI
-	//renderer->SubmitEditorGUI(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>());
-#endif
 
 	//交换缓冲区（front→back）并唤醒渲染线程根据back缓冲区命令、SSBO数据进行渲染
 	renderer->EndRenderFrame(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>());

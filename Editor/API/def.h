@@ -2,9 +2,9 @@
 
 #if defined(PITAYA_DLL_BUILD)
 	#ifdef EDITOR_EXPORT
-		#define EDITOR_API extern "C" __declspec(dllexport)
+		#define EDITOR_API __declspec(dllexport)
 	#else
-		#define EDITOR_API extern "C" __declspec(dllimport)
+		#define EDITOR_API __declspec(dllimport)
 	#endif
 #else
 	#define EDITOR_API

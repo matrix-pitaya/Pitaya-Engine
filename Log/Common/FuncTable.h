@@ -38,7 +38,7 @@ namespace Pitaya::Engine
 		}
 
 	private:
-		void (*OnLog)(Pitaya::Log::LogLevel, std::string_view) noexcept = nullptr;
+		void (ENGINE_CALL *OnLog)(Pitaya::Log::LogLevel, std::string_view) noexcept = nullptr;
 	};
 }
 

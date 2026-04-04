@@ -111,17 +111,17 @@ namespace Pitaya::Engine
 		}
 
 	private:
-		Pitaya::Core::Asset<Pitaya::Asset::Texture>(*OnLoadTexture)(Pitaya::Core::GUID) = nullptr;
-		Pitaya::Core::Asset<Pitaya::Asset::Shader>(*OnLoadShader)(Pitaya::Core::GUID) = nullptr;
-		Pitaya::Core::Asset<Pitaya::Asset::Mesh>(*OnLoadMesh)(Pitaya::Core::GUID) = nullptr;
-		Pitaya::Core::Asset<Pitaya::Asset::Material>(*OnLoadMaterial)(Pitaya::Core::GUID) = nullptr;
-		Pitaya::Core::Asset<Pitaya::Asset::RenderTarget>(*OnLoadRenderTarget)(Pitaya::Core::GUID) = nullptr;
-		bool (*OnGetAssetPathByGUID)(Pitaya::Core::GUID, std::filesystem::path&) = nullptr;
-		bool (*OnGetAssetGUIDByPath)(const std::filesystem::path&, Pitaya::Core::GUID&) = nullptr;
-		bool (*OnTransformToVirtualPath)(const std::filesystem::path&, const std::filesystem::path&, std::filesystem::path&) = nullptr;
-		bool (*OnRegisterExternalFile)(const std::filesystem::path&, const std::filesystem::path&, std::filesystem::path&, Pitaya::Core::GUID&) = nullptr;
-		void (*OnSyncAssetToGPU)() = nullptr;
-		bool (*OnIsUploadedToGPU)() = nullptr;
+		Pitaya::Core::Asset<Pitaya::Asset::Texture>(ENGINE_CALL *OnLoadTexture)(Pitaya::Core::GUID) = nullptr;
+		Pitaya::Core::Asset<Pitaya::Asset::Shader>(ENGINE_CALL *OnLoadShader)(Pitaya::Core::GUID) = nullptr;
+		Pitaya::Core::Asset<Pitaya::Asset::Mesh>(ENGINE_CALL *OnLoadMesh)(Pitaya::Core::GUID) = nullptr;
+		Pitaya::Core::Asset<Pitaya::Asset::Material>(ENGINE_CALL *OnLoadMaterial)(Pitaya::Core::GUID) = nullptr;
+		Pitaya::Core::Asset<Pitaya::Asset::RenderTarget>(ENGINE_CALL *OnLoadRenderTarget)(Pitaya::Core::GUID) = nullptr;
+		bool (ENGINE_CALL *OnGetAssetPathByGUID)(Pitaya::Core::GUID, std::filesystem::path&) = nullptr;
+		bool (ENGINE_CALL *OnGetAssetGUIDByPath)(const std::filesystem::path&, Pitaya::Core::GUID&) = nullptr;
+		bool (ENGINE_CALL *OnTransformToVirtualPath)(const std::filesystem::path&, const std::filesystem::path&, std::filesystem::path&) = nullptr;
+		bool (ENGINE_CALL *OnRegisterExternalFile)(const std::filesystem::path&, const std::filesystem::path&, std::filesystem::path&, Pitaya::Core::GUID&) = nullptr;
+		void (ENGINE_CALL *OnSyncAssetToGPU)() = nullptr;
+		bool (ENGINE_CALL *OnIsUploadedToGPU)() = nullptr;
 	};
 }
 

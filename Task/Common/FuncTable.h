@@ -38,7 +38,7 @@ namespace Pitaya::Engine
 		}
 
 	private:
-		void (*OnPostJob)(std::function<void()>, std::string_view) noexcept = nullptr;
+		void (ENGINE_CALL *OnPostJob)(std::function<void()>, std::string_view) noexcept = nullptr;
 	};
 }
 

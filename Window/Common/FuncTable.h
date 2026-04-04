@@ -36,9 +36,10 @@ namespace Pitaya::Engine
 		}
 
 	private:
-		void* (*OnGetNativeWindow)() = nullptr;
+		void* (ENGINE_CALL *OnGetNativeWindow)() = nullptr;
 	};
 }
+
 
 namespace Pitaya::Window
 {

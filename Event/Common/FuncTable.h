@@ -51,9 +51,9 @@ namespace Pitaya::Engine
 		}
 
 	private:
-		Pitaya::Event::EventToken(*OnSubscribe)(Pitaya::Event::EventType, void (*)(void*, const ::Pitaya::Event::Event&), void*) noexcept = nullptr;
-		bool (*OnUnSubscribe)(const Pitaya::Event::EventToken&) noexcept = nullptr;
-		void (*OnEmit)(const Pitaya::Event::Event&) noexcept = nullptr;
+		Pitaya::Event::EventToken (ENGINE_CALL *OnSubscribe)(Pitaya::Event::EventType, void (*)(void*, const ::Pitaya::Event::Event&), void*) noexcept = nullptr;
+		bool (ENGINE_CALL *OnUnSubscribe)(const Pitaya::Event::EventToken&) noexcept = nullptr;
+		void (ENGINE_CALL *OnEmit)(const Pitaya::Event::Event&) noexcept = nullptr;
 	};
 }
 

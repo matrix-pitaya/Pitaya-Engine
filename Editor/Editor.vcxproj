@@ -109,7 +109,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_EDITOR;PITAYA_PROFILER;PITAYA_DLL_BUILD;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -145,7 +145,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_EDITOR;PITAYA_PROFILER;PITAYA_DLL_BUILD;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -171,7 +171,6 @@
     <ClInclude Include="GUI\ImGui\imgui_internal.h" />
     <ClInclude Include="GUI\Panel\ConsolePanel.h" />
     <ClInclude Include="Editor.h" />
-    <ClInclude Include="GUI\Command\GUIDrawCommand.h" />
     <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="GUI\Panel\PreferencesPanel.h" />
     <ClInclude Include="GUI\Panel\ProfilerPanel.h" />

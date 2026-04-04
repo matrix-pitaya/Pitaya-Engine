@@ -51,9 +51,9 @@ namespace Pitaya::Engine
 		}
 
 	private:
-		bool (*OnGetKeyDown)(Pitaya::Input::KeyCode) noexcept = nullptr;
-		bool (*OnGetKeyPressed)(Pitaya::Input::KeyCode) noexcept = nullptr;
-		bool (*OnGetKeyReleased)(Pitaya::Input::KeyCode) noexcept = nullptr;
+		bool (ENGINE_CALL *OnGetKeyDown)(Pitaya::Input::KeyCode) noexcept = nullptr;
+		bool (ENGINE_CALL *OnGetKeyPressed)(Pitaya::Input::KeyCode) noexcept = nullptr;
+		bool (ENGINE_CALL *OnGetKeyReleased)(Pitaya::Input::KeyCode) noexcept = nullptr;
 	};
 }
 

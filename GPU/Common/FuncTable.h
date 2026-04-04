@@ -218,38 +218,38 @@ namespace Pitaya::Engine
 		}
 
 	private:
-		void (*OnDestroyAllGPUResource)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>) = nullptr;
+		void (ENGINE_CALL *OnDestroyAllGPUResource)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>) = nullptr;
 
-		Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray>(*OnCreateVertexArray)() = nullptr;
-		Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer>(*OnCreateVertexBuffer)(float*, uint32_t) = nullptr;
-		Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer>(*OnCreateIndexBuffer)(uint32_t*, uint32_t) = nullptr;
-		Pitaya::GPU::Identifier<Pitaya::GPU::Shader>(*OnCreateShaderVF)(const char*, const char*) = nullptr;
-		Pitaya::GPU::Identifier<Pitaya::GPU::Shader>(*OnCreateShaderVFG)(const char*, const char*, const char*) = nullptr;
-		Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D>(*OnCreateTexture2D)(unsigned char*, int, int, int, bool, bool, bool) = nullptr;
-		Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap>(*OnCreateTextureCubemap)(unsigned char**, int*, int*, int*, bool, bool, bool) = nullptr;
-		Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer>(*OnCreateUniformBuffer)(uint32_t, uint32_t) = nullptr;
-		Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer>(*OnCreateFrameBuffer)(const Pitaya::GPU::FrameBufferSpecification&) = nullptr;
-		Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer>(*OnCreateShaderStorageBuffer)(uint32_t, uint32_t) = nullptr;
+		Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> (ENGINE_CALL *OnCreateVertexArray)() = nullptr;
+		Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> (ENGINE_CALL *OnCreateVertexBuffer)(float*, uint32_t) = nullptr;
+		Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> (ENGINE_CALL *OnCreateIndexBuffer)(uint32_t*, uint32_t) = nullptr;
+		Pitaya::GPU::Identifier<Pitaya::GPU::Shader> (ENGINE_CALL *OnCreateShaderVF)(const char*, const char*) = nullptr;
+		Pitaya::GPU::Identifier<Pitaya::GPU::Shader> (ENGINE_CALL *OnCreateShaderVFG)(const char*, const char*, const char*) = nullptr;
+		Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> (ENGINE_CALL *OnCreateTexture2D)(unsigned char*, int, int, int, bool, bool, bool) = nullptr;
+		Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> (ENGINE_CALL *OnCreateTextureCubemap)(unsigned char**, int*, int*, int*, bool, bool, bool) = nullptr;
+		Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> (ENGINE_CALL *OnCreateUniformBuffer)(uint32_t, uint32_t) = nullptr;
+		Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> (ENGINE_CALL *OnCreateFrameBuffer)(const Pitaya::GPU::FrameBufferSpecification&) = nullptr;
+		Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> (ENGINE_CALL *OnCreateShaderStorageBuffer)(uint32_t, uint32_t) = nullptr;
 
-		bool (*OnDestroyVertexArray)(Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray>) = nullptr;
-		bool (*OnDestroyVertexBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer>) = nullptr;
-		bool (*OnDestroyIndexBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer>) = nullptr;
-		bool (*OnDestroyShader)(Pitaya::GPU::Identifier<Pitaya::GPU::Shader>) = nullptr;
-		bool (*OnDestroyTexture2D)(Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D>) = nullptr;
-		bool (*OnDestroyTextureCubemap)(Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap>) = nullptr;
-		bool (*OnDestroyUniformBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer>) = nullptr;
-		bool (*OnDestroyFrameBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer>) = nullptr;
-		bool (*OnDestroyShaderStorageBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer>) = nullptr;
+		bool (ENGINE_CALL *OnDestroyVertexArray)(Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray>) = nullptr;
+		bool (ENGINE_CALL *OnDestroyVertexBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer>) = nullptr;
+		bool (ENGINE_CALL *OnDestroyIndexBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer>) = nullptr;
+		bool (ENGINE_CALL *OnDestroyShader)(Pitaya::GPU::Identifier<Pitaya::GPU::Shader>) = nullptr;
+		bool (ENGINE_CALL *OnDestroyTexture2D)(Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D>) = nullptr;
+		bool (ENGINE_CALL *OnDestroyTextureCubemap)(Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap>) = nullptr;
+		bool (ENGINE_CALL *OnDestroyUniformBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer>) = nullptr;
+		bool (ENGINE_CALL *OnDestroyFrameBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer>) = nullptr;
+		bool (ENGINE_CALL *OnDestroyShaderStorageBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer>) = nullptr;
 
-		Pitaya::GPU::VertexArray* (*OnGetVertexArray)(Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray>) = nullptr;
-		Pitaya::GPU::VertexBuffer* (*OnGetVertexBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer>) = nullptr;
-		Pitaya::GPU::IndexBuffer* (*OnGetIndexBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer>) = nullptr;
-		Pitaya::GPU::Shader* (*OnGetShader)(Pitaya::GPU::Identifier<Pitaya::GPU::Shader>) = nullptr;
-		Pitaya::GPU::Texture2D* (*OnGetTexture2D)(Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D>) = nullptr;
-		Pitaya::GPU::TextureCubemap* (*OnGetTextureCubemap)(Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap>) = nullptr;
-		Pitaya::GPU::UniformBuffer* (*OnGetUniformBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer>) = nullptr;
-		Pitaya::GPU::FrameBuffer* (*OnGetFrameBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer>) = nullptr;
-		Pitaya::GPU::ShaderStorageBuffer* (*OnGetShaderStorageBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer>) = nullptr;
+		Pitaya::GPU::VertexArray* (ENGINE_CALL *OnGetVertexArray)(Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray>) = nullptr;
+		Pitaya::GPU::VertexBuffer* (ENGINE_CALL *OnGetVertexBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer>) = nullptr;
+		Pitaya::GPU::IndexBuffer* (ENGINE_CALL *OnGetIndexBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer>) = nullptr;
+		Pitaya::GPU::Shader* (ENGINE_CALL *OnGetShader)(Pitaya::GPU::Identifier<Pitaya::GPU::Shader>) = nullptr;
+		Pitaya::GPU::Texture2D* (ENGINE_CALL *OnGetTexture2D)(Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D>) = nullptr;
+		Pitaya::GPU::TextureCubemap* (ENGINE_CALL *OnGetTextureCubemap)(Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap>) = nullptr;
+		Pitaya::GPU::UniformBuffer* (ENGINE_CALL *OnGetUniformBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer>) = nullptr;
+		Pitaya::GPU::FrameBuffer* (ENGINE_CALL *OnGetFrameBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer>) = nullptr;
+		Pitaya::GPU::ShaderStorageBuffer* (ENGINE_CALL *OnGetShaderStorageBuffer)(Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer>) = nullptr;
 	};
 }
 

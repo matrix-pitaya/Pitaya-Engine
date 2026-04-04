@@ -16,10 +16,6 @@ namespace Pitaya::Core
         Singleton& operator=(Singleton&&) = delete;
     
     public:
-        static T& Instance()
-        {
-            static T instance;
-            return instance;
-        }
+        static T& Instance();
     };
 }

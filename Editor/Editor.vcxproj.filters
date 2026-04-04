@@ -18,9 +18,6 @@
     <ClInclude Include="Camera\Camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\Command\GUIDrawCommand.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="GUI\Panel\HierarchyPanel.h">
       <Filter>头文件</Filter>
     </ClInclude>

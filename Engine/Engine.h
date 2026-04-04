@@ -103,3 +103,6 @@ namespace Pitaya::Engine
 		FuncTables funcTables;
 	};
 }
+
+template<>
+ENGINE_API Pitaya::Engine::Engine& ENGINE_CALL Pitaya::Core::Singleton<Pitaya::Engine::Engine>::Instance();
