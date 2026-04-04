@@ -21,6 +21,9 @@
     <ClInclude Include="HookPoint.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Hook.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HookPoint.cpp">

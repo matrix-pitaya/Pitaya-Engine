@@ -5,6 +5,8 @@
 #include<Core/Utils/String/String.h>
 #include<Core/Utils/Time/Time.h>
 
+#include<Hook/def.h>
+
 #include<cstring>
 
 bool Pitaya::Log::Logger::Initialize()
@@ -85,6 +87,8 @@ void Pitaya::Log::Logger::Write(Pitaya::Log::LogLevel level, std::string_view me
 			cond.notify_one();
 		}
 	}
+
+	INVOKE_POSTLOG_HOOK(level, message)
 }
 void Pitaya::Log::Logger::ParseBuffer(const std::vector<std::byte>& buffer)
 {

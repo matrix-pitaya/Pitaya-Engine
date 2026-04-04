@@ -13,12 +13,6 @@
 #include<Log/Common/FuncTable.h>
 #include<Time/Common/FuncTable.h>
 #include<Window/Common/FuncTable.h>
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-#include<Profiler/Common/FuncTable.h>
-#endif
-#ifdef PITAYA_EDITOR
-#include<Editor/Common/FuncTable.h>
-#endif
 
 namespace Pitaya::Engine
 {
@@ -42,12 +36,6 @@ namespace Pitaya::Engine
 			Pitaya::Engine::Module<Pitaya::Window::Window> Window;
 			Pitaya::Engine::Module<Pitaya::Physics::PhysicsSimulator> PhysicsSimulator;
 			Pitaya::Engine::Module<Pitaya::Config::Configurator> Configurator;
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-			Pitaya::Engine::Module<Pitaya::Profiler::FrameMonitor> FrameMonitor;
-#endif
-#ifdef PITAYA_EDITOR
-			Pitaya::Engine::Module<Pitaya::Editor::Editor> Editor;
-#endif
 
 			bool Create();
 			bool Check();
@@ -75,12 +63,6 @@ namespace Pitaya::Engine
 			Pitaya::Engine::FuncTable<Pitaya::Input::InputMonitor> InputMonitor;
 			Pitaya::Engine::FuncTable<Pitaya::Task::TaskScheduler> TaskScheduler;
 			Pitaya::Engine::FuncTable<Pitaya::Window::Window> Window;
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-			Pitaya::Engine::FuncTable<Pitaya::Profiler::FrameMonitor> FrameMonitor;
-#endif
-#ifdef PITAYA_EDITOR
-			Pitaya::Engine::FuncTable<Pitaya::Editor::Editor> Editor;
-#endif
 
 			bool Check() const;
 			void UnRegister();

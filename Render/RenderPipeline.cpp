@@ -3,6 +3,7 @@
 #include<Asset/Common/FuncTable.h>
 #include<Core/Console/Console.h>
 #include<Core/Asset/Asset.h>
+#include<Hook/def.h>
 
 bool Pitaya::Render::RenderPipeline::Initialize()
 {
@@ -24,17 +25,18 @@ void Pitaya::Render::RenderPipeline::Release()
 		shader = nullptr;
 	}
 }
-void Pitaya::Render::RenderPipeline::Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Render::Renderer* renderer)
+void Pitaya::Render::RenderPipeline::Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine> passkey, Pitaya::Render::Renderer* renderer)
 {
+	INVOKE_PRERENDERPIPELINEEXECUTE_HOOK(passkey, this)
 	Pitaya::Core::Print(Pitaya::Core::Color::Green, "Begin Render Frame");
 	renderer->BeginRenderFrame(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>()); //清空fornt缓冲区残余数据
 
 	//提交渲染视图
 	SubmitRenderGraph(renderer);
-
+	
 #ifdef PITAYA_EDITOR
 	//提交编辑器GUI
-	renderer->SubmitEditorGUI(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>());
+	//renderer->SubmitEditorGUI(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>());
 #endif
 
 	//交换缓冲区（front→back）并唤醒渲染线程根据back缓冲区命令、SSBO数据进行渲染

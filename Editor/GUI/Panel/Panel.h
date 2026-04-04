@@ -5,6 +5,7 @@
 
 #include<string>
 #include<Core/Console/Console.h>
+
 namespace Pitaya::Editor
 {
     class GUI;

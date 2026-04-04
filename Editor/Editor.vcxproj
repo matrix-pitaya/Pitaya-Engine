@@ -109,7 +109,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_EDITOR;PITAYA_PROFILER;PITAYA_DLL_BUILD;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_EDITOR;PITAYA_PROFILER;PITAYA_DLL_BUILD;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -145,7 +145,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_EDITOR;PITAYA_PROFILER;PITAYA_DLL_BUILD;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_EDITOR;PITAYA_PROFILER;PITAYA_DLL_BUILD;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -163,7 +163,6 @@
     <ClInclude Include="API\func.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Common\EngineState.h" />
-    <ClInclude Include="Common\FuncTable.h" />
     <ClInclude Include="GUI\IconFontCppHeaders\IconsFontAwesome6.h" />
     <ClInclude Include="GUI\ImGui\Backends\imgui_impl_glfw.h" />
     <ClInclude Include="GUI\ImGui\Backends\imgui_impl_opengl3.h" />
@@ -181,6 +180,10 @@
     <ClInclude Include="GUI\Panel\Panel.h" />
     <ClInclude Include="GUI\Panel\ProjectPanel.h" />
     <ClInclude Include="GUI\Panel\ViewportPanel.h" />
+    <ClInclude Include="Profiler\Profiler.h" />
+    <ClInclude Include="Profiler\FrameState.h" />
+    <ClInclude Include="Profiler\RenderState.h" />
+    <ClInclude Include="Profiler\TimeState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API\func.cpp" />
@@ -193,6 +196,8 @@
     <ClCompile Include="GUI\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="GUI\GUI.cpp" />
+    <ClCompile Include="GUI\Panel\ProfilerPanel.cpp" />
+    <ClCompile Include="Profiler\Profiler.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

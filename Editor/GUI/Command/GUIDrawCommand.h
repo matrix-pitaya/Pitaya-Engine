@@ -50,9 +50,7 @@ namespace Pitaya::Editor
 			data = Pitaya::Core::New<ImDrawData>();
 			*data = *src;
 
-			data->CmdLists.Data = nullptr;
-			data->CmdLists.Size = 0;
-			data->CmdLists.Capacity = 0;
+			data->CmdLists.clear();
 			data->CmdLists.reserve(src->CmdListsCount);
 			for (int i = 0; i < src->CmdListsCount; i++)
 			{

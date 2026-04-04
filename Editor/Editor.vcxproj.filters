@@ -39,9 +39,6 @@
     <ClInclude Include="Editor.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\FuncTable.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="GUI\ImGui\imconfig.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -81,6 +78,18 @@
     <ClInclude Include="API\func.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Profiler\Profiler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Profiler\FrameState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Profiler\TimeState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Profiler\RenderState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp">
@@ -111,6 +120,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="API\func.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Profiler\Profiler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Panel\ProfilerPanel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

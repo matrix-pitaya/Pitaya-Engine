@@ -66,20 +66,20 @@ namespace
 
 	void UnMountEngineAllHook()
 	{
-		MOUNT_BEGINFRAME_HOOK(nullptr)
-		MOUNT_BEGINFRAME_HOOK(nullptr)
-		MOUNT_FIXEDUPDATE_HOOK(nullptr)
-		MOUNT_UPDATE_HOOK(nullptr)
-		MOUNT_LATEUPDATE_HOOK(nullptr)
-		MOUNT_ENDFRAME_HOOK(nullptr)
-		MOUNT_POSTRENDERERINTIALIZE_HOOK(nullptr)
-		MOUNT_POSTRENDERERRELEASE_HOOK(nullptr)
-		MOUNT_POSTRENDERERPARSECOMMAND_HOOK(nullptr)
-		MOUNT_POSTRENDERERSWAPBUFFER_HOOK(nullptr)
-		MOUNT_POSTRENDERCONTEXTINITIALIZED_HOOK(nullptr)
-		MOUNT_PRERENDERCONTEXTINRELEASED_HOOK(nullptr)
-		MOUNT_SHOULDWAKEUPRENDERTHREAD_HOOK(nullptr)
-		MOUNT_POSTCHRONOMETERTICK_HOOK(nullptr)
+		//MOUNT_BEGINFRAME_HOOK(nullptr, nullptr)
+		//MOUNT_BEGINFRAME_HOOK(nullptr, nullptr)
+		//MOUNT_FIXEDUPDATE_HOOK(nullptr, nullptr)
+		//MOUNT_UPDATE_HOOK(nullptr, nullptr)
+		//MOUNT_LATEUPDATE_HOOK(nullptr, nullptr)
+		//MOUNT_ENDFRAME_HOOK(nullptr, nullptr)
+		//MOUNT_POSTRENDERERINTIALIZE_HOOK(nullptr, nullptr)
+		//MOUNT_POSTRENDERERRELEASE_HOOK(nullptr, nullptr)
+		//MOUNT_POSTRENDERERPARSECOMMAND_HOOK(nullptr, nullptr)
+		//MOUNT_POSTRENDERERSWAPBUFFER_HOOK(nullptr, nullptr)
+		//MOUNT_POSTRENDERCONTEXTINITIALIZED_HOOK(nullptr, nullptr)
+		//MOUNT_PRERENDERCONTEXTINRELEASED_HOOK(nullptr, nullptr)
+		//MOUNT_SHOULDWAKEUPRENDERTHREAD_HOOK(nullptr, nullptr)
+		//MOUNT_POSTCHRONOMETERTICK_HOOK(nullptr, nullptr)
 	}
 
 	HMODULE editordll = nullptr;
@@ -124,7 +124,7 @@ int Pitaya::Application::Execute(int argc, char** argv)
 	try
 	{
 		SetUnhandledExceptionFilter(CrashFilter); 
-		LoadEditordll();
+		LoadEditordll();	Pitaya::Engine::EditorMountHook();	//TODO 模拟dll加载，将Editor设置为导出dll后移除
 		int32_t exitcode = Pitaya::Engine::Execute(argc, argv); 
 		FreeEditordll();
 		GenerateMemoryAnalysisFile();

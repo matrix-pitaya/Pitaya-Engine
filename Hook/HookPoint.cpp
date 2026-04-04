@@ -1,20 +1,26 @@
 #include<Hook/HookPoint.h>
 
 //Lifecycle
-void (ENGINE_CALL *Pitaya::Engine::HookFunc_BeginFrame)() = nullptr;
-void (ENGINE_CALL *Pitaya::Engine::HookFunc_FixedUpdate)() = nullptr;
-void (ENGINE_CALL *Pitaya::Engine::HookFunc_Update)() = nullptr;
-void (ENGINE_CALL *Pitaya::Engine::HookFunc_LateUpdate)() = nullptr;
-void (ENGINE_CALL *Pitaya::Engine::HookFunc_EndFrame)() = nullptr;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_BeginFrame;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_FixedUpdate;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_Update;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_LateUpdate;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_EndFrame;
 			    
-//Renderer	    
-void (ENGINE_CALL *Pitaya::Engine::HookFunc_PostRendererInitialize)() = nullptr;
-void (ENGINE_CALL *Pitaya::Engine::HookFunc_PostRendererRelease)() = nullptr;
-void (ENGINE_CALL *Pitaya::Engine::HookFunc_PostRendererParseCommand)() = nullptr;
-void (ENGINE_CALL *Pitaya::Engine::HookFunc_PostRendererSwapBuffer)() = nullptr;
-void (ENGINE_CALL *Pitaya::Engine::HookFunc_PostRenderContextInitialized)() = nullptr;
-void (ENGINE_CALL *Pitaya::Engine::HookFunc_PreRenderContextRelease)() = nullptr;
-bool (ENGINE_CALL *Pitaya::Engine::HookFunc_ShouldWakeupRenderThread)() = nullptr;
+//Renderer
+Pitaya::Engine::Hook<void(ENGINE_CALL)(void*)> Pitaya::Engine::Hook_PostRendererInitialize;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PostRendererRelease;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PostRendererParseCommand;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PostRendererSwapBuffer;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PostRendererBeginRenderFrame;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PreRendereEndRenderFrame;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PostRenderContextInitialized;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PreRenderContextRelease;
+Pitaya::Engine::Hook<void(ENGINE_CALL)(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Render::RenderPipeline*)> Pitaya::Engine::Hook_PreRenderPipelineExecute;
+Pitaya::Engine::Hook<bool(ENGINE_CALL)()> Pitaya::Engine::Hook_ShouldWakeupRenderThread;
 
 //Time		    
-void (ENGINE_CALL *Pitaya::Engine::HookFunc_PostChronometerTick)() = nullptr;
+Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Hook_PostChronometerTick;
+
+//Log
+Pitaya::Engine::Hook<void(ENGINE_CALL)(Pitaya::Log::LogLevel, std::string_view)> Pitaya::Engine::Hook_PostLog;

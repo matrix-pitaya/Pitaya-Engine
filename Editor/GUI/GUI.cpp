@@ -31,7 +31,7 @@ bool Pitaya::Editor::GUI::InitializeForMain(void* nativeWindow)
 	imGuiContext.store(context, std::memory_order_release);
 	InitializePanel();
 	while (!isRenderReady.load(std::memory_order_acquire)){ std::this_thread::yield(); }
-	return true;
+	return drawer.Initialize(nativeWindow);
 }
 bool Pitaya::Editor::GUI::InitializeForRender()
 {
@@ -45,6 +45,8 @@ bool Pitaya::Editor::GUI::InitializeForRender()
 }
 void Pitaya::Editor::GUI::ReleaseForMain()
 {
+	ReleasePanel();
+	drawer.Release();
 	const auto start = std::chrono::steady_clock::now();
 	const auto wait = std::chrono::milliseconds(2000);
 	while (isRenderReady.load(std::memory_order_acquire))
@@ -66,7 +68,6 @@ void Pitaya::Editor::GUI::ReleaseForMain()
 		ImGui::DestroyContext(context);
 		imGuiContext.store(nullptr, std::memory_order_release);
 	}
-	ReleasePanel();
 }
 void Pitaya::Editor::GUI::ReleaseForRender()
 {
@@ -478,4 +479,38 @@ void Pitaya::Editor::GUI::EndFrame()
 	//	ImGui::RenderPlatformWindowsDefault();
 	//	glfwMakeContextCurrent(nullptr);
 	//}
+}
+
+void Pitaya::Editor::GUI::Drawer::Draw(Pitaya::Core::PassKey<Editor>)
+{
+#if PITAYA_VERSION >= 100
+	//[VERSION >= 100] 通过预处理实现Hanlde映射Texture
+	//[VERSION  < 100] 通过修改ImGui_ImplOpenGL3_RenderDrawData源码实现Hanlde映射Texture
+	for (uint32_t i = 0; i < buffer[backBufferIndex].CmdListsCount; i++)
+	{
+		ImDrawList* cmdList = buffer[backBufferIndex].CmdLists[i];
+		for (uint32_t j = 0; j < cmdList->CmdBuffer.Size; j++)
+		{
+			ImDrawCmd* pcmd = &cmdList->CmdBuffer[j];
+			if ((pcmd->UserCallback != nullptr) || (pcmd->TexRef._TexData != nullptr) ||
+				(pcmd->TexRef._TexID == 0)) {
+				continue;
+			}
+
+			uint32_t handleId = (uint32_t)(intptr_t)pcmd->TexRef._TexID;
+			GLuint realGLTextureID = handleId; // TODO Hanle映射真实textureid
+			pcmd->TexRef._TexID = (ImTextureID)(intptr_t)realGLTextureID;
+		}
+	}
+#endif
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	int width, height;
+	glfwGetFramebufferSize(static_cast<GLFWwindow*>(nativeWindow), &width, &height);
+	glViewport(0, 0, width, height);
+	glClearColor(Pitaya::Core::Color::Dark.r, Pitaya::Core::Color::Dark.g, Pitaya::Core::Color::Dark.b, Pitaya::Core::Color::Dark.a);
+	glClearDepth(1.0f);
+	glClearStencil(0x00);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplOpenGL3_RenderDrawData(&buffer[backBufferIndex]);
 }

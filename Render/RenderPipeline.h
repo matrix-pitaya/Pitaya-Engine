@@ -87,10 +87,10 @@ namespace Pitaya::Render
 		}
 
 	public:
-		void Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Render::Renderer* renderer);
+		void Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Render::Renderer*);
 
 	private:
-		void SubmitRenderGraph(Pitaya::Render::Renderer* renderer);
+		void SubmitRenderGraph(Pitaya::Render::Renderer*);
 
 	private:
 		RenderGraph graph;

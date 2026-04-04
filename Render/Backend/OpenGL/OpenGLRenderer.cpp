@@ -199,38 +199,3 @@ void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::PostPr
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
-#ifdef PITAYA_EDITOR
-void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Editor::GUIDrawCommand& command) const
-{
-	ImDrawData* drawData = command.GetDrawData();
-	if (!drawData) { return; }
-#if PITAYA_VERSION >= 100
-	//[VERSION >= 100] 通过预处理实现Hanlde映射Texture
-	//[VERSION  < 100] 通过修改ImGui_ImplOpenGL3_RenderDrawData源码实现Hanlde映射Texture
-	for (uint32_t i = 0; i < drawData->CmdListsCount; i++)
-	{
-		ImDrawList* cmdList = drawData->CmdLists[i];
-		for (uint32_t j = 0; j < cmdList->CmdBuffer.Size; j++)
-		{
-			ImDrawCmd* pcmd = &cmdList->CmdBuffer[j];
-			if ((pcmd->UserCallback != nullptr) || (pcmd->TexRef._TexData != nullptr) ||
-				(pcmd->TexRef._TexID == 0)) { continue; }
-
-			uint32_t handleId = (uint32_t)(intptr_t)pcmd->TexRef._TexID;
-			GLuint realGLTextureID = handleId; // TODO Hanle映射真实textureid
-			pcmd->TexRef._TexID = (ImTextureID)(intptr_t)realGLTextureID;
-		}
-	}
-#endif
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	int width, height;
-	glfwGetFramebufferSize(glfwWindow, &width, &height);
-	glViewport(0, 0, width, height);
-	glClearColor(Pitaya::Core::Color::Dark.r, Pitaya::Core::Color::Dark.g, Pitaya::Core::Color::Dark.b, Pitaya::Core::Color::Dark.a);
-	glClearDepth(1.0f);
-	glClearStencil(0x00); 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplOpenGL3_RenderDrawData(drawData);
-}
-#endif

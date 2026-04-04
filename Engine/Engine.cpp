@@ -17,9 +17,6 @@
 #ifdef PITAYA_EDITOR
 #include<Editor/Editor.h>
 #endif
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-#include<Profiler/FrameMonitor.h>
-#endif
 
 #include<Core/Console/Console.h>
 
@@ -113,11 +110,6 @@ namespace
 	inline void OnLog(Pitaya::Log::LogLevel level,std::string_view info) noexcept
 	{
 		Pitaya::Engine::Context::Instance().GetModule<Pitaya::Log::Logger>()->Write(level, info);
-
-#ifdef PITAYA_EDITOR
-		//日志同步到编辑器窗口
-		Pitaya::Engine::Context::Instance().GetModule<Pitaya::Editor::Editor>()->Console(level, info);
-#endif
 	}
 #pragma endregion
 
@@ -383,42 +375,6 @@ namespace
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetShaderStorageBuffer(id);
 	}
 #pragma endregion
-
-
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	inline void OnWriteTimeState(Pitaya::Profiler::TimeState timeState) noexcept
-	{
-		Pitaya::Engine::Context::Instance().GetModule<Pitaya::Profiler::FrameMonitor>()->WriteTimeState(timeState);
-	}
-	inline void OnWriteRenderState(Pitaya::Profiler::RenderState renderState) noexcept
-	{
-		Pitaya::Engine::Context::Instance().GetModule<Pitaya::Profiler::FrameMonitor>()->WriteRenderState(renderState);
-	}
-	Pitaya::Profiler::TimeState OnGetTimeState() noexcept
-	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Profiler::FrameMonitor>()->GetTimeState();
-	}
-	Pitaya::Profiler::RenderState OnGetRenderState() noexcept
-	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Profiler::FrameMonitor>()->GetRenderState();
-	}
-#endif
-
-
-#ifdef PITAYA_EDITOR
-	inline bool OnInitializeForRender(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
-	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Editor::Editor>()->InitializeForRender(passkey);
-	}
-	inline void OnReleaseForRender(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
-	{
-		Pitaya::Engine::Context::Instance().GetModule<Pitaya::Editor::Editor>()->ReleaseForRender(passkey);
-	}
-	inline void OnConsole(Pitaya::Log::LogLevel level, std::string_view message)
-	{
-		Pitaya::Engine::Context::Instance().GetModule<Pitaya::Editor::Editor>()->Console(level, message);
-	}
-#endif
 }
 
 int Pitaya::Engine::Engine::Execute(int argc, char** argv)
@@ -517,12 +473,6 @@ bool Pitaya::Engine::Engine::FillContext()
 	modules.Workspace = &this->modules.Workspace;
 	modules.RHIDevice = &this->modules.RHIDevice;
 	modules.Configurator = &this->modules.Configurator;
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	modules.FrameMonitor = &this->modules.FrameMonitor;
-#endif
-#ifdef PITAYA_EDITOR
-	modules.Editor = &this->modules.Editor;
-#endif
 	
 	auto& funcTables = context.funcTables;
 	funcTables.AssetHub = &this->funcTables.AssetHub;
@@ -535,12 +485,6 @@ bool Pitaya::Engine::Engine::FillContext()
 	funcTables.ThreadTracker = &this->funcTables.ThreadTracker;
 	funcTables.Chronometer = &this->funcTables.Chronometer;
 	funcTables.Window = &this->funcTables.Window;
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	funcTables.FrameMonitor = &this->funcTables.FrameMonitor;
-#endif
-#ifdef PITAYA_EDITOR
-	funcTables.Editor = &this->funcTables.Editor;
-#endif
 	return context.Check();
 }
 bool Pitaya::Engine::Engine::FillFuncTables()
@@ -661,22 +605,6 @@ bool Pitaya::Engine::Engine::FillFuncTables()
 	gpu.OnGetFrameBuffer = OnGetFrameBuffer;
 	gpu.OnGetShaderStorageBuffer = OnGetShaderStorageBuffer;
 #pragma endregion
-
-
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	auto& frameMonitor = funcTables.FrameMonitor;
-	frameMonitor.OnWriteTimeState = OnWriteTimeState;
-	frameMonitor.OnWriteRenderState = OnWriteRenderState;
-	frameMonitor.OnGetTimeState = OnGetTimeState;
-	frameMonitor.OnGetRenderState = OnGetRenderState;
-#endif
-
-#ifdef PITAYA_EDITOR
-	auto& editor = funcTables.Editor;
-	editor.OnInitializeForRender = OnInitializeForRender;
-	editor.OnReleaseForRender = OnReleaseForRender;
-	editor.OnConsole = OnConsole;
-#endif
 	return true;
 }
 
@@ -697,13 +625,6 @@ bool Pitaya::Engine::Engine::Modules::Create()
 	if (!Renderer.Create(Configurator->GetRenderAPI())) { throw std::runtime_error("Engine [Module] [Renderer] Create Fail!"); }
 	if (!Window.Create(Configurator->GetWindowPlatform())) { throw std::runtime_error("Engine [Module] [Window] Create Fail!"); }
 	if(!PhysicsSimulator.Create(Configurator->GetPhysicsAPI())){ throw std::runtime_error("Engine [Module] [PhysicsSimulator] Create Fail!"); }
-
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	if (!FrameMonitor.Create()) { throw std::runtime_error("Engine [Module] [FrameMonitor] Create Fail!"); }
-#endif
-#ifdef PITAYA_EDITOR
-	if (!Editor.Create()) { throw std::runtime_error("Engine [Module] [Editor] Create Fail!"); }
-#endif
 	return true;
 }
 bool Pitaya::Engine::Engine::Modules::Check()
@@ -722,12 +643,6 @@ bool Pitaya::Engine::Engine::Modules::Check()
 	if (!Renderer) { throw std::runtime_error("Engine [Module] Miss [Renderer]!"); }
 	if (!Chronometer) { throw std::runtime_error("Engine [Module] Miss [Chronometer]!"); }
 	if (!RenderPipeline) { throw std::runtime_error("Engine [Module] Miss [RenderPipeline]!"); }
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	if (!FrameMonitor) { throw std::runtime_error("Engine [Module] Miss [FrameMonitor]!"); }
-#endif 
-#ifdef PITAYA_EDITOR
-	if (!Editor) { throw std::runtime_error("Engine [Module] Miss [Editor]!"); }
-#endif 
 	return true;
 }
 bool Pitaya::Engine::Engine::Modules::Initialize(int argc, char** argv)
@@ -745,13 +660,6 @@ bool Pitaya::Engine::Engine::Modules::Initialize(int argc, char** argv)
 	if (!Window.Initialize(Configurator->GetWindowWidth(), Configurator->GetWindowHeight(), Configurator->GetWindowName().c_str())) { throw std::runtime_error("Engine [Window] Module Initialize Fail!"); }
 	if (!RenderPipeline.Initialize()) { throw std::runtime_error("[RenderPipeline] Module Initialize Fail!"); }
 	if (!Renderer.Initialize(Window->GetNativeWindow())) { throw std::runtime_error("[Renderer] Module Initialize Fail!"); }
-
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	if (!FrameMonitor.Initialize()) { throw std::runtime_error("Engine [FrameMonitor] Module Initialize Fail!"); }
-#endif
-#ifdef PITAYA_EDITOR
-	if (!Editor.Initialize(Window->GetNativeWindow())) { throw std::runtime_error("Engine [Editor] Module Initialize Fail!"); }
-#endif 
 	if (!Chronometer.Initialize()) { throw std::runtime_error("Engine [Chronometer] Module Initialize Fail!"); }
 
 	//TODO REMOVE TEST -----------------------------------------------------------------------------
@@ -774,9 +682,6 @@ bool Pitaya::Engine::Engine::Modules::IsRunning() const
 }
 void Pitaya::Engine::Engine::Modules::BeginFrame()
 {
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	FrameMonitor.BeginFrame();
-#endif
 	Chronometer->Tick(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
 	InputMonitor->PrepareNewFrame(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
 	Window->PollEvents(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
@@ -784,17 +689,11 @@ void Pitaya::Engine::Engine::Modules::BeginFrame()
 }
 void Pitaya::Engine::Engine::Modules::FixedUpdate()
 {
-#ifdef PITAYA_EDITOR
-	if (Editor->GetEngineState() == Pitaya::Editor::EngineState::Edit) { return; }
-#endif
-
 	PhysicsSimulator.FixedUpdate();
 }
 void Pitaya::Engine::Engine::Modules::Update()
 {
-#ifdef PITAYA_EDITOR
-	Editor.Update();
-#endif
+
 }
 void Pitaya::Engine::Engine::Modules::LateUpdate()
 {
@@ -835,27 +734,11 @@ void Pitaya::Engine::Engine::Modules::Render()
 
 	//TODO 获取全局激活摄像机，遍历摄像机（一个摄像机一个Pass），渲染所有MeshRenderer组件
 
-#ifdef PITAYA_EDITOR
-	if (Editor->GetGUIScenePanelVisablew() && Editor->GetCamera().IsRenderTargetReady())
-	{
-		//TODO 增加特殊网格对象 天空盒对象
-		//RenderPipeline->AddRenderObject();
-		RenderPipeline->AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
-			Editor->GetCamera().GetCameraSnapshot(), Editor->GetCamera().GetRenderTarget(),
-			Editor->GetCamera().GetPostProcessSettings(), Editor->GetCamera().GetCullingMask());
-	}
-
-	//生成编辑器GUI
-	Editor->GUINewFrame(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
-#endif
-
 	RenderPipeline->Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(), Renderer.GetKernel());
 }
 void Pitaya::Engine::Engine::Modules::EndFrame()
 {
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	FrameMonitor.EndFrame();
-#endif
+
 }
 void Pitaya::Engine::Engine::Modules::FrameSync()
 {
@@ -872,12 +755,6 @@ void Pitaya::Engine::Engine::Modules::Release()
 	RHIDevice.Release();
 	RenderPipeline.Release();
 	Renderer.Release();
-#ifdef PITAYA_EDITOR
-	Editor.Release();
-#endif
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	FrameMonitor.Release();
-#endif
 	AssetHub.Release();
 	Window.Release();
 	EventDispatcher.Release();
@@ -889,9 +766,6 @@ void Pitaya::Engine::Engine::Modules::Destroy()
 	Workspace.Destroy();
 	Chronometer.Destroy();
 	InputMonitor.Destroy();
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	FrameMonitor.Destroy();
-#endif
 	PhysicsSimulator.Destroy(); 
 	TaskScheduler.Destroy();
 	RenderPipeline.Destroy();
@@ -903,9 +777,6 @@ void Pitaya::Engine::Engine::Modules::Destroy()
 	EventDispatcher.Destroy();
 	ThreadTracker.Destroy();
 	Logger.Destroy();
-#ifdef PITAYA_EDITOR
-	Editor.Destroy();
-#endif
 }
 
 bool Pitaya::Engine::Engine::FuncTables::Check() const
@@ -920,12 +791,6 @@ bool Pitaya::Engine::Engine::FuncTables::Check() const
 	if (!ThreadTracker.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [ThreadTracker]!"); }
 	if (!Chronometer.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Chronometer]!"); }
 	if (!Window.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Window]!"); }
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	if (!FrameMonitor.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [FrameMonitor]!"); }
-#endif
-#ifdef PITAYA_EDITOR
-	if (!Editor.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Editor]!"); }
-#endif
 	return true;
 }
 void Pitaya::Engine::Engine::FuncTables::UnRegister()
@@ -940,10 +805,4 @@ void Pitaya::Engine::Engine::FuncTables::UnRegister()
 	ThreadTracker.UnRegister();
 	Chronometer.UnRegister();
 	Window.UnRegister();
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-	FrameMonitor.UnRegister();
-#endif
-#ifdef PITAYA_EDITOR
-	Editor.UnRegister();
-#endif
 }

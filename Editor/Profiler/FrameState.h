@@ -1,9 +1,9 @@
 #pragma once
 
-#include<Profiler/Common/TimeState.h>
-#include<Profiler/Common/RenderState.h>
+#include<Editor/Profiler/TimeState.h>
+#include<Editor/Profiler/RenderState.h>
 
-namespace Pitaya::Profiler
+namespace Pitaya::Editor
 {
 	struct FrameState
 	{

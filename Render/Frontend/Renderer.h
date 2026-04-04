@@ -1,5 +1,6 @@
 #pragma once
 
+#include<Core/Allocate/Allocate.h>
 #include<Core/Camera/CameraSnapshot.h>
 #include<Core/Console/Console.h>
 #include<Core/Asset/Asset.h>
@@ -29,11 +30,6 @@
 #include<Asset/Common/Shader.h>
 #include<Asset/Common/Texture.h>
 #include<Asset/Common/Material.h>
-
-#ifdef PITAYA_EDITOR
-#include<Editor/Common/FuncTable.h>
-#include<Editor/GUI/Command/GUIDrawCommand.h>
-#endif
 
 #include<algorithm>
 #include<atomic>
@@ -205,9 +201,6 @@ namespace Pitaya::Render
 				std::vector<std::byte> CommandBuffer;
 				std::vector<glm::mat4> InstanceModelTransforms;
 				std::vector<glm::mat4> BoneMatrices;
-#ifdef PITAYA_EDITOR
-				std::optional<Pitaya::Editor::GUIDrawCommand> EditorGUIrawCommand;
-#endif
 
 				inline void Clear() noexcept
 				{
@@ -219,10 +212,6 @@ namespace Pitaya::Render
 
 					BoneMatrices.clear();
 					BoneMatrices.reserve(1024);
-
-#ifdef PITAYA_EDITOR
-					EditorGUIrawCommand.reset();
-#endif
 				}
 			};
 
@@ -285,15 +274,8 @@ namespace Pitaya::Render
 							break;
 					}
 				}
-				INVOKE_POSTRENDERERPARSECOMMAND_HOOK
-#ifdef PITAYA_EDITOR
-				//GUI命令
-				if (back.EditorGUIrawCommand.has_value() && back.EditorGUIrawCommand->GetDrawData())
-				{
-					renderer->ExecuteCommand(back.EditorGUIrawCommand.value());
-				}
-#endif
 				back.Clear();	//清空缓冲区
+				INVOKE_POSTRENDERERPARSECOMMAND_HOOK
 			}
 
 		public:
@@ -339,11 +321,7 @@ namespace Pitaya::Render
 		public:
 			inline bool IsRemain() const noexcept
 			{
-#ifdef PITAYA_EDITOR
-				return !back.CommandBuffer.empty() || (back.EditorGUIrawCommand.has_value() && back.EditorGUIrawCommand->GetDrawData());
-#else
 				return !back.CommandBuffer.empty();
-#endif
 			}
 			inline void PushDrawCommandToPass(Pitaya::Render::DrawCommand& cmd)
 			{
@@ -467,7 +445,7 @@ namespace Pitaya::Render
 			isRunning.store(true, std::memory_order_release);
 			renderThread = Pitaya::Thread::RegisterThread("Render", &Pitaya::Render::Renderer::BootstrapRenderThread, this, nativeWindow);
 			if (renderThread == Pitaya::Core::Thread::Identifier::Invalid) { throw std::runtime_error("Render Thread Register Fail!"); }
-			INVOKE_POSTRENDERERINTIALIZE_HOOK
+			INVOKE_POSTRENDERERINTIALIZE_HOOK(nativeWindow)
 			return true;
 		}
 		inline void Release()
@@ -485,28 +463,20 @@ namespace Pitaya::Render
 			globalRHI.CreateGlobalRHI();
 			fallbackRHI.CreateFallbackRHI();
 			INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK
-#ifdef PITAYA_EDITOR
-			Pitaya::Editor::InitializeForRender(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
-#endif
 
 			while (true)
 			{
 				std::unique_lock<std::mutex> lock(mutex);
 				cond.wait(lock, [this] { return renderPacket.IsRemain() || INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK ||
 					Pitaya::Asset::IsUploadedToGPU() || !isRunning.load(std::memory_order_acquire); });
-				
+				if (!isRunning.load(std::memory_order_acquire)) { break; }
+
 				ManageGPUMemory();
 				NewRenderFrame();
 				ParseCommand();
 				SwapBuffer();
-
-				if (!renderPacket.IsRemain() && !Pitaya::Asset::IsUploadedToGPU() && 
-					!isRunning.load(std::memory_order_acquire)) { break; }
 			}
 
-#ifdef PITAYA_EDITOR
-			Pitaya::Editor::ReleaseForRender(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
-#endif
 			INVOKE_PRERENDERCONTEXTINRELEASED_HOOK
 			Pitaya::GPU::DestroyAllGPUResource(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
 			ReleaseRenderContext();
@@ -530,14 +500,12 @@ namespace Pitaya::Render
 		virtual void ExecuteCommand(const Pitaya::Render::BeginPassCommand* command) const = 0;
 		virtual void ExecuteCommand(const Pitaya::Render::InstancedDrawCommand* command) const = 0;
 		virtual void ExecuteCommand(const Pitaya::Render::PostProcessCommand* command) const = 0;
-#ifdef PITAYA_EDITOR
-		virtual void ExecuteCommand(const Pitaya::Editor::GUIDrawCommand& command) const = 0;
-#endif
 
 	public:
 		inline void BeginRenderFrame(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>)
 		{
 			renderPacket.GetFrontBuffer().Clear();
+			INVOKE_POSTRENDERERBEGINRENDERFRAME_HOOK
 		}
 		inline void BeginPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>, RenderPass& pass)
 		{
@@ -635,6 +603,8 @@ namespace Pitaya::Render
 		}
 		inline void EndRenderFrame(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>)
 		{
+			INVOKE_PRERENDERERENDRENDERFRAME_HOOK
+
 			//交换渲染缓冲区
 			{
 				std::lock_guard<std::mutex> lock(mutex);
@@ -644,14 +614,6 @@ namespace Pitaya::Render
 			//唤醒渲染线程工作
 			cond.notify_one();
 		}
-#ifdef PITAYA_EDITOR
-		inline void SubmitEditorGUI(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>)
-		{
-			auto& front = renderPacket.GetFrontBuffer();
-			front.EditorGUIrawCommand.reset();
-			front.EditorGUIrawCommand.emplace();
-		}
-#endif
 
 	protected:
 		inline static void BootstrapRenderThread(void* renderer, void* nativeWindow)

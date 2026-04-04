@@ -20,12 +20,6 @@ namespace Pitaya::Window { class Window; }
 namespace Pitaya::Physics { class PhysicsSimulator; }
 namespace Pitaya::Game { class GameWorld; }
 namespace Pitaya::Script { class ScriptRuntime; }
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-namespace Pitaya::Profiler { class FrameMonitor; }
-#endif
-#ifdef PITAYA_EDITOR
-namespace Pitaya::Editor { class Editor; }
-#endif
 
 namespace Pitaya::Engine
 {
@@ -54,12 +48,6 @@ namespace Pitaya::Engine
 			Pitaya::Engine::Module<Pitaya::Physics::PhysicsSimulator>* PhysicsSimulator = nullptr;
 			Pitaya::Engine::Module<Pitaya::Game::GameWorld>* GameWorld = nullptr;
 			Pitaya::Engine::Module<Pitaya::Script::ScriptRuntime>* ScriptRuntime = nullptr;
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-			Pitaya::Engine::Module<Pitaya::Profiler::FrameMonitor>* FrameMonitor = nullptr;
-#endif
-#ifdef PITAYA_EDITOR
-			Pitaya::Engine::Module<Pitaya::Editor::Editor>* Editor = nullptr;
-#endif
 
 			inline bool Check() const
 			{
@@ -78,12 +66,6 @@ namespace Pitaya::Engine
 				if (!RHIDevice) { throw std::runtime_error("Context [Module] miss [RHIDevice]"); }
 				//if (!GameWorld) { throw std::runtime_error("Context [Module] miss [GameWorld]"); }
 				//if (!ScriptRuntime) { throw std::runtime_error("Context [Module] miss [ScriptRuntime]"); }
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-				if (!FrameMonitor) { throw std::runtime_error("Context [Module] miss [FrameMonitor]"); }
-#endif
-#ifdef PITAYA_EDITOR
-				if (!Editor) { throw std::runtime_error("Context [Module] miss [Editor]"); }
-#endif
 				return true;
 			}
 			inline void UnRegister() noexcept
@@ -103,12 +85,6 @@ namespace Pitaya::Engine
 				Configurator = nullptr;
 				GameWorld = nullptr;
 				ScriptRuntime = nullptr;
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-				FrameMonitor = nullptr;
-#endif
-#ifdef PITAYA_EDITOR
-				Editor = nullptr;
-#endif
 			}
 		};
 		struct FuncTables
@@ -125,12 +101,6 @@ namespace Pitaya::Engine
 			Pitaya::Engine::FuncTable<Pitaya::Input::InputMonitor>* InputMonitor = nullptr;
 			Pitaya::Engine::FuncTable<Pitaya::Task::TaskScheduler>* TaskScheduler = nullptr;
 			Pitaya::Engine::FuncTable<Pitaya::Window::Window>* Window = nullptr;
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-			Pitaya::Engine::FuncTable<Pitaya::Profiler::FrameMonitor>* FrameMonitor = nullptr;
-#endif
-#ifdef PITAYA_EDITOR
-			Pitaya::Engine::FuncTable<Pitaya::Editor::Editor>* Editor = nullptr;
-#endif
 
 			inline bool Check() const
 			{
@@ -144,12 +114,6 @@ namespace Pitaya::Engine
 				if (!ThreadTracker) { throw std::runtime_error("Context [FuncTable] miss [ThreadTracker]"); }
 				if (!Chronometer) { throw std::runtime_error("Context [FuncTable] miss [Chronometer]"); }
 				if (!Window) { throw std::runtime_error("Context [FuncTable] miss [Window]"); }
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-				if (!FrameMonitor) { throw std::runtime_error("Context [FuncTable] miss [FrameMonitor]"); }
-#endif
-#ifdef PITAYA_EDITOR
-				if (!Editor) { throw std::runtime_error("Context [FuncTable] miss [Editor]"); }
-#endif
 				return true;
 			}
 			inline void UnRegister() noexcept
@@ -164,12 +128,6 @@ namespace Pitaya::Engine
 				InputMonitor = nullptr;
 				TaskScheduler = nullptr;
 				Window = nullptr;
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-				FrameMonitor = nullptr;
-#endif
-#ifdef PITAYA_EDITOR
-				Editor = nullptr;
-#endif
 			}
 		};
 
@@ -203,12 +161,6 @@ namespace Pitaya::Engine
 				std::is_same_v<T, Pitaya::Physics::PhysicsSimulator> ||
 				std::is_same_v<T, Pitaya::Game::GameWorld> ||
 				std::is_same_v<T, Pitaya::Script::ScriptRuntime>
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-				|| std::is_same_v<T, Pitaya::Profiler::FrameMonitor>
-#endif
-#ifdef PITAYA_EDITOR
-				|| std::is_same_v<T, Pitaya::Editor::Editor>
-#endif
 				, "Context::GetModule<T>(): T must be a valid Engine Module Type");
 
 			if constexpr (std::is_same_v<T, Pitaya::Task::TaskScheduler>)			 { return *modules.TaskScheduler; }
@@ -226,12 +178,6 @@ namespace Pitaya::Engine
 			else if constexpr (std::is_same_v<T, Pitaya::Physics::PhysicsSimulator>) { return *modules.PhysicsSimulator; }
 			else if constexpr (std::is_same_v<T, Pitaya::Game::GameWorld>)			 { return *modules.GameWorld; }
 			else if constexpr (std::is_same_v<T, Pitaya::Script::ScriptRuntime>)	 { return *modules.ScriptRuntime; }
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-			else if constexpr (std::is_same_v<T, Pitaya::Profiler::FrameMonitor>)	 { return *modules.FrameMonitor; }
-#endif
-#ifdef PITAYA_EDITOR																 									  
-			else if constexpr (std::is_same_v<T, Pitaya::Editor::Editor>)            { return *modules.Editor; }
-#endif
 		}
 		template<typename T>
 		inline Pitaya::Engine::FuncTable<T>& GetFuncTable() const noexcept
@@ -247,12 +193,6 @@ namespace Pitaya::Engine
 				std::is_same_v<T, Pitaya::Input::InputMonitor> ||
 				std::is_same_v<T, Pitaya::Task::TaskScheduler> ||
 				std::is_same_v<T, Pitaya::Window::Window>
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-				|| std::is_same_v<T, Pitaya::Profiler::FrameMonitor>
-#endif
-#ifdef PITAYA_EDITOR
-				|| std::is_same_v<T, Pitaya::Editor::Editor>
-#endif
 				, "Context::GetFuncTable<T>(): T must be a valid Engine FuncTable Type");
 
 			if constexpr (std::is_same_v<T, Pitaya::Time::Chronometer>)				{ return *funcTables.Chronometer; }
@@ -265,12 +205,6 @@ namespace Pitaya::Engine
 			else if constexpr (std::is_same_v<T, Pitaya::Input::InputMonitor>)		{ return *funcTables.InputMonitor; }
 			else if constexpr (std::is_same_v<T, Pitaya::Task::TaskScheduler>)		{ return *funcTables.TaskScheduler; }
 			else if constexpr (std::is_same_v<T, Pitaya::Window::Window>)			{ return *funcTables.Window; }
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-			else if constexpr (std::is_same_v<T, Pitaya::Profiler::FrameMonitor>)	{ return *funcTables.FrameMonitor; }
-#endif
-#ifdef PITAYA_EDITOR
-			else if constexpr (std::is_same_v<T, Pitaya::Editor::Editor>)			{ return *funcTables.Editor; }
-#endif
 		}
 
 	private:

@@ -6,10 +6,6 @@
 #include<Config/Common/FunctionTable.h>
 #include<Hook/def.h>
 
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-#include<Profiler/Common/FuncTable.h>
-#endif
-
 #include<chrono>
 #include<cstdint>
 #include<thread>
@@ -70,10 +66,6 @@ namespace Pitaya::Time
 			delta = unscaledDeltaTime * scale;
 			lastTick = tick;
 			INVOKE_POSTCHRONOMETERTICK_HOOK
-#if defined(PITAYA_EDITOR) || defined(PITAYA_PROFILER)
-			Pitaya::Profiler::WriteTimeState({ delta, fixdelta, unscaledDeltaTime,
-				scale, GetFramerate(), Seconds(), Milliseconds() });
-#endif
 		}
 		inline void FrameSync(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) noexcept
 		{

@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="def.h" />
+    <ClInclude Include="Hook.h" />
     <ClInclude Include="HookPoint.h" />
   </ItemGroup>
   <ItemGroup>

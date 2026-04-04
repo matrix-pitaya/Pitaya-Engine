@@ -2,7 +2,7 @@
 
 #include<cstdint>
 
-namespace Pitaya::Profiler
+namespace Pitaya::Editor
 {
 	struct DrawcallState
 	{
