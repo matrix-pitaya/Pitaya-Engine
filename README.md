@@ -66,13 +66,19 @@ Pitaya 采用严格的分层架构，确保核心逻辑与底层实现解耦：
 
 ### 编译运行
 1.  **克隆仓库:**
+    
     ```bash
     git clone --recursive https://github.com/matrix-pitaya/Pitaya-Engine.git
     ```
+    
+    下载GitHub仓库Release中的 `Pitaya-Engine-res-third-v0.1.0.zip` 压缩包并解压缩到`Pitaya.sln`目录。
+    
 2.  **打开工程:**
     使用 Visual Studio 2022 打开根目录下的 `Pitaya.sln`。
+    
 3.  **配置环境:**
-    确保构建配置设为 `Debug` 或 `Release` (x64)。
+    确保构建配置设为`Release` (x64)。
+    
 4.  **运行项目:**
     将 `Application` 设为启动项目并按 `F5` 运行。
 
