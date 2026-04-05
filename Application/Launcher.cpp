@@ -84,9 +84,9 @@ int Pitaya::Application::Execute(int argc, char** argv)
 {
 	try
 	{
-		SetUnhandledExceptionFilter(CrashFilter); 
-		LoadEditordll();	
-		int32_t exitcode = Pitaya::Engine::Execute(argc, argv); 
+		SetUnhandledExceptionFilter(CrashFilter);
+		LoadEditordll();
+		int32_t exitcode = Pitaya::Engine::Execute(argc, argv);
 		FreeEditordll();
 		Pitaya::Core::GenerateFile("memory.profile", "Pitaya Engine Memory Analysis File", 
 			Pitaya::Core::GetMemoryState().c_str());
@@ -97,7 +97,7 @@ int Pitaya::Application::Execute(int argc, char** argv)
 		MessageBoxA(NULL, e.what(), "Error", MB_OK);
 		Pitaya::Core::GenerateFile("memory.profile", "Pitaya Engine Memory Analysis File", 
 			Pitaya::Core::GetMemoryState().c_str());
-		Pitaya::Engine::Terminate();
+		SafeTerminateInSEH();
 		FreeEditordll();
 		return -1;
 	}
@@ -106,7 +106,7 @@ int Pitaya::Application::Execute(int argc, char** argv)
 		MessageBoxA(NULL, "Unknown error!", "Error", MB_OK);
 		Pitaya::Core::GenerateFile("memory.profile", "Pitaya Engine Memory Analysis File", 
 			Pitaya::Core::GetMemoryState().c_str());
-		Pitaya::Engine::Terminate();
+		SafeTerminateInSEH();
 		FreeEditordll();
 		return -1;
 	}
