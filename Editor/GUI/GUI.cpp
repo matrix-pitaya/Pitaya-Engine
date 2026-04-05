@@ -18,9 +18,11 @@
 #include<stdexcept>
 #include<thread>
 #include<chrono> 
-#include<windows.h>
 #include<iostream>
 #include<cstdio>
+
+#define NOMINMAX
+#include<windows.h>
 
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
 #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
