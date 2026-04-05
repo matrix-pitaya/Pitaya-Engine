@@ -64,23 +64,23 @@
             "ShouldWakeupRenderThread            %s\n"                                        \
             "PostChronometerTick                 %s\n"                                        \
             "PostLog                             %s\n",                                       \
-            Pitaya::Engine::Hook_PreBeginFrame.Func ? Pitaya::Engine::Hook_PreBeginFrame.Name : "Unmounted",                                        \
-            Pitaya::Engine::Hook_PreFixedUpdate.Func ? Pitaya::Engine::Hook_PreFixedUpdate.Name : "Unmounted",                                      \
-            Pitaya::Engine::Hook_PreUpdate.Func ? Pitaya::Engine::Hook_PreUpdate.Name : "Unmounted",                                                \
-            Pitaya::Engine::Hook_PreLateUpdate.Func ? Pitaya::Engine::Hook_PreLateUpdate.Name : "Unmounted",                                        \
-            Pitaya::Engine::Hook_PreEndFrame.Func ? Pitaya::Engine::Hook_PreEndFrame.Name : "Unmounted",                                            \
-            Pitaya::Engine::Hook_PostRendererInitialize.Func ? Pitaya::Engine::Hook_PostRendererInitialize.Name : "Unmounted",                      \
-            Pitaya::Engine::Hook_PostRendererRelease.Func ? Pitaya::Engine::Hook_PostRendererRelease.Name : "Unmounted",                            \
-            Pitaya::Engine::Hook_PostRendererParseCommand.Func ? Pitaya::Engine::Hook_PostRendererParseCommand.Name : "Unmounted",                  \
-            Pitaya::Engine::Hook_PostRendererSwapBuffer.Func ? Pitaya::Engine::Hook_PostRendererSwapBuffer.Name : "Unmounted",                      \
-            Pitaya::Engine::Hook_PostRendererBeginRenderFrame.Func ? Pitaya::Engine::Hook_PostRendererBeginRenderFrame.Name : "Unmounted",          \
-            Pitaya::Engine::Hook_PreRendereEndRenderFrame.Func ? Pitaya::Engine::Hook_PreRendereEndRenderFrame.Name : "Unmounted",                  \
-            Pitaya::Engine::Hook_PostRenderContextInitialized.Func ? Pitaya::Engine::Hook_PostRenderContextInitialized.Name : "Unmounted",          \
-            Pitaya::Engine::Hook_PreRenderContextRelease.Func ? Pitaya::Engine::Hook_PreRenderContextRelease.Name : "Unmounted",                    \
-            Pitaya::Engine::Hook_PreRenderPipelineExecute.Func ? Pitaya::Engine::Hook_PreRenderPipelineExecute.Name : "Unmounted",                  \
-            Pitaya::Engine::Hook_ShouldWakeupRenderThread.Func ? Pitaya::Engine::Hook_ShouldWakeupRenderThread.Name : "Unmounted",                  \
-            Pitaya::Engine::Hook_PostChronometerTick.Func ? Pitaya::Engine::Hook_PostChronometerTick.Name : "Unmounted",                            \
-            Pitaya::Engine::Hook_PostLog.Func ? Pitaya::Engine::Hook_PostLog.Name : "Unmounted"                                                     \
-        );                                                                                                                                          \
-        return buffer;                                                                                                                              \
+            Pitaya::Engine::Hook_PreBeginFrame.Func ? (Pitaya::Engine::Hook_PreBeginFrame.Name ? Pitaya::Engine::Hook_PreBeginFrame.Name : "UnNamed") : "Unmounted",                                                \
+            Pitaya::Engine::Hook_PreFixedUpdate.Func ? (Pitaya::Engine::Hook_PreFixedUpdate.Name ? Pitaya::Engine::Hook_PreFixedUpdate.Name : "UnNamed") : "Unmounted",                                             \
+            Pitaya::Engine::Hook_PreUpdate.Func ? (Pitaya::Engine::Hook_PreUpdate.Name ? Pitaya::Engine::Hook_PreUpdate.Name : "UnNamed") : "Unmounted",                                                            \
+            Pitaya::Engine::Hook_PreLateUpdate.Func ? (Pitaya::Engine::Hook_PreLateUpdate.Name ? Pitaya::Engine::Hook_PreLateUpdate.Name : "UnNamed") : "Unmounted",                                                \
+            Pitaya::Engine::Hook_PreEndFrame.Func ? (Pitaya::Engine::Hook_PreEndFrame.Name ? Pitaya::Engine::Hook_PreEndFrame.Name : "UnNamed") : "Unmounted",                                                      \
+            Pitaya::Engine::Hook_PostRendererInitialize.Func ? (Pitaya::Engine::Hook_PostRendererInitialize.Name ? Pitaya::Engine::Hook_PostRendererInitialize.Name : "UnNamed") : "Unmounted",                     \
+            Pitaya::Engine::Hook_PostRendererRelease.Func ? (Pitaya::Engine::Hook_PostRendererRelease.Name ? Pitaya::Engine::Hook_PostRendererRelease.Name : "UnNamed") : "Unmounted",                              \
+            Pitaya::Engine::Hook_PostRendererParseCommand.Func ? (Pitaya::Engine::Hook_PostRendererParseCommand.Name ? Pitaya::Engine::Hook_PostRendererParseCommand.Name : "UnNamed") : "Unmounted",               \
+            Pitaya::Engine::Hook_PostRendererSwapBuffer.Func ? (Pitaya::Engine::Hook_PostRendererSwapBuffer.Name ? Pitaya::Engine::Hook_PostRendererSwapBuffer.Name : "UnNamed") : "Unmounted",                     \
+            Pitaya::Engine::Hook_PostRendererBeginRenderFrame.Func ? (Pitaya::Engine::Hook_PostRendererBeginRenderFrame.Name ? Pitaya::Engine::Hook_PostRendererBeginRenderFrame.Name : "UnNamed") : "Unmounted",   \
+            Pitaya::Engine::Hook_PreRendereEndRenderFrame.Func ? (Pitaya::Engine::Hook_PreRendereEndRenderFrame.Name ? Pitaya::Engine::Hook_PreRendereEndRenderFrame.Name : "UnNamed") : "Unmounted",               \
+            Pitaya::Engine::Hook_PostRenderContextInitialized.Func ? (Pitaya::Engine::Hook_PostRenderContextInitialized.Name ? Pitaya::Engine::Hook_PostRenderContextInitialized.Name : "UnNamed") : "Unmounted",   \
+            Pitaya::Engine::Hook_PreRenderContextRelease.Func ? (Pitaya::Engine::Hook_PreRenderContextRelease.Name ? Pitaya::Engine::Hook_PreRenderContextRelease.Name : "UnNamed") : "Unmounted",                  \
+            Pitaya::Engine::Hook_PreRenderPipelineExecute.Func ? (Pitaya::Engine::Hook_PreRenderPipelineExecute.Name ? Pitaya::Engine::Hook_PreRenderPipelineExecute.Name : "UnNamed") : "Unmounted",               \
+            Pitaya::Engine::Hook_ShouldWakeupRenderThread.Func ? (Pitaya::Engine::Hook_ShouldWakeupRenderThread.Name ? Pitaya::Engine::Hook_ShouldWakeupRenderThread.Name : "UnNamed") : "Unmounted",               \
+            Pitaya::Engine::Hook_PostChronometerTick.Func ? (Pitaya::Engine::Hook_PostChronometerTick.Name ? Pitaya::Engine::Hook_PostChronometerTick.Name : "UnNamed") : "Unmounted",                              \
+            Pitaya::Engine::Hook_PostLog.Func ? (Pitaya::Engine::Hook_PostLog.Name ? Pitaya::Engine::Hook_PostLog.Name : "UnNamed") : "Unmounted"                                                                   \
+        );                                                                                                                                                                                                          \
+        return buffer;                                                                                                                                                                                              \
     }()

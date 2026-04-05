@@ -175,7 +175,7 @@
     <ClInclude Include="Container\SlotMap\SlotMap.h" />
     <ClInclude Include="Identifier\GUID.h" />
     <ClInclude Include="Identifier\UID.h" />
-    <ClInclude Include="Console\Console.h" />
+    <ClInclude Include="Utils\Console.h" />
     <ClInclude Include="Container\ObjectPool\ObjectPool.h" />
     <ClInclude Include="Math\AABB.h" />
     <ClInclude Include="Math\Frustum.h" />
@@ -193,23 +193,16 @@
     <ClInclude Include="Container\ThreadSafe\ThreadSafeSlotMap.h" />
     <ClInclude Include="Container\ThreadSafe\ThreadSafeQueue.h" />
     <ClInclude Include="Container\ThreadSafe\ThreadSafeHashMap.h" />
-    <ClInclude Include="Utils\File\File.h" />
-    <ClInclude Include="Utils\Memory\Memory.h" />
-    <ClInclude Include="Utils\StateFlags\StateFlags.h" />
-    <ClInclude Include="Utils\String\String.h" />
-    <ClInclude Include="Utils\System\Console.h" />
-    <ClInclude Include="Utils\Time\Time.h" />
+    <ClInclude Include="Utils\File.h" />
+    <ClInclude Include="Utils\Memory.h" />
+    <ClInclude Include="Utils\StateFlags.h" />
+    <ClInclude Include="Utils\String.h" />
+    <ClInclude Include="Utils\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Allocate\Allocate.cpp" />
-    <ClCompile Include="Console\Console.cpp" />
     <ClCompile Include="Identifier\GUID.cpp" />
     <ClCompile Include="Thread\Thread.cpp" />
-    <ClCompile Include="Utils\File\File.cpp" />
-    <ClCompile Include="Utils\Memory\Memory.cpp" />
-    <ClCompile Include="Utils\String\String.cpp" />
-    <ClCompile Include="Utils\System\Console.cpp" />
-    <ClCompile Include="Utils\Time\Time.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

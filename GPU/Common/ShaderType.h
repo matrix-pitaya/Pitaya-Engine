@@ -1,8 +1,8 @@
 #pragma once
 
 #include<cstdint>
-#include<Core/Utils/String/String.h>
-#include<Core/Utils/StateFlags/StateFlags.h>
+#include<Core/Utils/String.h>
+#include<Core/Utils/StateFlags.h>
 
 namespace Pitaya::GPU
 {

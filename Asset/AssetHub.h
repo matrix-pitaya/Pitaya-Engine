@@ -4,9 +4,7 @@
 #include<Core/Container/ThreadSafe/ThreadSafeQueue.h>
 #include<Core/Container/ThreadSafe/ThreadSafeHashMap.h>
 #include<Core/Container/ThreadSafe/ThreadSafeBidirectionalMap.h>
-#include<Core/Utils/File/File.h>
 #include<Core/Asset/Asset.h>
-#include<Core/Console/Console.h>
 
 #include<Serialize/Serializable.h>
 #include<Asset/Common/FuncTable.h>

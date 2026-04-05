@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Console\Console.h">
+    <ClInclude Include="Utils\Console.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Container\ObjectPool\ObjectPool.h">
@@ -45,16 +45,16 @@
     <ClInclude Include="Container\ThreadSafe\ThreadSafeHashMap.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\Time\Time.h">
+    <ClInclude Include="Utils\Time.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\File\File.h">
+    <ClInclude Include="Utils\File.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\String\String.h">
+    <ClInclude Include="Utils\String.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\StateFlags\StateFlags.h">
+    <ClInclude Include="Utils\StateFlags.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Thread\Thread.h">
@@ -108,7 +108,7 @@
     <ClInclude Include="Asset\Asset.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\Memory\Memory.h">
+    <ClInclude Include="Utils\Memory.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Container\SlotMap\SlotMap.h">
@@ -120,36 +120,15 @@
     <ClInclude Include="PassKey\PassKey.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\System\Console.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Console\Console.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Identifier\GUID.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Time\Time.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\File\File.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\String\String.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Thread\Thread.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Memory\Memory.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Allocate\Allocate.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\System\Console.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

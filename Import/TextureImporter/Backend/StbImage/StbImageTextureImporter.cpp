@@ -1,6 +1,6 @@
 #include<Import/TextureImporter/Backend/StbImage/StbImageTextureImporter.h>
 #include<Import/TextureImporter/Backend/StbImage/stb_image.h>
-#include<Core/Utils/String/String.h>
+#include<Core/Utils/String.h>
 #include<Log/Common/FuncTable.h>
 
 bool Pitaya::Import::StbImageTextureImporter::Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, bool isFlipVerticallyOnLoad, bool isGenerateMipmap, Pitaya::Import::Texture2DImportResult& out)

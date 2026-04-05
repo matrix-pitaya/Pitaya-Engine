@@ -37,6 +37,4 @@ namespace Pitaya::Core
         printf("%s%s\033[0m\n", colorCode, buffer);
 #endif
     }
-
-    void PopupMessageBox(const char* title, const char* message);
 }

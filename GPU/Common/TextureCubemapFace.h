@@ -1,7 +1,7 @@
 #pragma once
 
 #include<cstdint>
-#include<Core/Utils/String/String.h>
+#include<Core/Utils/String.h>
 
 namespace Pitaya::GPU
 {

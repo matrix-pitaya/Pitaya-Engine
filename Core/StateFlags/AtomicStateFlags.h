@@ -1,6 +1,6 @@
 #pragma once
 
-#include<Core/Utils/StateFlags/StateFlags.h>
+#include<Core/Utils/StateFlags.h>
 
 #include<atomic>
 #include<type_traits>

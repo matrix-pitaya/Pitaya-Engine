@@ -1,5 +1,5 @@
 #include<Config/Configurator.h>
-#include<Core/Utils/File/File.h>
+#include<Core/Utils/File.h>
 
 bool Pitaya::Config::Configurator::Initialize()
 {

@@ -6,8 +6,6 @@
 #include<GPU/Frontend/Buffer/FrameBuffer.h>
 #include<Serialize/Serializable.h>
 
-#include<Core/Console/Console.h>
-
 namespace Pitaya::Asset
 {
 	struct RenderTarget : Pitaya::Serialize::Serializable

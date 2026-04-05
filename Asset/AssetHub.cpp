@@ -7,6 +7,7 @@
 #include<GPU/Frontend/Buffer/VertexArray.h>
 #include<GPU/Frontend/Buffer/FrameBuffer.h>
 #include<Import/Import.h>
+#include<Core/Utils/File.h>
 
 bool Pitaya::Asset::AssetHub::Initialize()
 {

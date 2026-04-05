@@ -4,7 +4,6 @@
 #include<Editor/GUI/ImGui/imgui_internal.h>
 
 #include<string>
-#include<Core/Console/Console.h>
 
 namespace Pitaya::Editor
 {

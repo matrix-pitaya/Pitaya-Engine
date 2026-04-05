@@ -1,18 +1,17 @@
 #include<Log/Logger.h>
 #include<Thread/Common/FuncTable.h>
-
-#include<Core/Utils/File/File.h>
-#include<Core/Utils/String/String.h>
-#include<Core/Utils/Time/Time.h>
-
 #include<Hook/def.h>
+#include<Core/Utils/String.h>
+#include<Core/Utils/Time.h>
+#include<Core/Utils/File.h>
 
 #include<cstring>
 
 bool Pitaya::Log::Logger::Initialize()
 {
+	if (!Pitaya::Core::GenerateFile(fileName, "Pitaya Engine Log", "")) { throw std::runtime_error("Generate Log File Fail!"); }
 	const std::filesystem::path path = Pitaya::Core::GetExecutableDirectory() / fileName;
-	ofs.open(path, std::ios::out | std::ios::trunc);
+	ofs.open(path, std::ios::out | std::ios::app);
 	if (!ofs.is_open()) { throw std::runtime_error("Open Log File Fail! Path: " + path.string()); }
 	front.reserve(1024 * 16);
 	back.reserve(1024 * 16);

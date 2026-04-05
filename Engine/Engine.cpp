@@ -1,12 +1,10 @@
 #include<Engine/Engine.h>
-#include<Hook/def.h>
 #include<Task/TaskScheduler.h>
 #include<Log/Logger.h>
 #include<Thread/ThreadTracker.h>
 #include<GPU/RHIDevice.h>
 #include<Time/Chronometer.h>
 #include<Input/InputMonitor.h>
-#include<Asset/AssetHub.h>
 #include<Event/EventDispatcher.h>
 #include<Config/Configurator.h>
 #include<Window/Frontend/Window.h>
@@ -14,8 +12,12 @@
 #include<Render/Frontend/Renderer.h>
 #include<Render/RenderPipeline.h>
 #include<Project/Workspace.h>
+#include<Asset/AssetHub.h>
+#include<Hook/def.h>
+#include<Core/Utils/Console.h>
 
-#include<Core/Console/Console.h>
+#define NOMINMAX
+#include<windows.h>
 
 #pragma region TOREMOVE
 //TODO REMOVE TEST -------------------------------------
@@ -72,31 +74,31 @@ inline glm::mat4 GenerateModuleChangeMatrix()
 namespace
 {
 #pragma region Time
-	inline float ENGINE_CALL Ondelta() noexcept
+	float ENGINE_CALL Ondelta() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Time::Chronometer>()->Getdelta();
 	}
-	inline float ENGINE_CALL OnFixdelta() noexcept
+	float ENGINE_CALL OnFixdelta() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Time::Chronometer>()->GetFixdelta();
 	}
-	inline float ENGINE_CALL OnUnscaledDelta() noexcept
+	float ENGINE_CALL OnUnscaledDelta() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Time::Chronometer>()->GetUnscaledDelta();
 	}
-	inline float ENGINE_CALL OnTimeScale() noexcept
+	float ENGINE_CALL OnTimeScale() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Time::Chronometer>()->GetTimeScale();
 	}
-	inline float ENGINE_CALL OnFramerate() noexcept
+	float ENGINE_CALL OnFramerate() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Time::Chronometer>()->GetFramerate();
 	}
-	inline double ENGINE_CALL OnSeconds() noexcept
+	double ENGINE_CALL OnSeconds() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Time::Chronometer>()->Seconds();
 	}
-	inline int64_t ENGINE_CALL OnMilliseconds() noexcept
+	int64_t ENGINE_CALL OnMilliseconds() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Time::Chronometer>()->Milliseconds();
 	}
@@ -104,7 +106,7 @@ namespace
 
 
 #pragma region Log
-	inline void ENGINE_CALL OnLog(Pitaya::Log::LogLevel level,std::string_view info) noexcept
+	void ENGINE_CALL OnLog(Pitaya::Log::LogLevel level,std::string_view info) noexcept
 	{
 		Pitaya::Engine::Context::Instance().GetModule<Pitaya::Log::Logger>()->Write(level, info);
 	}
@@ -112,19 +114,19 @@ namespace
 
 
 #pragma region Thread
-	inline Pitaya::Core::Thread::Identifier ENGINE_CALL OnRegisterThread(std::string_view name, void(*Thread)(void*, void*), void* bootstraper, void* args)
+	Pitaya::Core::Thread::Identifier ENGINE_CALL OnRegisterThread(std::string_view name, void(*Thread)(void*, void*), void* bootstraper, void* args)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Thread::ThreadTracker>()->RegisterThread(name, Thread, bootstraper, args);
 	}
-	inline bool ENGINE_CALL OnUnregisterThread(Pitaya::Core::Thread::Identifier id) noexcept
+	bool ENGINE_CALL OnUnregisterThread(Pitaya::Core::Thread::Identifier id) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Thread::ThreadTracker>()->UnregisterThread(id);
 	}
-	inline std::string ENGINE_CALL OnGetThreadName(Pitaya::Core::Thread::Identifier id) noexcept
+	std::string ENGINE_CALL OnGetThreadName(Pitaya::Core::Thread::Identifier id) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Thread::ThreadTracker>()->GetThreadName(id);
 	}
-	inline bool ENGINE_CALL OnGetThreadIsRunning(Pitaya::Core::Thread::Identifier id) noexcept
+	bool ENGINE_CALL OnGetThreadIsRunning(Pitaya::Core::Thread::Identifier id) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Thread::ThreadTracker>()->GetThreadIsRunning(id);
 	}
@@ -132,15 +134,15 @@ namespace
 
 
 #pragma region Event
-	inline Pitaya::Event::EventToken ENGINE_CALL OnSubscribe(Pitaya::Event::EventType type, void (*OnCallBack)(void*, const ::Pitaya::Event::Event&), void* listener) noexcept
+	Pitaya::Event::EventToken ENGINE_CALL OnSubscribe(Pitaya::Event::EventType type, void (*OnCallBack)(void*, const ::Pitaya::Event::Event&), void* listener) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Event::EventDispatcher>()->Subscribe(type, OnCallBack, listener);
 	}
-	inline bool ENGINE_CALL OnUnSubscribe(const Pitaya::Event::EventToken& eventToken) noexcept
+	bool ENGINE_CALL OnUnSubscribe(const Pitaya::Event::EventToken& eventToken) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Event::EventDispatcher>()->UnSubscribe(eventToken);
 	}
-	inline void ENGINE_CALL OnEmit(const Pitaya::Event::Event& event) noexcept
+	void ENGINE_CALL OnEmit(const Pitaya::Event::Event& event) noexcept
 	{
 		Pitaya::Engine::Context::Instance().GetModule<Pitaya::Event::EventDispatcher>()->Emit(event);
 	}
@@ -148,15 +150,15 @@ namespace
 
 
 #pragma region Input
-	inline bool ENGINE_CALL OnGetKeyDown(Pitaya::Input::KeyCode keyCode) noexcept
+	bool ENGINE_CALL OnGetKeyDown(Pitaya::Input::KeyCode keyCode) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Input::InputMonitor>()->GetKeyDown(keyCode);
 	}
-	inline bool ENGINE_CALL OnGetKeyPressed(Pitaya::Input::KeyCode keyCode) noexcept
+	bool ENGINE_CALL OnGetKeyPressed(Pitaya::Input::KeyCode keyCode) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Input::InputMonitor>()->GetKeyPressed(keyCode);
 	}
-	inline bool ENGINE_CALL OnGetKeyReleased(Pitaya::Input::KeyCode keyCode) noexcept
+	bool ENGINE_CALL OnGetKeyReleased(Pitaya::Input::KeyCode keyCode) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Input::InputMonitor>()->GetKeyReleased(keyCode);
 	}
@@ -164,7 +166,7 @@ namespace
 
 
 #pragma region Task
-	inline void ENGINE_CALL OnPostJob(std::function<void()> func, std::string_view name) noexcept
+	void ENGINE_CALL OnPostJob(std::function<void()> func, std::string_view name) noexcept
 	{
 		Pitaya::Engine::Context::Instance().GetModule<Pitaya::Task::TaskScheduler>()->PostJob(std::move(func), name);
 	}
@@ -172,47 +174,47 @@ namespace
 
 
 #pragma region Asset
-	inline Pitaya::Core::Asset<Pitaya::Asset::Texture> ENGINE_CALL OnLoadTexture(Pitaya::Core::GUID guid)
+	Pitaya::Core::Asset<Pitaya::Asset::Texture> ENGINE_CALL OnLoadTexture(Pitaya::Core::GUID guid)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->LoadAsset<Pitaya::Asset::Texture>(guid);
 	}
-	inline Pitaya::Core::Asset<Pitaya::Asset::Shader> ENGINE_CALL OnLoadShader(Pitaya::Core::GUID guid)
+	Pitaya::Core::Asset<Pitaya::Asset::Shader> ENGINE_CALL OnLoadShader(Pitaya::Core::GUID guid)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->LoadAsset<Pitaya::Asset::Shader>(guid);
 	}
-	inline Pitaya::Core::Asset<Pitaya::Asset::Mesh> ENGINE_CALL OnLoadMesh(Pitaya::Core::GUID guid)
+	Pitaya::Core::Asset<Pitaya::Asset::Mesh> ENGINE_CALL OnLoadMesh(Pitaya::Core::GUID guid)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->LoadAsset<Pitaya::Asset::Mesh>(guid);
 	}
-	inline Pitaya::Core::Asset<Pitaya::Asset::Material> ENGINE_CALL OnLoadMaterial(Pitaya::Core::GUID guid)
+	Pitaya::Core::Asset<Pitaya::Asset::Material> ENGINE_CALL OnLoadMaterial(Pitaya::Core::GUID guid)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->LoadAsset<Pitaya::Asset::Material>(guid);
 	}
-	inline Pitaya::Core::Asset<Pitaya::Asset::RenderTarget> ENGINE_CALL OnLoadRenderTarget(Pitaya::Core::GUID guid)
+	Pitaya::Core::Asset<Pitaya::Asset::RenderTarget> ENGINE_CALL OnLoadRenderTarget(Pitaya::Core::GUID guid)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->LoadAsset<Pitaya::Asset::RenderTarget>(guid);
 	}
-	inline bool ENGINE_CALL OnGetAssetPathByGUID(Pitaya::Core::GUID guid, std::filesystem::path& out)
+	bool ENGINE_CALL OnGetAssetPathByGUID(Pitaya::Core::GUID guid, std::filesystem::path& out)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->GetAssetPathByGUID(guid, out);
 	}
-	inline bool ENGINE_CALL OnGetAssetGUIDByPath(const std::filesystem::path& path, Pitaya::Core::GUID& out)
+	bool ENGINE_CALL OnGetAssetGUIDByPath(const std::filesystem::path& path, Pitaya::Core::GUID& out)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->GetAssetGUIDByPath(path, out);
 	}
-	inline bool ENGINE_CALL OnTransformToVirtualPath(const std::filesystem::path& inputPath, const std::filesystem::path& basePath, std::filesystem::path& out_virtualpath)
+	bool ENGINE_CALL OnTransformToVirtualPath(const std::filesystem::path& inputPath, const std::filesystem::path& basePath, std::filesystem::path& out_virtualpath)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->TransformToVirtualPath(inputPath, basePath, out_virtualpath);
 	}
-	inline bool ENGINE_CALL OnRegisterExternalFile(const std::filesystem::path& inputPath, const std::filesystem::path& basePath, std::filesystem::path& out_virtualpath, Pitaya::Core::GUID& out_guid)
+	bool ENGINE_CALL OnRegisterExternalFile(const std::filesystem::path& inputPath, const std::filesystem::path& basePath, std::filesystem::path& out_virtualpath, Pitaya::Core::GUID& out_guid)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->RegisterExternalFile(inputPath, basePath, out_virtualpath, out_guid);
 	}
-	inline void ENGINE_CALL OnSyncAssetToGPU()
+	void ENGINE_CALL OnSyncAssetToGPU()
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->SyncAssetToGPU();
 	}
-	inline bool ENGINE_CALL OnIsUploadedToGPU()
+	bool ENGINE_CALL OnIsUploadedToGPU()
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->IsUploadedToGPU();
 	}
@@ -220,23 +222,23 @@ namespace
 
 
 #pragma region Config
-	inline Pitaya::Render::API ENGINE_CALL OnGetRenderAPI() noexcept
+	Pitaya::Render::API ENGINE_CALL OnGetRenderAPI() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetRenderAPI();
 	}
-	inline size_t ENGINE_CALL OnGetMaxFixupdataExecuteTimes() noexcept
+	size_t ENGINE_CALL OnGetMaxFixupdataExecuteTimes() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetMaxFixupdataExecuteTimes();
 	}
-	inline uint32_t ENGINE_CALL OnGetMaxInstancesCount() noexcept
+	uint32_t ENGINE_CALL OnGetMaxInstancesCount() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetMaxInstancesCount();
 	}
-	inline uint32_t ENGINE_CALL OnGetMaxBonesPerInstance() noexcept
+	uint32_t ENGINE_CALL OnGetMaxBonesPerInstance() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetMaxBonesPerInstance();
 	}
-	inline bool ENGINE_CALL OnGetEnableVSync() noexcept
+	bool ENGINE_CALL OnGetEnableVSync() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetEnableVSync();
 	}
@@ -244,7 +246,7 @@ namespace
 
 
 #pragma region Window
-	inline void* ENGINE_CALL OnGetNativeWindow()
+	void* ENGINE_CALL OnGetNativeWindow()
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Window::Window>()->GetNativeWindow();
 	}
@@ -252,122 +254,122 @@ namespace
 
 
 #pragma region GPU
-	inline void ENGINE_CALL OnDestroyAllGPUResource(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
+	void ENGINE_CALL OnDestroyAllGPUResource(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
 	{
 		Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyAllGPUResource(passkey);
 	}
 
-	inline Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> ENGINE_CALL OnCreateVertexArray()
+	Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> ENGINE_CALL OnCreateVertexArray()
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateVertexArray();
 	}
-	inline Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> ENGINE_CALL OnCreateVertexBuffer(float* vertices, uint32_t size)
+	Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> ENGINE_CALL OnCreateVertexBuffer(float* vertices, uint32_t size)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateVertexBuffer(vertices, size);
 	}
-	inline Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> ENGINE_CALL OnCreateIndexBuffer(uint32_t* indices, uint32_t count)
+	Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> ENGINE_CALL OnCreateIndexBuffer(uint32_t* indices, uint32_t count)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateIndexBuffer(indices, count);
 	}
-	inline Pitaya::GPU::Identifier<Pitaya::GPU::Shader> ENGINE_CALL OnCreateShaderVF(const char* vertexSource, const char* fragmentSource)
+	Pitaya::GPU::Identifier<Pitaya::GPU::Shader> ENGINE_CALL OnCreateShaderVF(const char* vertexSource, const char* fragmentSource)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateShader(vertexSource, fragmentSource);
 	}
-	inline Pitaya::GPU::Identifier<Pitaya::GPU::Shader> ENGINE_CALL OnCreateShaderVFG(const char* vertexSource, const char* fragmentSource, const char* geometrySource)
+	Pitaya::GPU::Identifier<Pitaya::GPU::Shader> ENGINE_CALL OnCreateShaderVFG(const char* vertexSource, const char* fragmentSource, const char* geometrySource)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateShader(vertexSource, fragmentSource, geometrySource);
 	}
-	inline Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> ENGINE_CALL OnCreateTexture2D(unsigned char* data, int width, int height, int channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
+	Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> ENGINE_CALL OnCreateTexture2D(unsigned char* data, int width, int height, int channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateTexture2D(data, width, height, channels, isGenerateMipmap, isSRGB, isNearest);
 	}
-	inline Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> ENGINE_CALL OnCreateTextureCubemap(unsigned char** datas, int* widths, int* heights, int* channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
+	Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> ENGINE_CALL OnCreateTextureCubemap(unsigned char** datas, int* widths, int* heights, int* channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateTextureCubemap(datas, widths, heights, channels, isGenerateMipmap, isSRGB, isNearest);
 	}
-	inline Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> ENGINE_CALL OnCreateUniformBuffer(uint32_t size, uint32_t bindingPoint)
+	Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> ENGINE_CALL OnCreateUniformBuffer(uint32_t size, uint32_t bindingPoint)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateUniformBuffer(size, bindingPoint);
 	}
-	inline Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> ENGINE_CALL OnCreateFrameBuffer(const Pitaya::GPU::FrameBufferSpecification& spec)
+	Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> ENGINE_CALL OnCreateFrameBuffer(const Pitaya::GPU::FrameBufferSpecification& spec)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateFrameBuffer(spec);
 	}
-	inline Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> ENGINE_CALL OnCreateShaderStorageBuffer(uint32_t size, uint32_t bindingPoint)
+	Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> ENGINE_CALL OnCreateShaderStorageBuffer(uint32_t size, uint32_t bindingPoint)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateShaderStorageBuffer(size, bindingPoint);
 	}
 
-	inline bool ENGINE_CALL OnDestroyVertexArray(Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> id)
+	bool ENGINE_CALL OnDestroyVertexArray(Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyVertexArray(id);
 	}
-	inline bool ENGINE_CALL OnDestroyVertexBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> id)
+	bool ENGINE_CALL OnDestroyVertexBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyVertexBuffer(id);
 	}
-	inline bool ENGINE_CALL OnDestroyIndexBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> id)
+	bool ENGINE_CALL OnDestroyIndexBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyIndexBuffer(id);
 	}
-	inline bool ENGINE_CALL OnDestroyShader(Pitaya::GPU::Identifier<Pitaya::GPU::Shader> id)
+	bool ENGINE_CALL OnDestroyShader(Pitaya::GPU::Identifier<Pitaya::GPU::Shader> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyShader(id);
 	}
-	inline bool ENGINE_CALL OnDestroyTexture2D(Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> id)
+	bool ENGINE_CALL OnDestroyTexture2D(Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyTexture2D(id);
 	}
-	inline bool ENGINE_CALL OnDestroyTextureCubemap(Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> id)
+	bool ENGINE_CALL OnDestroyTextureCubemap(Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyTextureCubemap(id);
 	}
-	inline bool ENGINE_CALL OnDestroyUniformBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
+	bool ENGINE_CALL OnDestroyUniformBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyUniformBuffer(id);
 	}
-	inline bool ENGINE_CALL OnDestroyFrameBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> id)
+	bool ENGINE_CALL OnDestroyFrameBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyFrameBuffer(id);
 	}
-	inline bool ENGINE_CALL OnDestroyShaderStorageBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> id)
+	bool ENGINE_CALL OnDestroyShaderStorageBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyShaderStorageBuffer(id);
 	}
 
-	inline Pitaya::GPU::VertexArray* ENGINE_CALL OnGetVertexArray(Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> id)
+	Pitaya::GPU::VertexArray* ENGINE_CALL OnGetVertexArray(Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetVertexArray(id);
 	}
-	inline Pitaya::GPU::VertexBuffer* ENGINE_CALL OnGetVertexBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> id)
+	Pitaya::GPU::VertexBuffer* ENGINE_CALL OnGetVertexBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetVertexBuffer(id);
 	}
-	inline Pitaya::GPU::IndexBuffer* ENGINE_CALL OnGetIndexBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> id)
+	Pitaya::GPU::IndexBuffer* ENGINE_CALL OnGetIndexBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetIndexBuffer(id);
 	}
-	inline Pitaya::GPU::Shader* ENGINE_CALL OnGetShader(Pitaya::GPU::Identifier<Pitaya::GPU::Shader> id)
+	Pitaya::GPU::Shader* ENGINE_CALL OnGetShader(Pitaya::GPU::Identifier<Pitaya::GPU::Shader> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetShader(id);
 	}
-	inline Pitaya::GPU::Texture2D* ENGINE_CALL OnGetTexture2D(Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> id)
+	Pitaya::GPU::Texture2D* ENGINE_CALL OnGetTexture2D(Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetTexture2D(id);
 	}
-	inline Pitaya::GPU::TextureCubemap* ENGINE_CALL OnGetTextureCubemap(Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> id)
+	Pitaya::GPU::TextureCubemap* ENGINE_CALL OnGetTextureCubemap(Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetTextureCubemap(id);
 	}
-	inline Pitaya::GPU::UniformBuffer* ENGINE_CALL OnGetUniformBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
+	Pitaya::GPU::UniformBuffer* ENGINE_CALL OnGetUniformBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetUniformBuffer(id);
 	}
-	inline Pitaya::GPU::FrameBuffer* ENGINE_CALL OnGetFrameBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> id)
+	Pitaya::GPU::FrameBuffer* ENGINE_CALL OnGetFrameBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetFrameBuffer(id);
 	}
-	inline Pitaya::GPU::ShaderStorageBuffer* ENGINE_CALL OnGetShaderStorageBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> id)
+	Pitaya::GPU::ShaderStorageBuffer* ENGINE_CALL OnGetShaderStorageBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetShaderStorageBuffer(id);
 	}
@@ -446,7 +448,7 @@ void Pitaya::Engine::Engine::FrameSync()
 }
 void Pitaya::Engine::Engine::Release()
 {
-	if (!modules.Configurator->Export(Pitaya::Core::PassKey<Pitaya::Engine::Engine>())) { Pitaya::Core::Print(Pitaya::Core::Color::Red, "Config Export Fail!"); Pitaya::Core::PopupMessageBox("Warning","Config Export Fail"); }
+	if (!modules.Configurator->Export(Pitaya::Core::PassKey<Pitaya::Engine::Engine>())) { Pitaya::Core::Print(Pitaya::Core::Color::Red, "Config Export Fail!"); MessageBoxA(NULL, "Config Export Fail", "Warning", MB_OK); }
 	modules.Release();
 	modules.Destroy();
 	funcTables.UnRegister();
@@ -608,7 +610,7 @@ bool Pitaya::Engine::Engine::FillFuncTables()
 bool Pitaya::Engine::Engine::Modules::Create()
 {
 	if (!Configurator.Create()) { throw std::runtime_error("Engine [Module] [Configurator] Create Fail!"); }
-	if (!Configurator->Import(Pitaya::Core::PassKey<Pitaya::Engine::Engine>())) { Pitaya::Core::Print(Pitaya::Core::Color::Red, "Config Import Fail!"); Pitaya::Core::PopupMessageBox("Warning", "Config Import Fail!"); }
+	if (!Configurator->Import(Pitaya::Core::PassKey<Pitaya::Engine::Engine>())) { Pitaya::Core::Print(Pitaya::Core::Color::Red, "Config Import Fail!"); MessageBoxA(NULL, "Config Import Fail!", "Warning", MB_OK); }
 	if (!Chronometer.Create()) { throw std::runtime_error("Engine [Module] [Chronometer] reate Fail!"); }
 	if (!TaskScheduler.Create()) { throw std::runtime_error("Engine [Module] [TaskScheduler] Create Fail!"); }
 	if (!ThreadTracker.Create()) { throw std::runtime_error("Engine [Module] [ThreadTracker] Create Fail!"); }

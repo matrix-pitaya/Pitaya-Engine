@@ -1,6 +1,6 @@
 #include<Script/ScriptRuntime.h>
 #include<Log/Common/FuncTable.h>
-#include<Core/Utils/File/File.h>
+#include<Core/Utils/File.h>
 
 namespace
 {

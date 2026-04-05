@@ -1,6 +1,6 @@
 #pragma once
 
-#include<Core/Utils/StateFlags/StateFlags.h>
+#include<Core/Utils/StateFlags.h>
 #include<GPU/Common/ShaderType.h>
 #include<GPU/Common/ShaderVariableType.h>
 #include<GPU/Common/Identifier.h>

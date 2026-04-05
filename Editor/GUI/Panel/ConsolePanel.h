@@ -3,7 +3,7 @@
 #include<Core/Color/Color.h>
 #include<Core/Thread/Thread.h>
 #include<Core/Container/ThreadSafe/ThreadSafeQueue.h>
-#include<Core/Utils/Time/Time.h>
+#include<Core/Utils/Time.h>
 #include<Editor/GUI/Panel/Panel.h>
 #include<Log/Common/LogLevel.h>
 #include<Thread/Common/FuncTable.h>

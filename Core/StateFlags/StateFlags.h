@@ -1,6 +1,6 @@
 #pragma once
 
-#include<Core/Utils/StateFlags/StateFlags.h>
+#include<Core/Utils/StateFlags.h>
 
 #include<cstdint>
 #include<type_traits>
