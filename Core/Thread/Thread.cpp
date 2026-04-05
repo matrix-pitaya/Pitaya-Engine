@@ -35,7 +35,7 @@ Pitaya::Core::Thread::Identifier Pitaya::Core::Thread::GetThreadId() noexcept
 
     return static_cast<uint64_t>(::GetThreadId(static_cast<HANDLE>(thread.native_handle())));
 }
-Pitaya::Core::Thread::Identifier Pitaya::Core::Thread::GetCurrentThreadId() noexcept
+Pitaya::Core::Thread::Identifier ENGINE_CALL Pitaya::Core::Thread::GetCurrentThreadId() noexcept
 {
     return static_cast<uint64_t>(::GetCurrentThreadId());
 }

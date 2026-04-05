@@ -1,5 +1,7 @@
 #pragma once
 
+#include<Engine/API/def.h>
+
 #include<thread>
 #include<chrono>
 
@@ -96,7 +98,7 @@ namespace Pitaya::Core
         }
         
     public:
-        static Identifier GetCurrentThreadId() noexcept;
+        ENGINE_API static Identifier ENGINE_CALL GetCurrentThreadId() noexcept;
 
     private:
         std::thread thread;

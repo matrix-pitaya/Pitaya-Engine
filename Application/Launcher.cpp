@@ -1,5 +1,6 @@
 #include<Application/Launcher.h>
 #include<Engine/API/func.h>
+#include<Editor/API/def.h>
 #include<Hook/def.h>
 #include<Core/Utils/File.h>
 #include<Core/Utils/Memory.h>
@@ -45,14 +46,9 @@ namespace
 		editordll = LoadLibraryA(dllPath.string().c_str());
 		if (editordll)
 		{
-			auto func = reinterpret_cast<void(ENGINE_CALL *)()>(GetProcAddress(editordll, "MountEngineHook"));
+			auto func = reinterpret_cast<void(EDITOR_CALL *)()>(GetProcAddress(editordll, "MountEngineHook"));
 			if (func) { func(); }
 		}
-
-
-
-		//TODO 模拟dll加载，将Editor设置为导出dll后移除
-		Pitaya::Engine::EditorMountHook();	
 	}
 	void FreeEditordll()
 	{
