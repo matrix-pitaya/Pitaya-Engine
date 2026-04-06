@@ -1,5 +1,6 @@
 #include<Config/Configurator.h>
 #include<Core/Utils/File.h>
+#include<Log/Common/FuncTable.h>
 
 bool Pitaya::Config::Configurator::Initialize()
 {
@@ -7,17 +8,20 @@ bool Pitaya::Config::Configurator::Initialize()
 }
 void Pitaya::Config::Configurator::Release()
 {
-
+	if (!Export())
+	{
+		Pitaya::Log::Error("config export fail!");
+	}
 }
-bool Pitaya::Config::Configurator::Import(Pitaya::Core::PassKey<Pitaya::Engine::Engine>)
+bool Pitaya::Config::Configurator::Import()
 {
-	const std::filesystem::path path = Pitaya::Core::GetExecutableDirectory() / fileName;
+	const std::filesystem::path path = std::filesystem::path(Pitaya::Core::GetWorkspace()) / fileName;
 	if (!std::filesystem::exists(path)) { return false; }
 	return info.DeserializeFromFile(path, Pitaya::Serialize::API::YAML);
 }
-bool Pitaya::Config::Configurator::Export(Pitaya::Core::PassKey<Pitaya::Engine::Engine>)
+bool Pitaya::Config::Configurator::Export()
 {
-	const std::filesystem::path path = Pitaya::Core::GetExecutableDirectory() / fileName;
+	const std::filesystem::path path = std::filesystem::path(Pitaya::Core::GetWorkspace()) / fileName;
 	return info.SerializeToFile(path, Pitaya::Serialize::API::YAML);
 }
 

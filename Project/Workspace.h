@@ -15,9 +15,11 @@ namespace Pitaya::Project
 		{
 			friend class Pitaya::Engine::Module<Workspace>;
 		private:
-			static Workspace* Create()
+			static Workspace* Create(int argc, char** argv)
 			{
-				return PITAYA_NEW(Workspace);
+				Workspace* workspace = PITAYA_NEW(Workspace);
+				workspace->Resolve(argc, argv);
+				return workspace;
 			}
 			static void Destroy(Workspace* workspace)
 			{
@@ -28,9 +30,9 @@ namespace Pitaya::Project
 		{
 			friend class Pitaya::Engine::Module<Workspace>;
 		private:
-			static bool Initialize(Workspace* workspace, int argc, char** argv)
+			static bool Initialize(Workspace* workspace)
 			{
-				return workspace->Initialize(argc, argv);
+				return workspace->Initialize();
 			}
 			static void Release(Workspace* workspace)
 			{
@@ -48,8 +50,37 @@ namespace Pitaya::Project
 		Workspace& operator=(Workspace&&) = delete;
 
 	private:
-		bool Initialize(int argc, char** argv);
+		bool Initialize();
 		void Release();
+
+	private:
+		void Resolve(int argc, char** argv);
+
+	public:
+		inline std::filesystem::path GetRootPath() const noexcept
+		{
+			return rootPath;
+		}
+		inline std::filesystem::path GetPitayaFilePath() const noexcept
+		{
+			return pitayaFile;
+		}
+		inline std::filesystem::path GetAssetFolderPath() const noexcept
+		{
+			return assetFolder;
+		}
+		inline std::filesystem::path GetResourceFolderPath() const noexcept
+		{
+			return resourceFolder;
+		}
+		inline std::filesystem::path GetScriptFolderPath() const noexcept
+		{
+			return scriptFolder;
+		}
+		inline std::filesystem::path GetLibFolderPath() const noexcept
+		{
+			return libFolder;
+		}
 
 	private:
 		std::filesystem::path rootPath;

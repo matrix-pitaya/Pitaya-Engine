@@ -9,8 +9,8 @@
 
 bool Pitaya::Log::Logger::Initialize()
 {
-	if (!Pitaya::Core::GenerateFile(fileName, "Pitaya Engine Log", "")) { throw std::runtime_error("Generate Log File Fail!"); }
-	const std::filesystem::path path = Pitaya::Core::GetExecutableDirectory() / fileName;
+	if (!Pitaya::Core::GenerateFile(Pitaya::Core::GetWorkspace(), fileName, "Pitaya Engine Log", "")) { throw std::runtime_error("Generate Log File Fail"); }
+	const std::filesystem::path path = std::filesystem::path(Pitaya::Core::GetWorkspace()) / fileName;
 	ofs.open(path, std::ios::out | std::ios::app);
 	if (!ofs.is_open()) { throw std::runtime_error("Open Log File Fail! Path: " + path.string()); }
 	front.reserve(1024 * 16);

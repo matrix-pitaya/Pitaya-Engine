@@ -11,7 +11,7 @@
 
 bool Pitaya::Asset::AssetHub::Initialize()
 {
-	engineRoot = std::filesystem::absolute(std::filesystem::current_path());
+	engineRoot = Pitaya::Core::GetExecutableDirectory();
 	projectRoot = engineRoot;	//TOOD 获取项目根目录（目前没有写引擎Project模块，暂时不需要）
 	//registry.DeserializeFromFile();	//TOOD 反序列化数据
 	return LoadBuiltinAsset();

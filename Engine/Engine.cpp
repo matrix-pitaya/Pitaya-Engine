@@ -376,9 +376,9 @@ namespace
 #pragma endregion
 }
 
-int Pitaya::Engine::Engine::Execute(int argc, char** argv)
+int Pitaya::Engine::Engine::Execute()
 {
-	if (!Initialize(argc, argv)) { return -1; }
+	if (!Initialize()) { return -1; }
 
 	while (IsRunning())
 	{
@@ -399,14 +399,14 @@ void Pitaya::Engine::Engine::Terminate()
 	Release();
 }
 
-bool Pitaya::Engine::Engine::Initialize(int argc, char** argv)
+bool Pitaya::Engine::Engine::Initialize()
 {
 	if (!FillContext()) { throw std::runtime_error("Fill Context Fail!"); }
 	if (!FillFuncTables()) { throw std::runtime_error("Fill FuncTables Fail!"); }
 	if (!funcTables.Check()) { throw std::runtime_error("FuncTables Check Fail!"); }
 	if (!modules.Create()) { throw std::runtime_error("Modules Create Fail!"); }
 	if (!modules.Check()) { throw std::runtime_error("Modules Check Fail!"); }
-	if (!modules.Initialize(argc, argv)) { throw std::runtime_error("Modules Initialize Fail!"); }
+	if (!modules.Initialize()) { throw std::runtime_error("Modules Initialize Fail!"); }
 	return true;
 }
 bool Pitaya::Engine::Engine::IsRunning() const
@@ -448,7 +448,6 @@ void Pitaya::Engine::Engine::FrameSync()
 }
 void Pitaya::Engine::Engine::Release()
 {
-	if (!modules.Configurator->Export(Pitaya::Core::PassKey<Pitaya::Engine::Engine>())) { Pitaya::Core::Print(Pitaya::Core::Color::Red, "Config Export Fail!"); MessageBoxA(NULL, "Config Export Fail", "Warning", MB_OK); }
 	modules.Release();
 	modules.Destroy();
 	funcTables.UnRegister();
@@ -609,8 +608,7 @@ bool Pitaya::Engine::Engine::FillFuncTables()
 
 bool Pitaya::Engine::Engine::Modules::Create()
 {
-	if (!Configurator.Create()) { throw std::runtime_error("Engine [Module] [Configurator] Create Fail!"); }
-	if (!Configurator->Import(Pitaya::Core::PassKey<Pitaya::Engine::Engine>())) { Pitaya::Core::Print(Pitaya::Core::Color::Red, "Config Import Fail!"); MessageBoxA(NULL, "Config Import Fail!", "Warning", MB_OK); }
+	//if (!Workspace.Create(argc, argv)) { throw std::runtime_error("Engine [Module] [Workspace] Create Fail!"); }
 	if (!Chronometer.Create()) { throw std::runtime_error("Engine [Module] [Chronometer] reate Fail!"); }
 	if (!TaskScheduler.Create()) { throw std::runtime_error("Engine [Module] [TaskScheduler] Create Fail!"); }
 	if (!ThreadTracker.Create()) { throw std::runtime_error("Engine [Module] [ThreadTracker] Create Fail!"); }
@@ -619,8 +617,8 @@ bool Pitaya::Engine::Engine::Modules::Create()
 	if (!RHIDevice.Create()) { throw std::runtime_error("Engine [Module] [RHIDevice] Create Fail!"); }
 	if (!InputMonitor.Create()) { throw std::runtime_error("Engine [Module] [InputMonitor] Create Fail!"); }
 	if (!AssetHub.Create()) { throw std::runtime_error("Engine [Module] [AssetHub] Create Fail!"); }
-	if (!Workspace.Create()) { throw std::runtime_error("Engine [Module] [Workspace] Create Fail!"); }
 	if (!RenderPipeline.Create()) { throw std::runtime_error("Engine [Module] [RenderPipeline] Create Fail!"); }
+	if (!Configurator.Create()) { throw std::runtime_error("Engine [Module] [Configurator] Create Fail!"); }
 	if (!Renderer.Create(Configurator->GetRenderAPI())) { throw std::runtime_error("Engine [Module] [Renderer] Create Fail!"); }
 	if (!Window.Create(Configurator->GetWindowPlatform())) { throw std::runtime_error("Engine [Module] [Window] Create Fail!"); }
 	if(!PhysicsSimulator.Create(Configurator->GetPhysicsAPI())){ throw std::runtime_error("Engine [Module] [PhysicsSimulator] Create Fail!"); }
@@ -628,7 +626,7 @@ bool Pitaya::Engine::Engine::Modules::Create()
 }
 bool Pitaya::Engine::Engine::Modules::Check()
 {
-	if (!Workspace) { throw std::runtime_error("Engine [Module] Miss [Workspace]!"); }
+	//if (!Workspace) { throw std::runtime_error("Engine [Module] Miss [Workspace]!"); }
 	if (!Configurator) { throw std::runtime_error("Engine [Module] Miss [Configurator]!"); }
 	if (!EventDispatcher) { throw std::runtime_error("Engine [Module] Miss [EventDispatcher]!"); }
 	if (!InputMonitor) { throw std::runtime_error("Engine [Module] Miss [InputMonitor]!"); }
@@ -644,9 +642,9 @@ bool Pitaya::Engine::Engine::Modules::Check()
 	if (!RenderPipeline) { throw std::runtime_error("Engine [Module] Miss [RenderPipeline]!"); }
 	return true;
 }
-bool Pitaya::Engine::Engine::Modules::Initialize(int argc, char** argv)
+bool Pitaya::Engine::Engine::Modules::Initialize()
 {
-	if (!Workspace.Initialize(argc, argv)) { throw std::runtime_error("Engine [Workspace] Module Initialize Fail!"); }
+	//if (!Workspace.Initialize()) { throw std::runtime_error("Engine [Workspace] Module Initialize Fail!"); }
 	if (!Configurator.Initialize()) { throw std::runtime_error("Engine [Configurator] Module Initialize Fail!"); }
 	if (!EventDispatcher.Initialize()) { throw std::runtime_error("Engine [EventDispatcher] Module Initialize Fail!"); }
 	if (!InputMonitor.Initialize()) { throw std::runtime_error("Engine [InputMonitor] Module Initialize Fail!"); }
@@ -745,12 +743,12 @@ void Pitaya::Engine::Engine::Modules::FrameSync()
 }
 void Pitaya::Engine::Engine::Modules::Release()
 {
-	Workspace.Release();
+	Configurator.Release();
+	//Workspace.Release();
 	Chronometer.Release();
 	InputMonitor.Release();
 	PhysicsSimulator.Release();
 	TaskScheduler.Release();
-	Configurator.Release();
 	RHIDevice.Release();
 	RenderPipeline.Release();
 	Renderer.Release();
@@ -762,7 +760,7 @@ void Pitaya::Engine::Engine::Modules::Release()
 }
 void Pitaya::Engine::Engine::Modules::Destroy()
 {
-	Workspace.Destroy();
+	//Workspace.Destroy();
 	Chronometer.Destroy();
 	InputMonitor.Destroy();
 	PhysicsSimulator.Destroy(); 

@@ -3,6 +3,7 @@
 #include<Event/Common/FuncTable.h>
 #include<Import/Import.h>
 #include<Asset/Common/Texture.h>
+#include<Core/Utils/File.h>
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include<GLFW/glfw3native.h>  
@@ -99,7 +100,7 @@ void Pitaya::Window::GLFWWindow::SetTitleStyle()
 void Pitaya::Window::GLFWWindow::LoadWindowIcon()
 {
 	Pitaya::Import::Texture2DImportResult result;
-	Pitaya::Import::Import(Pitaya::Asset::Texture::Icon, "resource/icon/default.png", false, true, result);
+	Pitaya::Import::Import(Pitaya::Asset::Texture::Icon, Pitaya::Core::GetExecutableDirectory() / "resource/icon/default.png", false, true, result);
 	GLFWimage icon;
 	icon.width = result.Width;
 	icon.height = result.Height;

@@ -1,9 +1,9 @@
 #include<Engine/API/func.h>
 #include<Engine/Engine.h>
 
-int ENGINE_CALL Pitaya::Engine::Execute(int argc, char** argv)
+int ENGINE_CALL Pitaya::Engine::Execute()
 {
-	return Pitaya::Engine::Engine::Instance().Execute(argc, argv);
+	return Pitaya::Engine::Engine::Instance().Execute();
 }
 void ENGINE_CALL Pitaya::Engine::Terminate()
 {

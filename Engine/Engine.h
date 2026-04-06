@@ -39,7 +39,7 @@ namespace Pitaya::Engine
 
 			bool Create();
 			bool Check();
-			bool Initialize(int argc, char** argv);
+			bool Initialize();
 			bool IsRunning() const;
 			void BeginFrame();
 			void FixedUpdate();
@@ -79,11 +79,11 @@ namespace Pitaya::Engine
 		Engine& operator=(Engine&&) = delete;
 
 	public:
-		int Execute(int argc, char** argv);
+		int Execute();
 		void Terminate();
 
 	private:
-		bool Initialize(int argc, char** argv);
+		bool Initialize();
 		bool IsRunning() const;
 		void BeginFrame();
 		void FixedUpdate();

@@ -8,6 +8,7 @@
 #include<Log/Common/FuncTable.h>
 #include<Core/Color/Color.h>
 #include<Core/Utils/Memory.h>
+#include<Core/Utils/File.h>
 #include<Hook/def.h>
 
 #include<GL/glew.h>
@@ -121,8 +122,8 @@ bool Pitaya::Editor::GUI::InitializeForMain(void* nativeWindow)
 {
 	IMGUI_CHECKVERSION();
 	auto* context = ImGui::CreateContext();
-	ImGui::SetCurrentContext(context);
 	SetStyle();
+	ImGui::SetCurrentContext(context);
 	ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(nativeWindow), true);
 	imGuiContext.store(context, std::memory_order_release);
 	InitializePanel();
@@ -173,16 +174,18 @@ void Pitaya::Editor::GUI::ReleaseForRender()
 }
 void Pitaya::Editor::GUI::SetStyle()
 {
+	static std::string imguiInPath = (Pitaya::Core::GetWorkspace() / "imgui.ini").string();
 	ImGuiIO& io = ImGui::GetIO();
+	io.IniFilename = imguiInPath.c_str();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	// io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;	//TODO 涉及到同步点 暂时不做拖拽出窗口
-	io.Fonts->AddFontFromFileTTF("resource/fonts/segoeui.ttf", 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+	io.Fonts->AddFontFromFileTTF((Pitaya::Core::GetExecutableDirectory() / "resource/fonts/segoeui.ttf").string().c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 	ImFontConfig iconsConfig;
 	iconsConfig.MergeMode = true;
 	iconsConfig.PixelSnapH = true;
 	static const ImWchar iconsRanges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
-	io.Fonts->AddFontFromFileTTF("resource/fonts/fa-solid-900.ttf", 16.0f, &iconsConfig, iconsRanges);
+	io.Fonts->AddFontFromFileTTF((Pitaya::Core::GetExecutableDirectory() / "resource/fonts/fa-solid-900.ttf").string().c_str(), 16.0f, &iconsConfig, iconsRanges);
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	ImGui::StyleColorsDark();

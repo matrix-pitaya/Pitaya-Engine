@@ -21,7 +21,9 @@ namespace Pitaya::Config
 		private:
 			static Configurator* Create()
 			{
-				return PITAYA_NEW(Configurator);
+				Configurator* configurator = PITAYA_NEW(Configurator);
+				configurator->Import();
+				return configurator;
 			}
 			static void Destroy(Configurator* configurator)
 			{
@@ -85,9 +87,9 @@ namespace Pitaya::Config
 		bool Initialize();
 		void Release();
 
-	public:
-		bool Import(Pitaya::Core::PassKey<Pitaya::Engine::Engine>);
-		bool Export(Pitaya::Core::PassKey<Pitaya::Engine::Engine>);
+	private:
+		bool Import();
+		bool Export();
 
 	public:
 		inline Pitaya::Render::API GetRenderAPI() const noexcept

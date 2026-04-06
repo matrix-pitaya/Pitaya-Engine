@@ -200,7 +200,6 @@
     <ClInclude Include="Utils\Time.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Allocate\Allocate.cpp" />
     <ClCompile Include="Identifier\GUID.cpp" />
     <ClCompile Include="Thread\Thread.cpp" />
   </ItemGroup>

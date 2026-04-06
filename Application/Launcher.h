@@ -2,5 +2,5 @@
 
 namespace Pitaya::Application
 {
-	int Execute(int argc, char** argv);
+	int Execute();
 }

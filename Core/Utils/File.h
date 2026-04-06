@@ -6,6 +6,7 @@
 
 #define NOMINMAX
 #include<windows.h>
+#include<stdlib.h>
 
 namespace Pitaya::Core
 {
@@ -16,9 +17,15 @@ namespace Pitaya::Core
 		std::filesystem::path exePath(path);
 		return exePath.parent_path();
 	}
-	inline bool GenerateFile(const char* filename, const char* title,const char* info)
+	inline std::filesystem::path GetWorkspace()
 	{
-		const std::filesystem::path path = GetExecutableDirectory() / filename;
+		return __argc <= 1 ? 
+			std::filesystem::absolute(__argv[0]).parent_path() / "workspace" : 
+			std::filesystem::absolute(__argv[1]).parent_path();
+	}
+	inline bool GenerateFile(const std::filesystem::path& directory, const char* filename, const char* title,const char* info)
+	{
+		const std::filesystem::path path = directory / filename;
 		std::ofstream ofs(path, std::ios::out | std::ios::trunc);
 		if (!ofs.is_open())
 		{
