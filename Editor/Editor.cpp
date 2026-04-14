@@ -12,10 +12,10 @@ void Pitaya::Editor::Editor::MountEngineHook()
 	MOUNT_PREUPDATE_HOOK([]() { Pitaya::Editor::Editor::Instance().Updata(); }, "Editor::Update")
 	MOUNT_PRELATEUPDATE_HOOK([]() { Pitaya::Editor::Editor::Instance().LateUpdate(); }, "Editor::LateUpdate")
 	MOUNT_PREENDFRAME_HOOK([]() { Pitaya::Editor::Editor::Instance().EndFrame(); }, "Editor::EndFrame")
-	MOUNT_POSTRENDERERINTIALIZE_HOOK([](void* nativeWindow) {Pitaya::Editor::Editor::Instance().Initialize(nativeWindow); }, "Editor::Initialize")
-	MOUNT_POSTRENDERERRELEASE_HOOK([]() { Pitaya::Editor::Editor::Instance().Release(); }, "Editor::Release")
-	MOUNT_POSTRENDERCONTEXTINITIALIZED_HOOK([]() { Pitaya::Editor::Editor::Instance().InitializeForRender(); }, "Editor::InitializeForRender")
-	MOUNT_PRERENDERCONTEXTINRELEASED_HOOK([]() { Pitaya::Editor::Editor::Instance().ReleaseForRender(); }, "Editor::ReleaseForRender")
+	MOUNT_POSTRENDERERINTIALIZE_HOOK([](void* nativeWindow) {Pitaya::Editor::Editor::Instance().Initialize_Main(nativeWindow); }, "Editor::Initialize")
+	MOUNT_POSTRENDERERRELEASE_HOOK([]() { Pitaya::Editor::Editor::Instance().Release_Main(); }, "Editor::Release")
+	MOUNT_POSTRENDERCONTEXTINITIALIZED_HOOK([]() { Pitaya::Editor::Editor::Instance().Initialize_Render(); }, "Editor::InitializeForRender")
+	MOUNT_PRERENDERCONTEXTINRELEASED_HOOK([]() { Pitaya::Editor::Editor::Instance().Release_Render(); }, "Editor::ReleaseForRender")
 	MOUNT_POSTRENDERERSWAPBUFFER_HOOK([]() {Pitaya::Editor::Editor::Instance().gui.drawer.SwapBuffer(Pitaya::Core::PassKey<Pitaya::Editor::Editor>()); }, "Editor::GUI::SwapBuffer")
 	MOUNT_PRERENDERERENDRENDERFRAME_HOOK([]() { Pitaya::Editor::Editor::Instance().gui.drawer.CreateFrontDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>()); }, "Editor::GUI::CreateFrontDrawData")
 	MOUNT_POSTRENDERERBEGINRENDERFRAME_HOOK([]() { Pitaya::Editor::Editor::Instance().gui.drawer.ReleaseFrontDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>()); }, "Editor::GUI::ReleaseFrontDrawData")
@@ -42,17 +42,16 @@ void Pitaya::Editor::Editor::MountEngineHook()
 	}, "Editor::GUI::Draw | Editor::GUI::ReleaseBackDrawData")
 	MOUNT_POSTCHRONOMETERTICK_HOOK([]()
 		{
-			//TODO 通过Engine.dll 导出API获取
-			Pitaya::Editor::Editor::Instance().profiler.SetTimeState({ Pitaya::Time::delta() ,Pitaya::Time::Fixdelta() ,Pitaya::Time::UnscaledDelta() ,
-				Pitaya::Time::TimeScale(),Pitaya::Time::Framerate() ,Pitaya::Time::Seconds() , Pitaya::Time::Milliseconds() });
+			Pitaya::Editor::Editor::Instance().profiler.SetTimeState({ Pitaya::Time::delta() ,Pitaya::Time::Fixdelta() ,
+				Pitaya::Time::UnscaledDelta() , Pitaya::Time::TimeScale(),Pitaya::Time::Framerate() ,
+				Pitaya::Time::Seconds() , Pitaya::Time::Milliseconds() });
 		}, "Editor::Profiler::UploadTimeState")
 	MOUNT_POSTLOG_HOOK([](Pitaya::Log::LogLevel level, std::string_view message)
 		{
-			//TODO 根据设置决定是否同步Log到Console
 			Pitaya::Editor::Editor::Instance().gui.consolePanel.Console(level, message);
 		}, "Editor::GUI::Console")
 }
-bool Pitaya::Editor::Editor::Initialize(void* nativeWindow)
+bool Pitaya::Editor::Editor::Initialize_Main(void* nativeWindow)
 {
 	mouseScrollToken = Pitaya::Event::Subscribe(
 		Pitaya::Event::EventType::MouseScroll,
@@ -62,22 +61,22 @@ bool Pitaya::Editor::Editor::Initialize(void* nativeWindow)
 		Pitaya::Event::EventType::MouseCurrsorMove,
 		&Pitaya::Editor::Editor::OnMouseCurrsorMove, this);
 	
-	return camera.Initialize() && gui.InitializeForMain(nativeWindow);
+	return camera.Initialize() && gui.Initialize_Main(nativeWindow);
 }
-void Pitaya::Editor::Editor::Release()
+bool Pitaya::Editor::Editor::Initialize_Render()
+{
+	return gui.Initialize_Render();
+}
+void Pitaya::Editor::Editor::Release_Main()
 {
 	Pitaya::Event::UnSubscribe(mouseScrollToken);
 	Pitaya::Event::UnSubscribe(mouseCurrsorMoveToken);
 	camera.Release();
-	gui.ReleaseForMain();
+	gui.Release_Main();
 }
-bool Pitaya::Editor::Editor::InitializeForRender()
+void Pitaya::Editor::Editor::Release_Render()
 {
-	return gui.InitializeForRender();
-}
-void Pitaya::Editor::Editor::ReleaseForRender()
-{
-	gui.ReleaseForRender();
+	gui.Release_Render();
 }
 void Pitaya::Editor::Editor::BeginFrame()
 {
@@ -111,7 +110,6 @@ void Pitaya::Editor::Editor::OnMouseCurrsorMove(const Pitaya::Event::Event& even
 	const Pitaya::Event::MouseCurrsorMoveEventArgs& args = static_cast<const Pitaya::Event::MouseCurrsorMoveEventArgs&>(event.args);
 	if (gui.sceneViewportPanel.GetIsFocused()) { camera.OnMouseCurrsorMove(args); }
 }
-
 
 template<>
 Pitaya::Editor::Editor& EDITOR_CALL Pitaya::Core::Singleton<Pitaya::Editor::Editor>::Instance()

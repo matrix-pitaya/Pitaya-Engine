@@ -21,6 +21,7 @@
 #include<chrono> 
 #include<iostream>
 #include<cstdio>
+#include<filesystem>
 
 #define NOMINMAX
 #include<windows.h>
@@ -116,9 +117,37 @@ namespace
 		ShowWindow(consoleWindow, SW_HIDE);
 		return true;
 	}
+
+	//生成文件夹的 CheckList.req 文件 记录文件夹内的所有文件路径（相对于该文件夹的路径） 供引擎加载时读取
+	void GenerateCheckList(const std::filesystem::path& folder)
+	{
+		if (!std::filesystem::exists(folder) || !std::filesystem::is_directory(folder)) { return; }
+
+		const std::filesystem::path checklistfile = folder / "CheckList.req";
+		std::ofstream outFile(checklistfile, std::ios::out | std::ios::trunc);
+		if (!outFile.is_open()) { return; }
+		
+		//递归遍历
+		for (const auto& entry : std::filesystem::recursive_directory_iterator(folder))
+		{
+			//排除 CheckList.req 自身以及文件夹条目，只记录文件
+			if (std::filesystem::is_regular_file(entry.status())) 
+			{
+				if (entry.path() == checklistfile) { continue; }
+
+				//获取相对于 RootPath 的路径
+				std::filesystem::path relPath = std::filesystem::relative(entry.path(), folder);
+
+				//使用 generic_string 以确保路径分隔符在 Windows 下为 '/'
+				outFile << relPath.generic_string() << "\n";
+			}
+		}
+
+		outFile.close();
+	}
 }
 
-bool Pitaya::Editor::GUI::InitializeForMain(void* nativeWindow)
+bool Pitaya::Editor::GUI::Initialize_Main(void* nativeWindow)
 {
 	IMGUI_CHECKVERSION();
 	auto* context = ImGui::CreateContext();
@@ -130,7 +159,7 @@ bool Pitaya::Editor::GUI::InitializeForMain(void* nativeWindow)
 	while (!isRenderReady.load(std::memory_order_acquire)){ std::this_thread::yield(); }
 	return drawer.Initialize(nativeWindow);
 }
-bool Pitaya::Editor::GUI::InitializeForRender()
+bool Pitaya::Editor::GUI::Initialize_Render()
 {
 	ImGuiContext* context = nullptr;
 	while (!(context = imGuiContext.load(std::memory_order_acquire))) { std::this_thread::yield(); }
@@ -140,7 +169,7 @@ bool Pitaya::Editor::GUI::InitializeForRender()
 	isRenderReady.store(true, std::memory_order_release);
 	return true;
 }
-void Pitaya::Editor::GUI::ReleaseForMain()
+void Pitaya::Editor::GUI::Release_Main()
 {
 	ReleasePanel();
 	drawer.Release();
@@ -166,7 +195,7 @@ void Pitaya::Editor::GUI::ReleaseForMain()
 		imGuiContext.store(nullptr, std::memory_order_release);
 	}
 }
-void Pitaya::Editor::GUI::ReleaseForRender()
+void Pitaya::Editor::GUI::Release_Render()
 {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui::SetCurrentContext(nullptr);
@@ -191,7 +220,7 @@ void Pitaya::Editor::GUI::SetStyle()
 	ImGui::StyleColorsDark();
 	style.WindowPadding = ImVec2(8.0f, 8.0f);
 	style.FramePadding = ImVec2(6.0f, 3.0f);
-	style.ItemSpacing = ImVec2(8.0f, 4.0f);
+	style.ItemSpacing = ImVec2(4.0f, 4.0f);
 	style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
 
 	style.WindowRounding = 0.0f;                   // 主窗口纯直角
@@ -371,7 +400,6 @@ void Pitaya::Editor::GUI::DrawMenuBar()
 			}
 			ImGui::EndMenu();
 		}
-
 		if (ImGui::BeginMenu("System"))
 		{
 			static bool isConsoleOpen = (GetConsoleWindow() != nullptr);
@@ -388,7 +416,6 @@ void Pitaya::Editor::GUI::DrawMenuBar()
 			}
 			ImGui::EndMenu();
 		}
-
 		if (ImGui::BeginMenu("Utils"))
 		{
 			if (ImGui::MenuItem("MemoryAnalysis"))
@@ -402,7 +429,6 @@ void Pitaya::Editor::GUI::DrawMenuBar()
 			}
 			ImGui::EndMenu();
 		}
-
 		ImGui::EndMenuBar();
 	}
 }

@@ -45,16 +45,6 @@ namespace Pitaya::Config
 		};
 
 	private:
-		Configurator() = default;
-		~Configurator() = default;
-
-	public:
-		Configurator(const Configurator&) = delete;
-		Configurator& operator=(const Configurator&) = delete;
-		Configurator(Configurator&&) = delete;
-		Configurator& operator=(Configurator&&) = delete;
-
-	private:
 		struct ConfigInfo : public Pitaya::Serialize::Serializable
 		{
 			//Engine
@@ -82,6 +72,16 @@ namespace Pitaya::Config
 			void Serialize(Pitaya::Serialize::SerializeContext& context) const override;
 			void Deserialize(const Pitaya::Serialize::DeserializeContext& context) override;
 		};
+
+	private:
+		Configurator() = default;
+		~Configurator() = default;
+
+	public:
+		Configurator(const Configurator&) = delete;
+		Configurator& operator=(const Configurator&) = delete;
+		Configurator(Configurator&&) = delete;
+		Configurator& operator=(Configurator&&) = delete;
 
 	private:
 		bool Initialize();

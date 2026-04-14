@@ -7,7 +7,8 @@ namespace Pitaya::Render
 {
 	enum class PostProcessType : uint8_t
 	{
-		GammaCorrection = 0,
+		Bilt = 0,
+		GammaCorrection,
 		Bloom,
 		ToneMapping,
 
@@ -18,6 +19,7 @@ namespace Pitaya::Render
 	{
 		switch (type)
 		{
+			case PostProcessType::Bilt:				return "Bilt";
 			case PostProcessType::GammaCorrection:	return "GammaCorrection";
 			case PostProcessType::Bloom:			return "Bloom";
 			case PostProcessType::ToneMapping:		return "ToneMapping";

@@ -62,54 +62,54 @@ namespace Pitaya::Asset
 			Pitaya::Core::ThreadSafeBidirectionalMap<Core::GUID, std::filesystem::path> Map =
 			{
 #pragma region Shader
-				{Pitaya::Asset::Shader::Blit,std::filesystem::path("engine:/resource/shader/blit/blit.shader")},
-				{Pitaya::Asset::Shader::GammaCorrection,std::filesystem::path("engine:/resource/shader/GammaCorrection/GammaCorrection.shader")},
-				{Pitaya::Asset::Shader::Default,std::filesystem::path("engine:/resource/shader/default/default.shader")},
+				{Pitaya::Asset::Shader::Blit,std::filesystem::path("engine:/shader/blit/blit.shader")},
+				{Pitaya::Asset::Shader::GammaCorrection,std::filesystem::path("engine:/shader/GammaCorrection/GammaCorrection.shader")},
+				{Pitaya::Asset::Shader::Default,std::filesystem::path("engine:/shader/default/default.shader")},
 #pragma endregion
 
 
 #pragma region Tetxrue
-				{ Pitaya::Asset::Texture::White,std::filesystem::path("engine:/resource/texture/2D/white.png") },
-				{ Pitaya::Asset::Texture::Box,std::filesystem::path("engine:/resource/texture/2D/box.jpg") },
-				{ Pitaya::Asset::Texture::Face,std::filesystem::path("engine:/resource/texture/2D/face.png") },
-				{ Pitaya::Asset::Texture::Gress,std::filesystem::path("engine:/resource/texture/2D/gress.png") },
-				{ Pitaya::Asset::Texture::Huolg,std::filesystem::path("engine:/resource/texture/2D/Huolg.png") },
-				{ Pitaya::Asset::Texture::Irony,std::filesystem::path("engine:/resource/texture/2D/irony.png") },
-				{ Pitaya::Asset::Texture::TrasnformWindow,std::filesystem::path("engine:/resource/texture/2D/trasnform_window.png") },
-				{ Pitaya::Asset::Texture::Wood,std::filesystem::path("engine:/resource/texture/2D/wood.png") },
-				{ Pitaya::Asset::Texture::Wall,std::filesystem::path("engine:/resource/texture/2D/wall.jpg") },
-				{ Pitaya::Asset::Texture::Glacier,std::filesystem::path("engine:/resource/texture/Cubemap/glacier/glacier.cubemap") },
-				{ Pitaya::Asset::Texture::Palace,std::filesystem::path("engine:/resource/texture/Cubemap/palace/palace.cubemap") },
-				{ Pitaya::Asset::Texture::Backpack_Ao,std::filesystem::path("engine:/resource/mesh/backpack/ao.jpg") },
-				{ Pitaya::Asset::Texture::Backpack_Diffuse,std::filesystem::path("engine:/resource/mesh/backpack/diffuse.jpg") },
-				{ Pitaya::Asset::Texture::Backpack_Normal,std::filesystem::path("engine:/resource/mesh/backpack/normal.png") },
-				{ Pitaya::Asset::Texture::Backpack_Roughness,std::filesystem::path("engine:/resource/mesh/backpack/roughness.jpg") },
-				{ Pitaya::Asset::Texture::Backpack_Specular,std::filesystem::path("engine:/resource/mesh/backpack/specular.jpg") },
-				{ Pitaya::Asset::Texture::Planet_Quom,std::filesystem::path("engine:/resource/mesh/planet/planet_Quom1200.png") },
-				{ Pitaya::Asset::Texture::Rock_Surface,std::filesystem::path("engine:/resource/mesh/rock/Rock-Texture-Surface.jpg") },
+				{ Pitaya::Asset::Texture::White,std::filesystem::path("engine:/texture/2D/white.png") },
+				{ Pitaya::Asset::Texture::Box,std::filesystem::path("engine:/texture/2D/box.jpg") },
+				{ Pitaya::Asset::Texture::Face,std::filesystem::path("engine:/texture/2D/face.png") },
+				{ Pitaya::Asset::Texture::Gress,std::filesystem::path("engine:/texture/2D/gress.png") },
+				{ Pitaya::Asset::Texture::Huolg,std::filesystem::path("engine:/texture/2D/Huolg.png") },
+				{ Pitaya::Asset::Texture::Irony,std::filesystem::path("engine:/texture/2D/irony.png") },
+				{ Pitaya::Asset::Texture::TrasnformWindow,std::filesystem::path("engine:/texture/2D/trasnform_window.png") },
+				{ Pitaya::Asset::Texture::Wood,std::filesystem::path("engine:/texture/2D/wood.png") },
+				{ Pitaya::Asset::Texture::Wall,std::filesystem::path("engine:/texture/2D/wall.jpg") },
+				{ Pitaya::Asset::Texture::Glacier,std::filesystem::path("engine:/texture/Cubemap/glacier/glacier.cubemap") },
+				{ Pitaya::Asset::Texture::Palace,std::filesystem::path("engine:/texture/Cubemap/palace/palace.cubemap") },
+				{ Pitaya::Asset::Texture::Backpack_Ao,std::filesystem::path("engine:/mesh/backpack/ao.jpg") },
+				{ Pitaya::Asset::Texture::Backpack_Diffuse,std::filesystem::path("engine:/mesh/backpack/diffuse.jpg") },
+				{ Pitaya::Asset::Texture::Backpack_Normal,std::filesystem::path("engine:/mesh/backpack/normal.png") },
+				{ Pitaya::Asset::Texture::Backpack_Roughness,std::filesystem::path("engine:/mesh/backpack/roughness.jpg") },
+				{ Pitaya::Asset::Texture::Backpack_Specular,std::filesystem::path("engine:/mesh/backpack/specular.jpg") },
+				{ Pitaya::Asset::Texture::Planet_Quom,std::filesystem::path("engine:/mesh/planet/planet_Quom1200.png") },
+				{ Pitaya::Asset::Texture::Rock_Surface,std::filesystem::path("engine:/mesh/rock/Rock-Texture-Surface.jpg") },
 #pragma endregion
 
 
 #pragma region Material
-				{Pitaya::Asset::Material::Default,std::filesystem::path("engine:/resource/material/default.mat") },
-				{Pitaya::Asset::Material::Backpack,std::filesystem::path("engine:/resource/mesh/backpack/Scene_-_Root.mat") },
-				{Pitaya::Asset::Material::Planet,std::filesystem::path("engine:/resource/mesh/planet/Material.001.mat") },
-				{Pitaya::Asset::Material::Rock,std::filesystem::path("engine:/resource/mesh/rock/Material.mat") },
+				{Pitaya::Asset::Material::Default,std::filesystem::path("engine:/material/default.mat") },
+				{Pitaya::Asset::Material::Backpack,std::filesystem::path("engine:/mesh/backpack/Scene_-_Root.mat") },
+				{Pitaya::Asset::Material::Planet,std::filesystem::path("engine:/mesh/planet/Material.001.mat") },
+				{Pitaya::Asset::Material::Rock,std::filesystem::path("engine:/mesh/rock/Material.mat") },
 #pragma endregion
 
 
 #pragma region RenderTarget
-				{Pitaya::Asset::RenderTarget::Editor,std::filesystem::path("engine:/resource/rendertarget/editor.rt") },
-				{Pitaya::Asset::RenderTarget::Game,std::filesystem::path("engine:/resource/rendertarget/game.rt") },
+				{Pitaya::Asset::RenderTarget::Editor,std::filesystem::path("engine:/rendertarget/editor.rt") },
+				{Pitaya::Asset::RenderTarget::Game,std::filesystem::path("engine:/rendertarget/game.rt") },
 #pragma endregion
 
 
 #pragma region Mesh
-				{Pitaya::Asset::Mesh::Cube,std::filesystem::path("engine:/resource/mesh/cube/cube.obj") },
-				{Pitaya::Asset::Mesh::Backpack,std::filesystem::path("engine:/resource/mesh/backpack/backpack.obj") },
-				{Pitaya::Asset::Mesh::Panel,std::filesystem::path("engine:/resource/mesh/panel/panel.obj") },
-				{Pitaya::Asset::Mesh::Planet,std::filesystem::path("engine:/resource/mesh/planet/planet.obj")},
-				{Pitaya::Asset::Mesh::Rock,std::filesystem::path("engine:/resource/mesh/rock/rock.obj") }
+				{Pitaya::Asset::Mesh::Cube,std::filesystem::path("engine:/mesh/cube/cube.obj") },
+				{Pitaya::Asset::Mesh::Backpack,std::filesystem::path("engine:/mesh/backpack/backpack.obj") },
+				{Pitaya::Asset::Mesh::Panel,std::filesystem::path("engine:/mesh/panel/panel.obj") },
+				{Pitaya::Asset::Mesh::Planet,std::filesystem::path("engine:/mesh/planet/planet.obj")},
+				{Pitaya::Asset::Mesh::Rock,std::filesystem::path("engine:/mesh/rock/rock.obj") }
 #pragma endregion
 			};
 		};

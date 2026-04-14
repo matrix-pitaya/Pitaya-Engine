@@ -15,7 +15,6 @@ namespace Pitaya::Task { class TaskScheduler; }
 namespace Pitaya::GPU { class RHIDevice; }
 namespace Pitaya::Asset { class AssetHub; }
 namespace Pitaya::Render { class Renderer; class RenderPipeline; }
-namespace Pitaya::Project { class Workspace; }
 namespace Pitaya::Config { class Configurator; }
 namespace Pitaya::Window { class Window; }
 namespace Pitaya::Physics { class PhysicsSimulator; }
@@ -43,7 +42,6 @@ namespace Pitaya::Engine
 			Pitaya::Engine::Module<Pitaya::Time::Chronometer>* Chronometer = nullptr;
 			Pitaya::Engine::Module<Pitaya::Input::InputMonitor>* InputMonitor = nullptr;
 			Pitaya::Engine::Module<Pitaya::Asset::AssetHub>* AssetHub = nullptr;
-			Pitaya::Engine::Module<Pitaya::Project::Workspace>* Workspace = nullptr;
 			Pitaya::Engine::Module<Pitaya::Config::Configurator>* Configurator = nullptr;
 			Pitaya::Engine::Module<Pitaya::Window::Window>* Window = nullptr;
 			Pitaya::Engine::Module<Pitaya::Physics::PhysicsSimulator>* PhysicsSimulator = nullptr;
@@ -53,7 +51,6 @@ namespace Pitaya::Engine
 			inline bool Check() const
 			{
 				if (!Configurator) { throw std::runtime_error("Context [Module] miss [Configurator]"); }
-				if (!Workspace) { throw std::runtime_error("Context [Module] miss [Workspace]"); }
 				if (!InputMonitor) { throw std::runtime_error("Context [Module] miss [InputMonitor]"); }
 				if (!Chronometer) { throw std::runtime_error("Context [Module] miss [Chronometer]"); }
 				if (!EventDispatcher) { throw std::runtime_error("Context [Module] miss [EventDispatcher]"); }
@@ -65,8 +62,8 @@ namespace Pitaya::Engine
 				if (!PhysicsSimulator) { throw std::runtime_error("Context [Module] miss [PhysicsSimulator]"); }
 				if (!Window) { throw std::runtime_error("Context [Module] miss [Window]"); }
 				if (!RHIDevice) { throw std::runtime_error("Context [Module] miss [RHIDevice]"); }
-				//if (!GameWorld) { throw std::runtime_error("Context [Module] miss [GameWorld]"); }
-				//if (!ScriptRuntime) { throw std::runtime_error("Context [Module] miss [ScriptRuntime]"); }
+				if (!GameWorld) { throw std::runtime_error("Context [Module] miss [GameWorld]"); }
+				if (!ScriptRuntime) { throw std::runtime_error("Context [Module] miss [ScriptRuntime]"); }
 				return true;
 			}
 			inline void UnRegister() noexcept
@@ -82,7 +79,6 @@ namespace Pitaya::Engine
 				ThreadTracker = nullptr;
 				AssetHub = nullptr;
 				TaskScheduler = nullptr;
-				Workspace = nullptr;
 				Configurator = nullptr;
 				GameWorld = nullptr;
 				ScriptRuntime = nullptr;
@@ -102,6 +98,7 @@ namespace Pitaya::Engine
 			Pitaya::Engine::FuncTable<Pitaya::Input::InputMonitor>* InputMonitor = nullptr;
 			Pitaya::Engine::FuncTable<Pitaya::Task::TaskScheduler>* TaskScheduler = nullptr;
 			Pitaya::Engine::FuncTable<Pitaya::Window::Window>* Window = nullptr;
+			Pitaya::Engine::FuncTable<Pitaya::Game::GameWorld>* GameWorld = nullptr;
 
 			inline bool Check() const
 			{
@@ -115,6 +112,7 @@ namespace Pitaya::Engine
 				if (!ThreadTracker) { throw std::runtime_error("Context [FuncTable] miss [ThreadTracker]"); }
 				if (!Chronometer) { throw std::runtime_error("Context [FuncTable] miss [Chronometer]"); }
 				if (!Window) { throw std::runtime_error("Context [FuncTable] miss [Window]"); }
+				if (!GameWorld) { throw std::runtime_error("Context [FuncTable] miss [GameWorld]"); }
 				return true;
 			}
 			inline void UnRegister() noexcept
@@ -129,6 +127,7 @@ namespace Pitaya::Engine
 				InputMonitor = nullptr;
 				TaskScheduler = nullptr;
 				Window = nullptr;
+				GameWorld = nullptr;
 			}
 		};
 
@@ -156,7 +155,6 @@ namespace Pitaya::Engine
 				std::is_same_v<T, Pitaya::Time::Chronometer> ||
 				std::is_same_v<T, Pitaya::Input::InputMonitor> ||
 				std::is_same_v<T, Pitaya::Asset::AssetHub> ||
-				std::is_same_v<T, Pitaya::Project::Workspace> ||
 				std::is_same_v<T, Pitaya::Config::Configurator> ||
 				std::is_same_v<T, Pitaya::Window::Window> ||
 				std::is_same_v<T, Pitaya::Physics::PhysicsSimulator> ||
@@ -173,7 +171,6 @@ namespace Pitaya::Engine
 			else if constexpr (std::is_same_v<T, Pitaya::Time::Chronometer>)         { return *modules.Chronometer; }
 			else if constexpr (std::is_same_v<T, Pitaya::Input::InputMonitor>)       { return *modules.InputMonitor; }
 			else if constexpr (std::is_same_v<T, Pitaya::Asset::AssetHub>)           { return *modules.AssetHub; }
-			else if constexpr (std::is_same_v<T, Pitaya::Project::Workspace>)        { return *modules.Workspace; }
 			else if constexpr (std::is_same_v<T, Pitaya::Config::Configurator>)      { return *modules.Configurator; }
 			else if constexpr (std::is_same_v<T, Pitaya::Window::Window>)            { return *modules.Window; }
 			else if constexpr (std::is_same_v<T, Pitaya::Physics::PhysicsSimulator>) { return *modules.PhysicsSimulator; }
@@ -193,7 +190,8 @@ namespace Pitaya::Engine
 				std::is_same_v<T, Pitaya::GPU::RHIDevice> ||
 				std::is_same_v<T, Pitaya::Input::InputMonitor> ||
 				std::is_same_v<T, Pitaya::Task::TaskScheduler> ||
-				std::is_same_v<T, Pitaya::Window::Window>
+				std::is_same_v<T, Pitaya::Window::Window>	   ||
+				std::is_same_v<T, Pitaya::Game::GameWorld>
 				, "Context::GetFuncTable<T>(): T must be a valid Engine FuncTable Type");
 
 			if constexpr (std::is_same_v<T, Pitaya::Time::Chronometer>)				{ return *funcTables.Chronometer; }
@@ -206,6 +204,7 @@ namespace Pitaya::Engine
 			else if constexpr (std::is_same_v<T, Pitaya::Input::InputMonitor>)		{ return *funcTables.InputMonitor; }
 			else if constexpr (std::is_same_v<T, Pitaya::Task::TaskScheduler>)		{ return *funcTables.TaskScheduler; }
 			else if constexpr (std::is_same_v<T, Pitaya::Window::Window>)			{ return *funcTables.Window; }
+			else if constexpr (std::is_same_v<T, Pitaya::Game::GameWorld>)			{ return *funcTables.GameWorld; }
 		}
 
 	private:

@@ -1,8 +1,8 @@
 #pragma once
 
-#include<GPU/Common/Identifier.h>
 #include<Core/Color/Color.h>
 #include<Core/Math/Rect.h>
+#include<GPU/Common/Identifier.h>
 
 namespace Pitaya::Render
 {

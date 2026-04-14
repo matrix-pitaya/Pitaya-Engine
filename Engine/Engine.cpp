@@ -11,65 +11,17 @@
 #include<Physics/Frontend/PhysicsSimulator.h>
 #include<Render/Frontend/Renderer.h>
 #include<Render/RenderPipeline.h>
-#include<Project/Workspace.h>
 #include<Asset/AssetHub.h>
+#include<Script/ScriptRuntime.h>
+#include<Game/GameWorld.h>
+#include<Game/Scene/Scene.h>
+#include<Game/Component/Transform.h>
+#include<Game/Component/MeshRenderer.h>
+#include<Game/Component/Camera.h>
 #include<Hook/def.h>
-#include<Core/Utils/Console.h>
 
 #define NOMINMAX
 #include<windows.h>
-
-#pragma region TOREMOVE
-//TODO REMOVE TEST -------------------------------------
-#include<glm.hpp>
-#include<gtc/matrix_transform.hpp>
-#include<gtc/quaternion.hpp>
-#include<gtx/quaternion.hpp>
-#include<Game/Component/MeshRenderer.h>
-#include<Asset/Common/RenderTarget.h>
-#include<random>
-#include<vector>
-Pitaya::Game::MeshRenderer testmeshrenderer;
-uint32_t testCount = 10;
-const float MAX_TRANSLATE = 30.0f;    // 最大平移量（单位：米/单位长度）
-const float MAX_ROTATE = glm::pi<float>() / 4.0f; // 最大旋转角（45度）
-const float MIN_SCALE = 0.8f;        // 最小缩放系数
-const float MAX_SCALE = 1.2f;        // 最大缩放系数
-static std::random_device rd;
-static std::mt19937 gen(rd());
-static std::uniform_real_distribution<float> trans_dist(-MAX_TRANSLATE, MAX_TRANSLATE);
-static std::uniform_real_distribution<float> rot_dist(-MAX_ROTATE, MAX_ROTATE);
-static std::uniform_real_distribution<float> scale_dist(MIN_SCALE, MAX_SCALE);
-std::vector<glm::mat4> models;
-inline glm::mat4 GenerateModuleChangeMatrix()
-{
-	glm::mat4 changeMatrix = glm::mat4(1.0f);
-
-	// 2. 随机缩放（模块大小变化）
-	float scale_x = scale_dist(gen);
-	float scale_y = scale_dist(gen);
-	float scale_z = scale_dist(gen);
-	changeMatrix = glm::scale(changeMatrix, glm::vec3(scale_x, scale_y, scale_z));
-
-	// 3. 随机旋转（模块姿态变化，绕X/Y/Z轴分别旋转）
-	float rot_x = rot_dist(gen); // 绕X轴旋转角度
-	float rot_y = rot_dist(gen); // 绕Y轴旋转角度
-	float rot_z = rot_dist(gen); // 绕Z轴旋转角度
-	changeMatrix = glm::rotate(changeMatrix, rot_x, glm::vec3(1.0f, 0.0f, 0.0f));
-	changeMatrix = glm::rotate(changeMatrix, rot_y, glm::vec3(0.0f, 1.0f, 0.0f));
-	changeMatrix = glm::rotate(changeMatrix, rot_z, glm::vec3(0.0f, 0.0f, 1.0f));
-
-	// 4. 随机平移（模块位置变化）
-	float trans_x = trans_dist(gen);
-	float trans_y = trans_dist(gen);
-	float trans_z = trans_dist(gen);
-	changeMatrix = glm::translate(changeMatrix, glm::vec3(trans_x, trans_y, trans_z));
-
-	return changeMatrix;
-}
-//TODO REMOVE TEST -------------------------------------
-#pragma endregion
-
 
 namespace
 {
@@ -374,6 +326,14 @@ namespace
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetShaderStorageBuffer(id);
 	}
 #pragma endregion
+
+
+#pragma region Game
+	inline Pitaya::Game::Scene* ENGINE_CALL OnGetActiveScene() noexcept
+	{
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Game::GameWorld>()->GetActiveScene();
+	}
+#pragma endregion
 }
 
 int Pitaya::Engine::Engine::Execute()
@@ -420,7 +380,6 @@ void Pitaya::Engine::Engine::BeginFrame()
 }
 void Pitaya::Engine::Engine::FixedUpdate()
 {
-	INVOKE_PREFIXEDUPDATE_HOOK
 	modules.FixedUpdate();
 }
 void Pitaya::Engine::Engine::Update()
@@ -468,10 +427,11 @@ bool Pitaya::Engine::Engine::FillContext()
 	modules.Logger = &this->modules.Logger;
 	modules.ThreadTracker = &this->modules.ThreadTracker;
 	modules.TaskScheduler = &this->modules.TaskScheduler;
-	modules.Workspace = &this->modules.Workspace;
 	modules.RHIDevice = &this->modules.RHIDevice;
 	modules.Configurator = &this->modules.Configurator;
-	
+	modules.GameWorld = &this->modules.GameWorld;
+	modules.ScriptRuntime = &this->modules.ScriptRuntime;
+
 	auto& funcTables = context.funcTables;
 	funcTables.AssetHub = &this->funcTables.AssetHub;
 	funcTables.Configurator = &this->funcTables.Configurator;
@@ -483,6 +443,7 @@ bool Pitaya::Engine::Engine::FillContext()
 	funcTables.ThreadTracker = &this->funcTables.ThreadTracker;
 	funcTables.Chronometer = &this->funcTables.Chronometer;
 	funcTables.Window = &this->funcTables.Window;
+	funcTables.GameWorld = &this->funcTables.GameWorld;
 	return context.Check();
 }
 bool Pitaya::Engine::Engine::FillFuncTables()
@@ -603,12 +564,17 @@ bool Pitaya::Engine::Engine::FillFuncTables()
 	gpu.OnGetFrameBuffer = OnGetFrameBuffer;
 	gpu.OnGetShaderStorageBuffer = OnGetShaderStorageBuffer;
 #pragma endregion
+
+
+#pragma region Game
+	auto& game = funcTables.GameWorld;
+	game.OnGetActiveScene = OnGetActiveScene;
+#pragma endregion
 	return true;
 }
 
 bool Pitaya::Engine::Engine::Modules::Create()
 {
-	//if (!Workspace.Create(argc, argv)) { throw std::runtime_error("Engine [Module] [Workspace] Create Fail!"); }
 	if (!Chronometer.Create()) { throw std::runtime_error("Engine [Module] [Chronometer] reate Fail!"); }
 	if (!TaskScheduler.Create()) { throw std::runtime_error("Engine [Module] [TaskScheduler] Create Fail!"); }
 	if (!ThreadTracker.Create()) { throw std::runtime_error("Engine [Module] [ThreadTracker] Create Fail!"); }
@@ -621,12 +587,13 @@ bool Pitaya::Engine::Engine::Modules::Create()
 	if (!Configurator.Create()) { throw std::runtime_error("Engine [Module] [Configurator] Create Fail!"); }
 	if (!Renderer.Create(Configurator->GetRenderAPI())) { throw std::runtime_error("Engine [Module] [Renderer] Create Fail!"); }
 	if (!Window.Create(Configurator->GetWindowPlatform())) { throw std::runtime_error("Engine [Module] [Window] Create Fail!"); }
-	if(!PhysicsSimulator.Create(Configurator->GetPhysicsAPI())){ throw std::runtime_error("Engine [Module] [PhysicsSimulator] Create Fail!"); }
+	if (!PhysicsSimulator.Create(Configurator->GetPhysicsAPI())) { throw std::runtime_error("Engine [Module] [PhysicsSimulator] Create Fail!"); }
+	if (!GameWorld.Create()) { throw std::runtime_error("Engine [Module] [GameWorld] Create Fail!"); }
+	if (!ScriptRuntime.Create()) { throw std::runtime_error("Engine [Module] [ScriptRuntime] Create Fail!"); }
 	return true;
 }
 bool Pitaya::Engine::Engine::Modules::Check()
 {
-	//if (!Workspace) { throw std::runtime_error("Engine [Module] Miss [Workspace]!"); }
 	if (!Configurator) { throw std::runtime_error("Engine [Module] Miss [Configurator]!"); }
 	if (!EventDispatcher) { throw std::runtime_error("Engine [Module] Miss [EventDispatcher]!"); }
 	if (!InputMonitor) { throw std::runtime_error("Engine [Module] Miss [InputMonitor]!"); }
@@ -644,7 +611,6 @@ bool Pitaya::Engine::Engine::Modules::Check()
 }
 bool Pitaya::Engine::Engine::Modules::Initialize()
 {
-	//if (!Workspace.Initialize()) { throw std::runtime_error("Engine [Workspace] Module Initialize Fail!"); }
 	if (!Configurator.Initialize()) { throw std::runtime_error("Engine [Configurator] Module Initialize Fail!"); }
 	if (!EventDispatcher.Initialize()) { throw std::runtime_error("Engine [EventDispatcher] Module Initialize Fail!"); }
 	if (!InputMonitor.Initialize()) { throw std::runtime_error("Engine [InputMonitor] Module Initialize Fail!"); }
@@ -652,25 +618,14 @@ bool Pitaya::Engine::Engine::Modules::Initialize()
 	if (!Logger.Initialize()) { throw std::runtime_error("Engine [Logger] Module Initialize Fail!"); }
 	if (!TaskScheduler.Initialize()) { throw std::runtime_error("Engine [TaskScheduler] Module Initialize Fail!"); }
 	if (!AssetHub.Initialize()) { throw std::runtime_error("Engine [AssetHub] Module Initialize Fail!"); }
+	if (!GameWorld.Initialize()) { throw std::runtime_error("Engine [GameWorld] Module Initialize Fail!"); }
+	//if (!ScriptRuntime.Initialize()) { throw std::runtime_error("Engine [ScriptRuntime] Module Initialize Fail!"); }
 	if (!PhysicsSimulator.Initialize()) { throw std::runtime_error("Engine [PhysicsSimulator] Module Initialize Fail!"); }
 	if (!RHIDevice.Initialize()) { throw std::runtime_error("Engine [RHIDevice] Module Initialize Fail!"); }
 	if (!Window.Initialize(Configurator->GetWindowWidth(), Configurator->GetWindowHeight(), Configurator->GetWindowName().c_str())) { throw std::runtime_error("Engine [Window] Module Initialize Fail!"); }
 	if (!RenderPipeline.Initialize()) { throw std::runtime_error("[RenderPipeline] Module Initialize Fail!"); }
 	if (!Renderer.Initialize(Window->GetNativeWindow())) { throw std::runtime_error("[Renderer] Module Initialize Fail!"); }
 	if (!Chronometer.Initialize()) { throw std::runtime_error("Engine [Chronometer] Module Initialize Fail!"); }
-
-	//TODO REMOVE TEST -----------------------------------------------------------------------------
-	testmeshrenderer.mesh = AssetHub->LoadAsset<Pitaya::Asset::Mesh>(Pitaya::Asset::Mesh::Backpack);
-	testmeshrenderer.materials.emplace_back(AssetHub->LoadAsset<Pitaya::Asset::Material>(Pitaya::Asset::Material::Default));
-	testmeshrenderer.materials.emplace_back(AssetHub->LoadAsset<Pitaya::Asset::Material>(Pitaya::Asset::Material::Backpack));
-	
-	models.resize(testCount);
-	for (uint32_t i = 0; i < testCount; i++)
-	{
-		models[i] = GenerateModuleChangeMatrix();
-	}
-	//TODO REMOVE TEST -----------------------------------------------------------------------------
-
 	return true;
 }
 bool Pitaya::Engine::Engine::Modules::IsRunning() const
@@ -686,6 +641,8 @@ void Pitaya::Engine::Engine::Modules::BeginFrame()
 }
 void Pitaya::Engine::Engine::Modules::FixedUpdate()
 {
+	//TODO 移动至物理调度器内部，内部进行实际次数调度
+	INVOKE_PREFIXEDUPDATE_HOOK
 	PhysicsSimulator.FixedUpdate();
 }
 void Pitaya::Engine::Engine::Modules::Update()
@@ -694,48 +651,61 @@ void Pitaya::Engine::Engine::Modules::Update()
 }
 void Pitaya::Engine::Engine::Modules::LateUpdate()
 {
-
+	GameWorld.LateUpdate();
 }
 void Pitaya::Engine::Engine::Modules::Render()
 {
 	RenderPipeline->NewPipeline(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
 
-	//TODO 获取当前激活场景中所有 MeshRenderer 组件
-	auto& mesh = testmeshrenderer.GetMesh();
-	auto& materials = testmeshrenderer.GetMaterials();
-	for (auto& model : models)
+	//获取当前激活场景
+	if (auto* scene = GameWorld->GetActiveScene())
 	{
-		if (mesh.IsReady() && mesh.GetNativeAssetData() && !mesh.GetNativeAssetData()->SubMeshs.empty())
+		//提交MeshRenderer
+		for (auto [entity, transform, meshrenderer] : scene->GetView<Pitaya::Game::Transform, Pitaya::Game::MeshRenderer>().each())
 		{
-			for (uint32_t i = 0; i < mesh.GetNativeAssetData()->SubMeshs.size(); ++i)
+			const auto& mesh = meshrenderer.GetMesh();
+			const auto& materials = meshrenderer.GetMaterials();
+			if (mesh.IsReady() && mesh.GetNativeAssetData() && !mesh.GetNativeAssetData()->SubMeshs.empty())
 			{
-				uint32_t matIndex = mesh.GetNativeAssetData()->SubMeshs[i].MaterialIndex;
-				Pitaya::Asset::Material* nativeMaterial =
-					(matIndex < materials.size() && materials[matIndex].IsReady()) ?  materials[matIndex].GetNativeAssetData() : nullptr;
+				for (uint32_t i = 0; i < mesh.GetNativeAssetData()->SubMeshs.size(); ++i)
+				{
+					uint32_t matIndex = mesh.GetNativeAssetData()->SubMeshs[i].MaterialIndex;
+					Pitaya::Asset::Material* nativeMaterial =
+						(matIndex < materials.size() && materials[matIndex].IsReady()) ? materials[matIndex].GetNativeAssetData() : nullptr;
 
+					RenderPipeline->AddRenderItem(
+						Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
+						mesh.GetNativeAssetData(), nativeMaterial,
+						meshrenderer.GetLayerMask(), transform.GetWorldMatrix(), i);
+				}
+			}
+			else
+			{
+				//mesh 还没加载 → 传 nullptr，Submit 会 fallback 到异常立方体
 				RenderPipeline->AddRenderItem(
 					Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
-					mesh.GetNativeAssetData(), nativeMaterial,
-					testmeshrenderer.GetLayerMask(), model, i);
+					nullptr, nullptr,
+					meshrenderer.GetLayerMask(), transform.GetWorldMatrix(), 0);
 			}
 		}
-		else
+
+		//提交Pass
+		for (auto [entity, transform, camera] : scene->GetView<Pitaya::Game::Transform, Pitaya::Game::Camera>().each())
 		{
-			//mesh 还没加载 → 传 nullptr，Submit 会 fallback 到异常立方体
-			RenderPipeline->AddRenderItem(
-				Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
-				nullptr, nullptr,
-				testmeshrenderer.GetLayerMask(), model, 0);
+			if (camera.GetRenderTargetIsReady())
+			{
+				RenderPipeline->AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
+					camera.GetCameraState().BuildSnapshot(transform.GetWorldPosition(), transform.GetWorldForward(), transform.GetWorldUp()),
+					camera.GetRenderTarget(), camera.GetPostProcessSetting(), camera.GetCullingMask());
+			}
 		}
 	}
-
-	//TODO 获取全局激活摄像机，遍历摄像机（一个摄像机一个Pass），渲染所有MeshRenderer组件
 
 	RenderPipeline->Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(), Renderer.GetKernel());
 }
 void Pitaya::Engine::Engine::Modules::EndFrame()
 {
-
+	GameWorld.EndFrame();
 }
 void Pitaya::Engine::Engine::Modules::FrameSync()
 {
@@ -744,9 +714,10 @@ void Pitaya::Engine::Engine::Modules::FrameSync()
 void Pitaya::Engine::Engine::Modules::Release()
 {
 	Configurator.Release();
-	//Workspace.Release();
 	Chronometer.Release();
 	InputMonitor.Release();
+	GameWorld.Release();
+	//ScriptRuntime.Release();
 	PhysicsSimulator.Release();
 	TaskScheduler.Release();
 	RHIDevice.Release();
@@ -760,7 +731,8 @@ void Pitaya::Engine::Engine::Modules::Release()
 }
 void Pitaya::Engine::Engine::Modules::Destroy()
 {
-	//Workspace.Destroy();
+	ScriptRuntime.Destroy();
+	GameWorld.Destroy();
 	Chronometer.Destroy();
 	InputMonitor.Destroy();
 	PhysicsSimulator.Destroy(); 
@@ -788,6 +760,7 @@ bool Pitaya::Engine::Engine::FuncTables::Check() const
 	if (!ThreadTracker.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [ThreadTracker]!"); }
 	if (!Chronometer.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Chronometer]!"); }
 	if (!Window.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Window]!"); }
+	if (!GameWorld.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [GameWorld]!"); }
 	return true;
 }
 void Pitaya::Engine::Engine::FuncTables::UnRegister()
@@ -802,6 +775,7 @@ void Pitaya::Engine::Engine::FuncTables::UnRegister()
 	ThreadTracker.UnRegister();
 	Chronometer.UnRegister();
 	Window.UnRegister();
+	GameWorld.UnRegister();
 }
 
 template<>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include<string>
+#include<Core/Utils/String.h>
 
 namespace Pitaya::Game
 {
@@ -8,8 +8,11 @@ namespace Pitaya::Game
 	struct Tag
 	{
 	public:
-		Tag(std::string_view name, std::string_view tag, GameObject* gameobject)
-			:name(name), tag(tag), gameobject(gameobject) {}
+		Tag(std::string_view name, std::string_view tag)
+		{
+			Pitaya::Core::CopyStringToCharArray(name, this->name);
+			Pitaya::Core::CopyStringToCharArray(tag, this->tag);
+		}
 
 	public:
 		inline std::string_view GetName() const noexcept
@@ -20,28 +23,22 @@ namespace Pitaya::Game
 		{
 			return tag;
 		}
-		inline GameObject* GetGameObject() const noexcept
-		{
-			return gameobject;
-		}
 
 	public:
 		inline void SetName(std::string_view name) noexcept
 		{
-			this->name = name;
+			Pitaya::Core::CopyStringToCharArray(name, this->name);
 		}
 		inline void SetTag(std::string_view tag) noexcept
 		{
-			this->tag = tag;
-		}
-		inline void SetGameObject(GameObject* gameobject) noexcept
-		{
-			this->gameobject = gameobject;
+			Pitaya::Core::CopyStringToCharArray(tag, this->tag);
 		}
 
+	public:
+		inline static const constexpr uint32_t MAX_STR_SIZE = 128;
+
 	private:
-		std::string name = "GameObject";
-		std::string tag = "default";
-		GameObject* gameobject = nullptr;
+		char name[MAX_STR_SIZE] = {};
+		char tag[MAX_STR_SIZE] = {};
 	};
 }

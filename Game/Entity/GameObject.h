@@ -15,11 +15,10 @@ namespace Pitaya::Game
     public:
         inline bool IsValid() const noexcept
         { 
-            return scene != nullptr && entityId != entt::null && uid != Pitaya::Core::UID::Invalid;
+            return scene != nullptr && entityId != entt::null;
         }
         inline void Reset() noexcept
         {
-            uid = Pitaya::Core::UID::Invalid;
             entityId = entt::null;
             scene = nullptr;
         }

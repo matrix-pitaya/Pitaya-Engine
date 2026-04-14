@@ -1,12 +1,13 @@
 #pragma once
 
 #include<Hook/HookPoint.h>
+#include<cstdio>
 
-#define MOUNT_PREBEGINFRAME_HOOK(func,name) do { Pitaya::Engine::Hook_PreBeginFrame.Func = func; Pitaya::Engine::Hook_PreBeginFrame.Name = name;} while(false);
-#define MOUNT_PREFIXEDUPDATE_HOOK(func,name)  do { Pitaya::Engine::Hook_PreFixedUpdate.Func = func; Pitaya::Engine::Hook_PreFixedUpdate.Name = name;} while(false);
-#define MOUNT_PREUPDATE_HOOK(func,name)  do { Pitaya::Engine::Hook_PreUpdate.Func = func; Pitaya::Engine::Hook_PreUpdate.Name = name;} while(false);
-#define MOUNT_PRELATEUPDATE_HOOK(func,name)  do { Pitaya::Engine::Hook_PreLateUpdate.Func = func; Pitaya::Engine::Hook_PreLateUpdate.Name = name;} while(false);
-#define MOUNT_PREENDFRAME_HOOK(func,name)  do { Pitaya::Engine::Hook_PreEndFrame.Func = func; Pitaya::Engine::Hook_PreEndFrame.Name = name;} while(false);
+#define MOUNT_PREBEGINFRAME_HOOK(func,name) do { Pitaya::Engine::Hook_PreBeginFrame.Func = func; Pitaya::Engine::Hook_PreBeginFrame.Name = name; } while(false);
+#define MOUNT_PREFIXEDUPDATE_HOOK(func,name)  do { Pitaya::Engine::Hook_PreFixedUpdate.Func = func; Pitaya::Engine::Hook_PreFixedUpdate.Name = name; } while(false);
+#define MOUNT_PREUPDATE_HOOK(func,name)  do { Pitaya::Engine::Hook_PreUpdate.Func = func; Pitaya::Engine::Hook_PreUpdate.Name = name; } while(false);
+#define MOUNT_PRELATEUPDATE_HOOK(func,name)  do { Pitaya::Engine::Hook_PreLateUpdate.Func = func; Pitaya::Engine::Hook_PreLateUpdate.Name = name; } while(false);
+#define MOUNT_PREENDFRAME_HOOK(func,name)  do { Pitaya::Engine::Hook_PreEndFrame.Func = func; Pitaya::Engine::Hook_PreEndFrame.Name = name; } while(false);
 #define MOUNT_POSTRENDERERINTIALIZE_HOOK(func,name) do { Pitaya::Engine::Hook_PostRendererInitialize.Func = func; Pitaya::Engine::Hook_PostRendererInitialize.Name = name; } while(false);
 #define MOUNT_POSTRENDERERRELEASE_HOOK(func,name) do { Pitaya::Engine::Hook_PostRendererRelease.Func = func; Pitaya::Engine::Hook_PostRendererRelease.Name = name; } while(false);
 #define MOUNT_POSTRENDERERPARSECOMMAND_HOOK(func,name) do { Pitaya::Engine::Hook_PostRendererParseCommand.Func = func; Pitaya::Engine::Hook_PostRendererParseCommand.Name = name; } while(false);
@@ -40,7 +41,29 @@
 #define INVOKE_POSTLOG_HOOK(Leve,Message) if(Pitaya::Engine::Hook_PostLog.Func) { Pitaya::Engine::Hook_PostLog.Func(Leve,Message); }
 
 
-#include<cstdio>
+#define DISCARD_HOOK                                                                                                                                \
+    do                                                                                                                                              \
+    {                                                                                                                                               \
+        Pitaya::Engine::Hook_PreBeginFrame.Func = nullptr; Pitaya::Engine::Hook_PreBeginFrame.Name = nullptr;                                       \
+        Pitaya::Engine::Hook_PreFixedUpdate.Func = nullptr; Pitaya::Engine::Hook_PreFixedUpdate.Name = nullptr;                                     \
+        Pitaya::Engine::Hook_PreUpdate.Func = nullptr; Pitaya::Engine::Hook_PreUpdate.Name = nullptr;                                               \
+        Pitaya::Engine::Hook_PreLateUpdate.Func = nullptr; Pitaya::Engine::Hook_PreLateUpdate.Name = nullptr;                                       \
+        Pitaya::Engine::Hook_PreEndFrame.Func = nullptr; Pitaya::Engine::Hook_PreEndFrame.Name = nullptr;                                           \
+        Pitaya::Engine::Hook_PostRendererInitialize.Func = nullptr; Pitaya::Engine::Hook_PostRendererInitialize.Name = nullptr;                     \
+        Pitaya::Engine::Hook_PostRendererRelease.Func = nullptr; Pitaya::Engine::Hook_PostRendererRelease.Name = nullptr;                           \
+        Pitaya::Engine::Hook_PostRendererParseCommand.Func = nullptr; Pitaya::Engine::Hook_PostRendererParseCommand.Name = nullptr;                 \
+        Pitaya::Engine::Hook_PostRendererSwapBuffer.Func = nullptr; Pitaya::Engine::Hook_PostRendererSwapBuffer.Name = nullptr;                     \
+        Pitaya::Engine::Hook_PostRendererBeginRenderFrame.Func = nullptr; Pitaya::Engine::Hook_PostRendererBeginRenderFrame.Name = nullptr;         \
+        Pitaya::Engine::Hook_PreRendereEndRenderFrame.Func = nullptr; Pitaya::Engine::Hook_PreRendereEndRenderFrame.Name = nullptr;                 \
+        Pitaya::Engine::Hook_PostRenderContextInitialized.Func = nullptr; Pitaya::Engine::Hook_PostRenderContextInitialized.Name = nullptr;         \
+        Pitaya::Engine::Hook_PreRenderContextRelease.Func = nullptr; Pitaya::Engine::Hook_PreRenderContextRelease.Name = nullptr;                   \
+        Pitaya::Engine::Hook_PreRenderPipelineExecute.Func = nullptr; Pitaya::Engine::Hook_PreRenderPipelineExecute.Name = nullptr;                 \
+        Pitaya::Engine::Hook_ShouldWakeupRenderThread.Func = nullptr; Pitaya::Engine::Hook_ShouldWakeupRenderThread.Name = nullptr;                 \
+        Pitaya::Engine::Hook_PostChronometerTick.Func = nullptr; Pitaya::Engine::Hook_PostChronometerTick.Name = nullptr;                           \
+        Pitaya::Engine::Hook_PostLog.Func = nullptr; Pitaya::Engine::Hook_PostLog.Name = nullptr;                                                   \
+    } while (false);
+
+
 #define HOOK_STATE                                                                            \
     []() -> const char*                                                                       \
     {                                                                                         \

@@ -155,4 +155,4 @@ namespace Pitaya::Core
         {                                                                               \
             Pitaya::Core::Free(rawMemory);                                              \
         }                                                                               \
-    } while(0)
+    } while(false)

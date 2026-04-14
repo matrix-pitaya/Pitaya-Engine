@@ -120,7 +120,7 @@ namespace Pitaya::Core
 			return entry ? entry->Data.load(std::memory_order_relaxed) : nullptr;
 		}
 
-		bool IsReady() noexcept
+		bool IsReady() const noexcept
 		{
 			if (!entry) { return false; }
 			if (entry->State.HasBits(Pitaya::Core::AssetState::Unload))
@@ -153,6 +153,6 @@ namespace Pitaya::Core
 		}
 
 	private:
-		Pitaya::Core::Asset<T>::AssetEntry* entry = nullptr;
+		mutable Pitaya::Core::Asset<T>::AssetEntry* entry = nullptr;
 	};
 }

@@ -1,9 +1,10 @@
 #pragma once
 
-#include<Engine/API/def.h>
-
 #include<thread>
 #include<chrono>
+
+#define NOMINMAX
+#include<windows.h>
 
 namespace Pitaya::Core
 {
@@ -81,7 +82,25 @@ namespace Pitaya::Core
             }
             return true;
         }
-        bool JoinWaitForMilliseconds(std::chrono::milliseconds timeout) noexcept;
+        inline bool JoinWaitForMilliseconds(std::chrono::milliseconds timeout) noexcept
+        {
+            if (!thread.joinable()) { return true; }
+
+            const auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count();
+            const DWORD dw_ms = static_cast<DWORD>(ms < 0 ? 0 : ms);
+            const HANDLE hThread = static_cast<HANDLE>(thread.native_handle());
+            const DWORD ret = WaitForSingleObject(hThread, dw_ms);
+
+            if (ret == WAIT_OBJECT_0)
+            {
+                thread.join();
+                return true;
+            }
+
+            ::TerminateThread(hThread, 0xFFFFFFFF);
+            thread.join();
+            return false;
+        }
         inline void Detach() noexcept
         {
             if (thread.joinable())
@@ -90,15 +109,29 @@ namespace Pitaya::Core
             }
         }
         
-        bool IsRunning() noexcept;
-        Identifier GetThreadId() noexcept;
+        inline bool IsRunning() noexcept
+        {
+            if (!thread.joinable()) { return false; }
+            const HANDLE hThread = static_cast<HANDLE>(thread.native_handle());
+            DWORD exitCode = 0;
+            return GetExitCodeThread(hThread, &exitCode) && (exitCode == STILL_ACTIVE);
+        }
+        inline Identifier GetThreadId() noexcept
+        {
+            return thread.joinable() ?
+                static_cast<uint64_t>(::GetThreadId(static_cast<HANDLE>(thread.native_handle()))) :
+                0;
+        }
         inline std::thread::native_handle_type GetNativeHandle() noexcept
         {
             return thread.native_handle();
         }
         
     public:
-        ENGINE_API static Identifier ENGINE_CALL GetCurrentThreadId() noexcept;
+        inline static Identifier GetCurrentThreadId() noexcept
+        {
+            return static_cast<uint64_t>(::GetCurrentThreadId());
+        }
 
     private:
         std::thread thread;

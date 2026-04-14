@@ -7,12 +7,11 @@ bool Pitaya::Editor::Camera::Initialize()
 {
 	renderTarget = Pitaya::Asset::LoadAsset<Pitaya::Asset::RenderTarget>(Pitaya::Asset::RenderTarget::Editor);
 
-	//TOOD REMOVE 改成Asset资产，然后根据资产去动态创建PostProcessSetting
+	//TOOD 改成Asset资产，然后根据资产去动态创建PostProcessSettin
 	Pitaya::Render::PostProcessStep step;
 	Pitaya::Render::GammaCorrectionParams gama;
 	step.SetParams(gama);
-	setting.AddPostProcessStep(step);
-	//TODO END
+	setting.AddStep(step);
 	
 	return true;
 }

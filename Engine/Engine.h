@@ -13,6 +13,7 @@
 #include<Log/Common/FuncTable.h>
 #include<Time/Common/FuncTable.h>
 #include<Window/Common/FuncTable.h>
+#include<Game/Common/FuncTable.h>
 
 namespace Pitaya::Engine
 {
@@ -32,10 +33,11 @@ namespace Pitaya::Engine
 			Pitaya::Engine::Module<Pitaya::Time::Chronometer> Chronometer;
 			Pitaya::Engine::Module<Pitaya::Input::InputMonitor> InputMonitor;
 			Pitaya::Engine::Module<Pitaya::Asset::AssetHub> AssetHub;
-			Pitaya::Engine::Module<Pitaya::Project::Workspace> Workspace;
 			Pitaya::Engine::Module<Pitaya::Window::Window> Window;
 			Pitaya::Engine::Module<Pitaya::Physics::PhysicsSimulator> PhysicsSimulator;
 			Pitaya::Engine::Module<Pitaya::Config::Configurator> Configurator;
+			Pitaya::Engine::Module<Pitaya::Game::GameWorld> GameWorld;
+			Pitaya::Engine::Module<Pitaya::Script::ScriptRuntime> ScriptRuntime;
 
 			bool Create();
 			bool Check();
@@ -63,6 +65,7 @@ namespace Pitaya::Engine
 			Pitaya::Engine::FuncTable<Pitaya::Input::InputMonitor> InputMonitor;
 			Pitaya::Engine::FuncTable<Pitaya::Task::TaskScheduler> TaskScheduler;
 			Pitaya::Engine::FuncTable<Pitaya::Window::Window> Window;
+			Pitaya::Engine::FuncTable<Pitaya::Game::GameWorld> GameWorld;
 
 			bool Check() const;
 			void UnRegister();

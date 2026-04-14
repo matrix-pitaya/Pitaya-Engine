@@ -2,10 +2,10 @@
 
 #include<Core/Allocate/Allocate.h>
 #include<Context/Common/Module.h>
-#include<Game/Scene/Scene.h>
 
 namespace Pitaya::Game
 {
+	class Scene;
 	class GameWorld
 	{
 	public:
@@ -34,25 +34,13 @@ namespace Pitaya::Game
 			{
 				gameWorld->Release();
 			}
-			static void BeginFrame(GameWorld* gameWorld)
+			static void LateUpdate(GameWorld* gameWorld)
 			{
-				gameWorld->BeginFrame();
+				gameWorld->LateUpdate();
 			}
 			static void EndFrame(GameWorld* gameWorld)
 			{
 				gameWorld->EndFrame();
-			}
-			static void FixedUpdate(GameWorld* gameWorld)
-			{
-				gameWorld->FixedUpdate();
-			}
-			static void Update(GameWorld* gameWorld)
-			{
-				gameWorld->Update();
-			}
-			static void LateUpdate(GameWorld* gameWorld)
-			{
-				gameWorld->LateUpdate();
 			}
 		};
 
@@ -69,9 +57,6 @@ namespace Pitaya::Game
 	private:
 		bool Initialize();
 		void Release();
-		void BeginFrame();
-		void FixedUpdate();
-		void Update();
 		void LateUpdate();
 		void EndFrame();
 

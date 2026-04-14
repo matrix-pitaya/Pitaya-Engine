@@ -114,12 +114,10 @@ namespace Pitaya::Editor
 		GUI& operator=(GUI&&) = delete;
 
 	private:
-		bool InitializeForMain(void* nativeWindow);
-		void ReleaseForMain();
-
-	private:
-		bool InitializeForRender();
-		void ReleaseForRender();
+		bool Initialize_Main(void* nativeWindow);
+		bool Initialize_Render();
+		void Release_Main();
+		void Release_Render();
 
 	private:
 		void SetStyle();
@@ -145,7 +143,7 @@ namespace Pitaya::Editor
 
 			//设置回调函数
 			hierarchyPanel.SetSelectionChangedCallback(
-				[this](int32_t selectedID) {inspectorPanel.SetSelectedEntity(selectedID); });
+				[this](entt::entity selectedEntity) { inspectorPanel.SetSelectedEntity(selectedEntity); });
 		}
 		inline void ReleasePanel()
 		{

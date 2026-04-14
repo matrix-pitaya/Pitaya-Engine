@@ -7,6 +7,8 @@
 #include<mono/metadata/assembly.h>
 #include<mono/metadata/debug-helpers.h>
 
+#include<filesystem>
+
 namespace Pitaya::Script
 {
 	class ScriptRuntime
@@ -60,55 +62,6 @@ namespace Pitaya::Script
 		};
 
 	private:
-		class MonoVM
-		{
-		public:
-			bool Initialize();
-			void Release();
-
-		public:
-			bool LoadAssembly(const char* dllPath);
-
-		public:
-			inline MonoDomain* GetAppDomain() const noexcept
-			{
-				return appDomain;
-			}
-			inline MonoImage* GetGameImage() const noexcept
-			{
-				return gameImage;
-			}
-
-		private:
-			MonoDomain* rootDomain = nullptr;
-			MonoDomain* appDomain = nullptr;
-			MonoAssembly* gameAssembly = nullptr;
-			MonoImage* gameImage = nullptr;
-		};
-		class Bridge
-		{
-		public:
-			bool Initialize(MonoVM* monoVM);
-			void Release();
-
-		public:
-			void BeginFrame();
-			void FixedUpdate();
-			void Update();
-			void LateUpdate();
-			void EndFrame();
-
-		private:
-			void BindEngineAPI();
-			void CacheScriptAPI();
-
-		private:
-			MonoVM* monoVM = nullptr;
-			MonoMethod* updateMethod = nullptr;
-			MonoMethod* fixedUpdateMethod = nullptr;
-		};
-
-	private:
 		ScriptRuntime() = default;
 		~ScriptRuntime() = default;
 
@@ -127,8 +80,20 @@ namespace Pitaya::Script
 		void LateUpdate();
 		void EndFrame();
 
+	private:
+		bool InitMonoJit();
+		bool LoadAssembly(const std::filesystem::path& dllPath);
+		void BindEngineAPI();
+		void CacheScriptAPI();
+		bool CompileAndReload();	//热重载 先编译 Asset/Script 下的 .cs 为 GameLogic.dll 然后重新加载程序集
+		bool ReloadAssembly(const std::filesystem::path& dllPath);	//仅重载已存在的DLL 不编译
+
 	public:
-		Bridge bridge;
-		MonoVM mono;
+		MonoDomain* rootDomain = nullptr;
+		MonoDomain* appDomain = nullptr;
+		MonoAssembly* gameAssembly = nullptr;
+		MonoImage* gameImage = nullptr;
+		MonoMethod* updateMethod = nullptr;
+		MonoMethod* fixedUpdateMethod = nullptr;
 	};
 }

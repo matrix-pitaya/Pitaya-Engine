@@ -35,4 +35,3 @@ namespace Pitaya::Engine
 	//Log
 	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)(Pitaya::Log::LogLevel, std::string_view)> Hook_PostLog;
 }
-

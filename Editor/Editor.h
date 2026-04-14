@@ -28,12 +28,10 @@ namespace Pitaya::Editor
 		void MountEngineHook();
 
 	private:
-		bool Initialize(void* nativeWindow);
-		void Release();
-
-	public:
-		bool InitializeForRender();
-		void ReleaseForRender();
+		bool Initialize_Main(void* nativeWindow);
+		void Release_Main();
+		bool Initialize_Render();
+		void Release_Render();
 
 	private:
 		void BeginFrame();
@@ -75,7 +73,6 @@ namespace Pitaya::Editor
 		Pitaya::Event::EventToken mouseCurrsorMoveToken;
 	};
 }
-
 
 template<>
 EDITOR_API Pitaya::Editor::Editor& EDITOR_CALL Pitaya::Core::Singleton<Pitaya::Editor::Editor>::Instance();

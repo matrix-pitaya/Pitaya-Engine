@@ -4,6 +4,9 @@
 #include<cstdint>
 #include<stdexcept>
 
+#define NOMINMAX
+#include<objbase.h>
+
 namespace Pitaya::Core
 {
 	struct GUID
@@ -99,7 +102,16 @@ namespace Pitaya::Core
 			return std::string(buf);
 		}
 
-		static GUID New();
+		inline static GUID New()
+		{
+			::GUID winGuid;
+			Pitaya::Core::GUID result;
+			if (::CoCreateGuid(&winGuid) == S_OK)
+			{
+				std::memcpy(&result, &winGuid, sizeof(GUID));
+			}
+			return result;
+		}
 
 	private:
 		uint64_t value[2] = {};

@@ -10,5 +10,5 @@ void Pitaya::Physics::BulletPhysicsSimulator::Release()
 }
 void Pitaya::Physics::BulletPhysicsSimulator::FixedUpdate()
 {
-
+	
 }

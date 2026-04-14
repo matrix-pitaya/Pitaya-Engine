@@ -4,6 +4,7 @@
 #include<Core/Identifier/GUID.h>
 #include<GPU/Common/Identifier.h>
 #include<GPU/Common/MeshType.h>
+#include<Asset/Common/Material.h>
 
 #include<vector>
 #include<glm.hpp>
@@ -25,7 +26,7 @@ namespace Pitaya::Asset
 		std::vector<SubMesh> SubMeshs;
 		Pitaya::Core::AABB BoundingBox;
 
-		std::vector<Pitaya::Core::GUID> Materials;
+		std::vector<Pitaya::Core::Asset<Pitaya::Asset::Material>> Materials;
 		Pitaya::GPU::MeshType Type = Pitaya::GPU::MeshType::Static;
 
 		//骨骼数据专属

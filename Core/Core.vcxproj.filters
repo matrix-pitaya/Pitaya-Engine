@@ -18,7 +18,7 @@
     <ClInclude Include="Utils\Console.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Container\ObjectPool\ObjectPool.h">
+    <ClInclude Include="Container\ObjectPool.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Identifier\UID.h">
@@ -60,7 +60,7 @@
     <ClInclude Include="Thread\Thread.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Container\BidirectionalMap\BidirectionalMap.h">
+    <ClInclude Include="Container\BidirectionalMap.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Container\ThreadSafe\ThreadSafeBidirectionalMap.h">
@@ -111,7 +111,7 @@
     <ClInclude Include="Utils\Memory.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Container\SlotMap\SlotMap.h">
+    <ClInclude Include="Container\SlotMap.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Allocate\Allocate.h">
@@ -120,13 +120,5 @@
     <ClInclude Include="PassKey\PassKey.h">
       <Filter>头文件</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Identifier\GUID.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Thread\Thread.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

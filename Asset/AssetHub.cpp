@@ -11,8 +11,8 @@
 
 bool Pitaya::Asset::AssetHub::Initialize()
 {
-	engineRoot = Pitaya::Core::GetExecutableDirectory();
-	projectRoot = engineRoot;	//TOOD 获取项目根目录（目前没有写引擎Project模块，暂时不需要）
+	engineRoot = Pitaya::Core::GetExecutableDirectory() / "resource";
+	projectRoot = Pitaya::Core::GetWorkspace() / "Asset" / "Resource";
 	//registry.DeserializeFromFile();	//TOOD 反序列化数据
 	return LoadBuiltinAsset();
 }
@@ -545,7 +545,10 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::StaticMeshImportR
 	mesh->BoundingBox = cpuOpResult_Inner.BoundingBox;
 	mesh->SubMeshs = std::move(cpuOpResult_Inner.SubMeshs);
 	mesh->Type = Pitaya::GPU::MeshType::Static;
-	mesh->Materials = std::move(cpuOpResult_Inner.MaterialGUIDs);
+	for (const auto& materialGUID : cpuOpResult_Inner.MaterialGUIDs)
+	{
+		mesh->Materials.emplace_back(Pitaya::Asset::LoadAsset<Pitaya::Asset::Material>(materialGUID));
+	}
 	vao->Unbind();
 
 	Pitaya::Log::Info("Successfully created GPU resources for static mesh GUID: " + cpuOpResult_Inner.GUID.ToString());
@@ -682,7 +685,10 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::SkinnedMeshImport
 	mesh->BoneInverseMatrices = std::move(cpuOpResult_Inner.BoneInverseMatrices);
 	mesh->BoneCount = cpuOpResult_Inner.BoneCount;
 	mesh->BoundingBox = cpuOpResult_Inner.BoundingBox;
-	mesh->Materials = std::move(cpuOpResult_Inner.MaterialGUIDs);
+	for (const auto& materialGUID : cpuOpResult_Inner.MaterialGUIDs)
+	{
+		mesh->Materials.emplace_back(Pitaya::Asset::LoadAsset<Pitaya::Asset::Material>(materialGUID));
+	}
 	mesh->Type = Pitaya::GPU::MeshType::SkinnedMesh;
 
 	vao->Unbind();

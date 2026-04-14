@@ -1,5 +1,4 @@
 #include<Editor/GUI/Panel/ProfilerPanel.h>
-
 #include<Editor/Editor.h>
 
 void Pitaya::Editor::ProfilerPanel::OnImGuiRender()

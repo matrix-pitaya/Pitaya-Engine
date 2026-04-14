@@ -6,7 +6,7 @@
 
 namespace Pitaya::Game
 {
-	class Entity : public Pitaya::Core::Object
+	class Entity
 	{
 	public:
 		Entity(entt::entity entityId = entt::null)

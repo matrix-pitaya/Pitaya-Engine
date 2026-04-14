@@ -33,7 +33,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -46,7 +46,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -168,15 +168,15 @@
     <ClInclude Include="Camera\CameraSnapshot.h" />
     <ClInclude Include="Camera\CameraState.h" />
     <ClInclude Include="Color\Color.h" />
-    <ClInclude Include="Container\BidirectionalMap\BidirectionalMap.h" />
+    <ClInclude Include="Container\BidirectionalMap.h" />
     <ClInclude Include="Asset\AssetState.h" />
     <ClInclude Include="Camera\CameraType.h" />
     <ClInclude Include="Common\Direction.h" />
-    <ClInclude Include="Container\SlotMap\SlotMap.h" />
+    <ClInclude Include="Container\SlotMap.h" />
     <ClInclude Include="Identifier\GUID.h" />
     <ClInclude Include="Identifier\UID.h" />
     <ClInclude Include="Utils\Console.h" />
-    <ClInclude Include="Container\ObjectPool\ObjectPool.h" />
+    <ClInclude Include="Container\ObjectPool.h" />
     <ClInclude Include="Math\AABB.h" />
     <ClInclude Include="Math\Frustum.h" />
     <ClInclude Include="Math\Plane.h" />
@@ -198,10 +198,6 @@
     <ClInclude Include="Utils\StateFlags.h" />
     <ClInclude Include="Utils\String.h" />
     <ClInclude Include="Utils\Time.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Identifier\GUID.cpp" />
-    <ClCompile Include="Thread\Thread.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

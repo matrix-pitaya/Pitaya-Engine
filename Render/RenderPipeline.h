@@ -47,8 +47,7 @@ namespace Pitaya::Render
 	private:
 		struct PostProcessChain
 		{
-			Pitaya::Core::Asset<Pitaya::Asset::Shader> BlitShader = nullptr;
-			Pitaya::Core::Asset<Pitaya::Asset::Shader> PostProcessShaders[static_cast<uint8_t>(Pitaya::Render::PostProcessType::Unknown)] = {};
+			Pitaya::Core::Asset<Pitaya::Asset::Shader> Shaders[static_cast<uint8_t>(Pitaya::Render::PostProcessType::Unknown)] = {};
 		};
 		struct RenderGraph
 		{

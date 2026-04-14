@@ -2,6 +2,7 @@
 
 #include<string>  
 #include<algorithm>
+#include<cctype>
 
 namespace Pitaya::Core
 {
@@ -28,6 +29,25 @@ namespace Pitaya::Core
 	{
 		std::transform(str.begin(), str.end(), str.begin(),
 			[](unsigned char c) { return std::toupper(c); });
+	}
+
+	template <size_t N>
+	inline void ToUpper(char(&arr)[N]) noexcept
+	{
+		for (size_t i = 0; i < N; ++i)
+		{
+			if (arr[i] == '\0') { break; }
+			arr[i] = static_cast<char>(std::toupper(static_cast<unsigned char>(arr[i])));
+		}
+	}
+	template <size_t N>
+	inline void ToLower(char(&arr)[N]) noexcept
+	{
+		for (size_t i = 0; i < N; ++i)
+		{
+			if (arr[i] == '\0') { break; }
+			arr[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(arr[i])));
+		}
 	}
 
 	inline void CopyStringToBuffer(std::string_view sv, char* buffer, size_t size) noexcept
