@@ -81,12 +81,15 @@ namespace
 			const std::filesystem::path pitayaFile = workspace / ".pitaya";
 			if (!std::filesystem::exists(pitayaFile))
 			{
+				std::filesystem::create_directories(pitayaFile.parent_path());
 				std::ofstream file(pitayaFile);
 				if (!file.is_open())
 				{
-					MessageBoxA(NULL, "Failed to create project marker file!", "Error", MB_OK);
+					std::error_code ec(errno, std::generic_category());
+					MessageBoxA(NULL, ("Failed to create project marker file!\npath: " + pitayaFile.string() + "\nerror: " + ec.message()).c_str(), "Error", MB_OK);
 					exit(-1);
 				}
+				file.close();
 			}
 
 			auto CheckFolder = [](const std::filesystem::path& folder)
@@ -94,7 +97,7 @@ namespace
 					std::error_code ec;
 					if (!std::filesystem::create_directories(folder, ec) && ec)
 					{
-						MessageBoxA(NULL, ("Failed to create directory: " + folder.string()).c_str(), "Error", MB_OK);
+						MessageBoxA(NULL, ("Failed to create directory!\npath:" + folder.string() + "\nerror:" + ec.message()).c_str(), "Error", MB_OK);
 						exit(-1);
 					}
 				};
@@ -104,38 +107,59 @@ namespace
 			CheckFolder(workspace / "Asset" / "Scene");
 		}
 
-		//Resource/Mono Check
+		//Resource Check
 		{
-			auto CheckFolder = [](const std::filesystem::path& folder)
+			const constexpr std::string_view CheckList[] =
+			{
+				"fonts/fa-solid-900.ttf",
+				"fonts/segoeui.ttf",
+				"icon/default.png",
+				"rendertarget/editor.rt",
+				"rendertarget/game.rt",
+				"shader/blit/blit.frag",
+				"shader/blit/blit.shader",
+				"shader/blit/blit.vert",
+				"shader/GammaCorrection/GammaCorrection.frag",
+				"shader/GammaCorrection/GammaCorrection.shader",
+				"shader/GammaCorrection/GammaCorrection.vert",
+			};
+
+			const std::filesystem::path folder = Pitaya::Core::GetExecutableDirectory() / "resource";
+			for (const std::string_view fileName : CheckList)
+			{
+				if (fileName.empty()) { continue; }
+				std::filesystem::path absPath = folder / fileName;
+				if (!std::filesystem::exists(absPath))
 				{
-					const std::filesystem::path checkListFile = folder / "CheckList.req";
-					if (!std::filesystem::exists(checkListFile))
-					{
-						MessageBoxA(NULL, "miss checklist!", "Error", MB_OK);
-						exit(-1);
-					}
-					std::ifstream inFile(checkListFile);
-					if (!inFile.is_open())
-					{
-						MessageBoxA(NULL, "checklist open fail!", "Error", MB_OK);
-						exit(-1);
-					}
-					std::string line;
-					while (std::getline(inFile, line))
-					{
-						line.erase(line.find_last_not_of(" \n\r\t") + 1);	//去除行末潜在的空白字符
-						if (line.empty()) { continue; }
-						std::filesystem::path absPath = folder / line;		//拼接绝对路径
-						if (!std::filesystem::exists(absPath))				//检测文件是否存在
-						{
-							MessageBoxA(NULL, ("miss resource file: " + absPath.string()).c_str(), "Error", MB_OK);
-							exit(-1);
-						}
-					}
-					inFile.close();
-				};
-			CheckFolder(Pitaya::Core::GetExecutableDirectory() / "resource");
-			CheckFolder(Pitaya::Core::GetExecutableDirectory() / "mono");
+					MessageBoxA(NULL, ("miss resource core file: " + absPath.string()).c_str(), "Error", MB_OK);
+					exit(-1);
+				}
+			}
+		}
+
+		//Mono Check
+		{
+			const constexpr std::string_view CheckList[] =
+			{
+				"bin/mono-2.0-sgen.dll",
+				"lib/mono/4.5/mscorlib.dll",	
+				"lib/mono/4.5/System.dll",
+				"lib/mono/4.5/System.Core.dll",
+				"etc/mono/config",
+				"etc/mono/4.5/machine.config"
+			};
+
+			const std::filesystem::path folder = Pitaya::Core::GetExecutableDirectory() / "mono";
+			for (const std::string_view fileName : CheckList)
+			{
+				if (fileName.empty()) { continue; }
+				std::filesystem::path absPath = folder / fileName;
+				if (!std::filesystem::exists(absPath))
+				{
+					MessageBoxA(NULL, ("miss mono core file: " + absPath.string()).c_str(), "Error", MB_OK);
+					exit(-1);
+				}
+			}
 		}
 	}
 }
