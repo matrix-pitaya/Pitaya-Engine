@@ -359,306 +359,277 @@ void Pitaya::Engine::Engine::Terminate()
 	Release();
 }
 
+#define MODULE(T) modules.T
+#define FUNCTABLE(T) funcTables.T
+
 bool Pitaya::Engine::Engine::Initialize()
 {
-	if (!FillContext()) { throw std::runtime_error("Fill Context Fail!"); }
-	if (!FillFuncTables()) { throw std::runtime_error("Fill FuncTables Fail!"); }
-	if (!funcTables.Check()) { throw std::runtime_error("FuncTables Check Fail!"); }
-	if (!modules.Create()) { throw std::runtime_error("Modules Create Fail!"); }
-	if (!modules.Check()) { throw std::runtime_error("Modules Check Fail!"); }
-	if (!modules.Initialize()) { throw std::runtime_error("Modules Initialize Fail!"); }
-	return true;
-}
-bool Pitaya::Engine::Engine::IsRunning() const
-{
-	return modules.IsRunning();
-}
-void Pitaya::Engine::Engine::BeginFrame()
-{
-	INVOKE_PREBEGINFRAME_HOOK
-	modules.BeginFrame();
-}
-void Pitaya::Engine::Engine::FixedUpdate()
-{
-	modules.FixedUpdate();
-}
-void Pitaya::Engine::Engine::Update()
-{
-	INVOKE_PREUPDATE_HOOK
-	modules.Update();
-}
-void Pitaya::Engine::Engine::LateUpdate()
-{
-	INVOKE_PRELATEUPDATE_HOOK
-	modules.LateUpdate();
-}
-void Pitaya::Engine::Engine::Render()
-{
-	modules.Render();
-}
-void Pitaya::Engine::Engine::EndFrame()
-{
-	INVOKE_PREENDFRAME_HOOK
-	modules.EndFrame();
-}
-void Pitaya::Engine::Engine::FrameSync()
-{
-	modules.FrameSync();
-}
-void Pitaya::Engine::Engine::Release()
-{
-	modules.Release();
-	modules.Destroy();
-	funcTables.UnRegister();
-	Pitaya::Engine::Context::Instance().UnRegister();
-}
-bool Pitaya::Engine::Engine::FillContext()
-{
-	auto& context = Pitaya::Engine::Context::Instance();
-	auto& modules = context.modules;
-	modules.AssetHub = &this->modules.AssetHub;
-	modules.Renderer = &this->modules.Renderer;
-	modules.RenderPipeline = &this->modules.RenderPipeline;
-	modules.PhysicsSimulator = &this->modules.PhysicsSimulator;
-	modules.Window = &this->modules.Window;
-	modules.InputMonitor = &this->modules.InputMonitor;
-	modules.Chronometer = &this->modules.Chronometer;
-	modules.EventDispatcher = &this->modules.EventDispatcher;
-	modules.Logger = &this->modules.Logger;
-	modules.ThreadTracker = &this->modules.ThreadTracker;
-	modules.TaskScheduler = &this->modules.TaskScheduler;
-	modules.RHIDevice = &this->modules.RHIDevice;
-	modules.Configurator = &this->modules.Configurator;
-	modules.GameWorld = &this->modules.GameWorld;
-	modules.ScriptRuntime = &this->modules.ScriptRuntime;
+	//Fill Context
+	do
+	{
+#define FILLCONTEXT(T) Pitaya::Engine::Context::Instance().T = &T
 
-	auto& funcTables = context.funcTables;
-	funcTables.AssetHub = &this->funcTables.AssetHub;
-	funcTables.Configurator = &this->funcTables.Configurator;
-	funcTables.EventDispatcher = &this->funcTables.EventDispatcher;
-	funcTables.RHIDevice = &this->funcTables.RHIDevice;
-	funcTables.InputMonitor = &this->funcTables.InputMonitor;
-	funcTables.Logger = &this->funcTables.Logger;
-	funcTables.TaskScheduler = &this->funcTables.TaskScheduler;
-	funcTables.ThreadTracker = &this->funcTables.ThreadTracker;
-	funcTables.Chronometer = &this->funcTables.Chronometer;
-	funcTables.Window = &this->funcTables.Window;
-	funcTables.GameWorld = &this->funcTables.GameWorld;
-	return context.Check();
-}
-bool Pitaya::Engine::Engine::FillFuncTables()
-{
+		FILLCONTEXT(MODULE(AssetHub));
+		FILLCONTEXT(MODULE(Renderer));
+		FILLCONTEXT(MODULE(RenderPipeline));
+		FILLCONTEXT(MODULE(PhysicsSimulator));
+		FILLCONTEXT(MODULE(Window));
+		FILLCONTEXT(MODULE(InputMonitor));
+		FILLCONTEXT(MODULE(Chronometer));
+		FILLCONTEXT(MODULE(EventDispatcher));
+		FILLCONTEXT(MODULE(Logger));
+		FILLCONTEXT(MODULE(ThreadTracker));
+		FILLCONTEXT(MODULE(TaskScheduler));
+		FILLCONTEXT(MODULE(RHIDevice));
+		FILLCONTEXT(MODULE(Configurator));
+		FILLCONTEXT(MODULE(GameWorld));
+		FILLCONTEXT(MODULE(ScriptRuntime));
+
+		FILLCONTEXT(FUNCTABLE(AssetHub));
+		FILLCONTEXT(FUNCTABLE(Configurator));
+		FILLCONTEXT(FUNCTABLE(EventDispatcher));
+		FILLCONTEXT(FUNCTABLE(RHIDevice));
+		FILLCONTEXT(FUNCTABLE(InputMonitor));
+		FILLCONTEXT(FUNCTABLE(Logger));
+		FILLCONTEXT(FUNCTABLE(TaskScheduler));
+		FILLCONTEXT(FUNCTABLE(ThreadTracker));
+		FILLCONTEXT(FUNCTABLE(Chronometer));
+		FILLCONTEXT(FUNCTABLE(Window));
+		FILLCONTEXT(FUNCTABLE(GameWorld));
+
+#undef FILLCONTEXT
+
+		if (!Pitaya::Engine::Context::Instance().Check()) { return false; }
+	} while (false);
+
+	//Fill FuncTables
+	do
+	{
 #pragma region Asset
-	auto& asset = funcTables.AssetHub;
-	asset.OnLoadTexture = OnLoadTexture;
-	asset.OnLoadShader = OnLoadShader;
-	asset.OnLoadMesh = OnLoadMesh;
-	asset.OnLoadMaterial = OnLoadMaterial;
-	asset.OnLoadRenderTarget = OnLoadRenderTarget;
-	asset.OnGetAssetPathByGUID = OnGetAssetPathByGUID;
-	asset.OnGetAssetGUIDByPath = OnGetAssetGUIDByPath;
-	asset.OnTransformToVirtualPath = OnTransformToVirtualPath;
-	asset.OnRegisterExternalFile = OnRegisterExternalFile;
-	asset.OnSyncAssetToGPU = OnSyncAssetToGPU;
-	asset.OnIsUploadedToGPU = OnIsUploadedToGPU;
+		FUNCTABLE(AssetHub).OnLoadTexture = OnLoadTexture;
+		FUNCTABLE(AssetHub).OnLoadShader = OnLoadShader;
+		FUNCTABLE(AssetHub).OnLoadMesh = OnLoadMesh;
+		FUNCTABLE(AssetHub).OnLoadMaterial = OnLoadMaterial;
+		FUNCTABLE(AssetHub).OnLoadRenderTarget = OnLoadRenderTarget;
+		FUNCTABLE(AssetHub).OnGetAssetPathByGUID = OnGetAssetPathByGUID;
+		FUNCTABLE(AssetHub).OnGetAssetGUIDByPath = OnGetAssetGUIDByPath;
+		FUNCTABLE(AssetHub).OnTransformToVirtualPath = OnTransformToVirtualPath;
+		FUNCTABLE(AssetHub).OnRegisterExternalFile = OnRegisterExternalFile;
+		FUNCTABLE(AssetHub).OnSyncAssetToGPU = OnSyncAssetToGPU;
+		FUNCTABLE(AssetHub).OnIsUploadedToGPU = OnIsUploadedToGPU;
 #pragma endregion
 
 
 #pragma region Time
-	auto& time = funcTables.Chronometer;
-	time.Ondelta = Ondelta;
-	time.OnFixdelta = OnFixdelta;
-	time.OnUnscaledDelta = OnUnscaledDelta;
-	time.OnTimeScale = OnTimeScale;
-	time.OnFramerate = OnFramerate;
-	time.OnMilliseconds = OnMilliseconds;
-	time.OnSeconds = OnSeconds;
+		FUNCTABLE(Chronometer).Ondelta = Ondelta;
+		FUNCTABLE(Chronometer).OnFixdelta = OnFixdelta;
+		FUNCTABLE(Chronometer).OnUnscaledDelta = OnUnscaledDelta;
+		FUNCTABLE(Chronometer).OnTimeScale = OnTimeScale;
+		FUNCTABLE(Chronometer).OnFramerate = OnFramerate;
+		FUNCTABLE(Chronometer).OnMilliseconds = OnMilliseconds;
+		FUNCTABLE(Chronometer).OnSeconds = OnSeconds;
 #pragma endregion
 
 
 #pragma region Log
-	auto& log = funcTables.Logger;
-	log.OnLog = OnLog;
+		FUNCTABLE(Logger).OnLog = OnLog;
 #pragma endregion
 
 
 #pragma region Thread
-	auto& thread = funcTables.ThreadTracker;
-	thread.OnRegisterThread = OnRegisterThread;
-	thread.OnUnregisterThread = OnUnregisterThread;
-	thread.OnGetThreadName = OnGetThreadName;
-	thread.OnGetThreadIsRunning = OnGetThreadIsRunning;
+		FUNCTABLE(ThreadTracker).OnRegisterThread = OnRegisterThread;
+		FUNCTABLE(ThreadTracker).OnUnregisterThread = OnUnregisterThread;
+		FUNCTABLE(ThreadTracker).OnGetThreadName = OnGetThreadName;
+		FUNCTABLE(ThreadTracker).OnGetThreadIsRunning = OnGetThreadIsRunning;
 #pragma endregion
-	
+
 
 #pragma region Event
-	auto& event = funcTables.EventDispatcher;
-	event.OnSubscribe = OnSubscribe;
-	event.OnUnSubscribe = OnUnSubscribe;;
-	event.OnEmit = OnEmit;
+		FUNCTABLE(EventDispatcher).OnSubscribe = OnSubscribe;
+		FUNCTABLE(EventDispatcher).OnUnSubscribe = OnUnSubscribe;;
+		FUNCTABLE(EventDispatcher).OnEmit = OnEmit;
 #pragma endregion
 
 
 #pragma region Input
-	auto& input = funcTables.InputMonitor;
-	input.OnGetKeyDown = OnGetKeyDown;
-	input.OnGetKeyPressed = OnGetKeyPressed;
-	input.OnGetKeyReleased = OnGetKeyReleased;
+		FUNCTABLE(InputMonitor).OnGetKeyDown = OnGetKeyDown;
+		FUNCTABLE(InputMonitor).OnGetKeyPressed = OnGetKeyPressed;
+		FUNCTABLE(InputMonitor).OnGetKeyReleased = OnGetKeyReleased;
 #pragma endregion
 
 
 #pragma region Task
-	auto& task = funcTables.TaskScheduler;
-	task.OnPostJob = OnPostJob;
+		FUNCTABLE(TaskScheduler).OnPostJob = OnPostJob;
 #pragma endregion
 
 
 #pragma region Config
-	auto& config = funcTables.Configurator;
-	config.OnGetRenderAPI = OnGetRenderAPI;
-	config.OnGetMaxFixupdataExecuteTimes = OnGetMaxFixupdataExecuteTimes;
-	config.OnGetMaxInstancesCount = OnGetMaxInstancesCount;
-	config.OnGetMaxBonesPerInstance = OnGetMaxBonesPerInstance;
-	config.OnGetEnableVSync = OnGetEnableVSync;
+		FUNCTABLE(Configurator).OnGetRenderAPI = OnGetRenderAPI;
+		FUNCTABLE(Configurator).OnGetMaxFixupdataExecuteTimes = OnGetMaxFixupdataExecuteTimes;
+		FUNCTABLE(Configurator).OnGetMaxInstancesCount = OnGetMaxInstancesCount;
+		FUNCTABLE(Configurator).OnGetMaxBonesPerInstance = OnGetMaxBonesPerInstance;
+		FUNCTABLE(Configurator).OnGetEnableVSync = OnGetEnableVSync;
 #pragma endregion
 
 
 #pragma region Window
-	auto& window = funcTables.Window;
-	window.OnGetNativeWindow = OnGetNativeWindow;
+		FUNCTABLE(Window).OnGetNativeWindow = OnGetNativeWindow;
 #pragma endregion
 
 
 #pragma region GPU
-	auto& gpu = funcTables.RHIDevice;
-	gpu.OnDestroyAllGPUResource = OnDestroyAllGPUResource;
+		FUNCTABLE(RHIDevice).OnDestroyAllGPUResource = OnDestroyAllGPUResource;
 
-	gpu.OnCreateVertexArray = OnCreateVertexArray;
-	gpu.OnCreateVertexBuffer = OnCreateVertexBuffer;
-	gpu.OnCreateIndexBuffer = OnCreateIndexBuffer;
-	gpu.OnCreateShaderVF = OnCreateShaderVF;
-	gpu.OnCreateShaderVFG = OnCreateShaderVFG;
-	gpu.OnCreateTexture2D = OnCreateTexture2D;
-	gpu.OnCreateTextureCubemap = OnCreateTextureCubemap;
-	gpu.OnCreateUniformBuffer = OnCreateUniformBuffer;
-	gpu.OnCreateFrameBuffer = OnCreateFrameBuffer;
-	gpu.OnCreateShaderStorageBuffer = OnCreateShaderStorageBuffer;
+		FUNCTABLE(RHIDevice).OnCreateVertexArray = OnCreateVertexArray;
+		FUNCTABLE(RHIDevice).OnCreateVertexBuffer = OnCreateVertexBuffer;
+		FUNCTABLE(RHIDevice).OnCreateIndexBuffer = OnCreateIndexBuffer;
+		FUNCTABLE(RHIDevice).OnCreateShaderVF = OnCreateShaderVF;
+		FUNCTABLE(RHIDevice).OnCreateShaderVFG = OnCreateShaderVFG;
+		FUNCTABLE(RHIDevice).OnCreateTexture2D = OnCreateTexture2D;
+		FUNCTABLE(RHIDevice).OnCreateTextureCubemap = OnCreateTextureCubemap;
+		FUNCTABLE(RHIDevice).OnCreateUniformBuffer = OnCreateUniformBuffer;
+		FUNCTABLE(RHIDevice).OnCreateFrameBuffer = OnCreateFrameBuffer;
+		FUNCTABLE(RHIDevice).OnCreateShaderStorageBuffer = OnCreateShaderStorageBuffer;
 
-	gpu.OnDestroyVertexArray = OnDestroyVertexArray;
-	gpu.OnDestroyVertexBuffer = OnDestroyVertexBuffer;
-	gpu.OnDestroyIndexBuffer = OnDestroyIndexBuffer;
-	gpu.OnDestroyShader = OnDestroyShader;
-	gpu.OnDestroyTexture2D = OnDestroyTexture2D;
-	gpu.OnDestroyTextureCubemap = OnDestroyTextureCubemap;
-	gpu.OnDestroyUniformBuffer = OnDestroyUniformBuffer;
-	gpu.OnDestroyFrameBuffer = OnDestroyFrameBuffer;
-	gpu.OnDestroyShaderStorageBuffer = OnDestroyShaderStorageBuffer;
+		FUNCTABLE(RHIDevice).OnDestroyVertexArray = OnDestroyVertexArray;
+		FUNCTABLE(RHIDevice).OnDestroyVertexBuffer = OnDestroyVertexBuffer;
+		FUNCTABLE(RHIDevice).OnDestroyIndexBuffer = OnDestroyIndexBuffer;
+		FUNCTABLE(RHIDevice).OnDestroyShader = OnDestroyShader;
+		FUNCTABLE(RHIDevice).OnDestroyTexture2D = OnDestroyTexture2D;
+		FUNCTABLE(RHIDevice).OnDestroyTextureCubemap = OnDestroyTextureCubemap;
+		FUNCTABLE(RHIDevice).OnDestroyUniformBuffer = OnDestroyUniformBuffer;
+		FUNCTABLE(RHIDevice).OnDestroyFrameBuffer = OnDestroyFrameBuffer;
+		FUNCTABLE(RHIDevice).OnDestroyShaderStorageBuffer = OnDestroyShaderStorageBuffer;
 
-	gpu.OnGetVertexArray = OnGetVertexArray;
-	gpu.OnGetVertexBuffer = OnGetVertexBuffer;
-	gpu.OnGetIndexBuffer = OnGetIndexBuffer;
-	gpu.OnGetShader = OnGetShader;
-	gpu.OnGetTexture2D = OnGetTexture2D;
-	gpu.OnGetTextureCubemap = OnGetTextureCubemap;
-	gpu.OnGetUniformBuffer = OnGetUniformBuffer;
-	gpu.OnGetFrameBuffer = OnGetFrameBuffer;
-	gpu.OnGetShaderStorageBuffer = OnGetShaderStorageBuffer;
+		FUNCTABLE(RHIDevice).OnGetVertexArray = OnGetVertexArray;
+		FUNCTABLE(RHIDevice).OnGetVertexBuffer = OnGetVertexBuffer;
+		FUNCTABLE(RHIDevice).OnGetIndexBuffer = OnGetIndexBuffer;
+		FUNCTABLE(RHIDevice).OnGetShader = OnGetShader;
+		FUNCTABLE(RHIDevice).OnGetTexture2D = OnGetTexture2D;
+		FUNCTABLE(RHIDevice).OnGetTextureCubemap = OnGetTextureCubemap;
+		FUNCTABLE(RHIDevice).OnGetUniformBuffer = OnGetUniformBuffer;
+		FUNCTABLE(RHIDevice).OnGetFrameBuffer = OnGetFrameBuffer;
+		FUNCTABLE(RHIDevice).OnGetShaderStorageBuffer = OnGetShaderStorageBuffer;
 #pragma endregion
 
 
 #pragma region Game
-	auto& game = funcTables.GameWorld;
-	game.OnGetActiveScene = OnGetActiveScene;
+		FUNCTABLE(GameWorld).OnGetActiveScene = OnGetActiveScene;
 #pragma endregion
-	return true;
-}
+	} while (false);
 
-bool Pitaya::Engine::Engine::Modules::Create()
-{
-	if (!Chronometer.Create()) { throw std::runtime_error("Engine [Module] [Chronometer] reate Fail!"); }
-	if (!TaskScheduler.Create()) { throw std::runtime_error("Engine [Module] [TaskScheduler] Create Fail!"); }
-	if (!ThreadTracker.Create()) { throw std::runtime_error("Engine [Module] [ThreadTracker] Create Fail!"); }
-	if (!EventDispatcher.Create()) { throw std::runtime_error("Engine [Module] [EventDispatcher] Create Fail!"); }
-	if (!Logger.Create()) { throw std::runtime_error("Engine [Module] [Logger] Create Fail!"); }
-	if (!RHIDevice.Create()) { throw std::runtime_error("Engine [Module] [RHIDevice] Create Fail!"); }
-	if (!InputMonitor.Create()) { throw std::runtime_error("Engine [Module] [InputMonitor] Create Fail!"); }
-	if (!AssetHub.Create()) { throw std::runtime_error("Engine [Module] [AssetHub] Create Fail!"); }
-	if (!RenderPipeline.Create()) { throw std::runtime_error("Engine [Module] [RenderPipeline] Create Fail!"); }
-	if (!Configurator.Create()) { throw std::runtime_error("Engine [Module] [Configurator] Create Fail!"); }
-	if (!Renderer.Create(Configurator->GetRenderAPI())) { throw std::runtime_error("Engine [Module] [Renderer] Create Fail!"); }
-	if (!Window.Create(Configurator->GetWindowPlatform())) { throw std::runtime_error("Engine [Module] [Window] Create Fail!"); }
-	if (!PhysicsSimulator.Create(Configurator->GetPhysicsAPI())) { throw std::runtime_error("Engine [Module] [PhysicsSimulator] Create Fail!"); }
-	if (!GameWorld.Create()) { throw std::runtime_error("Engine [Module] [GameWorld] Create Fail!"); }
-	if (!ScriptRuntime.Create()) { throw std::runtime_error("Engine [Module] [ScriptRuntime] Create Fail!"); }
+	//Check FuncTables
+	do
+	{
+		if (!FUNCTABLE(AssetHub).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [AssetHub]!"); }
+		if (!FUNCTABLE(Configurator).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Configurator]!"); }
+		if (!FUNCTABLE(EventDispatcher).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [EventDispatcher]!"); }
+		if (!FUNCTABLE(RHIDevice).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [RHIDevice]!"); }
+		if (!FUNCTABLE(InputMonitor).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [InputMonitor]!"); }
+		if (!FUNCTABLE(Logger).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Logger]!"); }
+		if (!FUNCTABLE(TaskScheduler).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [TaskScheduler]!"); }
+		if (!FUNCTABLE(ThreadTracker).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [ThreadTracker]!"); }
+		if (!FUNCTABLE(Chronometer).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Chronometer]!"); }
+		if (!FUNCTABLE(Window).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Window]!"); }
+		if (!FUNCTABLE(GameWorld).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [GameWorld]!"); }
+	} while (false);
+
+	//Create Modules
+	do
+	{
+		if (!MODULE(Chronometer).Create()) { throw std::runtime_error("Engine [Module] [Chronometer] reate Fail!"); }
+		if (!MODULE(TaskScheduler).Create()) { throw std::runtime_error("Engine [Module] [TaskScheduler] Create Fail!"); }
+		if (!MODULE(ThreadTracker).Create()) { throw std::runtime_error("Engine [Module] [ThreadTracker] Create Fail!"); }
+		if (!MODULE(EventDispatcher).Create()) { throw std::runtime_error("Engine [Module] [EventDispatcher] Create Fail!"); }
+		if (!MODULE(Logger).Create()) { throw std::runtime_error("Engine [Module] [Logger] Create Fail!"); }
+		if (!MODULE(RHIDevice).Create()) { throw std::runtime_error("Engine [Module] [RHIDevice] Create Fail!"); }
+		if (!MODULE(InputMonitor).Create()) { throw std::runtime_error("Engine [Module] [InputMonitor] Create Fail!"); }
+		if (!MODULE(AssetHub).Create()) { throw std::runtime_error("Engine [Module] [AssetHub] Create Fail!"); }
+		if (!MODULE(RenderPipeline).Create()) { throw std::runtime_error("Engine [Module] [RenderPipeline] Create Fail!"); }
+		if (!MODULE(Configurator).Create()) { throw std::runtime_error("Engine [Module] [Configurator] Create Fail!"); }
+		if (!MODULE(Renderer).Create(MODULE(Configurator)->GetRenderAPI())) { throw std::runtime_error("Engine [Module] [Renderer] Create Fail!"); }
+		if (!MODULE(Window).Create(MODULE(Configurator)->GetWindowPlatform())) { throw std::runtime_error("Engine [Module] [Window] Create Fail!"); }
+		if (!MODULE(PhysicsSimulator).Create(MODULE(Configurator)->GetPhysicsAPI())) { throw std::runtime_error("Engine [Module] [PhysicsSimulator] Create Fail!"); }
+		if (!MODULE(GameWorld).Create()) { throw std::runtime_error("Engine [Module] [GameWorld] Create Fail!"); }
+		if (!MODULE(ScriptRuntime).Create()) { throw std::runtime_error("Engine [Module] [ScriptRuntime] Create Fail!"); }
+	} while (false);
+	
+	//Check Modules
+	do
+	{
+		if (!MODULE(Configurator)) { throw std::runtime_error("Engine [Module] Miss [Configurator]!"); }
+		if (!MODULE(EventDispatcher)) { throw std::runtime_error("Engine [Module] Miss [EventDispatcher]!"); }
+		if (!MODULE(InputMonitor)) { throw std::runtime_error("Engine [Module] Miss [InputMonitor]!"); }
+		if (!MODULE(ThreadTracker)) { throw std::runtime_error("Engine [Module] Miss [ThreadTracker]!"); }
+		if (!MODULE(Logger)) { throw std::runtime_error("Engine [Module] Miss [Logger]!"); }
+		if (!MODULE(TaskScheduler)) { throw std::runtime_error("Engine [Module] Miss [TaskScheduler]!"); }
+		if (!MODULE(AssetHub)) { throw std::runtime_error("Engine [Module] Miss [AssetHub]!"); }
+		if (!MODULE(PhysicsSimulator)) { throw std::runtime_error("Engine [Module] Miss [PhysicsSimulator]!"); }
+		if (!MODULE(RHIDevice)) { throw std::runtime_error("Engine [Module] Miss [RHIDevice]!"); }
+		if (!MODULE(Window)) { throw std::runtime_error("Engine [Module] Miss [Window]!"); }
+		if (!MODULE(Renderer)) { throw std::runtime_error("Engine [Module] Miss [Renderer]!"); }
+		if (!MODULE(Chronometer)) { throw std::runtime_error("Engine [Module] Miss [Chronometer]!"); }
+		if (!MODULE(RenderPipeline)) { throw std::runtime_error("Engine [Module] Miss [RenderPipeline]!"); }
+	} while (false);
+
+	//Initialize Modules
+	do
+	{
+		if (!MODULE(Configurator).Initialize()) { throw std::runtime_error("Engine [Configurator] Module Initialize Fail!"); }
+		if (!MODULE(EventDispatcher).Initialize()) { throw std::runtime_error("Engine [EventDispatcher] Module Initialize Fail!"); }
+		if (!MODULE(InputMonitor).Initialize()) { throw std::runtime_error("Engine [InputMonitor] Module Initialize Fail!"); }
+		if (!MODULE(ThreadTracker).Initialize()) { throw std::runtime_error("Engine [ThreadTracker] Module Initialize Fail!"); }
+		if (!MODULE(Logger).Initialize()) { throw std::runtime_error("Engine [Logger] Module Initialize Fail!"); }
+		if (!MODULE(TaskScheduler).Initialize()) { throw std::runtime_error("Engine [TaskScheduler] Module Initialize Fail!"); }
+		if (!MODULE(AssetHub).Initialize()) { throw std::runtime_error("Engine [AssetHub] Module Initialize Fail!"); }
+		if (!MODULE(GameWorld).Initialize()) { throw std::runtime_error("Engine [GameWorld] Module Initialize Fail!"); }
+		//if (!MODULE(ScriptRuntime).Initialize()) { throw std::runtime_error("Engine [ScriptRuntime] Module Initialize Fail!"); }
+		if (!MODULE(PhysicsSimulator).Initialize()) { throw std::runtime_error("Engine [PhysicsSimulator] Module Initialize Fail!"); }
+		if (!MODULE(RHIDevice).Initialize()) { throw std::runtime_error("Engine [RHIDevice] Module Initialize Fail!"); }
+		if (!MODULE(Window).Initialize(MODULE(Configurator)->GetWindowWidth(), MODULE(Configurator)->GetWindowHeight(), MODULE(Configurator)->GetWindowName().c_str())) { throw std::runtime_error("Engine [Window] Module Initialize Fail!"); }
+		if (!MODULE(RenderPipeline).Initialize()) { throw std::runtime_error("[RenderPipeline] Module Initialize Fail!"); }
+		if (!MODULE(Renderer).Initialize(MODULE(Window)->GetNativeWindow())) { throw std::runtime_error("[Renderer] Module Initialize Fail!"); }
+		if (!MODULE(Chronometer).Initialize()) { throw std::runtime_error("Engine [Chronometer] Module Initialize Fail!"); }
+	} while (false);
+
 	return true;
 }
-bool Pitaya::Engine::Engine::Modules::Check()
+bool Pitaya::Engine::Engine::IsRunning() const
 {
-	if (!Configurator) { throw std::runtime_error("Engine [Module] Miss [Configurator]!"); }
-	if (!EventDispatcher) { throw std::runtime_error("Engine [Module] Miss [EventDispatcher]!"); }
-	if (!InputMonitor) { throw std::runtime_error("Engine [Module] Miss [InputMonitor]!"); }
-	if (!ThreadTracker) { throw std::runtime_error("Engine [Module] Miss [ThreadTracker]!"); }
-	if (!Logger) { throw std::runtime_error("Engine [Module] Miss [Logger]!"); }
-	if (!TaskScheduler) { throw std::runtime_error("Engine [Module] Miss [TaskScheduler]!"); }
-	if (!AssetHub) { throw std::runtime_error("Engine [Module] Miss [AssetHub]!"); }
-	if (!PhysicsSimulator) { throw std::runtime_error("Engine [Module] Miss [PhysicsSimulator]!"); }
-	if (!RHIDevice) { throw std::runtime_error("Engine [Module] Miss [RHIDevice]!"); }
-	if (!Window) { throw std::runtime_error("Engine [Module] Miss [Window]!"); }
-	if (!Renderer) { throw std::runtime_error("Engine [Module] Miss [Renderer]!"); }
-	if (!Chronometer) { throw std::runtime_error("Engine [Module] Miss [Chronometer]!"); }
-	if (!RenderPipeline) { throw std::runtime_error("Engine [Module] Miss [RenderPipeline]!"); }
-	return true;
+	return !MODULE(Window)->IsClose();
 }
-bool Pitaya::Engine::Engine::Modules::Initialize()
+void Pitaya::Engine::Engine::BeginFrame()
 {
-	if (!Configurator.Initialize()) { throw std::runtime_error("Engine [Configurator] Module Initialize Fail!"); }
-	if (!EventDispatcher.Initialize()) { throw std::runtime_error("Engine [EventDispatcher] Module Initialize Fail!"); }
-	if (!InputMonitor.Initialize()) { throw std::runtime_error("Engine [InputMonitor] Module Initialize Fail!"); }
-	if (!ThreadTracker.Initialize()) { throw std::runtime_error("Engine [ThreadTracker] Module Initialize Fail!"); }
-	if (!Logger.Initialize()) { throw std::runtime_error("Engine [Logger] Module Initialize Fail!"); }
-	if (!TaskScheduler.Initialize()) { throw std::runtime_error("Engine [TaskScheduler] Module Initialize Fail!"); }
-	if (!AssetHub.Initialize()) { throw std::runtime_error("Engine [AssetHub] Module Initialize Fail!"); }
-	if (!GameWorld.Initialize()) { throw std::runtime_error("Engine [GameWorld] Module Initialize Fail!"); }
-	//if (!ScriptRuntime.Initialize()) { throw std::runtime_error("Engine [ScriptRuntime] Module Initialize Fail!"); }
-	if (!PhysicsSimulator.Initialize()) { throw std::runtime_error("Engine [PhysicsSimulator] Module Initialize Fail!"); }
-	if (!RHIDevice.Initialize()) { throw std::runtime_error("Engine [RHIDevice] Module Initialize Fail!"); }
-	if (!Window.Initialize(Configurator->GetWindowWidth(), Configurator->GetWindowHeight(), Configurator->GetWindowName().c_str())) { throw std::runtime_error("Engine [Window] Module Initialize Fail!"); }
-	if (!RenderPipeline.Initialize()) { throw std::runtime_error("[RenderPipeline] Module Initialize Fail!"); }
-	if (!Renderer.Initialize(Window->GetNativeWindow())) { throw std::runtime_error("[Renderer] Module Initialize Fail!"); }
-	if (!Chronometer.Initialize()) { throw std::runtime_error("Engine [Chronometer] Module Initialize Fail!"); }
-	return true;
+	INVOKE_PREBEGINFRAME_HOOK
+
+	MODULE(Chronometer)->Tick(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
+	MODULE(InputMonitor)->PrepareNewFrame(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
+	MODULE(Window)->PollEvents(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
+	MODULE(InputMonitor)->UpdateSnapshots(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
 }
-bool Pitaya::Engine::Engine::Modules::IsRunning() const
-{
-	return !Window->IsClose();
-}
-void Pitaya::Engine::Engine::Modules::BeginFrame()
-{
-	Chronometer->Tick(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
-	InputMonitor->PrepareNewFrame(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
-	Window->PollEvents(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
-	InputMonitor->UpdateSnapshots(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
-}
-void Pitaya::Engine::Engine::Modules::FixedUpdate()
+void Pitaya::Engine::Engine::FixedUpdate()
 {
 	//TODO 移动至物理调度器内部，内部进行实际次数调度
 	INVOKE_PREFIXEDUPDATE_HOOK
-	PhysicsSimulator.FixedUpdate();
-}
-void Pitaya::Engine::Engine::Modules::Update()
-{
 
+	MODULE(PhysicsSimulator).FixedUpdate();
 }
-void Pitaya::Engine::Engine::Modules::LateUpdate()
+void Pitaya::Engine::Engine::Update()
 {
-	GameWorld.LateUpdate();
+	INVOKE_PREUPDATE_HOOK
 }
-void Pitaya::Engine::Engine::Modules::Render()
+void Pitaya::Engine::Engine::LateUpdate()
 {
-	RenderPipeline->NewPipeline(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
+	INVOKE_PRELATEUPDATE_HOOK
+
+	MODULE(GameWorld).LateUpdate();
+}
+void Pitaya::Engine::Engine::Render()
+{
+	MODULE(RenderPipeline)->NewPipeline(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
 
 	//获取当前激活场景
-	if (auto* scene = GameWorld->GetActiveScene())
+	if (auto* scene = MODULE(GameWorld)->GetActiveScene())
 	{
 		//提交MeshRenderer
 		for (auto [entity, transform, meshrenderer] : scene->GetView<Pitaya::Game::Transform, Pitaya::Game::MeshRenderer>().each())
@@ -673,7 +644,7 @@ void Pitaya::Engine::Engine::Modules::Render()
 					Pitaya::Asset::Material* nativeMaterial =
 						(matIndex < materials.size() && materials[matIndex].IsReady()) ? materials[matIndex].GetNativeAssetData() : nullptr;
 
-					RenderPipeline->AddRenderItem(
+					MODULE(RenderPipeline)->AddRenderItem(
 						Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
 						mesh.GetNativeAssetData(), nativeMaterial,
 						meshrenderer.GetLayerMask(), transform.GetWorldMatrix(), i);
@@ -682,7 +653,7 @@ void Pitaya::Engine::Engine::Modules::Render()
 			else
 			{
 				//mesh 还没加载 → 传 nullptr，Submit 会 fallback 到异常立方体
-				RenderPipeline->AddRenderItem(
+				MODULE(RenderPipeline)->AddRenderItem(
 					Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
 					nullptr, nullptr,
 					meshrenderer.GetLayerMask(), transform.GetWorldMatrix(), 0);
@@ -694,89 +665,89 @@ void Pitaya::Engine::Engine::Modules::Render()
 		{
 			if (camera.GetRenderTargetIsReady())
 			{
-				RenderPipeline->AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
+				MODULE(RenderPipeline)->AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
 					camera.GetCameraState().BuildSnapshot(transform.GetWorldPosition(), transform.GetWorldForward(), transform.GetWorldUp()),
 					camera.GetRenderTarget(), camera.GetPostProcessSetting(), camera.GetCullingMask());
 			}
 		}
 	}
 
-	RenderPipeline->Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(), Renderer.GetKernel());
+	MODULE(RenderPipeline)->Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(), MODULE(Renderer).GetKernel());
 }
-void Pitaya::Engine::Engine::Modules::EndFrame()
+void Pitaya::Engine::Engine::EndFrame()
 {
-	GameWorld.EndFrame();
+	INVOKE_PREENDFRAME_HOOK
+
+	MODULE(GameWorld).EndFrame();
 }
-void Pitaya::Engine::Engine::Modules::FrameSync()
+void Pitaya::Engine::Engine::FrameSync()
 {
-	Chronometer->FrameSync(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
+	MODULE(Chronometer)->FrameSync(Pitaya::Core::PassKey<Pitaya::Engine::Engine>());
 }
-void Pitaya::Engine::Engine::Modules::Release()
+void Pitaya::Engine::Engine::Release()
 {
-	Configurator.Release();
-	Chronometer.Release();
-	InputMonitor.Release();
-	GameWorld.Release();
-	//ScriptRuntime.Release();
-	PhysicsSimulator.Release();
-	TaskScheduler.Release();
-	RHIDevice.Release();
-	RenderPipeline.Release();
-	Renderer.Release();
-	AssetHub.Release();
-	Window.Release();
-	EventDispatcher.Release();
-	ThreadTracker.Release();
-	Logger.Release();
-}
-void Pitaya::Engine::Engine::Modules::Destroy()
-{
-	ScriptRuntime.Destroy();
-	GameWorld.Destroy();
-	Chronometer.Destroy();
-	InputMonitor.Destroy();
-	PhysicsSimulator.Destroy(); 
-	TaskScheduler.Destroy();
-	RenderPipeline.Destroy();
-	Renderer.Destroy();
-	RHIDevice.Destroy();
-	Configurator.Destroy();
-	AssetHub.Destroy();
-	Window.Destroy();
-	EventDispatcher.Destroy();
-	ThreadTracker.Destroy();
-	Logger.Destroy();
+	//Release Modules
+	do
+	{
+		MODULE(Configurator).Release();
+		MODULE(Chronometer).Release();
+		MODULE(InputMonitor).Release();
+		MODULE(GameWorld).Release();
+		//MODULE(ScriptRuntime).Release();
+		MODULE(PhysicsSimulator).Release();
+		MODULE(TaskScheduler).Release();
+		MODULE(RHIDevice).Release();
+		MODULE(RenderPipeline).Release();
+		MODULE(Renderer).Release();
+		MODULE(AssetHub).Release();
+		MODULE(Window).Release();
+		MODULE(EventDispatcher).Release();
+		MODULE(ThreadTracker).Release();
+		MODULE(Logger).Release();
+	} while (false);
+
+	//Destroy Modules
+	do
+	{
+		MODULE(ScriptRuntime).Destroy();
+		MODULE(GameWorld).Destroy();
+		MODULE(Chronometer).Destroy();
+		MODULE(InputMonitor).Destroy();
+		MODULE(PhysicsSimulator).Destroy();
+		MODULE(TaskScheduler).Destroy();
+		MODULE(RenderPipeline).Destroy();
+		MODULE(Renderer).Destroy();
+		MODULE(RHIDevice).Destroy();
+		MODULE(Configurator).Destroy();
+		MODULE(AssetHub).Destroy();
+		MODULE(Window).Destroy();
+		MODULE(EventDispatcher).Destroy();
+		MODULE(ThreadTracker).Destroy();
+		MODULE(Logger).Destroy();
+	} while (false);
+
+	//UnRegister FuncTables
+	do
+	{
+		FUNCTABLE(AssetHub).UnRegister();
+		FUNCTABLE(Configurator).UnRegister();
+		FUNCTABLE(EventDispatcher).UnRegister();;
+		FUNCTABLE(RHIDevice).UnRegister();
+		FUNCTABLE(InputMonitor).UnRegister();
+		FUNCTABLE(Logger).UnRegister();
+		FUNCTABLE(TaskScheduler).UnRegister();
+		FUNCTABLE(ThreadTracker).UnRegister();
+		FUNCTABLE(Chronometer).UnRegister();
+		FUNCTABLE(Window).UnRegister();
+		FUNCTABLE(GameWorld).UnRegister();
+	} while (false);
+
+	//UnRegister Context
+	Pitaya::Engine::Context::Instance().UnRegister();
 }
 
-bool Pitaya::Engine::Engine::FuncTables::Check() const
-{
-	if (!AssetHub.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [AssetHub]!"); }
-	if (!Configurator.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Configurator]!"); }
-	if (!EventDispatcher.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [EventDispatcher]!"); }
-	if (!RHIDevice.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [RHIDevice]!"); }
-	if (!InputMonitor.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [InputMonitor]!"); }
-	if (!Logger.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Logger]!"); }
-	if (!TaskScheduler.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [TaskScheduler]!"); }
-	if (!ThreadTracker.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [ThreadTracker]!"); }
-	if (!Chronometer.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Chronometer]!"); }
-	if (!Window.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Window]!"); }
-	if (!GameWorld.Check()) { throw std::runtime_error("Engine [FuncTable] Miss [GameWorld]!"); }
-	return true;
-}
-void Pitaya::Engine::Engine::FuncTables::UnRegister()
-{
-	AssetHub.UnRegister();
-	Configurator.UnRegister();
-	EventDispatcher.UnRegister();;
-	RHIDevice.UnRegister();
-	InputMonitor.UnRegister();
-	Logger.UnRegister();
-	TaskScheduler.UnRegister();
-	ThreadTracker.UnRegister();
-	Chronometer.UnRegister();
-	Window.UnRegister();
-	GameWorld.UnRegister();
-}
+#undef MODULE
+#undef FUNCTABLE
 
 template<>
 Pitaya::Engine::Engine& ENGINE_CALL Pitaya::Core::Singleton<Pitaya::Engine::Engine>::Instance()

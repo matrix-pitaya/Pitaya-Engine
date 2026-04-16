@@ -38,20 +38,6 @@ namespace Pitaya::Engine
 			Pitaya::Engine::Module<Pitaya::Config::Configurator> Configurator;
 			Pitaya::Engine::Module<Pitaya::Game::GameWorld> GameWorld;
 			Pitaya::Engine::Module<Pitaya::Script::ScriptRuntime> ScriptRuntime;
-
-			bool Create();
-			bool Check();
-			bool Initialize();
-			bool IsRunning() const;
-			void BeginFrame();
-			void FixedUpdate();
-			void Update();
-			void LateUpdate();
-			void Render();
-			void EndFrame();
-			void FrameSync();
-			void Release();
-			void Destroy();
 		};
 		struct FuncTables
 		{
@@ -66,9 +52,6 @@ namespace Pitaya::Engine
 			Pitaya::Engine::FuncTable<Pitaya::Task::TaskScheduler> TaskScheduler;
 			Pitaya::Engine::FuncTable<Pitaya::Window::Window> Window;
 			Pitaya::Engine::FuncTable<Pitaya::Game::GameWorld> GameWorld;
-
-			bool Check() const;
-			void UnRegister();
 		};
 
 	private:
@@ -96,10 +79,6 @@ namespace Pitaya::Engine
 		void EndFrame();
 		void FrameSync();
 		void Release();
-
-	private:
-		bool FillContext();
-		bool FillFuncTables();
 
 	private:
 		Modules modules;

@@ -31,7 +31,6 @@ namespace Pitaya::Engine
 		struct Modules
 		{
 			friend class Pitaya::Engine::Engine;
-
 			Pitaya::Engine::Module<Pitaya::Task::TaskScheduler>* TaskScheduler = nullptr;
 			Pitaya::Engine::Module<Pitaya::Render::Renderer>* Renderer = nullptr;
 			Pitaya::Engine::Module<Pitaya::Render::RenderPipeline>* RenderPipeline = nullptr;
@@ -47,47 +46,10 @@ namespace Pitaya::Engine
 			Pitaya::Engine::Module<Pitaya::Physics::PhysicsSimulator>* PhysicsSimulator = nullptr;
 			Pitaya::Engine::Module<Pitaya::Game::GameWorld>* GameWorld = nullptr;
 			Pitaya::Engine::Module<Pitaya::Script::ScriptRuntime>* ScriptRuntime = nullptr;
-
-			inline bool Check() const
-			{
-				if (!Configurator) { throw std::runtime_error("Context [Module] miss [Configurator]"); }
-				if (!InputMonitor) { throw std::runtime_error("Context [Module] miss [InputMonitor]"); }
-				if (!Chronometer) { throw std::runtime_error("Context [Module] miss [Chronometer]"); }
-				if (!EventDispatcher) { throw std::runtime_error("Context [Module] miss [EventDispatcher]"); }
-				if (!Logger) { throw std::runtime_error("Context [Module] miss [Logger]"); }
-				if (!ThreadTracker) { throw std::runtime_error("Context [Module] miss [ThreadTracker]"); }
-				if (!AssetHub) { throw std::runtime_error("Context [Module] miss [AssetHub]"); }
-				if (!TaskScheduler) { throw std::runtime_error("Context [Module] miss [TaskScheduler]"); }
-				if (!Renderer) { throw std::runtime_error("Context [Module] miss [Renderer]"); }
-				if (!PhysicsSimulator) { throw std::runtime_error("Context [Module] miss [PhysicsSimulator]"); }
-				if (!Window) { throw std::runtime_error("Context [Module] miss [Window]"); }
-				if (!RHIDevice) { throw std::runtime_error("Context [Module] miss [RHIDevice]"); }
-				if (!GameWorld) { throw std::runtime_error("Context [Module] miss [GameWorld]"); }
-				if (!ScriptRuntime) { throw std::runtime_error("Context [Module] miss [ScriptRuntime]"); }
-				return true;
-			}
-			inline void UnRegister() noexcept
-			{
-				Renderer = nullptr;
-				RHIDevice = nullptr;
-				PhysicsSimulator = nullptr;
-				Window = nullptr;
-				InputMonitor = nullptr;
-				Chronometer = nullptr;
-				EventDispatcher = nullptr;
-				Logger = nullptr;
-				ThreadTracker = nullptr;
-				AssetHub = nullptr;
-				TaskScheduler = nullptr;
-				Configurator = nullptr;
-				GameWorld = nullptr;
-				ScriptRuntime = nullptr;
-			}
 		};
 		struct FuncTables
 		{
 			friend class Pitaya::Engine::Engine;
-
 			Pitaya::Engine::FuncTable<Pitaya::Time::Chronometer>* Chronometer = nullptr;
 			Pitaya::Engine::FuncTable<Pitaya::Log::Logger>* Logger = nullptr;
 			Pitaya::Engine::FuncTable<Pitaya::Thread::ThreadTracker>* ThreadTracker = nullptr;
@@ -99,36 +61,6 @@ namespace Pitaya::Engine
 			Pitaya::Engine::FuncTable<Pitaya::Task::TaskScheduler>* TaskScheduler = nullptr;
 			Pitaya::Engine::FuncTable<Pitaya::Window::Window>* Window = nullptr;
 			Pitaya::Engine::FuncTable<Pitaya::Game::GameWorld>* GameWorld = nullptr;
-
-			inline bool Check() const
-			{
-				if (!AssetHub) { throw std::runtime_error("Context [FuncTable] miss [AssetHub]"); }
-				if (!Configurator) { throw std::runtime_error("Context [FuncTable] miss [Configurator]"); }
-				if (!EventDispatcher) { throw std::runtime_error("Context [FuncTable] miss [EventDispatcher]"); }
-				if (!RHIDevice) { throw std::runtime_error("Context [FuncTable] miss [RHIDevice]"); }
-				if (!InputMonitor) { throw std::runtime_error("Context [FuncTable] miss [InputMonitor]"); }
-				if (!Logger) { throw std::runtime_error("Context [FuncTable] miss [Logger]"); }
-				if (!TaskScheduler) { throw std::runtime_error("Context [FuncTable] miss [TaskScheduler]"); }
-				if (!ThreadTracker) { throw std::runtime_error("Context [FuncTable] miss [ThreadTracker]"); }
-				if (!Chronometer) { throw std::runtime_error("Context [FuncTable] miss [Chronometer]"); }
-				if (!Window) { throw std::runtime_error("Context [FuncTable] miss [Window]"); }
-				if (!GameWorld) { throw std::runtime_error("Context [FuncTable] miss [GameWorld]"); }
-				return true;
-			}
-			inline void UnRegister() noexcept
-			{
-				Chronometer = nullptr;
-				Logger = nullptr;
-				ThreadTracker = nullptr;
-				AssetHub = nullptr;
-				Configurator = nullptr;
-				EventDispatcher = nullptr;
-				RHIDevice = nullptr;
-				InputMonitor = nullptr;
-				TaskScheduler = nullptr;
-				Window = nullptr;
-				GameWorld = nullptr;
-			}
 		};
 
 	private:
@@ -208,15 +140,8 @@ namespace Pitaya::Engine
 		}
 
 	private:
-		inline bool Check() const
-		{
-			return modules.Check() && funcTables.Check();
-		}
-		inline void UnRegister() noexcept
-		{
-			modules.UnRegister();
-			funcTables.UnRegister();
-		}
+		bool Check() const;
+		void UnRegister() noexcept;
 
 	private:
 		Modules modules;
