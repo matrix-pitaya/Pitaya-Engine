@@ -87,6 +87,18 @@
     <ClInclude Include="Profiler\RenderState.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\Panel\GameViewportPanel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Panel\SceneViewportPanel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\ImGui\ImGuizmo\ImGuizmo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\TransformTool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp">
@@ -123,6 +135,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GUI\Panel\ProfilerPanel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\ImGui\ImGuizmo\ImGuizmo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Panel\SceneViewportPanel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Panel\InspectorPanel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Panel\HierarchyPanel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

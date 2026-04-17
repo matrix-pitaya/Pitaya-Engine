@@ -3,16 +3,19 @@
 #include<Core/PassKey/PassKey.h>
 
 #include<Editor/GUI/Panel/HierarchyPanel.h>
-#include<Editor/GUI/Panel/ViewportPanel.h>
+#include<Editor/GUI/Panel/SceneViewportPanel.h>
+#include<Editor/GUI/Panel/GameViewportPanel.h>
 #include<Editor/GUI/Panel/InspectorPanel.h>
 #include<Editor/GUI/Panel/ConsolePanel.h>
 #include<Editor/GUI/Panel/ProfilerPanel.h>
 #include<Editor/GUI//Panel/PreferencesPanel.h>
 #include<Editor/GUI/Panel/ProjectPanel.h>
 
+#include<Editor/Common/TransformTool.h>
+
 #include<string>
-#include<vector>
 #include<atomic>
+#include<array>
 
 namespace Pitaya::Editor
 {
@@ -44,6 +47,7 @@ namespace Pitaya::Editor
 			{
 				ReleaseDrawData(frontBufferIndex);
 				ReleaseDrawData(backBufferIndex);
+				this->nativeWindow = nullptr;
 			}
 
 		public:
@@ -102,6 +106,62 @@ namespace Pitaya::Editor
 			uint8_t backBufferIndex = 1;	//渲染线程读取
 			void* nativeWindow = nullptr;
 		};
+		class Panels
+		{
+			friend class Pitaya::Editor::GUI;
+			friend class Pitaya::Editor::Editor;
+		private:
+			Panels() = default;
+			~Panels() = default;
+
+		public:
+			Panels(const Panels&) = delete;
+			Panels& operator=(const Panels&) = delete;
+			Panels(Panels&&) = delete;
+			Panels& operator=(Panels&&) = delete;
+
+		public:
+			inline constexpr auto Each()
+			{
+				return std::to_array<Panel*>({ &hierarchyPanel, &inspectorPanel, &profilerPanel, &preferencesPanel,
+									&projectPanel, &sceneViewportPanel, &gameViewportPanel, &consolePanel });
+			}
+
+		private:
+			HierarchyPanel hierarchyPanel;
+			InspectorPanel inspectorPanel;
+			ConsolePanel consolePanel;
+			ProfilerPanel profilerPanel;
+			PreferencesPanel preferencesPanel;
+			ProjectPanel projectPanel;
+			SceneViewportPanel sceneViewportPanel;
+			GameViewportPanel gameViewportPanel;
+		};
+
+	public:
+		struct Context
+		{
+			struct State
+			{
+				TransformTool ActiveTool = TransformTool::Translate;
+				bool IsPaused = false;
+				bool IsLocal = true;
+			};
+			struct Selection
+			{
+				enum class Type : uint8_t
+				{
+					Entity = 0,
+					File
+				};
+
+				entt::entity SelectedEntity = entt::null;       //选中实体时的数据
+				Type Type = Type::Entity;
+			};
+
+			State State;
+			Selection Selection;
+		};
 
 	private:
 		GUI() = default;
@@ -132,39 +192,22 @@ namespace Pitaya::Editor
 		void DrawToolbar();
 		void DrawPanels();
 		void EndFrame();
-		
-	private:
-		inline void InitializePanel()
-		{
-			for (auto panel : panels)
-			{
-				panel->Initialize();
-			}
 
-			//设置回调函数
-			hierarchyPanel.SetSelectionChangedCallback(
-				[this](entt::entity selectedEntity) { inspectorPanel.SetSelectedEntity(selectedEntity); });
-		}
-		inline void ReleasePanel()
+	public:
+		inline const Pitaya::Editor::GUI::Context& GetContext() const noexcept
 		{
-			for (auto panel : panels)
-			{
-				panel->Release();
-			}
+			return context;
+		}
+		inline void NotifySelectionChanged(entt::entity entity) noexcept
+		{
+			context.Selection.Type = Context::Selection::Type::Entity;
+			context.Selection.SelectedEntity = entity;
 		}
 
 	private:
-		Drawer drawer;
-
-		HierarchyPanel hierarchyPanel;
-		InspectorPanel inspectorPanel;
-		ConsolePanel consolePanel;
-		ProfilerPanel profilerPanel;
-		PreferencesPanel preferencesPanel;
-		ProjectPanel projectPanel;
-		ViewportPanel sceneViewportPanel { "Scene" };
-		ViewportPanel gameViewportPanel { "Game" };
-		std::vector<Panel*> panels = { &hierarchyPanel,&inspectorPanel, &profilerPanel,&preferencesPanel, &projectPanel, &sceneViewportPanel,&gameViewportPanel,&consolePanel };
+		Pitaya::Editor::GUI::Drawer drawer;
+		Pitaya::Editor::GUI::Panels panels;
+		Pitaya::Editor::GUI::Context context;
 
 		std::atomic<ImGuiContext*> imGuiContext = nullptr;
 		std::atomic<bool> isRenderReady = false;

@@ -175,7 +175,9 @@
     <ClInclude Include="API\func.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Common\EngineState.h" />
+    <ClInclude Include="Common\TransformTool.h" />
     <ClInclude Include="GUI\IconFontCppHeaders\IconsFontAwesome6.h" />
+    <ClInclude Include="GUI\ImGui\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="GUI\ImGui\Backends\imgui_impl_glfw.h" />
     <ClInclude Include="GUI\ImGui\Backends\imgui_impl_opengl3.h" />
     <ClInclude Include="GUI\ImGui\imconfig.h" />
@@ -184,12 +186,14 @@
     <ClInclude Include="GUI\Panel\ConsolePanel.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="GUI\GUI.h" />
+    <ClInclude Include="GUI\Panel\GameViewportPanel.h" />
     <ClInclude Include="GUI\Panel\PreferencesPanel.h" />
     <ClInclude Include="GUI\Panel\ProfilerPanel.h" />
     <ClInclude Include="GUI\Panel\HierarchyPanel.h" />
     <ClInclude Include="GUI\Panel\InspectorPanel.h" />
     <ClInclude Include="GUI\Panel\Panel.h" />
     <ClInclude Include="GUI\Panel\ProjectPanel.h" />
+    <ClInclude Include="GUI\Panel\SceneViewportPanel.h" />
     <ClInclude Include="GUI\Panel\ViewportPanel.h" />
     <ClInclude Include="Profiler\Profiler.h" />
     <ClInclude Include="Profiler\FrameState.h" />
@@ -199,6 +203,7 @@
   <ItemGroup>
     <ClCompile Include="API\func.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="GUI\ImGui\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="GUI\ImGui\Backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="GUI\ImGui\Backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="GUI\ImGui\imgui.cpp" />
@@ -207,7 +212,10 @@
     <ClCompile Include="GUI\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="GUI\GUI.cpp" />
+    <ClCompile Include="GUI\Panel\HierarchyPanel.cpp" />
+    <ClCompile Include="GUI\Panel\InspectorPanel.cpp" />
     <ClCompile Include="GUI\Panel\ProfilerPanel.cpp" />
+    <ClCompile Include="GUI\Panel\SceneViewportPanel.cpp" />
     <ClCompile Include="Profiler\Profiler.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

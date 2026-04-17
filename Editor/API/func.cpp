@@ -3,5 +3,5 @@
 
 void EDITOR_CALL Pitaya::Editor::MountEngineHook()
 {
-	Pitaya::Editor::Editor::Instance().MountEngineHook();
+	Pitaya::Editor::Editor::MountEngineHook();
 }

@@ -5,7 +5,6 @@
 #include<Editor/Camera/Camera.h>
 #include<Editor/GUI/GUI.h>
 #include<Editor/Profiler/Profiler.h>
-
 #include<Event/Common/Event.h>
 #include<Log/Common/LogLevel.h>
 
@@ -15,6 +14,28 @@ namespace Pitaya::Editor
 	{
 		friend class Pitaya::Core::Singleton<Editor>;
 	private:
+		struct HookFunc
+		{
+			static void PreBeginFrame();
+			static void PreFixedUpdate();
+			static void PreUpdate();
+			static void PreLateUpdate();
+			static void PreEndFrame();
+			static void PostRendererIntialize(void*);
+			static void PostRendererRelease();
+			static void PostRenderContextInitialized();
+			static void PreRenderContextReleased();
+			static void PostRendererSwapBuffer();
+			static void PreRendererEndRenderFrame();
+			static void PostRendererBeginRenderFrame();
+			static bool ShouldWakeupRenderThread();
+			static void PreRenderPipelineExecute(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Render::RenderPipeline*);
+			static void PostRendererParseCommand();
+			static void PostChronometerTick();
+			static void PostLog(Pitaya::Log::LogLevel, std::string_view);
+		};
+
+	private:
 		Editor() = default;
 		~Editor() = default;
 
@@ -23,9 +44,6 @@ namespace Pitaya::Editor
 		Editor& operator=(const Editor&) = delete;
 		Editor(Editor&&) = delete;
 		Editor& operator=(Editor&&) = delete;
-
-	public:
-		void MountEngineHook();
 
 	private:
 		bool Initialize_Main(void* nativeWindow);
@@ -41,13 +59,17 @@ namespace Pitaya::Editor
 		void EndFrame();
 			
 	public:
-		inline Pitaya::Editor::Camera& GetCamera() noexcept
+		inline Camera& GetCamera() noexcept
 		{
 			return camera;
 		}
-		inline Pitaya::Editor::Profiler& GetProfiler() noexcept
+		inline Profiler& GetProfiler() noexcept
 		{
 			return profiler;
+		}
+		inline GUI& GetGUI() noexcept
+		{
+			return gui;
 		}
 
 	private:
@@ -63,6 +85,9 @@ namespace Pitaya::Editor
 		{
 			static_cast<Pitaya::Editor::Editor*>(listener)->OnMouseCurrsorMove(event);
 		}
+
+	public:
+		static void MountEngineHook();
 
 	private:
 		Pitaya::Editor::GUI gui;

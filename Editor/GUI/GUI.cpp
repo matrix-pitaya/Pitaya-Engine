@@ -155,7 +155,7 @@ bool Pitaya::Editor::GUI::Initialize_Main(void* nativeWindow)
 	ImGui::SetCurrentContext(context);
 	ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(nativeWindow), true);
 	imGuiContext.store(context, std::memory_order_release);
-	InitializePanel();
+	for (auto panel : panels.Each()) { panel->Initialize(); }
 	while (!isRenderReady.load(std::memory_order_acquire)){ std::this_thread::yield(); }
 	return drawer.Initialize(nativeWindow);
 }
@@ -171,8 +171,8 @@ bool Pitaya::Editor::GUI::Initialize_Render()
 }
 void Pitaya::Editor::GUI::Release_Main()
 {
-	ReleasePanel();
 	drawer.Release();
+	for (auto panel : panels.Each()) { panel->Release(); }
 	const auto start = std::chrono::steady_clock::now();
 	const auto wait = std::chrono::milliseconds(2000);
 	while (isRenderReady.load(std::memory_order_acquire))
@@ -213,7 +213,7 @@ void Pitaya::Editor::GUI::SetStyle()
 	ImFontConfig iconsConfig;
 	iconsConfig.MergeMode = true;
 	iconsConfig.PixelSnapH = true;
-	static const ImWchar iconsRanges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
+	static const constexpr ImWchar iconsRanges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
 	io.Fonts->AddFontFromFileTTF((Pitaya::Core::GetExecutableDirectory() / "resource/fonts/fa-solid-900.ttf").string().c_str(), 16.0f, &iconsConfig, iconsRanges);
 
 	ImGuiStyle& style = ImGui::GetStyle();
@@ -306,6 +306,23 @@ void Pitaya::Editor::GUI::SetStyle()
 	style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.35f, 0.35f, 0.35f, 1.00f);
 	style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.45f, 0.45f, 0.45f, 1.00f);
 	style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.55f, 0.55f, 0.55f, 1.00f);
+
+	// ImGuizmo Style
+	ImGuizmo::Style& styleGuizmo = ImGuizmo::GetStyle();
+
+	// 设置线条和箭头的粗细
+	styleGuizmo.TranslationLineThickness = 4.0f;   // 默认较细，调大后更像 Unity
+	styleGuizmo.TranslationLineArrowSize = 10.0f;  // 箭头大小
+	styleGuizmo.RotationLineThickness = 4.0f;   // 旋转环的粗细
+	styleGuizmo.RotationOuterLineThickness = 2.0f;
+	styleGuizmo.ScaleLineThickness = 4.0f;
+	styleGuizmo.ScaleLineCircleSize = 8.0f;   // 缩放末端的方块大小
+
+	// 设置中间那个“中心圆点/方块”的大小
+	styleGuizmo.CenterCircleSize = 5.0f;
+
+	// Gizmo 的显示比例 
+	ImGuizmo::SetGizmoSizeClipSpace(0.12f);
 }
 void Pitaya::Editor::GUI::NewFrame()
 {
@@ -318,6 +335,7 @@ void Pitaya::Editor::GUI::BeginFrame()
 {
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame(); 
+	ImGuizmo::BeginFrame();
 }
 void Pitaya::Editor::GUI::SetupDockSpace()
 {
@@ -391,7 +409,7 @@ void Pitaya::Editor::GUI::DrawMenuBar()
 	{
 		if (ImGui::BeginMenu("Panel"))
 		{
-			for (auto& panel : panels)
+			for (auto& panel : panels.Each())
 			{
 				if (ImGui::MenuItem(panel->GetName().data(), nullptr, panel->GetOpenState()))
 				{
@@ -421,11 +439,11 @@ void Pitaya::Editor::GUI::DrawMenuBar()
 			if (ImGui::MenuItem("MemoryAnalysis"))
 			{
 				mi_stats_print(NULL);
-				consolePanel.Console(Pitaya::Log::LogLevel::Debug, Pitaya::Core::GetMemoryState());
+				panels.consolePanel.Console(Pitaya::Log::LogLevel::Debug, Pitaya::Core::GetMemoryState());
 			}
 			if (ImGui::MenuItem("HookState"))
 			{
-				consolePanel.Console(Pitaya::Log::LogLevel::Debug, HOOK_STATE);
+				panels.consolePanel.Console(Pitaya::Log::LogLevel::Debug, HOOK_STATE);
 			}
 			ImGui::EndMenu();
 		}
@@ -434,17 +452,6 @@ void Pitaya::Editor::GUI::DrawMenuBar()
 }
 void Pitaya::Editor::GUI::DrawToolbar()
 {
-	enum class TransformTool : uint8_t
-	{
-		Select = 0,
-		Translate,
-		Rotate,
-		Scale
-	};
-
-	static TransformTool activeTool = TransformTool::Translate;
-	static bool isPaused = false;
-
 	ImGuiStyle& style = ImGui::GetStyle();
 	ImVec4 toolbarBgColor = style.Colors[ImGuiCol_MenuBarBg];
 
@@ -487,12 +494,12 @@ void Pitaya::Editor::GUI::DrawToolbar()
 
 	for (int i = 0; i < 4; ++i)
 	{
-		bool isToolActive = (activeTool == tools[i]);
+		bool isToolActive = (context.State.ActiveTool == tools[i]);
 		ImGui::PushStyleColor(ImGuiCol_Button, isToolActive ? toolActiveBg : bgNormal);
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, isToolActive ? toolHoverBg : bgHover);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, isToolActive ? toolActiveBg : bgActiveClick);
 
-		if (ImGui::Button(toolNames[i], btnSize)) { activeTool = tools[i]; }
+		if (ImGui::Button(toolNames[i], btnSize)) { context.State.ActiveTool = tools[i]; }
 		if (ImGui::IsItemHovered()) { ImGui::SetTooltip("%s", toolTips[i]); }
 
 		ImGui::PopStyleColor(3);
@@ -521,7 +528,7 @@ void Pitaya::Editor::GUI::DrawToolbar()
 	if (ImGui::Button(isPlaying ? ICON_FA_STOP : ICON_FA_PLAY, btnSize))
 	{
 		currentState = (currentState == EngineState::Edit) ? EngineState::Play : EngineState::Edit;
-		isPaused = false;
+		context.State.IsPaused = false;
 	}
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip(isPlaying ? "Stop" : "Play"); }
 	ImGui::PopStyleColor(3);
@@ -532,10 +539,10 @@ void Pitaya::Editor::GUI::DrawToolbar()
 	if (!canPauseOrStep) { ImGui::BeginDisabled(); }
 
 	//Pause 按钮
-	ImGui::PushStyleColor(ImGuiCol_Button, isPaused ? toolActiveBg : bgNormal);
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, isPaused ? toolHoverBg : bgHover);
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, isPaused ? toolActiveBg : bgActiveClick);
-	if (ImGui::Button(ICON_FA_PAUSE, btnSize)) { isPaused = !isPaused; }
+	ImGui::PushStyleColor(ImGuiCol_Button, context.State.IsPaused ? toolActiveBg : bgNormal);
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, context.State.IsPaused ? toolHoverBg : bgHover);
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, context.State.IsPaused ? toolActiveBg : bgActiveClick);
+	if (ImGui::Button(ICON_FA_PAUSE, btnSize)) { context.State.IsPaused = !context.State.IsPaused; }
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("Pause"); }
 	ImGui::PopStyleColor(3);
 	ImGui::SameLine();
@@ -556,7 +563,6 @@ void Pitaya::Editor::GUI::DrawToolbar()
 	ImGui::PopStyleVar(); //弹出中部的间距
 
 	//右侧区域
-	static bool isLocal = true;
 	float rightBtnWidth = 66.0f;
 
 	//核心定位：总宽度 - 按钮本身宽度 - 要求的右边距
@@ -564,7 +570,7 @@ void Pitaya::Editor::GUI::DrawToolbar()
 
 	ImGui::SetCursorPosY(centerY);
 	ImGui::SetCursorPosX(rightX);
-	if (ImGui::Button(isLocal ? ICON_FA_CUBE " Local" : ICON_FA_GLOBE " Global", ImVec2(rightBtnWidth, buttonSize))) { isLocal = !isLocal; }
+	if (ImGui::Button(context.State.IsLocal ? ICON_FA_CUBE " Local" : ICON_FA_GLOBE " Global", ImVec2(rightBtnWidth, buttonSize))) { context.State.IsLocal = !context.State.IsLocal; }
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("Toggle Gizmo Coordinate Space"); }
 
 	ImGui::PopStyleColor(); //ImGuiCol_Border
@@ -586,9 +592,8 @@ void Pitaya::Editor::GUI::DrawToolbar()
 }
 void Pitaya::Editor::GUI::DrawPanels()
 {
-	for (auto& panel : panels)
+	for (auto& panel : panels.Each())
 	{
-		if (!panel) { continue; }
 		panel->Draw();
 	}
 }
@@ -611,22 +616,22 @@ void Pitaya::Editor::GUI::Drawer::Draw(Pitaya::Core::PassKey<Editor>)
 #if PITAYA_VERSION >= 100
 	//[VERSION >= 100] 通过预处理实现Hanlde映射Texture
 	//[VERSION  < 100] 通过修改ImGui_ImplOpenGL3_RenderDrawData源码实现Hanlde映射Texture
-	for (uint32_t i = 0; i < buffer[backBufferIndex].CmdListsCount; i++)
-	{
-		ImDrawList* cmdList = buffer[backBufferIndex].CmdLists[i];
-		for (uint32_t j = 0; j < cmdList->CmdBuffer.Size; j++)
-		{
-			ImDrawCmd* pcmd = &cmdList->CmdBuffer[j];
-			if ((pcmd->UserCallback != nullptr) || (pcmd->TexRef._TexData != nullptr) ||
-				(pcmd->TexRef._TexID == 0)) {
-				continue;
-			}
+	//for (uint32_t i = 0; i < buffer[backBufferIndex].CmdListsCount; i++)
+	//{
+	//	ImDrawList* cmdList = buffer[backBufferIndex].CmdLists[i];
+	//	for (uint32_t j = 0; j < cmdList->CmdBuffer.Size; j++)
+	//	{
+	//		ImDrawCmd* pcmd = &cmdList->CmdBuffer[j];
+	//		if ((pcmd->UserCallback != nullptr) || (pcmd->TexRef._TexData != nullptr) ||
+	//			(pcmd->TexRef._TexID == 0)) {
+	//			continue;
+	//		}
 
-			uint32_t handleId = (uint32_t)(intptr_t)pcmd->TexRef._TexID;
-			GLuint realGLTextureID = handleId; // TODO Hanle映射真实textureid
-			pcmd->TexRef._TexID = (ImTextureID)(intptr_t)realGLTextureID;
-		}
-	}
+	//		uint32_t handleId = (uint32_t)(intptr_t)pcmd->TexRef._TexID;
+	//		GLuint realGLTextureID = handleId; // TODO Hanle映射真实textureid
+	//		pcmd->TexRef._TexID = (ImTextureID)(intptr_t)realGLTextureID;
+	//	}
+	//}
 #endif
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	int width, height;
