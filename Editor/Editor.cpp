@@ -59,7 +59,8 @@ bool Pitaya::Editor::Editor::HookFunc::ShouldWakeupRenderThread()
 void Pitaya::Editor::Editor::HookFunc::PreRenderPipelineExecute(Pitaya::Core::PassKey<Pitaya::Engine::Engine> passkey, Pitaya::Render::RenderPipeline* renderPipeline)
 {
 	//提交EditorCamera
-	if (Pitaya::Editor::Editor::Instance().gui.panels.sceneViewportPanel.GetIsVisable() && Pitaya::Editor::Editor::Instance().camera.IsRenderTargetReady())
+	if (Pitaya::Editor::Editor::Instance().gui.panels.sceneViewportPanel.GetIsVisable() && 
+		Pitaya::Editor::Editor::Instance().camera.GetRenderTargetIsReady())
 	{
 		//TODO 增加特殊网格对象 天空盒对象
 		//renderPipeline->AddRenderObject();
@@ -130,7 +131,7 @@ void Pitaya::Editor::Editor::FixedUpdate()
 }
 void Pitaya::Editor::Editor::Updata()
 {
-	if (gui.panels.sceneViewportPanel.GetIsFocused()) { camera.Updata(); }
+	camera.Update();
 }
 void Pitaya::Editor::Editor::LateUpdate()
 {

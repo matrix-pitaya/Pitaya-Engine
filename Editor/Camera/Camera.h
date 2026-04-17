@@ -18,6 +18,14 @@ namespace Pitaya::Editor
 	{
 		friend class Pitaya::Editor::Editor;
 	private:
+		enum class CameraMode : uint8_t
+		{
+			Fly = 0,
+			Orbit,
+			Transitioning
+		};
+
+	private:
 		Camera() = default;
 		~Camera() = default;
 
@@ -32,22 +40,27 @@ namespace Pitaya::Editor
 		void Release();
 
 	private:
-		void Updata();
-
-	private:
+		void Update();
+		void UpdateCameraVectors();
 		void Move(Pitaya::Core::Direction);
+
+	public:
+		void Focus(const glm::vec3& targetPoint, float targetDist = 5.0f);
 
 	private:
 		void OnMouseScroll(const Pitaya::Event::MouseScrollEventArgs&);
 		void OnMouseCurrsorMove(const Pitaya::Event::MouseCurrsorMoveEventArgs&);
 
 	public:
+		inline const Pitaya::Core::CameraState& GetCameraState() const noexcept
+		{
+			return state;
+		}
 		inline const Pitaya::Core::CameraSnapshot& GetCameraSnapshot() const noexcept
 		{
-			static Pitaya::Core::CameraSnapshot snapshot = state.BuildSnapshot(position, forward, up);
 			if (dirty) 
 			{ 
-				snapshot  = state.BuildSnapshot(position, forward, up);
+				snapshot = state.BuildSnapshot(position, forward, up);
 				dirty = false;
 			}
 			return snapshot;
@@ -69,14 +82,12 @@ namespace Pitaya::Editor
 							 renderTarget->ClearStencil,
 							 renderTarget->SceneFrameBufferSpecification.Samples > 1 };
 				};
-
-			static Pitaya::Render::RenderTargetSnapshot snapshot = BuildRT();
 			if (dirtyRT)
 			{
-				snapshot = BuildRT();
+				rtSnapshot = BuildRT();
 				dirtyRT = false;
 			}
-			return snapshot;
+			return rtSnapshot;
 		}
 		inline const Pitaya::Render::PostProcessSetting& GetPostProcessSettings() const noexcept
 		{
@@ -86,36 +97,68 @@ namespace Pitaya::Editor
 		{
 			return cullingMask.GetEnum();
 		}
-		inline float GetAspectRatio() const noexcept
-		{
-			return state.AspectRatio;
-		}
-		inline bool IsRenderTargetReady()
+		inline bool GetRenderTargetIsReady() const noexcept
 		{
 			return renderTarget.IsReady();
 		}
+		inline void ApplyViewMatrix(const glm::mat4& newViewMatrix)
+		{
+			glm::mat4 invView = glm::inverse(newViewMatrix);
+			position = glm::vec3(invView[3]);
+
+			// 从逆矩阵（即 World Matrix）的前向向量计算
+			glm::vec3 worldForward = -glm::vec3(invView[2]);
+			forward = glm::normalize(worldForward);
+
+			// 重新计算 Yaw 和 Pitch
+			pitch = glm::degrees(asin(glm::clamp(forward.y, -0.999f, 0.999f)));
+			yaw = glm::degrees(atan2(forward.z, forward.x));
+
+			// 如果处于轨道模式，需要更新 pivot
+			if (mode == CameraMode::Orbit) {
+				pivot = position + forward * distance;
+			}
+
+			dirty = true;
+		}
 
 	private:
+		//Camera Base
 		Pitaya::Core::CameraState state;
+		mutable Pitaya::Core::CameraSnapshot snapshot;
+
+		//Render Base
 		Pitaya::Core::StateFlags<Pitaya::Render::RenderLayer> cullingMask = static_cast<Pitaya::Render::RenderLayer>(0xFFFFFFFF);
 		Pitaya::Core::Asset<Pitaya::Asset::RenderTarget> renderTarget = nullptr;
+		mutable Pitaya::Render::RenderTargetSnapshot rtSnapshot;
 		Pitaya::Render::PostProcessSetting setting;		//TODO 换成Asset 然后生成PostProcessSetting 
 
+		//Transform
 		glm::vec3 position = glm::vec3(0.0f);
 		glm::vec3 forward = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-
-		glm::vec2 lastMousePosition = glm::vec2(0.0f);
-
-		float speed = 5.0f;
-		float sensitivity = 0.1f;
-
 		float yaw = -90.0f;
 		float pitch = 0.0f;
 
-		bool firstMove = true;
+		//Orbit
+		glm::vec3 pivot = glm::vec3(0.0f);	//轨道中心点
+		float distance = 10.0f;				//轨道距离
 
-		mutable bool dirty = false;
-		mutable bool dirtyRT = false;
+		//Transition Animation
+		glm::vec3 startPos = glm::vec3(0.0f);
+		glm::vec3 targetPos = glm::vec3(0.0f);
+		glm::vec3 startPivot = glm::vec3(0.0f);
+		glm::vec3 targetPivot = glm::vec3(0.0f);
+		float transitionElapsed = 0.0f;
+		inline static const constexpr float TransitionDuration = 0.5f; // 0.5秒过渡
+
+		//Internal State
+		glm::vec2 lastMousePosition = glm::vec2(0.0f);
+		float speed = 5.0f;
+		float sensitivity = 0.1f;
+		bool firstMove = true;
+		mutable bool dirty = true;
+		mutable bool dirtyRT = true;
+		CameraMode mode = CameraMode::Fly;
 	};
 }

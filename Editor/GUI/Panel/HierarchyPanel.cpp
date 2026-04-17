@@ -151,6 +151,15 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
         ImGui::EndDragDropTarget();
     }
 
+	// 双击聚焦逻辑
+    if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+    {
+        if (auto* transform = scene->GetComponent<Pitaya::Game::Transform>(entity))
+        {
+            Pitaya::Editor::Editor::Instance().GetCamera().Focus(transform->GetWorldPosition());
+        }
+    }
+
     // 鼠标选中逻辑 
     if (ImGui::IsItemClicked(ImGuiMouseButton_Left) || ImGui::IsItemClicked(ImGuiMouseButton_Right))
     {
