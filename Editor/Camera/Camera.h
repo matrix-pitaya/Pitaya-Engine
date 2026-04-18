@@ -105,20 +105,11 @@ namespace Pitaya::Editor
 		{
 			glm::mat4 invView = glm::inverse(newViewMatrix);
 			position = glm::vec3(invView[3]);
-
-			// 从逆矩阵（即 World Matrix）的前向向量计算
 			glm::vec3 worldForward = -glm::vec3(invView[2]);
 			forward = glm::normalize(worldForward);
-
-			// 重新计算 Yaw 和 Pitch
 			pitch = glm::degrees(asin(glm::clamp(forward.y, -0.999f, 0.999f)));
 			yaw = glm::degrees(atan2(forward.z, forward.x));
-
-			// 如果处于轨道模式，需要更新 pivot
-			if (mode == CameraMode::Orbit) {
-				pivot = position + forward * distance;
-			}
-
+			if (mode == CameraMode::Orbit) { pivot = position + forward * distance; }
 			dirty = true;
 		}
 

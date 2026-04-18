@@ -141,11 +141,18 @@ namespace Pitaya::Editor
 	public:
 		struct Context
 		{
-			struct State
+			struct ToolState
 			{
 				TransformTool ActiveTool = TransformTool::Translate;
 				bool IsPaused = false;
 				bool IsLocal = true;
+			};
+			struct GizmoState
+			{
+				bool ShowCameraGizmo = true;  // 摄像机图标
+				bool ShowLightGizmo = true;   // 灯光图标
+				bool ShowGrid = true;         // 地面网格
+				bool ShowColliders = false;   // 碰撞体框线 (可选的扩充)
 			};
 			struct Selection
 			{
@@ -159,7 +166,8 @@ namespace Pitaya::Editor
 				Type Type = Type::Entity;
 			};
 
-			State State;
+			ToolState ToolState;
+			GizmoState GizmoState;
 			Selection Selection;
 		};
 
@@ -194,16 +202,11 @@ namespace Pitaya::Editor
 		void EndFrame();
 
 	public:
-		inline const Pitaya::Editor::GUI::Context& GetContext() const noexcept
+		inline Pitaya::Editor::GUI::Context& GetContext() noexcept
 		{
 			return context;
 		}
-		inline void NotifySelectionChanged(entt::entity entity) noexcept
-		{
-			context.Selection.Type = Context::Selection::Type::Entity;
-			context.Selection.SelectedEntity = entity;
-		}
-
+	
 	private:
 		Pitaya::Editor::GUI::Drawer drawer;
 		Pitaya::Editor::GUI::Panels panels;

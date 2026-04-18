@@ -40,9 +40,11 @@ void Pitaya::Editor::HierarchyPanel::OnImGuiRender()
     // 点击空白区域取消选中逻辑
     if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsAnyItemHovered())
     {
-        if (Pitaya::Editor::Editor::Instance().GetGUI().GetContext().Selection.SelectedEntity != entt::null)
+		auto& selection = Pitaya::Editor::Editor::Instance().GetGUI().GetContext().Selection;
+        if (selection.SelectedEntity != entt::null)
         {
-            Pitaya::Editor::Editor::Instance().GetGUI().NotifySelectionChanged(entt::null);
+            selection.SelectedEntity = entt::null;
+			selection.Type = Pitaya::Editor::GUI::Context::Selection::Type::Entity;
         }
     }
 
@@ -74,7 +76,7 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth |
         ImGuiTreeNodeFlags_OpenOnDoubleClick;
 
-	const auto& selection = Pitaya::Editor::Editor::Instance().GetGUI().GetContext().Selection;
+	auto& selection = Pitaya::Editor::Editor::Instance().GetGUI().GetContext().Selection;
     if (!hasChildren) { flags |= ImGuiTreeNodeFlags_Leaf; }
     if (selection.SelectedEntity == entity) { flags |= ImGuiTreeNodeFlags_Selected; }
 
@@ -165,7 +167,8 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
     {
         if (selection.SelectedEntity != entity)
         {
-            Pitaya::Editor::Editor::Instance().GetGUI().NotifySelectionChanged(entity);
+			selection.SelectedEntity = entity;
+			selection.Type = Pitaya::Editor::GUI::Context::Selection::Type::Entity;
         }
     }
 
@@ -177,7 +180,8 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
             // 如果要删除的是当前选中的实体，清空指针防止 UI 崩溃
             if (selection.SelectedEntity == entity)
             {
-                Pitaya::Editor::Editor::Instance().GetGUI().NotifySelectionChanged(entt::null);
+                selection.SelectedEntity = entt::null;
+                selection.Type = Pitaya::Editor::GUI::Context::Selection::Type::Entity;
             }
             scene->DestroyEntity(entity);
         }

@@ -22,12 +22,6 @@ namespace Pitaya::Editor
         ViewportPanel& operator=(ViewportPanel&&) = delete;
 
     protected:
-        inline ImVec2 GetSize() const 
-        { 
-            return viewportSize;
-        }
-
-    protected:
         void OnImGuiRender() override
         {
             ImVec2 availSize = ImGui::GetContentRegionAvail();
@@ -50,8 +44,8 @@ namespace Pitaya::Editor
             float offsetX = (availSize.x - renderSize.x) * 0.5f;
             float offsetY = (availSize.y - renderSize.y) * 0.5f;
 
-            ImVec2 cursorScreenPos = ImGui::GetCursorScreenPos();
-            viewportBoundsMin = ImVec2(cursorScreenPos.x + offsetX, cursorScreenPos.y + offsetY);
+            viewportPos = ImGui::GetCursorScreenPos();
+            viewportBoundsMin = ImVec2(viewportPos.x + offsetX, viewportPos.y + offsetY);
 
             if (!textureId && RT.IsReady()) 
             { 
@@ -82,6 +76,7 @@ namespace Pitaya::Editor
     protected:
         void* textureId = nullptr;
         float aspectRatio = 16.0f / 9.0f;
+        ImVec2 viewportPos = ImVec2(0, 0);
         ImVec2 viewportSize = ImVec2(0, 0);
         ImVec2 viewportBoundsMin = ImVec2(0, 0);
         Pitaya::Core::Asset<Pitaya::Asset::RenderTarget> RT = nullptr;

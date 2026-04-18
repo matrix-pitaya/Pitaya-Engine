@@ -63,7 +63,11 @@ void Pitaya::Editor::Editor::HookFunc::PreRenderPipelineExecute(Pitaya::Core::Pa
 		Pitaya::Editor::Editor::Instance().camera.GetRenderTargetIsReady())
 	{
 		//TODO 增加特殊网格对象 天空盒对象
-		//renderPipeline->AddRenderObject();
+		if (Pitaya::Editor::Editor::Instance().gui.context.GizmoState.ShowGrid)
+		{
+			//renderPipeline->AddRenderObject();
+		}
+		
 		renderPipeline->AddRenderPass(passkey,
 			Pitaya::Editor::Editor::Instance().camera.GetCameraSnapshot(), Pitaya::Editor::Editor::Instance().camera.GetRenderTarget(),
 			Pitaya::Editor::Editor::Instance().camera.GetPostProcessSettings(), Pitaya::Editor::Editor::Instance().camera.GetCullingMask());

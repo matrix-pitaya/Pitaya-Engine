@@ -32,6 +32,7 @@ namespace Pitaya::Editor
     private:
         void OnImGuiRender() override
         {
+            DrawMenuBar();
             ViewportPanel::OnImGuiRender();
             DrawGizmos();
         }
@@ -41,6 +42,7 @@ namespace Pitaya::Editor
         }
 
     private:
+		void DrawMenuBar();
         void DrawGizmos();
     };
 }

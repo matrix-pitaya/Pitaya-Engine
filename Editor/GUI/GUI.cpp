@@ -494,12 +494,12 @@ void Pitaya::Editor::GUI::DrawToolbar()
 
 	for (int i = 0; i < 4; ++i)
 	{
-		bool isToolActive = (context.State.ActiveTool == tools[i]);
+		bool isToolActive = (context.ToolState.ActiveTool == tools[i]);
 		ImGui::PushStyleColor(ImGuiCol_Button, isToolActive ? toolActiveBg : bgNormal);
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, isToolActive ? toolHoverBg : bgHover);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, isToolActive ? toolActiveBg : bgActiveClick);
 
-		if (ImGui::Button(toolNames[i], btnSize)) { context.State.ActiveTool = tools[i]; }
+		if (ImGui::Button(toolNames[i], btnSize)) { context.ToolState.ActiveTool = tools[i]; }
 		if (ImGui::IsItemHovered()) { ImGui::SetTooltip("%s", toolTips[i]); }
 
 		ImGui::PopStyleColor(3);
@@ -528,7 +528,7 @@ void Pitaya::Editor::GUI::DrawToolbar()
 	if (ImGui::Button(isPlaying ? ICON_FA_STOP : ICON_FA_PLAY, btnSize))
 	{
 		currentState = (currentState == EngineState::Edit) ? EngineState::Play : EngineState::Edit;
-		context.State.IsPaused = false;
+		context.ToolState.IsPaused = false;
 	}
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip(isPlaying ? "Stop" : "Play"); }
 	ImGui::PopStyleColor(3);
@@ -539,10 +539,10 @@ void Pitaya::Editor::GUI::DrawToolbar()
 	if (!canPauseOrStep) { ImGui::BeginDisabled(); }
 
 	//Pause 按钮
-	ImGui::PushStyleColor(ImGuiCol_Button, context.State.IsPaused ? toolActiveBg : bgNormal);
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, context.State.IsPaused ? toolHoverBg : bgHover);
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, context.State.IsPaused ? toolActiveBg : bgActiveClick);
-	if (ImGui::Button(ICON_FA_PAUSE, btnSize)) { context.State.IsPaused = !context.State.IsPaused; }
+	ImGui::PushStyleColor(ImGuiCol_Button, context.ToolState.IsPaused ? toolActiveBg : bgNormal);
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, context.ToolState.IsPaused ? toolHoverBg : bgHover);
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, context.ToolState.IsPaused ? toolActiveBg : bgActiveClick);
+	if (ImGui::Button(ICON_FA_PAUSE, btnSize)) { context.ToolState.IsPaused = !context.ToolState.IsPaused; }
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("Pause"); }
 	ImGui::PopStyleColor(3);
 	ImGui::SameLine();
@@ -570,7 +570,7 @@ void Pitaya::Editor::GUI::DrawToolbar()
 
 	ImGui::SetCursorPosY(centerY);
 	ImGui::SetCursorPosX(rightX);
-	if (ImGui::Button(context.State.IsLocal ? ICON_FA_CUBE " Local" : ICON_FA_GLOBE " Global", ImVec2(rightBtnWidth, buttonSize))) { context.State.IsLocal = !context.State.IsLocal; }
+	if (ImGui::Button(context.ToolState.IsLocal ? ICON_FA_CUBE " Local" : ICON_FA_GLOBE " Global", ImVec2(rightBtnWidth, buttonSize))) { context.ToolState.IsLocal = !context.ToolState.IsLocal; }
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip("Toggle Gizmo Coordinate Space"); }
 
 	ImGui::PopStyleColor(); //ImGuiCol_Border

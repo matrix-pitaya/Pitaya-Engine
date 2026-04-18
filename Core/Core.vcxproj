@@ -194,6 +194,7 @@
     <ClInclude Include="Container\ThreadSafe\ThreadSafeQueue.h" />
     <ClInclude Include="Container\ThreadSafe\ThreadSafeHashMap.h" />
     <ClInclude Include="Utils\File.h" />
+    <ClInclude Include="Utils\Math.h" />
     <ClInclude Include="Utils\Memory.h" />
     <ClInclude Include="Utils\StateFlags.h" />
     <ClInclude Include="Utils\String.h" />
