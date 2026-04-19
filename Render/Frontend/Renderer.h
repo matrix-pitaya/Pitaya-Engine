@@ -87,8 +87,8 @@ namespace Pitaya::Render
 
 			inline bool CreateGlobalRHI()
 			{
-				EmptyVAO = Pitaya::GPU::CreateVertexArray(); if (EmptyVAO == Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray>::Invalid) { Pitaya::Log::Error("create global RHI error, from create empty vao!"); return false; }
-				CameraSnapshotUBO = Pitaya::GPU::CreateUniformBuffer(sizeof(Pitaya::Core::CameraSnapshot), static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::CameraSnapshot)); if (CameraSnapshotUBO == Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer>::Invalid) { Pitaya::Log::Error("create global RHI error, from create camera snapshot UBO!"); return false; }
+				EmptyVAO = Pitaya::GPU::CreateVertexArray(); 
+				CameraSnapshotUBO = Pitaya::GPU::CreateUniformBuffer(sizeof(Pitaya::Core::CameraSnapshot), static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::CameraSnapshot));
 				PostProcessUBO = Pitaya::GPU::CreateUniformBuffer(Pitaya::Render::PostProcessStep::UniformBufferBytes, static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
 				
 				// 初始分配1024个位置

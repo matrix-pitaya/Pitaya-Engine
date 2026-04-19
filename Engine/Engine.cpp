@@ -647,7 +647,7 @@ void Pitaya::Engine::Engine::Render()
 			}
 			else
 			{
-				//mesh 还没加载 → 传 nullptr，Submit 会 fallback 到异常立方体
+				//mesh 还没加载 → 传 nullptr, Submit 会 fallback 到异常立方体
 				MODULE(RenderPipeline)->AddRenderItem(
 					Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
 					nullptr, nullptr,
@@ -656,7 +656,7 @@ void Pitaya::Engine::Engine::Render()
 		}
 		
 		//提交Pass
-		for (auto [entity, transform, camera] : scene->GetView<Pitaya::Game::Transform, Pitaya::Game::Camera>().each())
+		for (auto [entity, camera, transform] : scene->GetView<Pitaya::Game::Camera, Pitaya::Game::Transform>().each())
 		{
 			if (camera.GetRenderTargetIsReady())
 			{

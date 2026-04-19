@@ -90,7 +90,7 @@ void Pitaya::Editor::SceneViewportPanel::DrawGizmos()
         ImDrawList* drawList = window->DrawList;
         if (gizmoState.ShowCameraGizmo)
         {
-            for (auto [entity, transform, camera] : scene->GetView<Pitaya::Game::Transform,Pitaya::Game::Camera>().each()) // 遍历当前场景中所有的「场景相机」(CameraComponent)
+            for (auto [entity, camera, transform] : scene->GetView<Pitaya::Game::Camera, Pitaya::Game::Transform>().each()) // 遍历当前场景中所有的「场景相机」(CameraComponent)
             {
                 glm::vec3 worldPos = transform.GetWorldPosition();  //获取这个场景相机的 3D 世界坐标
                 glm::vec4 clipSpacePos = editorCameraViewProj * glm::vec4(worldPos, 1.0f);    //将 3D 坐标转换到剪裁空间 (Clip Space)

@@ -38,20 +38,15 @@ namespace Pitaya::Game
             entt::entity entity = ecsRegistry.create();
             AddComponent<Tag>(entity, name, tag);
             AddComponent<Transform>(entity);
-            if (root == entt::null) 
+            if (root == entt::null)
             {
                 root = entity;
+                tail = entity; 
                 AddComponent<ChildLink>(entity);
             }
-            else 
+            else
             {
-                // 找到最后一个根节点并链接
-                entt::entity curr = root;
-                while (GetComponent<ChildLink>(curr)->GetNextSibling() != entt::null) 
-                {
-                    curr = GetComponent<ChildLink>(curr)->GetNextSibling();
-                }
-                SetRelationship(entity, entt::null, curr); // 传 curr 表示在它之后
+                SetRelationship(entity, entt::null, tail);
             }
             return entity;
         }
@@ -115,7 +110,7 @@ namespace Pitaya::Game
         }
 
     public:
-        // 注：Group适用于组件数量非常多的情况但需要注意同一个主键的entt::get必须保持一致
+        // 注：Group适用于组件数量非常多的情况 但需要注意同一个主键的entt::get<T>必须保持一致
         // 渲染器MeshRenderer[Transform]、刚体RigidBody[Transform]、粒子Particle[Transform]、2D精灵图Sprite[Transform]
         template<typename... Owned, typename... Get>
         inline auto GetGroup(entt::get_t<Get...> get)
@@ -247,7 +242,7 @@ namespace Pitaya::Game
             }
             return false;
         }
-        inline void UnlinkFromCurrent(entt::entity entity) 
+        inline void UnlinkFromCurrent(entt::entity entity)
         {
             auto* link = GetComponent<ChildLink>(entity);
             if (!link) { return; }
@@ -256,11 +251,14 @@ namespace Pitaya::Game
             entt::entity next = link->GetNextSibling();
             entt::entity parentId = HasComponent<Parent>(entity) ? GetComponent<Parent>(entity)->GetId() : entt::null;
 
+            // 处理前驱
             if (prev != entt::null) { GetComponent<ChildLink>(prev)->SetNextSibling(next); }
             else if (parentId != entt::null) { GetComponent<ChildLink>(parentId)->SetFirstChild(next); }
-            else if (entity == root) { root = next; } // 如果是根节点的头节点
+            else if (entity == root) { root = next; } // 处理头
 
+            // 处理后继
             if (next != entt::null) { GetComponent<ChildLink>(next)->SetPreviousSibling(prev); }
+            else if (parentId == entt::null && entity == tail) { tail = prev; } // 如果当前脱离的是根链表的末尾 尾指针前移
 
             link->SetNextSibling(entt::null);
             link->SetPreviousSibling(entt::null);
@@ -288,18 +286,18 @@ namespace Pitaya::Game
                 if (next != entt::null) { GetComponent<ChildLink>(next)->SetPreviousSibling(child); }
             }
         }
-        inline void InsertIntoRootList(entt::entity child, entt::entity after) 
+        inline void InsertIntoRootList(entt::entity child, entt::entity after)
         {
             if (!HasComponent<ChildLink>(child)) { AddComponent<ChildLink>(child); }
             auto* cLink = GetComponent<ChildLink>(child);
-
-            if (after == entt::null || root == entt::null) 
+            if (after == entt::null || root == entt::null)
             {
                 cLink->SetNextSibling(root);
                 if (root != entt::null) { GetComponent<ChildLink>(root)->SetPreviousSibling(child); }
                 root = child;
+                if (tail == entt::null) { tail = child; }
             }
-            else 
+            else
             {
                 auto* aLink = GetComponent<ChildLink>(after);
                 entt::entity next = aLink->GetNextSibling();
@@ -307,11 +305,13 @@ namespace Pitaya::Game
                 cLink->SetPreviousSibling(after);
                 cLink->SetNextSibling(next);
                 if (next != entt::null) { GetComponent<ChildLink>(next)->SetPreviousSibling(child); }
+                else { tail = child; }
             }
         }
 
 	private:
 		entt::entity root = entt::null; // 供UI显示使用的根节点链表头 通过 ChildLink 连接所有根节点
+		entt::entity tail = entt::null; // 根节点链表尾 方便插入
 		entt::registry ecsRegistry;
 		std::vector<entt::entity> delayDestroyQueue;
 	};

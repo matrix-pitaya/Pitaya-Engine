@@ -45,14 +45,14 @@ namespace Pitaya::Render
 		};
 
 	private:
-		struct PostProcessChain
-		{
-			Pitaya::Core::Asset<Pitaya::Asset::Shader> Shaders[static_cast<uint8_t>(Pitaya::Render::PostProcessType::Unknown)] = {};
-		};
 		struct RenderGraph
 		{
 			std::vector<RenderPass> Passes;
 			std::vector<RenderItem> Items;
+		};
+		struct PostProcessChain
+		{
+			Pitaya::Core::Asset<Pitaya::Asset::Shader> Shaders[static_cast<uint8_t>(Pitaya::Render::PostProcessType::Unknown)] = {};
 		};
 
 	private:
