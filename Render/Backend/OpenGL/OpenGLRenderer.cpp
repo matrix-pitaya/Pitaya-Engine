@@ -48,23 +48,46 @@ void Pitaya::Render::OpenGLRenderer::SwapBuffer() const
 }
 void Pitaya::Render::OpenGLRenderer::NewRenderFrame()
 {
-	const Pitaya::Render::Renderer::RenderPacket::Buffer& back = renderPacket.GetBackBuffer();
-	if (!back.InstanceModelTransforms.empty())
+	const auto& back = renderPacket.GetBackBuffer();
+
+	// 动态扩容/上传 Transform SSBO
+	size_t uploadTransformCount = back.InstanceModelTransforms.size();
+	if (uploadTransformCount > 0)
 	{
-		size_t dataSize = back.InstanceModelTransforms.size() * sizeof(glm::mat4);
+		size_t requiredSize = uploadTransformCount * sizeof(glm::mat4);
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER,
 			static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform),
 			globalRHI.InstanceModelTransformSSBO);
-		glNamedBufferSubData(globalRHI.InstanceModelTransformSSBO, 0, dataSize, back.InstanceModelTransforms.data());
+
+		// 检查预申请的显存能不能装下当前帧的数据
+		if (requiredSize > globalRHI.TransformSSBOCapacity)
+		{
+			// 1.5 倍扩容策略
+			globalRHI.TransformSSBOCapacity = requiredSize + (requiredSize / 2);	
+			glNamedBufferData(globalRHI.InstanceModelTransformSSBO, globalRHI.TransformSSBOCapacity, nullptr, GL_DYNAMIC_DRAW);	// 使用 glNamedBufferData 重新分配显存块
+		}
+
+		// 将最新推算好的数据安全更新到 SSBO 中
+		glNamedBufferSubData(globalRHI.InstanceModelTransformSSBO, 0, requiredSize, back.InstanceModelTransforms.data());
 	}
 
-	if (!back.BoneMatrices.empty())
+	// 动态扩容/上传 Bone SSBO
+	size_t uploadBoneCount = back.BoneMatrices.size();
+	if (uploadBoneCount > 0)
 	{
-		size_t boneDataSize = back.BoneMatrices.size() * sizeof(glm::mat4);
+		size_t requiredBoneSize = uploadBoneCount * sizeof(glm::mat4);
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER,
 			static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::BoneInverseMatrice),
 			globalRHI.BoneInverseMatriceSSBO);
-		glNamedBufferSubData(globalRHI.BoneInverseMatriceSSBO, 0, boneDataSize, back.BoneMatrices.data());
+
+		if (requiredBoneSize > globalRHI.BoneSSBOCapacity)
+		{
+			// 1.5倍扩容
+			globalRHI.BoneSSBOCapacity = requiredBoneSize + (requiredBoneSize / 2);
+			glNamedBufferData(globalRHI.BoneInverseMatriceSSBO, globalRHI.BoneSSBOCapacity, nullptr, GL_DYNAMIC_DRAW);
+		}
+
+		glNamedBufferSubData(globalRHI.BoneInverseMatriceSSBO, 0, requiredBoneSize, back.BoneMatrices.data());
 	}
 }
 

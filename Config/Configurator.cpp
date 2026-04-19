@@ -90,7 +90,6 @@ void Pitaya::Config::Configurator::ConfigInfo::Serialize(Pitaya::Serialize::Seri
 
 	//GPU
 	auto& gpu = context.GetSubContext("GPU");
-	gpu.Write("MaxInstancesCount", MaxInstancesCount);
 	gpu.Write("MaxBonesPerInstance", MaxBonesPerInstance);
 }
 void Pitaya::Config::Configurator::ConfigInfo::Deserialize(const Pitaya::Serialize::DeserializeContext& context)
@@ -176,7 +175,6 @@ void Pitaya::Config::Configurator::ConfigInfo::Deserialize(const Pitaya::Seriali
 	if (context.HasSubContext("GPU"))
 	{
 		const auto& gpu = context.GetSubContext("GPU");
-		if (gpu.Read("MaxInstancesCount", _uint32_t)) { MaxInstancesCount = _uint32_t; }
 		if (gpu.Read("MaxBonesPerInstance", _uint32_t)) { MaxBonesPerInstance = _uint32_t; }
 	}
 }

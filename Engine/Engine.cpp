@@ -182,10 +182,6 @@ namespace
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetMaxFixupdataExecuteTimes();
 	}
-	uint32_t ENGINE_CALL OnGetMaxInstancesCount() noexcept
-	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetMaxInstancesCount();
-	}
 	uint32_t ENGINE_CALL OnGetMaxBonesPerInstance() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetMaxBonesPerInstance();
@@ -466,7 +462,6 @@ bool Pitaya::Engine::Engine::Initialize()
 #pragma region Config
 		FUNCTABLE(Configurator).OnGetRenderAPI = OnGetRenderAPI;
 		FUNCTABLE(Configurator).OnGetMaxFixupdataExecuteTimes = OnGetMaxFixupdataExecuteTimes;
-		FUNCTABLE(Configurator).OnGetMaxInstancesCount = OnGetMaxInstancesCount;
 		FUNCTABLE(Configurator).OnGetMaxBonesPerInstance = OnGetMaxBonesPerInstance;
 		FUNCTABLE(Configurator).OnGetEnableVSync = OnGetEnableVSync;
 #pragma endregion
@@ -632,7 +627,7 @@ void Pitaya::Engine::Engine::Render()
 	if (auto* scene = MODULE(GameWorld)->GetActiveScene())
 	{
 		//提交MeshRenderer
-		for (auto [entity, transform, meshrenderer] : scene->GetView<Pitaya::Game::Transform, Pitaya::Game::MeshRenderer>().each())
+		for (auto [entity, meshrenderer, transform] : scene->GetGroup<Pitaya::Game::MeshRenderer>(entt::get<Pitaya::Game::Transform>).each())
 		{
 			const auto& mesh = meshrenderer.GetMesh();
 			const auto& materials = meshrenderer.GetMaterials();
@@ -659,7 +654,7 @@ void Pitaya::Engine::Engine::Render()
 					meshrenderer.GetLayerMask(), transform.GetWorldMatrix(), 0);
 			}
 		}
-
+		
 		//提交Pass
 		for (auto [entity, transform, camera] : scene->GetView<Pitaya::Game::Transform, Pitaya::Game::Camera>().each())
 		{

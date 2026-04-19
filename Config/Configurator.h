@@ -65,7 +65,6 @@ namespace Pitaya::Config
 			int32_t WindowHeight = 900;
 
 			//GPU
-			uint32_t MaxInstancesCount = 1000;
 			uint32_t MaxBonesPerInstance = 100;
 
 		public:
@@ -119,10 +118,6 @@ namespace Pitaya::Config
 		inline size_t GetMaxFixupdataExecuteTimes() const noexcept
 		{
 			return info.MaxFixupdataExecuteTimes;
-		}
-		inline uint32_t GetMaxInstancesCount() const noexcept
-		{
-			return info.MaxInstancesCount;
 		}
 		inline uint32_t GetMaxBonesPerInstance() const noexcept
 		{

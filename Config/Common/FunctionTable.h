@@ -25,7 +25,6 @@ namespace Pitaya::Engine
 		{
 			if (!OnGetRenderAPI) { throw std::runtime_error("FuncTable miss [Config::GetRenderAPI] Function!"); }
 			if (!OnGetMaxFixupdataExecuteTimes) { throw std::runtime_error("FuncTable miss [Config::GetMaxFixupdataExecuteTimes] Function!"); }
-			if (!OnGetMaxInstancesCount) { throw std::runtime_error("FuncTable miss [Config::GetMaxInstancesCount] Function!"); }
 			if (!OnGetMaxBonesPerInstance) { throw std::runtime_error("FuncTable miss [Config::GetMaxBonesPerInstance] Function!"); }
 			if (!OnGetEnableVSync) { throw std::runtime_error("FuncTable miss [Config::GetEnableVSync] Function!"); }
 			return true;
@@ -34,7 +33,6 @@ namespace Pitaya::Engine
 		{
 			OnGetRenderAPI = nullptr;
 			OnGetMaxFixupdataExecuteTimes = nullptr;
-			OnGetMaxInstancesCount = nullptr;
 			OnGetMaxBonesPerInstance = nullptr;
 			OnGetEnableVSync = nullptr;
 		}
@@ -48,10 +46,6 @@ namespace Pitaya::Engine
 		{
 			return OnGetMaxFixupdataExecuteTimes();
 		}
-		inline uint32_t InvokeOnGetMaxInstancesCount() const noexcept
-		{
-			return OnGetMaxInstancesCount();
-		}
 		inline uint32_t InvokeOnGetMaxBonesPerInstance() const noexcept
 		{
 			return OnGetMaxBonesPerInstance();
@@ -64,7 +58,6 @@ namespace Pitaya::Engine
 	private:
 		Pitaya::Render::API (ENGINE_CALL *OnGetRenderAPI)() noexcept = nullptr;
 		size_t (ENGINE_CALL *OnGetMaxFixupdataExecuteTimes)() noexcept = nullptr;
-		uint32_t (ENGINE_CALL*OnGetMaxInstancesCount)() noexcept = nullptr;
 		uint32_t (ENGINE_CALL *OnGetMaxBonesPerInstance)() noexcept = nullptr;
 		bool (ENGINE_CALL *OnGetEnableVSync)() noexcept = nullptr;
 	};
@@ -79,10 +72,6 @@ namespace Pitaya::Config
 	inline size_t GetMaxFixupdataExecuteTimes() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Config::Configurator>().InvokeOnGetMaxFixupdataExecuteTimes();
-	}
-	inline uint32_t GetMaxInstancesCount() noexcept
-	{
-		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Config::Configurator>().InvokeOnGetMaxInstancesCount();
 	}
 	inline uint32_t GetMaxBonesPerInstance() noexcept
 	{

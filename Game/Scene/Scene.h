@@ -115,6 +115,18 @@ namespace Pitaya::Game
         }
 
     public:
+        // 注：Group适用于组件数量非常多的情况但需要注意同一个主键的entt::get必须保持一致
+        // 渲染器MeshRenderer[Transform]、刚体RigidBody[Transform]、粒子Particle[Transform]、2D精灵图Sprite[Transform]
+        template<typename... Owned, typename... Get>
+        inline auto GetGroup(entt::get_t<Get...> get)
+        {
+            return ecsRegistry.group<Owned...>(get);
+        }
+        template<typename... Owned, typename... Get, typename... Exclude>
+        inline auto GetGroup(entt::get_t<Get...> get, entt::exclude_t<Exclude...> exclude)
+        {
+            return ecsRegistry.group<Owned...>(get, exclude);
+        }
         template<typename... Components>
         inline auto GetView()
         {
@@ -145,6 +157,7 @@ namespace Pitaya::Game
         {
             ecsRegistry.remove<T>(entity);
         }
+
 
     private:
 		inline void ProcessDelayDestroyQueue()  // 在 EndFrame 调用

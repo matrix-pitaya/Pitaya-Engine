@@ -81,13 +81,23 @@ namespace Pitaya::Render
 			Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> InstanceModelTransformSSBO;
 			Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> BoneInverseMatriceSSBO;
 
+			//记录当前显存缓冲区的大小
+			size_t TransformSSBOCapacity = 0;
+			size_t BoneSSBOCapacity = 0;
+
 			inline bool CreateGlobalRHI()
 			{
 				EmptyVAO = Pitaya::GPU::CreateVertexArray(); if (EmptyVAO == Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray>::Invalid) { Pitaya::Log::Error("create global RHI error, from create empty vao!"); return false; }
 				CameraSnapshotUBO = Pitaya::GPU::CreateUniformBuffer(sizeof(Pitaya::Core::CameraSnapshot), static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::CameraSnapshot)); if (CameraSnapshotUBO == Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer>::Invalid) { Pitaya::Log::Error("create global RHI error, from create camera snapshot UBO!"); return false; }
 				PostProcessUBO = Pitaya::GPU::CreateUniformBuffer(Pitaya::Render::PostProcessStep::UniformBufferBytes, static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
-				InstanceModelTransformSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Config::GetMaxInstancesCount() * sizeof(glm::mat4), static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform));
-				BoneInverseMatriceSSBO = Pitaya::GPU::CreateShaderStorageBuffer(1000 * Pitaya::Config::GetMaxBonesPerInstance() * sizeof(glm::mat4), static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::BoneInverseMatrice));
+				
+				// 初始分配1024个位置
+				TransformSSBOCapacity = 1024 * sizeof(glm::mat4); 
+				InstanceModelTransformSSBO = Pitaya::GPU::CreateShaderStorageBuffer(TransformSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform));
+
+				// 初始分配一段骨骼容量
+				BoneSSBOCapacity = 4096 * sizeof(glm::mat4); 
+				BoneInverseMatriceSSBO = Pitaya::GPU::CreateShaderStorageBuffer(BoneSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::BoneInverseMatrice));
 				return true;
 			}
 		};
@@ -325,87 +335,111 @@ namespace Pitaya::Render
 			}
 			inline void PushDrawCommandToPass(Pitaya::Render::DrawCommand& cmd)
 			{
-				pass.emplace_back(std::move(cmd));
+				if (cmd.BoneInverseMatrices.empty())
+				{
+					staticPass.emplace_back(std::move(cmd));
+				}
+				else
+				{
+					skinnedPass.emplace_back(std::move(cmd));
+				}
 			}
 			inline void CompilePass()
 			{
-				if (pass.empty()) { return; }
-
-				//通过索引间接排序DrawcallCommand
-				static std::vector<uint32_t> sortedIndices;
-				uint32_t drawCommandCount = pass.size();
-				sortedIndices.resize(drawCommandCount);
-				std::iota(sortedIndices.begin(), sortedIndices.end(), 0);
-
-				//通过SortKey对DrawComamnd进行排序
-				std::sort(sortedIndices.begin(), sortedIndices.end(),
-					[&](uint32_t a, uint32_t b) { return pass[a].SortKey < pass[b].SortKey; });
-
-				//和批处理
-				bool isBatching = false;
+				uint32_t beforeSize = skinnedPass.size() + staticPass.size();
+				if (beforeSize == 0) { return; }
 				uint32_t debug_drawtimes = 0;
-				Pitaya::Render::InstancedDrawCommand currentBatch;
-				for (uint32_t idx : sortedIndices)
-				{
-					const auto& cmd = pass[idx];
-					bool canBatch = isBatching &&
-						cmd.VertexArray == currentBatch.VertexArray &&
-						cmd.BaseIndex == currentBatch.BaseIndex &&
-						cmd.BaseVertex == currentBatch.BaseVertex &&
-						cmd.IndexCount == currentBatch.IndexCount &&
-						cmd.MaterialId == currentBatch.MaterialId &&
-						cmd.DepthTest == currentBatch.DepthTest &&
-						cmd.Blend == currentBatch.Blend;
-
-					if (!canBatch)
+				// 处理命令队列
+				auto ProcessQueue = [&](std::vector<Pitaya::Render::DrawCommand>& currentPass, bool isSkinnedBatch)
 					{
-						if (isBatching) { PushCommand(currentBatch); debug_drawtimes++; }
-						isBatching = true;
+						if (currentPass.empty()) { return; }
 
-						// 复制状态
-						currentBatch.VertexArray = cmd.VertexArray;
-						currentBatch.MaterialId = cmd.MaterialId;
-						currentBatch.IndexCount = cmd.IndexCount;
-						currentBatch.BaseIndex = cmd.BaseIndex;
-						currentBatch.BaseVertex = cmd.BaseVertex;
-						currentBatch.DepthTest = cmd.DepthTest;
-						currentBatch.Blend = cmd.Blend;
-						currentBatch.Shader = cmd.Shader;
-						for (uint32_t i = 0; i < static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Unknown); i++)
+						// 通过索引间接排序DrawcallCommand
+						static std::vector<uint32_t> sortedIndices;
+						uint32_t drawCommandCount = currentPass.size();
+						sortedIndices.resize(drawCommandCount);
+						std::iota(sortedIndices.begin(), sortedIndices.end(), 0);
+
+						// 通过SortKey对DrawComamnd进行排序
+						std::sort(sortedIndices.begin(), sortedIndices.end(),
+							[&](uint32_t a, uint32_t b) { return currentPass[a].SortKey < currentPass[b].SortKey; });
+
+						// 合批处理
+						bool isBatching = false;
+						Pitaya::Render::InstancedDrawCommand currentBatch;
+
+						for (uint32_t idx : sortedIndices)
 						{
-							currentBatch.Textures[i] = cmd.Textures[i];
+							const auto& cmd = currentPass[idx];
+							bool canBatch = isBatching &&
+								cmd.VertexArray == currentBatch.VertexArray &&
+								cmd.BaseIndex == currentBatch.BaseIndex &&
+								cmd.BaseVertex == currentBatch.BaseVertex &&
+								cmd.IndexCount == currentBatch.IndexCount &&
+								cmd.MaterialId == currentBatch.MaterialId &&
+								cmd.DepthTest == currentBatch.DepthTest &&
+								cmd.Blend == currentBatch.Blend;
+
+							if (!canBatch)
+							{
+								if (isBatching) { PushCommand(currentBatch); debug_drawtimes++; }
+								isBatching = true;
+
+								// 复制状态
+								currentBatch.VertexArray = cmd.VertexArray;
+								currentBatch.MaterialId = cmd.MaterialId;
+								currentBatch.IndexCount = cmd.IndexCount;
+								currentBatch.BaseIndex = cmd.BaseIndex;
+								currentBatch.BaseVertex = cmd.BaseVertex;
+								currentBatch.DepthTest = cmd.DepthTest;
+								currentBatch.Blend = cmd.Blend;
+								currentBatch.Shader = cmd.Shader;
+								for (uint32_t i = 0; i < static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Unknown); i++)
+								{
+									currentBatch.Textures[i] = cmd.Textures[i];
+								}
+
+								currentBatch.InstanceCount = 0;
+								currentBatch.BaseInstance = static_cast<uint32_t>(front.InstanceModelTransforms.size()); // 不论是哪个队列 BaseInstance 永远递增
+							}
+
+							// Transform SSBO
+							front.InstanceModelTransforms.push_back(cmd.ModelMatrix);
+
+							// 只有蒙皮渲染队列才去处理骨骼
+							if (isSkinnedBatch)
+							{
+								size_t maxBones = static_cast<size_t>(Pitaya::Config::GetMaxBonesPerInstance());
+								size_t bonesToCopy = std::min(cmd.BoneInverseMatrices.size(), maxBones);
+								size_t paddingBones = maxBones - bonesToCopy;
+								if (bonesToCopy > 0)
+								{
+									front.BoneMatrices.insert(
+										front.BoneMatrices.end(),
+										cmd.BoneInverseMatrices.begin(),
+										cmd.BoneInverseMatrices.begin() + bonesToCopy);
+								}
+								if (paddingBones > 0)	// 不足补1单元矩阵
+								{
+									front.BoneMatrices.insert(
+										front.BoneMatrices.end(),
+										paddingBones,
+										glm::mat4(1.0f));
+								}
+							}
+							currentBatch.InstanceCount++;
 						}
 
-						currentBatch.InstanceCount = 0;
-						currentBatch.BaseInstance = static_cast<uint32_t>(front.InstanceModelTransforms.size());
-					}
+						// 提交当前队列最后一个批次
+						if (isBatching) { PushCommand(currentBatch); debug_drawtimes++; }
+						currentPass.clear();
+					};
 
-					front.InstanceModelTransforms.push_back(cmd.ModelMatrix);
+				// 严格控制调用顺序 先骨骼网格 后静态网格
+				ProcessQueue(skinnedPass, true);   // 先处理骨骼队列
+				ProcessQueue(staticPass, false);   // 后处理无骨骼的静态物体队列
 
-					size_t maxBones = static_cast<size_t>(Pitaya::Config::GetMaxBonesPerInstance());
-					size_t bonesToCopy = std::min(cmd.BoneInverseMatrices.size(), maxBones);
-					size_t paddingBones = maxBones - bonesToCopy;
-					if (bonesToCopy > 0)
-					{
-						front.BoneMatrices.insert(
-							front.BoneMatrices.end(),
-							cmd.BoneInverseMatrices.begin(),
-							cmd.BoneInverseMatrices.begin() + bonesToCopy);
-					}
-					if (paddingBones > 0)
-					{
-						front.BoneMatrices.insert(
-							front.BoneMatrices.end(),
-							paddingBones,
-							glm::mat4(1.0f));
-					}
-					currentBatch.InstanceCount++;
-				}
-
-				//提交最后一个批次
-				if (isBatching) { PushCommand(currentBatch); debug_drawtimes++; }
-				Core::Print(Core::Color::Red, "[Batch] Before:%d to After:%d", pass.size(), debug_drawtimes);
-				pass.clear();
+				Core::Print(Core::Color::Red, "[Batch] Before:%d to After:%d", beforeSize, debug_drawtimes);
 			}
 			inline void SwapBuffer()
 			{
@@ -426,7 +460,8 @@ namespace Pitaya::Render
 		private:
 			Buffer front;												//主线程写入渲染命令、实例化Models、骨骼动画
 			Buffer back;												//渲染线程执行渲染命令
-			std::vector<Pitaya::Render::DrawCommand> pass;				//用于对DrawCommand进行排序
+			std::vector<Pitaya::Render::DrawCommand> skinnedPass;		//用于对DrawCommand进行排序
+			std::vector<Pitaya::Render::DrawCommand> staticPass;
 		};
 
 	protected:
