@@ -21,6 +21,8 @@
 #include<Asset/Common/Texture.h>
 #include<Asset/Common/AssetType.h>
 
+#include<chrono>
+
 namespace Pitaya::Asset
 {
 	class AssetHub
@@ -392,45 +394,29 @@ namespace Pitaya::Asset
 		//TODO 实现函数 每一帧遍历16-32个资源，判断能否销毁
 		//TODO 实现函数 强制遍历所有资源，判断能否销毁
 
-#pragma region Texture
 	private:
 		void LoadTextureAsset(Core::GUID guid, const std::filesystem::path& path);
 		bool LoadTexture2DAsset(Core::GUID guid, const std::filesystem::path& path, Pitaya::Import::Texture2DImportResult& result);
 		bool LoadTextureCubemapAsset(Core::GUID guid, const std::filesystem::path& path, const std::vector<std::filesystem::path>& paths, Pitaya::Import::TextureCubemapImportResult& result);
-#pragma endregion
 
-
-#pragma region Shader
 	private:
 		void LoadShaderAsset(Core::GUID guid, const std::filesystem::path& folder);
 		bool LoadVFShaderAsset(Core::GUID guid, const std::filesystem::path& folder, const std::filesystem::path& vertexPath,
 			const std::filesystem::path& fragmentPath, Pitaya::Import::ShaderImportResult& cpuOpResult_Inner);
 		bool LoadVFGShaderAsset(Core::GUID guid, const std::filesystem::path& folder, const std::filesystem::path& vertexPath,
 			const std::filesystem::path& fragmentPath, const std::filesystem::path& geometry, Pitaya::Import::ShaderImportResult& cpuOpResult_Inner);
-#pragma endregion
 
-
-#pragma region Mesh
 	private:
 		void LoadMeshAsset(Pitaya::Core::GUID guid, const std::filesystem::path& file);
 		bool LoadStaticMeshAsset(Pitaya::Core::GUID guid, const std::filesystem::path& file, const Pitaya::Import::MeshPreloadResult& detectResult, Pitaya::Import::StaticMeshImportResult& out);
 		bool LoadSkinnedMeshAsset(Pitaya::Core::GUID guid, const std::filesystem::path& file, const Pitaya::Import::MeshPreloadResult& detectResult, Pitaya::Import::SkinnedMeshImportResult& out);
-#pragma endregion
 
-
-#pragma region Material
 	private:
 		void LoadMaterialAsset(Pitaya::Core::GUID guid, const std::filesystem::path& file);
-#pragma endregion
 
-
-#pragma region RenderTarget
 	private:
 		void LoadRenderTarget(Pitaya::Core::GUID guid, const std::filesystem::path& file);
-#pragma endregion
 
-
-#pragma region Check
 	private:
 		bool CheckIsVirtualPath(const std::filesystem::path& path) const;
 		bool CheckAssetValid(const std::filesystem::path& path) const;
@@ -438,22 +424,11 @@ namespace Pitaya::Asset
 	private:
 		bool CheckIsValidTexture2DFile(const std::filesystem::path& file) const;
 		bool CheckIsValidTextureCubeMapFolder(const std::filesystem::path& folder, std::vector<std::filesystem::path>& out) const;
-
-	private:
 		bool CheckIsValidShaderFloder(const std::filesystem::path& folder, std::unordered_map<Pitaya::GPU::ShaderType, std::filesystem::path>& out) const;
-
-	private:
 		bool CheckIsValidMaterialFile(const std::filesystem::path&) const;
-
-	private:
 		bool CheckIsValidRenderTargetFile(const std::filesystem::path&) const;
-
-	private:
 		bool CheckIsValidMeshFile(const std::filesystem::path& file) const;
-#pragma endregion
 
-
-#pragma region AssetOperate
 	public:
 		inline void CommitAssetOperate(const Pitaya::Asset::AssetOperate& operate)
 		{
@@ -461,16 +436,24 @@ namespace Pitaya::Asset
 		}
 
 	public:
-		inline void SyncAssetToGPU()
+		inline void SyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
 		{
-			std::queue<Pitaya::Asset::AssetOperate> queue = assetOperateQueue.PopAll();
-			while (!queue.empty())
+			// 每一帧最多处理5个资源操作 避免过多资源操作导致的卡顿
+			if (cacheAssetOperateQueue.empty()) { cacheAssetOperateQueue = assetOperateQueue.PopN(5); }
+
+			// 防卡顿时间预算
+			auto startTime = std::chrono::high_resolution_clock::now();
+			while (!cacheAssetOperateQueue.empty())
 			{
-				std::visit([this](auto& result_Inner) {this->SyncAssetOperate(result_Inner); }, queue.front().Data);
-				queue.pop();
+				std::visit([this](auto& result_Inner) { this->SyncAssetOperate(result_Inner); }, cacheAssetOperateQueue.front().Data);
+				cacheAssetOperateQueue.pop();
+
+				// 超时检测
+				auto currentTime = std::chrono::high_resolution_clock::now();
+				if (currentTime - startTime >= std::chrono::milliseconds(2)) { break; }
 			}
 		}
-		inline bool IsUploadedToGPU()
+		inline bool IsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
 		{
 			return !assetOperateQueue.Empty();
 		}
@@ -484,7 +467,6 @@ namespace Pitaya::Asset
 		void SyncAssetOperate(Pitaya::Import::SkinnedMeshImportResult&);
 		void SyncAssetOperate(Pitaya::Import::RenderTargetImportResult&);
 		void SyncAssetOperate(Pitaya::Asset::Texture2DUnloadRequire&);
-#pragma endregion
 
 	private:
 		const std::unordered_set<std::string> TextureExtensions =
@@ -520,6 +502,7 @@ namespace Pitaya::Asset
 
 		//存储CPU操作资源结果（任务线程添加 → 渲染线程处理）
 		Pitaya::Core::ThreadSafeQueue<Pitaya::Asset::AssetOperate> assetOperateQueue;
+		std::queue<Pitaya::Asset::AssetOperate> cacheAssetOperateQueue;	//渲染线程处理资源操作时的临时队列 避免长时间占用锁
 
 		Pitaya::Asset::AssetHub::AssetRegistry registry;
 	};

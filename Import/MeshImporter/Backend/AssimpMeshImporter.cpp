@@ -635,20 +635,10 @@ bool Pitaya::Import::AssimpMeshImporter::ParseMaterial(const aiMaterial* aimater
 
         switch (prop->mType)
         {
-            case aiPTI_Float:
-                ParseMaterialProperty_FLOAT();
-                break;
-
-            case aiPTI_Double:
-                ParseMaterialProperty_DOUBLE();
-                break;
-
-            case aiPTI_Integer:
-                ParseMaterialProperty_INTERGER();
-                break;
-
-            default: 
-                break;
+            case aiPTI_Float:   ParseMaterialProperty_FLOAT();      break;
+            case aiPTI_Double:  ParseMaterialProperty_DOUBLE();     break;
+            case aiPTI_Integer: ParseMaterialProperty_INTERGER();   break;
+            default: break;
         }
     }
 
@@ -662,7 +652,7 @@ bool Pitaya::Import::AssimpMeshImporter::ParseMaterial(const aiMaterial* aimater
 
     //dunmmyentry 用于material临时序列化
     Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry dummyAssetEntry_TEXTURES[static_cast<uint8_t>(Pitaya::GPU::TextureUsage::Unknown)] = {};
-    for (int t = 0; texTypes[t] != aiTextureType_UNKNOWN; ++t)
+    for (uint32_t t = 0; texTypes[t] != aiTextureType_UNKNOWN; ++t)
     {
         aiTextureType aiType = texTypes[t];
         aiString path;

@@ -25,27 +25,26 @@ namespace Pitaya::Core
 		Asset() noexcept = default;
 		~Asset() noexcept
 		{
-			ReduceRefCount();
+			if (entry) { entry->ReduceRefCount(); }
 		}
 		Asset(std::nullptr_t) noexcept
 			: entry(nullptr) {}
 		explicit Asset(Pitaya::Core::Asset<T>::AssetEntry* entry) noexcept
 			: entry(entry)
 		{
-			AddRefCount();
+			if (entry) { entry->AddRefCount(); }
 		}
 		Asset(const Asset& other) noexcept
 			: entry(other.entry)
 		{
-			AddRefCount();
+			if (entry) { entry->AddRefCount(); }
 		}
 		Asset& operator=(const Asset& other) noexcept
 		{
 			if (this == &other) { return *this; }
-
-			ReduceRefCount();
+			if (entry) { entry->ReduceRefCount(); }
 			entry = other.entry;
-			AddRefCount();
+			if (entry) { entry->AddRefCount(); }
 			return *this;
 		}
 		Asset(Asset&& other) noexcept
@@ -55,29 +54,24 @@ namespace Pitaya::Core
 		}
 		Asset& operator=(Asset&& other) noexcept
 		{
-			if (this == &other)
-			{
-				return *this;
-			}
-
-			ReduceRefCount();
+			if (this == &other) { return *this; }
+			if (entry) { entry->ReduceRefCount(); }
 			entry = other.entry;
 			other.entry = nullptr;
 			return *this;
 		}
 		Asset& operator=(std::nullptr_t) noexcept
 		{
-			ReduceRefCount();
+			if (entry) { entry->ReduceRefCount(); }
 			entry = nullptr;
 			return *this;
 		}
 		Asset& operator=(Pitaya::Core::Asset<T>::AssetEntry* entry) noexcept
 		{
 			if (this->entry == entry) { return *this; }
-
-			ReduceRefCount();
+			if (this->entry) { this->entry->ReduceRefCount(); }
 			this->entry = entry;
-			AddRefCount();
+			if (this->entry) { this->entry->AddRefCount(); }
 			return *this;
 		}
 
@@ -125,7 +119,7 @@ namespace Pitaya::Core
 			if (!entry) { return false; }
 			if (entry->State.HasBits(Pitaya::Core::AssetState::Unload))
 			{
-				ReduceRefCount();
+				entry->ReduceRefCount();
 				entry = nullptr;
 				return false;
 			}
@@ -138,18 +132,6 @@ namespace Pitaya::Core
 		Pitaya::Core::GUID GetGUID() const noexcept
 		{
 			return entry ? entry->GUID : Pitaya::Core::GUID();
-		}
-
-	private:
-		inline void AddRefCount() const noexcept
-		{
-			if (!entry) { return; }
-			entry->AddRefCount();
-		}
-		inline void ReduceRefCount() const noexcept
-		{
-			if (!entry) { return; }
-			entry->ReduceRefCount();
 		}
 
 	private:

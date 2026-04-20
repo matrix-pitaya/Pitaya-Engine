@@ -121,7 +121,7 @@ namespace Pitaya::Editor
 			Panels& operator=(Panels&&) = delete;
 
 		public:
-			inline constexpr auto Each()
+			inline constexpr auto Each() noexcept
 			{
 				return std::to_array<Panel*>({ &hierarchyPanel, &inspectorPanel, &profilerPanel, &preferencesPanel,
 									&projectPanel, &sceneViewportPanel, &gameViewportPanel, &consolePanel });

@@ -1,5 +1,6 @@
 #pragma once
 
+#include<Core/PassKey/PassKey.h>
 #include<Core/Asset/Asset.h>
 #include<Core/Identifier/GUID.h>
 #include<Context/Context.h>
@@ -101,13 +102,13 @@ namespace Pitaya::Engine
 		{
 			return OnRegisterExternalFile(inputPath, basePath, out_virtualpath, out_guid);
 		}
-		inline void InvokeOnSyncAssetToGPU()
+		inline void InvokeOnSyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
 		{
-			OnSyncAssetToGPU();
+			OnSyncAssetToGPU(passkey);
 		}
-		inline bool InvokeOnIsUploadedToGPU()
+		inline bool InvokeOnIsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
 		{
-			return OnIsUploadedToGPU();
+			return OnIsUploadedToGPU(passkey);
 		}
 
 	private:
@@ -120,8 +121,8 @@ namespace Pitaya::Engine
 		bool (ENGINE_CALL *OnGetAssetGUIDByPath)(const std::filesystem::path&, Pitaya::Core::GUID&) = nullptr;
 		bool (ENGINE_CALL *OnTransformToVirtualPath)(const std::filesystem::path&, const std::filesystem::path&, std::filesystem::path&) = nullptr;
 		bool (ENGINE_CALL *OnRegisterExternalFile)(const std::filesystem::path&, const std::filesystem::path&, std::filesystem::path&, Pitaya::Core::GUID&) = nullptr;
-		void (ENGINE_CALL *OnSyncAssetToGPU)() = nullptr;
-		bool (ENGINE_CALL *OnIsUploadedToGPU)() = nullptr;
+		void (ENGINE_CALL *OnSyncAssetToGPU)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>) = nullptr;
+		bool (ENGINE_CALL *OnIsUploadedToGPU)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>) = nullptr;
 	};
 }
 
@@ -159,12 +160,12 @@ namespace Pitaya::Asset
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Asset::AssetHub>().InvokeOnRegisterExternalFile(inputPath, basePath, out_virtualpath, out_guid);
 	}
-	inline void SyncAssetToGPU()
+	inline void SyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
 	{
-		Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Asset::AssetHub>().InvokeOnSyncAssetToGPU();
+		Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Asset::AssetHub>().InvokeOnSyncAssetToGPU(passkey);
 	}
-	inline bool IsUploadedToGPU()
+	inline bool IsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
 	{
-		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Asset::AssetHub>().InvokeOnIsUploadedToGPU();
+		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Asset::AssetHub>().InvokeOnIsUploadedToGPU(passkey);
 	}
 }

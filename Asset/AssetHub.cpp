@@ -77,6 +77,7 @@ void Pitaya::Asset::AssetHub::Release()
 }
 bool Pitaya::Asset::AssetHub::LoadBuiltinAsset()
 {
+	/*	采用懒加载的方式加载内置资源 避免在引擎启动时一次性加载过多资源导致卡顿
 	Pitaya::Task::PostJob([this]()
 		{
 			std::vector<std::pair<Pitaya::Core::GUID, std::filesystem::path>> buildinAssets = registry.Map.GetAllKeyValuePairs();
@@ -94,6 +95,7 @@ bool Pitaya::Asset::AssetHub::LoadBuiltinAsset()
 				}
 			}
 		},"Load Buildin Asset");
+	*/
 	return true;
 }
 

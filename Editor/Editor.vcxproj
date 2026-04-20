@@ -199,6 +199,7 @@
     <ClInclude Include="Profiler\FrameState.h" />
     <ClInclude Include="Profiler\RenderState.h" />
     <ClInclude Include="Profiler\TimeState.h" />
+    <ClInclude Include="StateMachine\StateMachine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API\func.cpp" />
@@ -217,6 +218,7 @@
     <ClCompile Include="GUI\Panel\ProfilerPanel.cpp" />
     <ClCompile Include="GUI\Panel\SceneViewportPanel.cpp" />
     <ClCompile Include="Profiler\Profiler.cpp" />
+    <ClCompile Include="StateMachine\StateMachine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

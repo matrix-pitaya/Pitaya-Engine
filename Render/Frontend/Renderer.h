@@ -106,9 +106,11 @@ namespace Pitaya::Render
 			Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> VAO;
 			Pitaya::GPU::Identifier<Pitaya::GPU::Shader> Shader;
 			Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> Texture;
-			uint32_t IndexCount = 36;
-			uint32_t BaseIndex = 0;
-			uint32_t BaseVertex = 0;
+
+			// Fallback立方体渲染数据
+			inline static constexpr const uint32_t IndexCount = 36;
+			inline static constexpr const uint32_t BaseIndex = 0;
+			inline static constexpr const uint32_t BaseVertex = 0;
 
 			inline bool CreateFallbackRHI()
 			{
@@ -503,13 +505,16 @@ namespace Pitaya::Render
 			{
 				std::unique_lock<std::mutex> lock(mutex);
 				cond.wait(lock, [this] { return renderPacket.IsRemain() || INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK ||
-					Pitaya::Asset::IsUploadedToGPU() || !isRunning.load(std::memory_order_acquire); });
+					Pitaya::Asset::IsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>()) || !isRunning.load(std::memory_order_acquire); });
 				if (!isRunning.load(std::memory_order_acquire)) { break; }
 
-				ManageGPUMemory();
-				NewRenderFrame();
-				ParseCommand();
-				SwapBuffer();
+				Pitaya::Asset::SyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+				if (renderPacket.IsRemain() || INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK)
+				{
+					NewRenderFrame();
+					ParseCommand();
+					SwapBuffer();
+				}
 			}
 
 			INVOKE_PRERENDERCONTEXTINRELEASED_HOOK
@@ -520,10 +525,6 @@ namespace Pitaya::Render
 		virtual void ReleaseRenderContext() = 0;
 
 	protected:
-		inline void ManageGPUMemory()
-		{
-			Pitaya::Asset::SyncAssetToGPU();
-		}
 		inline void ParseCommand()
 		{
 			renderPacket.ParseCommand(this);

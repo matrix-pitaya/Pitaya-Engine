@@ -99,6 +99,9 @@
     <ClInclude Include="Common\TransformTool.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="StateMachine\StateMachine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp">
@@ -147,6 +150,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GUI\Panel\HierarchyPanel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMachine\StateMachine.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

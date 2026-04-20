@@ -17,6 +17,11 @@ namespace Pitaya::Core
 		ThreadSafeQueue& operator=(ThreadSafeQueue&&) = delete;
 
 	public:
+        inline bool Empty() const
+        {
+            std::lock_guard<std::mutex> lock(mutex);
+            return queue.empty();
+        }
         inline void Push(const T& item)
         {
             std::lock_guard<std::mutex> lock(mutex);
@@ -41,10 +46,16 @@ namespace Pitaya::Core
             std::swap(out, queue);
             return out;
         }
-        inline bool Empty() const 
+        inline std::queue<T> PopN(size_t n)
         {
             std::lock_guard<std::mutex> lock(mutex);
-            return queue.empty();
+            std::queue<T> out;
+            for (size_t i = 0; i < n && !queue.empty(); ++i)
+            {
+                out.push(std::move(queue.front()));
+                queue.pop();
+            }
+            return out;
         }
 
 	private:

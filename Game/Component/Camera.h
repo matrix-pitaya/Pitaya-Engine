@@ -18,15 +18,11 @@ namespace Pitaya::Game
 		{
 			return cameraState;
 		}
-		inline Pitaya::Render::RenderLayer GetCullingMask() const noexcept
-		{
-			return cullingMask.GetEnum();
-		}
 		inline const Pitaya::Render::PostProcessSetting& GetPostProcessSetting() const noexcept
 		{
 			return setting;
 		}
-		inline Pitaya::Render::RenderTargetSnapshot GetRenderTarget() const noexcept
+		inline Pitaya::Render::RenderTargetSnapshot RenderTargetSnapshot() const noexcept
 		{
 			return { renderTarget->SceneFrameBuffer,
 					 renderTarget->SceneInternalFrameBuffer,
@@ -41,6 +37,14 @@ namespace Pitaya::Game
 					 renderTarget->ClearStencil,
 					 renderTarget->SceneFrameBufferSpecification.Samples > 1 };
 		}
+		inline Pitaya::Render::RenderLayer GetCullingMask() const noexcept
+		{
+			return cullingMask.GetEnum();
+		}
+		inline bool GetRenderTargetIsReady() const noexcept
+		{
+			return renderTarget.IsReady();
+		}
 
 	public:
 		inline void SetCameraState(const Pitaya::Core::CameraState& state) noexcept
@@ -54,10 +58,6 @@ namespace Pitaya::Game
 		inline void SetRenderTarget(Pitaya::Core::GUID rt) noexcept
 		{
 			renderTarget = Pitaya::Asset::LoadAsset<Pitaya::Asset::RenderTarget>(rt);
-		}
-		inline bool GetRenderTargetIsReady() const noexcept
-		{
-			return renderTarget.IsReady();
 		}
 
 	private:

@@ -5,6 +5,7 @@
 #include<Editor/Camera/Camera.h>
 #include<Editor/GUI/GUI.h>
 #include<Editor/Profiler/Profiler.h>
+#include<Editor/StateMachine/StateMachine.h>
 #include<Event/Common/Event.h>
 #include<Log/Common/LogLevel.h>
 
@@ -29,10 +30,12 @@ namespace Pitaya::Editor
 			static void PreRendererEndRenderFrame();
 			static void PostRendererBeginRenderFrame();
 			static bool ShouldWakeupRenderThread();
+			static bool ShouldSubmitSceneCameraPass();
 			static void PreRenderPipelineExecute(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Render::RenderPipeline*);
 			static void PostRendererParseCommand();
 			static void PostChronometerTick();
 			static void PostLog(Pitaya::Log::LogLevel, std::string_view);
+			static bool TerminateFixedUpdate();
 		};
 
 	private:
@@ -59,6 +62,10 @@ namespace Pitaya::Editor
 		void EndFrame();
 			
 	public:
+		inline GUI& GetGUI() noexcept
+		{
+			return gui;
+		}
 		inline Camera& GetCamera() noexcept
 		{
 			return camera;
@@ -67,9 +74,9 @@ namespace Pitaya::Editor
 		{
 			return profiler;
 		}
-		inline GUI& GetGUI() noexcept
+		inline StateMachine& GetStateMachine() noexcept
 		{
-			return gui;
+			return stateMachine;
 		}
 
 	private:
@@ -93,6 +100,7 @@ namespace Pitaya::Editor
 		Pitaya::Editor::GUI gui;
 		Pitaya::Editor::Camera camera;
 		Pitaya::Editor::Profiler profiler;
+		Pitaya::Editor::StateMachine stateMachine;
 
 		Pitaya::Event::EventToken mouseScrollToken;
 		Pitaya::Event::EventToken mouseCurrsorMoveToken;

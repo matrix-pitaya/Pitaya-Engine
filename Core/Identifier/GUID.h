@@ -14,40 +14,42 @@ namespace Pitaya::Core
 		constexpr GUID() = default;
 		constexpr GUID(std::string_view strview)
 		{
-			constexpr auto hex_to_byte = [](char c) constexpr -> uint8_t
+			constexpr auto HexToByte = [](char c) constexpr -> std::byte
 				{
-					if (c >= '0' && c <= '9') return static_cast<uint8_t>(c - '0');
-					if (c >= 'a' && c <= 'f') return static_cast<uint8_t>(c - 'a' + 10);
-					if (c >= 'A' && c <= 'F') return static_cast<uint8_t>(c - 'A' + 10);
-					return 0;
+					if (c >= '0' && c <= '9') return static_cast<std::byte>(c - '0');
+					if (c >= 'a' && c <= 'f') return static_cast<std::byte>(c - 'a' + 10);
+					if (c >= 'A' && c <= 'F') return static_cast<std::byte>(c - 'A' + 10);
+					return static_cast<std::byte>(0);
 				};
 
-			uint8_t bytes[16] = {};
-			size_t byte_idx = 0;
-			for (size_t i = 0; i < strview.size() && byte_idx < 16; ++i)
+			size_t byteIndex = 0;
+			std::byte bytes[16] = {};
+			for (size_t i = 0; i < strview.size() && byteIndex < 16; ++i)
 			{
 				if (strview[i] == '-') { continue; }
 				if (i + 1 >= strview.size()) { break; }
 
-				uint8_t high = hex_to_byte(strview[i]);
-				uint8_t low = hex_to_byte(strview[i + 1]);
+				std::byte high = HexToByte(strview[i]);
+				std::byte low = HexToByte(strview[i + 1]);
 
-				bytes[byte_idx++] = static_cast<uint8_t>((high << 4) | low);
+				bytes[byteIndex++] = static_cast<std::byte>((high << 4) | low);
 				++i;
 			}
 
-			auto pack_u64 = [](const uint8_t* p) constexpr -> uint64_t {
-				return (static_cast<uint64_t>(p[0]) << 0)
-					| (static_cast<uint64_t>(p[1]) << 8)
-					| (static_cast<uint64_t>(p[2]) << 16)
-					| (static_cast<uint64_t>(p[3]) << 24)
-					| (static_cast<uint64_t>(p[4]) << 32)
-					| (static_cast<uint64_t>(p[5]) << 40)
-					| (static_cast<uint64_t>(p[6]) << 48)
-					| (static_cast<uint64_t>(p[7]) << 56); };
+			auto PackToU64 = [](const std::byte* p) constexpr -> uint64_t 
+				{
+					return (static_cast<uint64_t>(p[0]) << 0)
+						| (static_cast<uint64_t>(p[1]) << 8)
+						| (static_cast<uint64_t>(p[2]) << 16)
+						| (static_cast<uint64_t>(p[3]) << 24)
+						| (static_cast<uint64_t>(p[4]) << 32)
+						| (static_cast<uint64_t>(p[5]) << 40)
+						| (static_cast<uint64_t>(p[6]) << 48)
+						| (static_cast<uint64_t>(p[7]) << 56); 
+				};
 
-			value[0] = pack_u64(&bytes[0]);
-			value[1] = pack_u64(&bytes[8]);
+			value[0] = PackToU64(&bytes[0]);
+			value[1] = PackToU64(&bytes[8]);
 		}
 
 		constexpr bool operator==(const GUID& other) const noexcept
@@ -69,39 +71,34 @@ namespace Pitaya::Core
 		}
 		constexpr uint64_t& operator[](size_t index) noexcept
 		{
-			return value[index];
+			return value[index == 0 ? 0 : 1];
 		}
 		constexpr const uint64_t& operator[](size_t index) const noexcept
 		{
-			return value[index];
+			return value[index == 0 ? 0 : 1];
 		}
 
-		inline uint64_t at(size_t index) const
+		inline uint64_t at(size_t index) const noexcept
 		{
-			if (!(index == 0 || index == 1))
-			{
-				throw std::runtime_error("GUID Index Error!");
-			}
-
-			return value[index];
+			return value[index == 0 ? 0 : 1];
 		}
-
-		std::string ToString() const noexcept
+		inline std::string ToString() const noexcept
 		{
 			uint64_t value[2] = {};
 			value[0] = this->value[0];
 			value[1] = this->value[1];
 
 			char buf[37] = {};
-			const uint8_t* p = reinterpret_cast<const uint8_t*>(value);
+			const std::byte* p = reinterpret_cast<const std::byte*>(value);
 
 			std::snprintf(buf, sizeof(buf),
 				"%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
 				p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15]);
 
-			return std::string(buf);
+			return buf;
 		}
 
+	public:
 		inline static GUID New()
 		{
 			::GUID winGuid;

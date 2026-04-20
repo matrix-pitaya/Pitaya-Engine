@@ -5,6 +5,8 @@
 #include<Editor/GUI/ImGui/Backends/imgui_impl_opengl3.h>
 #include<Editor/GUI/ImGui/imgui_internal.h>
 #include<Editor/GUI/IconFontCppHeaders/IconsFontAwesome6.h>
+#include<Editor/StateMachine/StateMachine.h>
+#include<Editor/Editor.h>
 #include<Log/Common/FuncTable.h>
 #include<Core/Color/Color.h>
 #include<Core/Utils/Memory.h>
@@ -438,7 +440,6 @@ void Pitaya::Editor::GUI::DrawMenuBar()
 		{
 			if (ImGui::MenuItem("MemoryAnalysis"))
 			{
-				mi_stats_print(NULL);
 				panels.consolePanel.Console(Pitaya::Log::LogLevel::Debug, Pitaya::Core::GetMemoryState());
 			}
 			if (ImGui::MenuItem("HookState"))
@@ -516,18 +517,17 @@ void Pitaya::Editor::GUI::DrawToolbar()
 	ImGui::SetCursorPosX(centerX);
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(spacing, 0.0f));
 
-	//引擎当前状态 TODO应该从Editor类去拿
-	static EngineState currentState = EngineState::Edit;
+	auto& stateMachine = Pitaya::Editor::Editor::Instance().GetStateMachine();
 
 	//Play / Stop 按钮
-	bool isPlaying = (currentState == EngineState::Play);
+	bool isPlaying = (stateMachine.GetCurrentState() == EngineState::Play);
 	ImGui::PushStyleColor(ImGuiCol_Button, isPlaying ? toolActiveBg : bgNormal);
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, isPlaying ? toolHoverBg : bgHover);
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, isPlaying ? toolActiveBg : bgActiveClick);
 
 	if (ImGui::Button(isPlaying ? ICON_FA_STOP : ICON_FA_PLAY, btnSize))
 	{
-		currentState = (currentState == EngineState::Edit) ? EngineState::Play : EngineState::Edit;
+		stateMachine.SwitchState(stateMachine.GetCurrentState() == EngineState::Edit ? EngineState::Play : EngineState::Edit);
 		context.ToolState.IsPaused = false;
 	}
 	if (ImGui::IsItemHovered()) { ImGui::SetTooltip(isPlaying ? "Stop" : "Play"); }
@@ -535,7 +535,7 @@ void Pitaya::Editor::GUI::DrawToolbar()
 	ImGui::SameLine();
 
 	//禁用态逻辑 (未播放时不可暂停和单步)
-	bool canPauseOrStep = (currentState == EngineState::Play);
+	bool canPauseOrStep = (stateMachine.GetCurrentState() == EngineState::Play);
 	if (!canPauseOrStep) { ImGui::BeginDisabled(); }
 
 	//Pause 按钮

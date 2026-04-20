@@ -56,6 +56,10 @@ bool Pitaya::Editor::Editor::HookFunc::ShouldWakeupRenderThread()
 {
 	return Pitaya::Editor::Editor::Instance().gui.drawer.HasRenderDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
 }
+bool Pitaya::Editor::Editor::HookFunc::ShouldSubmitSceneCameraPass()
+{
+	return Pitaya::Editor::Editor::Instance().gui.panels.gameViewportPanel.GetIsVisable();
+}
 void Pitaya::Editor::Editor::HookFunc::PreRenderPipelineExecute(Pitaya::Core::PassKey<Pitaya::Engine::Engine> passkey, Pitaya::Render::RenderPipeline* renderPipeline)
 {
 	//提交EditorCamera
@@ -96,6 +100,10 @@ void Pitaya::Editor::Editor::HookFunc::PostLog(Pitaya::Log::LogLevel level, std:
 	{
 		Pitaya::Editor::Editor::Instance().gui.panels.consolePanel.Console(level, message);
 	}
+}
+bool Pitaya::Editor::Editor::HookFunc::TerminateFixedUpdate()
+{
+	return Pitaya::Editor::Editor::Instance().stateMachine.GetCurrentState() == Pitaya::Editor::EngineState::Edit;
 }
 
 bool Pitaya::Editor::Editor::Initialize_Main(void* nativeWindow)
@@ -173,10 +181,12 @@ void Pitaya::Editor::Editor::MountEngineHook()
 	MOUNT_PRERENDERERENDRENDERFRAME_HOOK(Pitaya::Editor::Editor::HookFunc::PreRendererEndRenderFrame, "Editor::GUI::CreateFrontDrawData")
 	MOUNT_POSTRENDERERBEGINRENDERFRAME_HOOK(Pitaya::Editor::Editor::HookFunc::PostRendererBeginRenderFrame, "Editor::GUI::ReleaseFrontDrawData")
 	MOUNT_SHOULDWAKEUPRENDERTHREAD_HOOK(Pitaya::Editor::Editor::HookFunc::ShouldWakeupRenderThread, "Editor::GUI::HasRenderDrawData")
+	MOUNT_SHOULDSUBMITSCENECAMERAPASS_HOOK(Pitaya::Editor::Editor::HookFunc::ShouldSubmitSceneCameraPass, "Editor::GUI::GetGameViewportPanelIsVisable")
 	MOUNT_PRERENDERPIPELINEEXECUTE_HOOK(Pitaya::Editor::Editor::HookFunc::PreRenderPipelineExecute, "Editor::SubmitCameraPass | Editor::GUI::NewFrame")
 	MOUNT_POSTRENDERERPARSECOMMAND_HOOK(Pitaya::Editor::Editor::HookFunc::PostRendererParseCommand, "Editor::GUI::Draw | Editor::GUI::ReleaseBackDrawData")
 	MOUNT_POSTCHRONOMETERTICK_HOOK(Pitaya::Editor::Editor::HookFunc::PostChronometerTick, "Editor::Profiler::UploadTimeState")
 	MOUNT_POSTLOG_HOOK(Pitaya::Editor::Editor::HookFunc::PostLog, "Editor::GUI::Console")
+	MOUNT_TERMINATEFIXEDUPDATE_HOOK(Pitaya::Editor::Editor::HookFunc::TerminateFixedUpdate, "Editor::StateMachine::IsEdit")
 }
 
 template<>

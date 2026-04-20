@@ -162,13 +162,13 @@ namespace
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->RegisterExternalFile(inputPath, basePath, out_virtualpath, out_guid);
 	}
-	void ENGINE_CALL OnSyncAssetToGPU()
+	void ENGINE_CALL OnSyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
 	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->SyncAssetToGPU();
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->SyncAssetToGPU(passkey);
 	}
-	bool ENGINE_CALL OnIsUploadedToGPU()
+	bool ENGINE_CALL OnIsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
 	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->IsUploadedToGPU();
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->IsUploadedToGPU(passkey);
 	}
 #pragma endregion
 
@@ -604,8 +604,7 @@ void Pitaya::Engine::Engine::BeginFrame()
 }
 void Pitaya::Engine::Engine::FixedUpdate()
 {
-	//TODO 移动至物理调度器内部，内部进行实际次数调度
-	INVOKE_PREFIXEDUPDATE_HOOK
+	INVOKE_TERMINATEFIXEDUPDATE_HOOK
 
 	MODULE(PhysicsSimulator).FixedUpdate();
 }
@@ -655,14 +654,17 @@ void Pitaya::Engine::Engine::Render()
 			}
 		}
 		
-		//提交Pass
-		for (auto [entity, camera, transform] : scene->GetView<Pitaya::Game::Camera, Pitaya::Game::Transform>().each())
+		if (INVOKE_SHOULDSUBMITSCENECAMERAPASS_HOOK)
 		{
-			if (camera.GetRenderTargetIsReady())
+			//提交Pass
+			for (auto [entity, camera, transform] : scene->GetView<Pitaya::Game::Camera, Pitaya::Game::Transform>().each())
 			{
-				MODULE(RenderPipeline)->AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
-					camera.GetCameraState().BuildSnapshot(transform.GetWorldPosition(), transform.GetWorldForward(), transform.GetWorldUp()),
-					camera.GetRenderTarget(), camera.GetPostProcessSetting(), camera.GetCullingMask());
+				if (camera.GetRenderTargetIsReady())
+				{
+					MODULE(RenderPipeline)->AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
+						camera.GetCameraState().BuildSnapshot(transform.GetWorldPosition(), transform.GetWorldForward(), transform.GetWorldUp()),
+						camera.RenderTargetSnapshot(), camera.GetPostProcessSetting(), camera.GetCullingMask());
+				}
 			}
 		}
 	}
