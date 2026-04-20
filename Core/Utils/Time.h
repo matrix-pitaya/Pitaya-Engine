@@ -31,4 +31,17 @@ namespace Pitaya::Core
 		std::strftime(temp, sizeof(temp), "%Y-%m-%d %H:%M:%S", &buf);
 		return temp;
 	}
+
+	template<typename TerminateCondition, typename Func, typename... Args>
+	inline bool InvokeWithTimeBudget(TerminateCondition&& terminateCondition, std::chrono::nanoseconds timeBudget, Func&& func, Args&&... args)
+	{
+		auto startTime = std::chrono::high_resolution_clock::now();
+		while (!terminateCondition())
+		{
+			func(args...);
+			auto currentTime = std::chrono::high_resolution_clock::now();
+			if (currentTime - startTime >= timeBudget) { return false; }
+		}
+		return true;
+	}
 }

@@ -5,6 +5,7 @@
 #include<Core/Container/ThreadSafe/ThreadSafeHashMap.h>
 #include<Core/Container/ThreadSafe/ThreadSafeBidirectionalMap.h>
 #include<Core/Asset/Asset.h>
+#include<Core/Utils/Time.h>
 
 #include<Serialize/Serializable.h>
 #include<Asset/Common/FuncTable.h>
@@ -441,17 +442,11 @@ namespace Pitaya::Asset
 			// 每一帧最多处理5个资源操作 避免过多资源操作导致的卡顿
 			if (cacheAssetOperateQueue.empty()) { cacheAssetOperateQueue = assetOperateQueue.PopN(5); }
 
-			// 防卡顿时间预算
-			auto startTime = std::chrono::high_resolution_clock::now();
-			while (!cacheAssetOperateQueue.empty())
-			{
-				std::visit([this](auto& result_Inner) { this->SyncAssetOperate(result_Inner); }, cacheAssetOperateQueue.front().Data);
-				cacheAssetOperateQueue.pop();
-
-				// 超时检测
-				auto currentTime = std::chrono::high_resolution_clock::now();
-				if (currentTime - startTime >= std::chrono::milliseconds(2)) { break; }
-			}
+			// 在时间预算内处理资产
+			Pitaya::Core::InvokeWithTimeBudget(
+				[this]() ->bool { return cacheAssetOperateQueue.empty(); },
+				std::chrono::milliseconds(2),
+				[this]() { std::visit([this](auto& result_Inner) { this->SyncAssetOperate(result_Inner); }, cacheAssetOperateQueue.front().Data); cacheAssetOperateQueue.pop(); });
 		}
 		inline bool IsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
 		{
