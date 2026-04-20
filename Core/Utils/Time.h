@@ -32,16 +32,13 @@ namespace Pitaya::Core
 		return temp;
 	}
 
-	template<typename TerminateCondition, typename Func, typename... Args>
-	inline bool InvokeWithTimeBudget(TerminateCondition&& terminateCondition, std::chrono::nanoseconds timeBudget, Func&& func, Args&&... args)
+	template<typename TerminateCondition, typename Func>
+	inline bool InvokeWithTimeBudget(TerminateCondition&& terminateCondition, Func&& func, std::chrono::nanoseconds timeBudget)
 	{
-		auto startTime = std::chrono::high_resolution_clock::now();
-		while (!terminateCondition())
-		{
-			func(args...);
-			auto currentTime = std::chrono::high_resolution_clock::now();
-			if (currentTime - startTime >= timeBudget) { return false; }
-		}
-		return true;
+		if (terminateCondition()) { return true; }
+		const auto startTime = std::chrono::steady_clock::now();
+		do { func(); if (terminateCondition()) { return true; } } 
+		while (std::chrono::steady_clock::now() - startTime < timeBudget);
+		return false;
 	}
 }
