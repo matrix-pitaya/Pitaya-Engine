@@ -5,7 +5,7 @@
 
 namespace Pitaya::Core
 {
-	inline std::string Date()
+	inline std::string Data()
 	{
 		auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 		struct tm buf;
