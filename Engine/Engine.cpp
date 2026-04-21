@@ -18,6 +18,7 @@
 #include<Game/Component/Transform.h>
 #include<Game/Component/MeshRenderer.h>
 #include<Game/Component/Camera.h>
+#include<Game/Component/MaterialOverride.h>
 #include<Hook/def.h>
 
 #define NOMINMAX
@@ -628,8 +629,10 @@ void Pitaya::Engine::Engine::Render()
 		//提交MeshRenderer
 		for (auto [entity, meshrenderer, transform] : scene->GetGroup<Pitaya::Game::MeshRenderer>(entt::get<Pitaya::Game::Transform>).each())
 		{
+			//尝试获取材质覆盖组件
+			auto* materialOverride = scene->GetComponent<Pitaya::Game::MaterialOverride>(entity);
 			const auto& mesh = meshrenderer.GetMesh();
-			const auto& materials = meshrenderer.GetMaterials();
+			const auto& materials = materialOverride ? materialOverride->GetOverrideMaterials() : meshrenderer.GetMaterials();	//如果有材质覆盖组件 优先使用覆盖的材质列表 否则使用MeshRenderer自带的材质列表
 			if (mesh.IsReady() && mesh.GetNativeAssetData() && !mesh.GetNativeAssetData()->SubMeshs.empty())
 			{
 				for (uint32_t i = 0; i < mesh.GetNativeAssetData()->SubMeshs.size(); ++i)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include<cstdint>
+#include<string_view>
 
 namespace Pitaya::Render
 {
@@ -14,4 +15,17 @@ namespace Pitaya::Render
 
         EditorOnly    = 1 << 31 
     };
+
+    inline std::string_view ToString(RenderLayer layer) noexcept
+    {
+        switch (layer)
+        {
+            case RenderLayer::Empty:        return "Empty";
+            case RenderLayer::Default:      return "Default";
+            case RenderLayer::Transparent:  return "Transparent";
+            case RenderLayer::UI:           return "UI";
+            case RenderLayer::EditorOnly:   return "Editor Only";
+            default: return "Unknown";
+        }
+	}
 }

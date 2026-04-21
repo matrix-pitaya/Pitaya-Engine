@@ -12,7 +12,7 @@ namespace Pitaya::Editor
     {
         friend class Pitaya::Editor::GUI;
     private:
-        struct FileNode 
+        struct FileNode
         {
             std::filesystem::path path;
             std::string name;
@@ -271,7 +271,7 @@ namespace Pitaya::Editor
                 }
                 catch (...) {}
 
-                std::sort(cache.nodes.begin(), cache.nodes.end(), 
+                std::sort(cache.nodes.begin(), cache.nodes.end(),
                     [](const FileNode& a, const FileNode& b)
                     {
                         return (a.isDirectory != b.isDirectory) ? (a.isDirectory > b.isDirectory) : (a.name < b.name);

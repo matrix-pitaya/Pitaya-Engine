@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="Common\FuncTable.h" />
     <ClInclude Include="Component\ChildLink .h" />
+    <ClInclude Include="Component\MaterialOverride.h" />
     <ClInclude Include="Component\Parent.h" />
     <ClInclude Include="Component\Script.h" />
     <ClInclude Include="Entity\GameObjectTreeView.h" />

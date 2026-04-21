@@ -14,13 +14,9 @@ namespace Pitaya::Game
 	struct Camera
 	{
 	public:
-		inline const Pitaya::Core::CameraState& GetCameraState() const noexcept
+		inline Pitaya::Core::CameraState GetCameraState() const noexcept
 		{
 			return cameraState;
-		}
-		inline const Pitaya::Render::PostProcessSetting& GetPostProcessSetting() const noexcept
-		{
-			return setting;
 		}
 		inline Pitaya::Render::RenderTargetSnapshot RenderTargetSnapshot() const noexcept
 		{
@@ -41,13 +37,17 @@ namespace Pitaya::Game
 		{
 			return cullingMask.GetEnum();
 		}
+		inline Pitaya::Render::PostProcessSetting& GetPostProcessSetting() noexcept
+		{
+			return setting;
+		}
 		inline bool GetRenderTargetIsReady() const noexcept
 		{
 			return renderTarget.IsReady();
 		}
 
 	public:
-		inline void SetCameraState(const Pitaya::Core::CameraState& state) noexcept
+		inline void SetCameraState(Pitaya::Core::CameraState state) noexcept
 		{
 			cameraState = state;
 		}

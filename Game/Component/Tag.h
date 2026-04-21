@@ -35,7 +35,7 @@ namespace Pitaya::Game
 		}
 
 	public:
-		inline static const constexpr uint32_t MAX_STR_SIZE = 128;
+		inline static const constexpr uint32_t MAX_STR_SIZE = 64;
 
 	private:
 		char name[MAX_STR_SIZE] = {};

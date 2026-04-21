@@ -57,6 +57,9 @@
     <ClInclude Include="Common\FuncTable.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Component\MaterialOverride.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameWorld.cpp">

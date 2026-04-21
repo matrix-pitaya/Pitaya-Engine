@@ -132,6 +132,15 @@ namespace Pitaya::Game
         {
             return ecsRegistry.view<Components...>(exclude);
         }
+        template<typename Func>
+        inline void Visit(entt::entity entity, Func&& func) const
+        {
+            if (!ecsRegistry.valid(entity)) { return; }
+            for (auto&& [id, storage] : ecsRegistry.storage())
+            {
+                if (storage.contains(entity)) { func(id); }
+            }
+        }
         template<typename T, typename... Args>
         inline T& AddComponent(entt::entity entity, Args&&... args)
         {
@@ -150,9 +159,11 @@ namespace Pitaya::Game
         template<typename T>
         inline void RemoveComponent(entt::entity entity)
         {
+            static_assert(!std::is_same_v<T, Tag> || !std::is_same_v<T, Transform>, 
+                "Cant Remove Tag or Transform Component");
+
             ecsRegistry.remove<T>(entity);
         }
-
 
     private:
 		inline void ProcessDelayDestroyQueue()  // 在 EndFrame 调用

@@ -23,9 +23,7 @@ namespace Pitaya::Game
 		inline const std::vector<Pitaya::Core::Asset<Pitaya::Asset::Material>>& GetMaterials() const noexcept
 		{
 			static const std::vector<Pitaya::Core::Asset<Pitaya::Asset::Material>> Empty;
-			return overrideMaterials.empty() ?
-				(mesh.IsReady() ? mesh->Materials : Empty) :
-				overrideMaterials;
+			return mesh.IsReady() ? mesh->Materials : Empty;
 		}
 		inline Pitaya::Render::RenderLayer GetLayerMask() const noexcept
 		{
@@ -38,7 +36,6 @@ namespace Pitaya::Game
 
 	private:
 		Pitaya::Core::Asset<Pitaya::Asset::Mesh> mesh = nullptr;
-		std::vector<Pitaya::Core::Asset<Pitaya::Asset::Material>> overrideMaterials;
 		Pitaya::Core::StateFlags<Pitaya::Render::RenderLayer> layerMask = Pitaya::Render::RenderLayer::Default;
 	};
 }

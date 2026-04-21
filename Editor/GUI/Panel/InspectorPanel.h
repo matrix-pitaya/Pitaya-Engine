@@ -2,8 +2,12 @@
 
 #include<Editor/GUI/Panel/Panel.h>
 #include<Editor/GUI/IconFontCppHeaders/IconsFontAwesome6.h>
-#include<Game/Component/Tag.h>
-#include<Game/Component/Transform.h>
+
+namespace Pitaya::Game
+{
+    class Tag;
+    class Transform;
+}
 
 namespace Pitaya::Editor
 {
@@ -27,9 +31,5 @@ namespace Pitaya::Editor
     private:
         void DrawEntity();
         void DrawFile();
-
-    private:
-        void DrawTag(Pitaya::Game::Tag* tag);
-        void DrawTransform(Pitaya::Game::Transform* transform);
     };
 }
