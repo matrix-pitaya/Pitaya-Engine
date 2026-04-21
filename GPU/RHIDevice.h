@@ -20,6 +20,8 @@
 
 #include<unordered_map>
 
+namespace Pitaya::Render { class Renderer; }
+
 namespace Pitaya::GPU
 {
 	class RHIDevice
@@ -149,28 +151,28 @@ namespace Pitaya::GPU
 		}
 		 
 	public:				
-		inline Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> CreateVertexArray()
+		inline Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
 		{
-			Pitaya::GPU::VertexArray* vertexArray = Pitaya::GPU::VertexArray::Create();
+			Pitaya::GPU::VertexArray* vertexArray = Pitaya::GPU::VertexArray::Create(passkey);
 			Pitaya::GPU::Identifier gpuIdentifier = vertexArray->GetGPUIdentifier();
 			registry.VertexArrays.emplace(gpuIdentifier, vertexArray);
 			return gpuIdentifier;
 		}
-		inline Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> CreateVertexBuffer(float* vertices, uint32_t size)
+		inline Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> CreateVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, float* vertices, uint32_t size)
 		{
 			Pitaya::GPU::VertexBuffer* vertexBuffer = Pitaya::GPU::VertexBuffer::Create(vertices, size);
 			Pitaya::GPU::Identifier gpuIdentifier = vertexBuffer->GetGPUIdentifier();
 			registry.VertexBuffers.emplace(gpuIdentifier, vertexBuffer);
 			return gpuIdentifier;
 		}
-		inline Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> CreateIndexBuffer(uint32_t* indices, uint32_t count)
+		inline Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> CreateIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, uint32_t* indices, uint32_t count)
 		{
 			Pitaya::GPU::IndexBuffer* indexBuffer = Pitaya::GPU::IndexBuffer::Create(indices, count);
 			Pitaya::GPU::Identifier gpuIdentifier = indexBuffer->GetGPUIdentifier();
 			registry.IndexBuffers.emplace(gpuIdentifier, indexBuffer);
 			return gpuIdentifier;
 		}
-		inline Pitaya::GPU::Identifier<Pitaya::GPU::Shader> CreateShader(const char* vertexSource, const char* fragmentSource)
+		inline Pitaya::GPU::Identifier<Pitaya::GPU::Shader> CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, const char* vertexSource, const char* fragmentSource)
 		{
 			try
 			{
@@ -190,7 +192,7 @@ namespace Pitaya::GPU
 				return Pitaya::GPU::Identifier<Pitaya::GPU::Shader>::Invalid;
 			}
 		}
-		inline Pitaya::GPU::Identifier<Pitaya::GPU::Shader> CreateShader(const char* vertexSource, const char* fragmentSource, const char* geometrySource)
+		inline Pitaya::GPU::Identifier<Pitaya::GPU::Shader> CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, const char* vertexSource, const char* fragmentSource, const char* geometrySource)
 		{
 			try
 			{
@@ -210,28 +212,28 @@ namespace Pitaya::GPU
 				return Pitaya::GPU::Identifier<Pitaya::GPU::Shader>::Invalid;
 			}
 		}
-		inline Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> CreateTexture2D(unsigned char* data, int width, int height, int channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
+		inline Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> CreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, unsigned char* data, int width, int height, int channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
 		{
 			Pitaya::GPU::Texture2D* texture2D = Pitaya::GPU::Texture2D::Create(data, width, height, channels, isGenerateMipmap, isSRGB, isNearest);
 			Pitaya::GPU::Identifier gpuIdentifier = texture2D->GetGPUIdentifier();
 			registry.Texture2Ds.emplace(gpuIdentifier, texture2D);
 			return gpuIdentifier;
 		}
-		inline Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> CreateTextureCubemap(unsigned char** datas, int* widths, int* heights, int* channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
+		inline Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> CreateTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, unsigned char** datas, int* widths, int* heights, int* channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
 		{
 			Pitaya::GPU::TextureCubemap* textureCubemap = Pitaya::GPU::TextureCubemap::Create(datas, widths, heights, channels, isGenerateMipmap, isSRGB, isNearest);
 			Pitaya::GPU::Identifier gpuIdentifier = textureCubemap->GetGPUIdentifier();
 			registry.TextureCubemaps.emplace(gpuIdentifier, textureCubemap);
 			return gpuIdentifier;
 		}
-		inline Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> CreateUniformBuffer(uint32_t size, uint32_t bindingPoint)
+		inline Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, uint32_t size, uint32_t bindingPoint)
 		{
 			Pitaya::GPU::UniformBuffer* uniformBuffer = Pitaya::GPU::UniformBuffer::Create(size, bindingPoint);
 			Pitaya::GPU::Identifier gpuIdentifier = uniformBuffer->GetGPUIdentifier();
 			registry.UniformBuffers.emplace(gpuIdentifier, uniformBuffer);
 			return gpuIdentifier;
 		}
-		inline Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> CreateFrameBuffer(const Pitaya::GPU::FrameBufferSpecification& spec)
+		inline Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, const Pitaya::GPU::FrameBufferSpecification& spec)
 		{
 			try
 			{
@@ -251,7 +253,7 @@ namespace Pitaya::GPU
 				return Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer>::Invalid;
 			}
 		}
-		inline Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> CreateShaderStorageBuffer(uint32_t size, uint32_t bindingPoint)
+		inline Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, uint32_t size, uint32_t bindingPoint)
 		{
 			Pitaya::GPU::ShaderStorageBuffer* shaderStorageBuffer = Pitaya::GPU::ShaderStorageBuffer::Create(size, bindingPoint);
 			Pitaya::GPU::Identifier gpuIdentifier = shaderStorageBuffer->GetGPUIdentifier();
@@ -259,7 +261,7 @@ namespace Pitaya::GPU
 			return gpuIdentifier;
 		}
 
-		inline bool DestroyVertexArray(Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> id)
+		inline bool DestroyVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> id)
 		{
 			auto iterator = registry.VertexArrays.find(id);
 			if (iterator == registry.VertexArrays.end()) { return false; }
@@ -271,12 +273,12 @@ namespace Pitaya::GPU
 				return false;
 			}
 
-			delete iterator->second;
+			PITAYA_DELETE(iterator->second);
 			iterator->second = nullptr;
 			registry.VertexArrays.erase(iterator);
 			return true;
 		}
-		inline bool DestroyVertexBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> id)
+		inline bool DestroyVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> id)
 		{
 			auto iterator = registry.VertexBuffers.find(id);
 			if (iterator == registry.VertexBuffers.end()) { return false; }
@@ -288,12 +290,12 @@ namespace Pitaya::GPU
 				return false;
 			}
 
-			delete iterator->second;
+			PITAYA_DELETE(iterator->second);
 			iterator->second = nullptr;
 			registry.VertexBuffers.erase(iterator);
 			return true;
 		}
-		inline bool DestroyIndexBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> id)
+		inline bool DestroyIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> id)
 		{
 			auto iterator = registry.IndexBuffers.find(id);
 			if (iterator == registry.IndexBuffers.end()) { return false; }
@@ -305,12 +307,12 @@ namespace Pitaya::GPU
 				return false;
 			}
 
-			delete iterator->second;
+			PITAYA_DELETE(iterator->second);
 			iterator->second = nullptr;
 			registry.IndexBuffers.erase(iterator);
 			return true;
 		}
-		inline bool DestroyShader(Pitaya::GPU::Identifier<Pitaya::GPU::Shader> id)
+		inline bool DestroyShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::Shader> id)
 		{
 			auto iterator = registry.Shaders.find(id);
 			if (iterator == registry.Shaders.end()) { return false; }
@@ -322,12 +324,12 @@ namespace Pitaya::GPU
 				return false;
 			}
 
-			delete iterator->second;
+			PITAYA_DELETE(iterator->second);
 			iterator->second = nullptr;
 			registry.Shaders.erase(iterator);
 			return true;
 		}
-		inline bool DestroyTexture2D(Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> id)
+		inline bool DestroyTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> id)
 		{
 			auto iterator = registry.Texture2Ds.find(id);
 			if (iterator == registry.Texture2Ds.end()) { return false; }
@@ -339,12 +341,12 @@ namespace Pitaya::GPU
 				return false;
 			}
 
-			delete iterator->second;
+			PITAYA_DELETE(iterator->second);
 			iterator->second = nullptr;
 			registry.Texture2Ds.erase(iterator);
 			return true;
 		}
-		inline bool DestroyTextureCubemap(Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> id)
+		inline bool DestroyTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> id)
 		{
 			auto iterator = registry.TextureCubemaps.find(id);
 			if (iterator == registry.TextureCubemaps.end()) { return false; }
@@ -356,12 +358,12 @@ namespace Pitaya::GPU
 				return false;
 			}
 
-			delete iterator->second;
+			PITAYA_DELETE(iterator->second);
 			iterator->second = nullptr;
 			registry.TextureCubemaps.erase(iterator);
 			return true;
 		}
-		inline bool DestroyUniformBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
+		inline bool DestroyUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
 		{
 			auto iterator = registry.UniformBuffers.find(id);
 			if (iterator == registry.UniformBuffers.end()) { return false; }
@@ -373,12 +375,12 @@ namespace Pitaya::GPU
 				return false;
 			}
 
-			delete iterator->second;
+			PITAYA_DELETE(iterator->second);
 			iterator->second = nullptr;
 			registry.UniformBuffers.erase(iterator);
 			return true;
 		}
-		inline bool DestroyFrameBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> id)
+		inline bool DestroyFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> id)
 		{
 			auto iterator = registry.FrameBuffers.find(id);
 			if (iterator == registry.FrameBuffers.end()) { return false; }
@@ -390,12 +392,12 @@ namespace Pitaya::GPU
 				return false;
 			}
 
-			delete iterator->second;
+			PITAYA_DELETE(iterator->second);
 			iterator->second = nullptr;
 			registry.FrameBuffers.erase(iterator);
 			return true;
 		}
-		inline bool DestroyShaderStorageBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> id)
+		inline bool DestroyShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> id)
 		{
 			auto iterator = registry.ShaderStorageBuffers.find(id);
 			if (iterator == registry.ShaderStorageBuffers.end()) { return false; }
@@ -407,53 +409,53 @@ namespace Pitaya::GPU
 				return false;
 			}
 
-			delete iterator->second;
+			PITAYA_DELETE(iterator->second);
 			iterator->second = nullptr;
 			registry.ShaderStorageBuffers.erase(iterator);
 			return true;
 		}
 
-		inline Pitaya::GPU::VertexArray* GetVertexArray(Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> id)
+		inline Pitaya::GPU::VertexArray* GetVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> id)
 		{
 			auto iterator = registry.VertexArrays.find(id);
 			return iterator != registry.VertexArrays.end() ? iterator->second : nullptr;
 		}
-		inline Pitaya::GPU::VertexBuffer* GetVertexBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> id)
+		inline Pitaya::GPU::VertexBuffer* GetVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> id)
 		{
 			auto iterator = registry.VertexBuffers.find(id);
 			return iterator != registry.VertexBuffers.end() ? iterator->second : nullptr;
 		}
-		inline Pitaya::GPU::IndexBuffer* GetIndexBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> id)
+		inline Pitaya::GPU::IndexBuffer* GetIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> id)
 		{
 			auto iterator = registry.IndexBuffers.find(id);
 			return iterator != registry.IndexBuffers.end() ? iterator->second : nullptr;
 		}
-		inline Pitaya::GPU::Shader* GetShader(Pitaya::GPU::Identifier<Pitaya::GPU::Shader> id)
+		inline Pitaya::GPU::Shader* GetShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::Shader> id)
 		{
 			auto iterator = registry.Shaders.find(id);
 			return iterator != registry.Shaders.end() ? iterator->second : nullptr;
 		}
-		inline Pitaya::GPU::Texture2D* GetTexture2D(Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> id)
+		inline Pitaya::GPU::Texture2D* GetTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> id)
 		{
 			auto iterator = registry.Texture2Ds.find(id);
 			return iterator != registry.Texture2Ds.end() ? iterator->second : nullptr;
 		}
-		inline Pitaya::GPU::TextureCubemap* GetTextureCubemap(Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> id)
+		inline Pitaya::GPU::TextureCubemap* GetTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> id)
 		{
 			auto iterator = registry.TextureCubemaps.find(id);
 			return iterator != registry.TextureCubemaps.end() ? iterator->second : nullptr;
 		}
-		inline Pitaya::GPU::UniformBuffer* GetUniformBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
+		inline Pitaya::GPU::UniformBuffer* GetUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
 		{
 			auto iterator = registry.UniformBuffers.find(id);
 			return iterator != registry.UniformBuffers.end() ? iterator->second : nullptr;
 		}
-		inline Pitaya::GPU::FrameBuffer* GetFrameBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> id)
+		inline Pitaya::GPU::FrameBuffer* GetFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> id)
 		{
 			auto iterator = registry.FrameBuffers.find(id);
 			return iterator != registry.FrameBuffers.end() ? iterator->second : nullptr;
 		}
-		inline Pitaya::GPU::ShaderStorageBuffer* GetShaderStorageBuffer(Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> id)
+		inline Pitaya::GPU::ShaderStorageBuffer* GetShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> id)
 		{
 			auto iterator = registry.ShaderStorageBuffers.find(id);
 			return iterator != registry.ShaderStorageBuffers.end() ? iterator->second : nullptr;

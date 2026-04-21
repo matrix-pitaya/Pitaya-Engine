@@ -131,9 +131,6 @@ namespace Pitaya::Asset
 		bool Initialize();
 		void Release();
 
-	private:
-		bool LoadBuiltinAsset();
-
 	public:
 		template<typename T>
 		inline Pitaya::Core::Asset<T> LoadAsset(Pitaya::Core::GUID guid)
@@ -437,7 +434,7 @@ namespace Pitaya::Asset
 		}
 
 	public:
-		inline void SyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
+		inline void SyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
 		{
 			// 每一帧最多处理5个资源操作 避免过多资源操作导致的卡顿
 			if (cacheAssetOperateQueue.empty()) { cacheAssetOperateQueue = assetOperateQueue.PopN(5); }
@@ -445,23 +442,23 @@ namespace Pitaya::Asset
 			// 在时间预算内处理资产
 			Pitaya::Core::InvokeWithTimeBudget(
 				[this]() ->bool { return cacheAssetOperateQueue.empty(); },
-				[this]() { std::visit([this](auto& result_Inner) { this->SyncAssetOperate(result_Inner); }, cacheAssetOperateQueue.front().Data); cacheAssetOperateQueue.pop(); },
+				[this, passkey]() { std::visit([this, passkey](auto& result_Inner) { this->SyncAssetOperate(passkey,result_Inner); }, cacheAssetOperateQueue.front().Data); cacheAssetOperateQueue.pop(); },
 				std::chrono::milliseconds(2));
 		}
 		inline bool IsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
 		{
-			return !assetOperateQueue.Empty();
+			return !cacheAssetOperateQueue.empty() || !assetOperateQueue.Empty();
 		}
 
 	private:
-		void SyncAssetOperate(std::monostate&);
-		void SyncAssetOperate(Pitaya::Import::Texture2DImportResult&);
-		void SyncAssetOperate(Pitaya::Import::TextureCubemapImportResult&);
-		void SyncAssetOperate(Pitaya::Import::ShaderImportResult&);
-		void SyncAssetOperate(Pitaya::Import::StaticMeshImportResult&);
-		void SyncAssetOperate(Pitaya::Import::SkinnedMeshImportResult&);
-		void SyncAssetOperate(Pitaya::Import::RenderTargetImportResult&);
-		void SyncAssetOperate(Pitaya::Asset::Texture2DUnloadRequire&);
+		void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, std::monostate&);
+		void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::Texture2DImportResult&);
+		void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::TextureCubemapImportResult&);
+		void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::ShaderImportResult&);
+		void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::StaticMeshImportResult&);
+		void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::SkinnedMeshImportResult&);
+		void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::RenderTargetImportResult&);
+		void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Asset::Texture2DUnloadRequire&);
 
 	private:
 		const std::unordered_set<std::string> TextureExtensions =

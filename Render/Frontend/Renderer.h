@@ -87,17 +87,17 @@ namespace Pitaya::Render
 
 			inline bool CreateGlobalRHI()
 			{
-				EmptyVAO = Pitaya::GPU::CreateVertexArray(); 
-				CameraSnapshotUBO = Pitaya::GPU::CreateUniformBuffer(sizeof(Pitaya::Core::CameraSnapshot), static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::CameraSnapshot));
-				PostProcessUBO = Pitaya::GPU::CreateUniformBuffer(Pitaya::Render::PostProcessStep::UniformBufferBytes, static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
+				EmptyVAO = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+				CameraSnapshotUBO = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), sizeof(Pitaya::Core::CameraSnapshot), static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::CameraSnapshot));
+				PostProcessUBO = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), Pitaya::Render::PostProcessStep::UniformBufferBytes, static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
 				
 				// 初始分配1024个位置
 				TransformSSBOCapacity = 1024 * sizeof(glm::mat4); 
-				InstanceModelTransformSSBO = Pitaya::GPU::CreateShaderStorageBuffer(TransformSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform));
+				InstanceModelTransformSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), TransformSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform));
 
 				// 初始分配一段骨骼容量
 				BoneSSBOCapacity = 4096 * sizeof(glm::mat4); 
-				BoneInverseMatriceSSBO = Pitaya::GPU::CreateShaderStorageBuffer(BoneSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::BoneInverseMatrice));
+				BoneInverseMatriceSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), BoneSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::BoneInverseMatrice));
 				return true;
 			}
 		};
@@ -130,18 +130,18 @@ namespace Pitaya::Render
 					4, 0, 3,  3, 7, 4,		//左面
 					4, 5, 1,  1, 0, 4,		//底面
 					3, 2, 6,  6, 7, 3 };	//顶面
-				VAO = Pitaya::GPU::CreateVertexArray();
-				Pitaya::GPU::Identifier VBO = Pitaya::GPU::CreateVertexBuffer(ERROR_VERTICES, sizeof(ERROR_VERTICES));
-				Pitaya::GPU::Identifier IBO = Pitaya::GPU::CreateIndexBuffer(ERROR_INDICES, IndexCount);
-				Pitaya::GPU::VertexArray* vao = Pitaya::GPU::GetVertexArray(VAO);
-				Pitaya::GPU::VertexBuffer* vbo = Pitaya::GPU::GetVertexBuffer(VBO);
-				Pitaya::GPU::IndexBuffer* ibo = Pitaya::GPU::GetIndexBuffer(IBO);
+				VAO = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+				Pitaya::GPU::Identifier VBO = Pitaya::GPU::CreateVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), ERROR_VERTICES, sizeof(ERROR_VERTICES));
+				Pitaya::GPU::Identifier IBO = Pitaya::GPU::CreateIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), ERROR_INDICES, IndexCount);
+				Pitaya::GPU::VertexArray* vao = Pitaya::GPU::GetVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), VAO);
+				Pitaya::GPU::VertexBuffer* vbo = Pitaya::GPU::GetVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), VBO);
+				Pitaya::GPU::IndexBuffer* ibo = Pitaya::GPU::GetIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), IBO);
 				if (!vao || !vbo || !ibo)
 				{
 					Pitaya::Log::Error("create global RHI error, from error vao or vbo or ibo is empty!");
-					if (!Pitaya::GPU::DestroyVertexArray(VAO)) { Pitaya::Log::Error("destroy error VAO fail!"); }
-					if (!Pitaya::GPU::DestroyVertexBuffer(VBO)) { Pitaya::Log::Error("destroy error VBO fail!"); }
-					if (!Pitaya::GPU::DestroyIndexBuffer(IBO)) { Pitaya::Log::Error("destroy error IBO fail!"); }
+					if (!Pitaya::GPU::DestroyVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), VAO)) { Pitaya::Log::Error("destroy error VAO fail!"); }
+					if (!Pitaya::GPU::DestroyVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), VBO)) { Pitaya::Log::Error("destroy error VBO fail!"); }
+					if (!Pitaya::GPU::DestroyIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), IBO)) { Pitaya::Log::Error("destroy error IBO fail!"); }
 					return false;
 				}
 				vbo->SetLayout({ { Pitaya::GPU::ShaderVariableType::Float3, 0 } });
@@ -162,7 +162,7 @@ namespace Pitaya::Render
 						ERROR_TEXTURE_DATA[i + 3] = 255;				//A
 					}
 				}
-				Texture = Pitaya::GPU::CreateTexture2D(ERROR_TEXTURE_DATA, SIZE, SIZE, 4, false, false, true);
+				Texture = Pitaya::GPU::CreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), ERROR_TEXTURE_DATA, SIZE, SIZE, 4, false, false, true);
 
 				const char* ERROR_VERTEX_SHADER =
 					"#version 460 core\n"
@@ -198,7 +198,7 @@ namespace Pitaya::Render
 							FragColor = vec4(1.0f, 0.0f, 1.0f, 1.0f);
 						}
 					)";
-				Shader = Pitaya::GPU::CreateShader(ERROR_VERTEX_SHADER, ERROR_FRAGMENT_SHADER);
+				Shader = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), ERROR_VERTEX_SHADER, ERROR_FRAGMENT_SHADER);
 				return true;
 			}
 		};

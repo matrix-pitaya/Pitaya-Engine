@@ -52,7 +52,7 @@ namespace Pitaya::GPU
 			int32_t value = -1;
 		};
 
-	protected:
+	public:
 		Shader(const char* vertexSource, const char* fragmentSource) {}
 		Shader(const char* vertexSource, const char* fragmentSource, const char* geometrySource) {}
 		virtual ~Shader() = default;

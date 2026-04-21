@@ -136,6 +136,7 @@ namespace Pitaya::Window
 		bool IsClose() const override;
 		void* GetNativeWindow() const override;
 
+	public:
 		void ResetSize(int width, int height);
 
 	private:

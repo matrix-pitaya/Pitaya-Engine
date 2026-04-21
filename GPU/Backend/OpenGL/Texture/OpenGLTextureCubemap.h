@@ -11,7 +11,7 @@ namespace Pitaya::GPU
 {
 	class OpenGLTextureCubemap : public TextureCubemap
 	{
-	public:
+    public:
         OpenGLTextureCubemap(unsigned char** datas,
             int* widths, int* heights, int* channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
             :TextureCubemap(datas, widths, heights, channels, isGenerateMipmap, isSRGB, isNearest)
@@ -46,7 +46,8 @@ namespace Pitaya::GPU
 			glDeleteTextures(1, &target);
 			target = 0;
 		}
-
+    
+    public:
 		Identifier<TextureCubemap> GetGPUIdentifier() const override
 		{
 			return target;

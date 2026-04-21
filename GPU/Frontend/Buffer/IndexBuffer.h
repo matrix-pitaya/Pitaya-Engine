@@ -16,6 +16,7 @@ namespace Pitaya::GPU
 			:count(count) { }
 		virtual ~IndexBuffer() = default;
 
+	public:
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 		virtual Pitaya::GPU::Identifier<IndexBuffer> GetGPUIdentifier() const = 0;

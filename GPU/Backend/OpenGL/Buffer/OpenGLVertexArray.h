@@ -1,5 +1,7 @@
 #pragma once
 
+#include<Core/Allocate/Allocate.h>
+
 #include<GPU/Frontend/Buffer/VertexArray.h>
 #include<GPU/Backend/OpenGL/Shader/OpenGLShader.h>
 #include<GPU/Common/FuncTable.h>
@@ -15,8 +17,9 @@ namespace Pitaya::GPU
 {
 	class OpenGLVertexArray : public VertexArray
 	{
-	public:
-        OpenGLVertexArray() 
+    public:
+        OpenGLVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
+            :VertexArray(passkey)
         {
             glGenVertexArrays(1, &VAO);
         }
@@ -29,9 +32,9 @@ namespace Pitaya::GPU
             {
                 if (vertexBuffer && vertexBuffer->ReduceRefCount())
                 {
-                    if (!Pitaya::GPU::DestroyVertexBuffer(vertexBuffer->GetGPUIdentifier()))
+                    if (!Pitaya::GPU::DestroyVertexBuffer(passkey, vertexBuffer->GetGPUIdentifier()))
                     {
-                        delete vertexBuffer;    //资源不在资源池 手动销毁
+                        PITAYA_DELETE(vertexBuffer);  //资源不在资源池 手动销毁
                         Pitaya::Log::Warning("destroy vertex buffer fail,in vertex array destructor");
                     }
                 }
@@ -40,9 +43,9 @@ namespace Pitaya::GPU
 
             if (indexBuffer && indexBuffer->ReduceRefCount())
             {
-                if (!Pitaya::GPU::DestroyIndexBuffer(indexBuffer->GetGPUIdentifier()))
+                if (!Pitaya::GPU::DestroyIndexBuffer(passkey, indexBuffer->GetGPUIdentifier()))
                 {
-                    delete indexBuffer;     //资源不在资源池 手动销毁
+                    PITAYA_DELETE(indexBuffer);     //资源不在资源池 手动销毁
                     Pitaya::Log::Warning("destroy index buffer fail,in vertex array destructor");
                 }
             }
@@ -113,9 +116,9 @@ namespace Pitaya::GPU
 
             if (this->indexBuffer && this->indexBuffer->ReduceRefCount()) 
             { 
-                if (!Pitaya::GPU::DestroyIndexBuffer(this->indexBuffer->GetGPUIdentifier()))
+                if (!Pitaya::GPU::DestroyIndexBuffer(passkey, this->indexBuffer->GetGPUIdentifier()))
                 {
-                    delete this->indexBuffer;   //资源不在资源池 手动销毁
+					PITAYA_DELETE(this->indexBuffer);     //资源不在资源池 手动销毁
                     Pitaya::Log::Warning("destroy index buffer fail,in vertex array set index buffer");
                 }
             }

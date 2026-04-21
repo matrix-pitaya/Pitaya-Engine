@@ -1,9 +1,12 @@
 #pragma once
 
+#include<Core/PassKey/PassKey.h>
 #include<GPU/Frontend/Buffer/VertexBuffer.h>
 #include<GPU/Frontend/Buffer/IndexBuffer.h>
 
 #include<vector>
+
+namespace Pitaya::Render { class Renderer; }
 
 namespace Pitaya::GPU
 {
@@ -11,8 +14,9 @@ namespace Pitaya::GPU
 	class VertexArray
 	{
         friend class Pitaya::GPU::RHIDevice;
-	public:
-        VertexArray() = default;
+    public:
+        VertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
+            :passkey(passkey) { }
         virtual ~VertexArray() = default;
 
     public:
@@ -34,10 +38,13 @@ namespace Pitaya::GPU
         }
 
     private:
-        static VertexArray* Create();
+        static VertexArray* Create(Pitaya::Core::PassKey<Pitaya::Render::Renderer>);
 
     protected:
         std::vector<VertexBuffer*> vertexBuffers;
         IndexBuffer* indexBuffer = nullptr;
+
+        //用于调用GPU::Destroy VBO和IBO [TODO 该考虑重构了]
+        Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey;
 	};
 }

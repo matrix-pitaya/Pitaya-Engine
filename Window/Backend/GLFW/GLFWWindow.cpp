@@ -81,9 +81,6 @@ void Pitaya::Window::GLFWWindow::ResetSize(int width, int height)
 {
 	this->width = width;
 	this->height = height;
-
-	//TODO 提交数据到渲染线程，在渲染线程改变
-	//glViewport(0, 0, width, height);
 }
 void Pitaya::Window::GLFWWindow::SetTitleStyle()
 {
