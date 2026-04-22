@@ -5,7 +5,7 @@
 
 namespace Pitaya::Game
 {
-    class Tag;
+    class Metadata;
     class Transform;
 }
 

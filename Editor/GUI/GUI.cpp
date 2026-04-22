@@ -293,7 +293,7 @@ void Pitaya::Editor::GUI::SetStyle()
 	style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.40f, 0.40f, 0.40f, 1.00f);
 
 	// 【强调色 (光标 / Checkbox勾选 / Slider蓝色区域)】
-	style.Colors[ImGuiCol_CheckMark] = accentColor;
+	style.Colors[ImGuiCol_CheckMark] = ImVec4(0.90f, 0.90f, 0.90f, 1.00f);
 	style.Colors[ImGuiCol_SliderGrab] = accentColorHover;
 	style.Colors[ImGuiCol_SliderGrabActive] = accentColorActive;
 	style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(accentColor.x, accentColor.y, accentColor.z, 0.40f);

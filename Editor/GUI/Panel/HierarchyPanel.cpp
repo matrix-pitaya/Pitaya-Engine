@@ -68,21 +68,45 @@ void Pitaya::Editor::HierarchyPanel::DrawSceneTree()
 }
 void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, entt::entity entity)
 {
-    auto* tag = scene->GetComponent<Pitaya::Game::Tag>(entity);
+    // 获取基础组件信息
+    auto* metadata = scene->GetComponent<Pitaya::Game::Metadata>(entity);
     auto* link = scene->GetComponent<Pitaya::Game::ChildLink>(entity);
-    const char* name = tag ? tag->GetName().data() : "[Error] UnTag";
+    const char* name = metadata ? metadata->GetName().data() : "[Error] UnMetadata";
     bool hasChildren = link && link->GetFirstChild() != entt::null;
 
+    // 活性状态视觉处理
+    bool isSelfActive = metadata ? metadata->IsActive() : true;
+    bool isHierarchyActive = !scene->HasComponent<Pitaya::Game::Disabled>(entity);
+
+    bool pushedColor = false;
+    if (!isSelfActive)
+    {
+        // 自身被禁用：深灰色
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+        pushedColor = true;
+    }
+    else if (!isHierarchyActive)
+    {
+        // 自身开着，但父级是关着的 (层级禁用)：半透明淡灰色
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 0.4f));
+        pushedColor = true;
+    }
+
+    // 配置 TreeNode 标志位
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth |
         ImGuiTreeNodeFlags_OpenOnDoubleClick;
 
-	auto& selection = Pitaya::Editor::Editor::Instance().GetGUI().GetContext().Selection;
+    auto& selection = Pitaya::Editor::Editor::Instance().GetGUI().GetContext().Selection;
     if (!hasChildren) { flags |= ImGuiTreeNodeFlags_Leaf; }
     if (selection.SelectedEntity == entity) { flags |= ImGuiTreeNodeFlags_Selected; }
 
+    // 绘制节点主体
     bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity, flags, "%s", name);
 
-    // 拖拽源处理 
+    // 绘制完 Label 立即还原颜色，避免颜色污染子节点列表
+    if (pushedColor) { ImGui::PopStyleColor(); }
+
+    // 拖拽源 (Drag Source
     if (ImGui::BeginDragDropSource())
     {
         ImGui::SetDragDropPayload("HIERARCHY_ENTITY", &entity, sizeof(entt::entity));
@@ -90,15 +114,13 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
         ImGui::EndDragDropSource();
     }
 
-    // 拖拽目标与排序逻辑
+    // 拖拽目标 (Drag Target)
     if (ImGui::BeginDragDropTarget())
     {
-        // 使用 AcceptBeforeDelivery 允许我们在悬停时画辅助线
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_ENTITY", ImGuiDragDropFlags_AcceptBeforeDelivery))
         {
             entt::entity draggedEntity = *(const entt::entity*)payload->Data;
 
-            // 不能把自己拖给自己，也不能把父节点拖给子节点 (底层 IsDescendant 已保护)
             if (draggedEntity != entity)
             {
                 float mouseY = ImGui::GetMousePos().y;
@@ -113,7 +135,7 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
                 float lineX = ImGui::GetItemRectMin().x;
                 float lineW = ImGui::GetContentRegionAvail().x;
 
-                // A. 顶部区域 (上 25%) -> 插在 entity 之前
+                // A. 顶部区域：插在当前节点之前 (Sibling)
                 if (mouseY < itemRectMinY + itemHeight * 0.25f)
                 {
                     drawList->AddLine(ImVec2(lineX, itemRectMinY), ImVec2(lineX + lineW, itemRectMinY), ImColor(255, 255, 0), 2.0f);
@@ -121,26 +143,22 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
                     {
                         auto* selfLink = scene->GetComponent<Pitaya::Game::ChildLink>(entity);
                         entt::entity prevSibling = selfLink->GetPreviousSibling();
-                        if (draggedEntity != prevSibling && draggedEntity != entity)    // 防止自己插在自己前面导致消失
+                        if (draggedEntity != prevSibling) // 防止重复设置
                         {
                             scene->SetRelationship(draggedEntity, parentId, prevSibling);
                         }
                     }
                 }
-                // B. 底部区域 (下 25%) -> 插在 entity 之后
+                // B. 底部区域：插在当前节点之后 (Sibling)
                 else if (mouseY > itemRectMaxY - itemHeight * 0.25f)
                 {
                     drawList->AddLine(ImVec2(lineX, itemRectMaxY), ImVec2(lineX + lineW, itemRectMaxY), ImColor(255, 255, 0), 2.0f);
                     if (payload->IsDelivery())
                     {
-                        // 防止自己插在自己后面
-                        if (draggedEntity != entity)
-                        {
-                            scene->SetRelationship(draggedEntity, parentId, entity);
-                        }
+                        scene->SetRelationship(draggedEntity, parentId, entity);
                     }
                 }
-                // C. 中间区域 -> 成为其子物体
+                // C. 中间区域：成为当前节点的子物体
                 else
                 {
                     if (payload->IsDelivery())
@@ -153,7 +171,7 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
         ImGui::EndDragDropTarget();
     }
 
-	// 双击聚焦逻辑
+    // 双击聚焦
     if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
     {
         if (auto* transform = scene->GetComponent<Pitaya::Game::Transform>(entity))
@@ -162,22 +180,21 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
         }
     }
 
-    // 鼠标选中逻辑 
+    // 点击选中
     if (ImGui::IsItemClicked(ImGuiMouseButton_Left) || ImGui::IsItemClicked(ImGuiMouseButton_Right))
     {
         if (selection.SelectedEntity != entity)
         {
-			selection.SelectedEntity = entity;
-			selection.Type = Pitaya::Editor::GUI::Context::Selection::Type::Entity;
+            selection.SelectedEntity = entity;
+            selection.Type = Pitaya::Editor::GUI::Context::Selection::Type::Entity;
         }
     }
 
-    // 右键删除菜单 
+    // 右键上下文菜单
     if (ImGui::BeginPopupContextItem())
     {
         if (ImGui::MenuItem("Delete Entity"))
         {
-            // 如果要删除的是当前选中的实体，清空指针防止 UI 崩溃
             if (selection.SelectedEntity == entity)
             {
                 selection.SelectedEntity = entt::null;
@@ -188,7 +205,7 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
         ImGui::EndPopup();
     }
 
-    // 递归子节点渲染
+    // 递归渲染子节点
     if (opened)
     {
         if (hasChildren)
@@ -196,10 +213,10 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
             entt::entity currChild = link->GetFirstChild();
             while (currChild != entt::null)
             {
-                // 同样在循环内获取 Next，防止 DrawEntityNode 操作导致链表变化
                 auto* childLink = scene->GetComponent<Pitaya::Game::ChildLink>(currChild);
                 entt::entity nextChild = childLink ? childLink->GetNextSibling() : entt::null;
 
+                // 递归调用
                 DrawEntityNode(scene, currChild);
 
                 currChild = nextChild;

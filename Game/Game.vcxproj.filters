@@ -39,7 +39,7 @@
     <ClInclude Include="GameWorld.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Component\Tag.h">
+    <ClInclude Include="Component\Metadata.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Entity\GameObjectTreeView.h">
@@ -58,6 +58,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Component\MaterialOverride.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Disabled.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

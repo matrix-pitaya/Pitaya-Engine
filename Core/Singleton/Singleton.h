@@ -16,6 +16,6 @@ namespace Pitaya::Core
         Singleton& operator=(Singleton&&) = delete;
     
     public:
-        static T& Instance();
+        static T& Instance();   // 为防止多dll出现幽灵单例问题 请手动特例化此函数
     };
 }

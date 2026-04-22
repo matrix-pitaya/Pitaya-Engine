@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="Common\FuncTable.h" />
     <ClInclude Include="Component\ChildLink .h" />
+    <ClInclude Include="Component\Disabled.h" />
     <ClInclude Include="Component\MaterialOverride.h" />
     <ClInclude Include="Component\Parent.h" />
     <ClInclude Include="Component\Script.h" />
@@ -168,7 +169,7 @@
     <ClInclude Include="Component\Camera.h" />
     <ClInclude Include="Component\MeshRenderer.h" />
     <ClInclude Include="Component\RigidBody.h" />
-    <ClInclude Include="Component\Tag.h" />
+    <ClInclude Include="Component\Metadata.h" />
     <ClInclude Include="Component\Transform.h" />
     <ClInclude Include="Entity\Entity.h" />
     <ClInclude Include="Entity\GameObject.h" />

@@ -4,10 +4,11 @@
 #include<Core/PassKey/PassKey.h>
 #include<Core/Container/ObjectPool.h>
 #include<Game/Entity/GameObject.h>
-#include<Game/Component/Tag.h>
+#include<Game/Component/Metadata.h>
+#include<Game/Component/Transform.h>
 #include<Game/Component/Parent.h>
 #include<Game/Component/ChildLink .h>
-#include<Game/Component/Transform.h>
+#include<Game/Component/Disabled.h>
 
 #include<entt/entt.hpp>
 #include<glm.hpp>
@@ -33,10 +34,10 @@ namespace Pitaya::Game
         {
             return root;
         }
-        inline entt::entity CreateEntity(std::string_view name = "GameObject", std::string_view tag = "default")
+        inline entt::entity CreateEntity(std::string_view name = "GameObject", std::string_view label = "default")
         {
             entt::entity entity = ecsRegistry.create();
-            AddComponent<Tag>(entity, name, tag);
+            AddComponent<Metadata>(entity, name, label);
             AddComponent<Transform>(entity);
             if (root == entt::null)
             {
@@ -159,8 +160,8 @@ namespace Pitaya::Game
         template<typename T>
         inline void RemoveComponent(entt::entity entity)
         {
-            static_assert(!std::is_same_v<T, Tag> || !std::is_same_v<T, Transform>, 
-                "Cant Remove Tag or Transform Component");
+            static_assert(!std::is_same_v<T, Metadata> || !std::is_same_v<T, Transform>,
+                "Can't Remove Metadata or Transform Component");
 
             ecsRegistry.remove<T>(entity);
         }
@@ -204,39 +205,60 @@ namespace Pitaya::Game
             // 队列处理完毕 统一清空
             delayDestroyQueue.clear();
         }
-		inline void ProcessTransformSystem()    // 在 LateUpdate 调用
+		inline void ProcessHierarchySystem()    // 在 LateUpdate 调用
         {
             auto rootCandidates = ecsRegistry.view<Transform>(entt::exclude<Parent>);
             for (auto entity : rootCandidates)
             {
-                UpdateTransformHierarchy(entity, glm::mat4(1.0f), false);
+                UpdateHierarchy(entity, glm::mat4(1.0f), false, true, false);
             }
         }
 
     private:
-        inline void UpdateTransformHierarchy(entt::entity entity, const glm::mat4& parentWorldMatrix, bool parentChanged)
+        inline void UpdateHierarchy(entt::entity entity, const glm::mat4& parentWorldMatrix, bool parentChanged, bool parentActive, bool parentActiveChanged)
         {
+			// 处理 Transform 系统
             auto* trans = ecsRegistry.try_get<Transform>(entity);
-            if (!trans) { return; }
-
-            bool needsUpdate = trans->IsDirty() || parentChanged;
-            glm::mat4 currWorldMatrix = trans->GetWorldMatrix();
-
-            if (needsUpdate)
+            bool transformNeedsUpdate = false;
+            glm::mat4 currWorldMatrix = parentWorldMatrix;
+            if (trans)
             {
-                const glm::mat4& localMat = trans->GetLocalMatrix();
-                currWorldMatrix = parentWorldMatrix * localMat;
-                trans->SetWorldMatrix(currWorldMatrix);
+                transformNeedsUpdate = trans->IsDirty() || parentChanged;
+                currWorldMatrix = trans->GetWorldMatrix();
+                if (transformNeedsUpdate)
+                {
+                    const glm::mat4& localMat = trans->GetLocalMatrix();
+                    currWorldMatrix = parentWorldMatrix * localMat;
+                    trans->SetWorldMatrix(currWorldMatrix);
+                }
             }
 
-            // 只对含有 ChildLink 且拥有子节点的实体发起递归查询
+            // 处理 Active 系统
+            auto* metadata = ecsRegistry.try_get<Metadata>(entity);
+            bool selfActive = true;
+            bool activeDirty = false;
+            if (metadata)
+            {
+                selfActive = metadata->IsActive();
+                activeDirty = metadata->IsDirty();
+            }
+            bool isHierarchyActive = parentActive && selfActive;    // 只有当父节点真正激活，且自身也激活时，才是真正的被激活状态
+            bool activeNeedsUpdate = parentActiveChanged || activeDirty || transformNeedsUpdate;    // 是否需要对当前实体的挂载状态发生成变更
+            if (activeNeedsUpdate)
+            {
+                if (isHierarchyActive) { ecsRegistry.remove<Disabled>(entity); }    // 状态激活
+                else { ecsRegistry.emplace_or_replace<Disabled>(entity); }          // 状态失活
+                if (metadata && activeDirty) { metadata->MarkClear(Pitaya::Core::PassKey<Scene>()); }
+            }
+
+            // 递归处理子节点
             if (auto* link = ecsRegistry.try_get<ChildLink>(entity))
             {
                 entt::entity currChild = link->GetFirstChild();
                 while (currChild != entt::null)
                 {
                     entt::entity nextChild = ecsRegistry.get<ChildLink>(currChild).GetNextSibling();
-                    UpdateTransformHierarchy(currChild, currWorldMatrix, needsUpdate);
+                    UpdateHierarchy(currChild, currWorldMatrix, transformNeedsUpdate, isHierarchyActive, activeNeedsUpdate);
                     currChild = nextChild;
                 }
             }

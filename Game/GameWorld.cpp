@@ -8,7 +8,7 @@ bool Pitaya::Game::GameWorld::Initialize()
 	activeScene = PITAYA_NEW(Scene);
 
 	//TODOD 序列化场景
-	entt::entity entity = activeScene->CreateEntity("Main Camera", "MainCamera");
+	entt::entity entity = activeScene->CreateEntity("Main Camera", "Main Camera");
 	activeScene->AddComponent<Camera>(entity).SetRenderTarget(Pitaya::Asset::RenderTarget::Game);
 
 	return true;
@@ -21,7 +21,7 @@ void Pitaya::Game::GameWorld::Release()
 void Pitaya::Game::GameWorld::LateUpdate()
 {
 	//渲染前调用
-	if (activeScene) { activeScene->ProcessTransformSystem(); }
+	if (activeScene) { activeScene->ProcessHierarchySystem(); }
 }
 void Pitaya::Game::GameWorld::EndFrame()
 {

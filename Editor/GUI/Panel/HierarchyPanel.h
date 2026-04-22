@@ -4,7 +4,7 @@
 #include<Game/Common/FuncTable.h>
 #include<Game/Scene/Scene.h>
 #include<Game/Component/Camera.h>
-#include<Game/Component/Tag.h>
+#include<Game/Component/Metadata.h>
 #include<Game/Component/Parent.h>
 #include<Game/Component/MeshRenderer.h>
 #include<Asset/Common/Mesh.h>

@@ -11,10 +11,10 @@ namespace Pitaya::Render
 {
     struct PostProcessStep
     {
-        inline static constexpr const uint8_t UniformBufferBytes = 64;
+        inline static constexpr const uint8_t UniformBufferBytes = 62;
 
-        PostProcessType Type = PostProcessType::Unknown;
         std::byte ShaderParams[UniformBufferBytes] = {};
+        PostProcessType Type = PostProcessType::Unknown;
         uint8_t Size = 0;
 
         template<typename T>

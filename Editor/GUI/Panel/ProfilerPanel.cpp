@@ -85,20 +85,7 @@ void Pitaya::Editor::ProfilerPanel::OnImGuiRender()
         //TODO 记录渲染的三角形面数等
 
         //TODO 移动到首选项监视面板
-        static bool wireframe = false;
-        if (ImGui::Checkbox("Wireframe Mode", &wireframe))
-        {
-            // 这里连接你的渲染器接口: Renderer::SetWireframe(wireframe);
-        }
 
-        static bool vSync = true;
-        if (ImGui::Checkbox("VSync", &vSync))
-        {
-            // 这里连接你的 Application 接口: Application::Get().GetWindow().SetVSync(vSync);
-        }
-
-        static float exposure = 1.0f;
-        ImGui::DragFloat("Exposure", &exposure, 0.01f, 0.0f, 10.0f);
     }
 
     ImGui::Separator();

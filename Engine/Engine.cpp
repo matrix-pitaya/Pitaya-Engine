@@ -19,6 +19,7 @@
 #include<Game/Component/MeshRenderer.h>
 #include<Game/Component/Camera.h>
 #include<Game/Component/MaterialOverride.h>
+#include<Game/Component/Disabled.h>
 #include<Hook/def.h>
 
 #define NOMINMAX
@@ -627,7 +628,7 @@ void Pitaya::Engine::Engine::Render()
 	if (auto* scene = MODULE(GameWorld)->GetActiveScene())
 	{
 		//提交MeshRenderer
-		for (auto [entity, meshrenderer, transform] : scene->GetGroup<Pitaya::Game::MeshRenderer>(entt::get<Pitaya::Game::Transform>).each())
+		for (auto [entity, meshrenderer, transform] : scene->GetGroup<Pitaya::Game::MeshRenderer>(entt::get<Pitaya::Game::Transform>, entt::exclude<Pitaya::Game::Disabled>).each())
 		{
 			//尝试获取材质覆盖组件
 			auto* materialOverride = scene->GetComponent<Pitaya::Game::MaterialOverride>(entity);
@@ -660,7 +661,7 @@ void Pitaya::Engine::Engine::Render()
 		if (INVOKE_SHOULDSUBMITSCENECAMERAPASS_HOOK)
 		{
 			//提交Pass
-			for (auto [entity, camera, transform] : scene->GetView<Pitaya::Game::Camera, Pitaya::Game::Transform>().each())
+			for (auto [entity, camera, transform] : scene->GetView<Pitaya::Game::Camera, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each())
 			{
 				if (camera.GetRenderTargetIsReady())
 				{
