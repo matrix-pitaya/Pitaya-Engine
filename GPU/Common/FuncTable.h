@@ -23,7 +23,7 @@ namespace Pitaya::Engine
 		FuncTable& operator=(FuncTable&&) = delete;
 
 	public:
-		inline bool Check() const
+		inline bool Verify() const
 		{
 			if (!OnDestroyAllGPUResource) { throw std::runtime_error("FuncTable miss [GPU::DestroyAllGPUResource] Function!"); }
 
@@ -60,7 +60,7 @@ namespace Pitaya::Engine
 
 			return true;
 		}
-		inline void UnRegister() noexcept
+		inline void Nullify() noexcept
 		{
 			OnDestroyAllGPUResource = nullptr;
 

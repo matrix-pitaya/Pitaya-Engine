@@ -54,6 +54,10 @@ namespace Pitaya::Game
 		}
 
 	public:
+		inline void MarkDirty(Pitaya::Core::PassKey<Scene>) noexcept
+		{
+			dirty = true;
+		}
 		inline void MarkClear(Pitaya::Core::PassKey<Scene>) noexcept
 		{
 			dirty = false;

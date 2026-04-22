@@ -16,18 +16,18 @@
 namespace Pitaya::Game
 {
     class GameWorld;
-	class Scene
-	{
+    class Scene
+    {
         friend class GameWorld;
-	private:
+    private:
         Scene() = default;
-		~Scene() = default;
+        ~Scene() = default;
 
     public:
         Scene(const Scene&) = delete;
         Scene& operator=(const Scene&) = delete;
         Scene(Scene&&) = delete;
-		Scene& operator=(Scene&&) = delete;
+        Scene& operator=(Scene&&) = delete;
 
     public:
         inline entt::entity GetRootEntity() const noexcept
@@ -42,7 +42,7 @@ namespace Pitaya::Game
             if (root == entt::null)
             {
                 root = entity;
-                tail = entity; 
+                tail = entity;
                 AddComponent<ChildLink>(entity);
             }
             else
@@ -61,7 +61,7 @@ namespace Pitaya::Game
             if (childId == parentId || !ecsRegistry.valid(childId)) { return; }
             if (parentId != entt::null && IsDescendant(parentId, childId)) { return; }
 
-            // 在断开连接前，记录当前的世界矩阵
+            // 记录当前的世界矩阵 用于保持世界坐标不变
             glm::mat4 currentWorldMatrix = glm::mat4(1.0f);
             auto* childTransform = GetComponent<Transform>(childId);
             if (childTransform && keepWorldTransform)
@@ -71,6 +71,7 @@ namespace Pitaya::Game
 
             UnlinkFromCurrent(childId);
 
+            // 建立新链接
             if (parentId != entt::null)
             {
                 AddComponent<Parent>(childId).SetId(parentId);
@@ -79,12 +80,11 @@ namespace Pitaya::Game
             }
             else
             {
-                // 处理为根节点
                 RemoveComponent<Parent>(childId);
                 InsertIntoRootList(childId, afterSibling);
             }
 
-            // 链接完成后，根据新父节点的世界矩阵，反推新的 Local 属性
+            // 重算 Transform 属性
             if (childTransform)
             {
                 if (keepWorldTransform)
@@ -97,22 +97,22 @@ namespace Pitaya::Game
                             parentWorldMatrix = parentTransform->GetWorldMatrix();
                         }
                     }
-
-                    // 新的局部矩阵 = 逆(新父节点的世界矩阵) * 原始世界矩阵
                     glm::mat4 newLocalMatrix = glm::inverse(parentWorldMatrix) * currentWorldMatrix;
-
-                    // 使用你已有的 SetLocalFromMatrix 来分解更新 localPosition/Rotation/Scale
                     childTransform->SetLocalFromMatrix(newLocalMatrix);
                 }
 
-                // 无论何种情况，层级变化必须强制标记脏数据
+                // 层级变化标记脏逻辑
                 childTransform->MarkDirty();
+            }
+
+            // 改变层级时立刻标记 Metadata 为脏 强制 UpdateHierarchy 在下一帧重刷它的 Active 状态
+            if (auto* metadata = GetComponent<Metadata>(childId))
+            {
+                metadata->MarkDirty(Pitaya::Core::PassKey<Scene>());
             }
         }
 
     public:
-        // 注：Group适用于组件数量非常多的情况 但需要注意同一个主键的entt::get<T>必须保持一致
-        // 渲染器MeshRenderer[Transform]、刚体RigidBody[Transform]、粒子Particle[Transform]、2D精灵图Sprite[Transform]
         template<typename... Owned, typename... Get>
         inline auto GetGroup(entt::get_t<Get...> get)
         {
@@ -162,50 +162,34 @@ namespace Pitaya::Game
         {
             static_assert(!std::is_same_v<T, Metadata> || !std::is_same_v<T, Transform>,
                 "Can't Remove Metadata or Transform Component");
-
             ecsRegistry.remove<T>(entity);
         }
 
     private:
-		inline void ProcessDelayDestroyQueue()  // 在 EndFrame 调用
+        inline void ProcessDelayDestroyQueue()
         {
-            // 注：此处必须通过下标索引循环 因为在循环体内调用 DestroyEntity 会导致 queue.size() 动态增长
             for (size_t i = 0; i < delayDestroyQueue.size(); ++i)
             {
                 entt::entity entity = delayDestroyQueue[i];
-
-                // 防止同一个实体在队列中出现多次导致的重复销毁崩溃
                 if (!ecsRegistry.valid(entity)) { continue; }
 
-                // 仅仅脱离当前链表指针 不要使用 SetRelationship 以免又被加进 root 链表
                 UnlinkFromCurrent(entity);
 
-                // 层级销毁 通过 ChildLink 安全遍历子节点
                 if (auto* link = GetComponent<ChildLink>(entity))
                 {
                     entt::entity currChild = link->GetFirstChild();
                     while (currChild != entt::null)
                     {
                         entt::entity nextChild = GetComponent<ChildLink>(currChild)->GetNextSibling();
-
-                        // 立即切断子节点与当前父节点的联系
-                        // 防止子节点出队执行 UnlinkFromCurrent 时 尝试访问已被彻底销毁的父节点而崩溃
-                        RemoveComponent<Parent>(currChild);
-
-                        // 然后将子节点加入延迟销毁队列
                         DestroyEntity(currChild);
                         currChild = nextChild;
                     }
                 }
-
-                // 在 ECS 注册表中彻底抹除此实体
                 ecsRegistry.destroy(entity);
             }
-
-            // 队列处理完毕 统一清空
             delayDestroyQueue.clear();
         }
-		inline void ProcessHierarchySystem()    // 在 LateUpdate 调用
+        inline void ProcessHierarchySystem()
         {
             auto rootCandidates = ecsRegistry.view<Transform>(entt::exclude<Parent>);
             for (auto entity : rootCandidates)
@@ -217,19 +201,21 @@ namespace Pitaya::Game
     private:
         inline void UpdateHierarchy(entt::entity entity, const glm::mat4& parentWorldMatrix, bool parentChanged, bool parentActive, bool parentActiveChanged)
         {
-			// 处理 Transform 系统
+            // 处理 Transform 系统
             auto* trans = ecsRegistry.try_get<Transform>(entity);
             bool transformNeedsUpdate = false;
             glm::mat4 currWorldMatrix = parentWorldMatrix;
             if (trans)
             {
                 transformNeedsUpdate = trans->IsDirty() || parentChanged;
-                currWorldMatrix = trans->GetWorldMatrix();
                 if (transformNeedsUpdate)
                 {
-                    const glm::mat4& localMat = trans->GetLocalMatrix();
-                    currWorldMatrix = parentWorldMatrix * localMat;
-                    trans->SetWorldMatrix(currWorldMatrix);
+                    currWorldMatrix = parentWorldMatrix * trans->GetLocalMatrix();
+                    trans->SetWorldMatrix(currWorldMatrix); // 内部执行了 ClearDirty
+                }
+                else
+                {
+                    currWorldMatrix = trans->GetWorldMatrix();
                 }
             }
 
@@ -242,12 +228,27 @@ namespace Pitaya::Game
                 selfActive = metadata->IsActive();
                 activeDirty = metadata->IsDirty();
             }
-            bool isHierarchyActive = parentActive && selfActive;    // 只有当父节点真正激活，且自身也激活时，才是真正的被激活状态
-            bool activeNeedsUpdate = parentActiveChanged || activeDirty || transformNeedsUpdate;    // 是否需要对当前实体的挂载状态发生成变更
+
+            bool isHierarchyActive = parentActive && selfActive;
+            bool activeNeedsUpdate = parentActiveChanged || activeDirty;
             if (activeNeedsUpdate)
             {
-                if (isHierarchyActive) { ecsRegistry.remove<Disabled>(entity); }    // 状态激活
-                else { ecsRegistry.emplace_or_replace<Disabled>(entity); }          // 状态失活
+                bool isCurrentlyDisabled = ecsRegistry.all_of<Disabled>(entity);
+                if (isHierarchyActive)
+                {
+                    if (isCurrentlyDisabled) 
+                    { 
+                        ecsRegistry.remove<Disabled>(entity);
+                    }
+                }
+                else
+                {
+                    if (!isCurrentlyDisabled) 
+                    { 
+                        ecsRegistry.emplace_or_replace<Disabled>(entity);
+                    }
+                }
+
                 if (metadata && activeDirty) { metadata->MarkClear(Pitaya::Core::PassKey<Scene>()); }
             }
 
@@ -257,8 +258,12 @@ namespace Pitaya::Game
                 entt::entity currChild = link->GetFirstChild();
                 while (currChild != entt::null)
                 {
+                    // 获取下一个兄弟节点缓存，防止子节点销毁影响遍历
                     entt::entity nextChild = ecsRegistry.get<ChildLink>(currChild).GetNextSibling();
+
+                    // 下传 parentDirty(transformNeedsUpdate) 和 activeDirty(activeNeedsUpdate)
                     UpdateHierarchy(currChild, currWorldMatrix, transformNeedsUpdate, isHierarchyActive, activeNeedsUpdate);
+
                     currChild = nextChild;
                 }
             }
@@ -284,33 +289,31 @@ namespace Pitaya::Game
             entt::entity next = link->GetNextSibling();
             entt::entity parentId = HasComponent<Parent>(entity) ? GetComponent<Parent>(entity)->GetId() : entt::null;
 
-            // 处理前驱
             if (prev != entt::null) { GetComponent<ChildLink>(prev)->SetNextSibling(next); }
             else if (parentId != entt::null) { GetComponent<ChildLink>(parentId)->SetFirstChild(next); }
-            else if (entity == root) { root = next; } // 处理头
+            else if (entity == root) { root = next; }
 
-            // 处理后继
             if (next != entt::null) { GetComponent<ChildLink>(next)->SetPreviousSibling(prev); }
-            else if (parentId == entt::null && entity == tail) { tail = prev; } // 如果当前脱离的是根链表的末尾 尾指针前移
+            else if (parentId == entt::null && entity == tail) { tail = prev; }
 
             link->SetNextSibling(entt::null);
             link->SetPreviousSibling(entt::null);
         }
-        inline void InsertIntoLinkList(entt::entity child, entt::entity parent, entt::entity after) 
+        inline void InsertIntoLinkList(entt::entity child, entt::entity parent, entt::entity after)
         {
             if (!HasComponent<ChildLink>(child)) { AddComponent<ChildLink>(child); }
             auto* pLink = GetComponent<ChildLink>(parent);
             auto* cLink = GetComponent<ChildLink>(child);
 
-            if (after == entt::null) 
-            { 
+            if (after == entt::null)
+            {
                 entt::entity oldFirst = pLink->GetFirstChild();
                 cLink->SetNextSibling(oldFirst);
                 if (oldFirst != entt::null) { GetComponent<ChildLink>(oldFirst)->SetPreviousSibling(child); }
                 pLink->SetFirstChild(child);
             }
-            else 
-            { 
+            else
+            {
                 auto* aLink = GetComponent<ChildLink>(after);
                 entt::entity next = aLink->GetNextSibling();
                 aLink->SetNextSibling(child);
@@ -342,10 +345,10 @@ namespace Pitaya::Game
             }
         }
 
-	private:
-		entt::entity root = entt::null; // 供UI显示使用的根节点链表头 通过 ChildLink 连接所有根节点
-		entt::entity tail = entt::null; // 根节点链表尾 方便插入
-		entt::registry ecsRegistry;
-		std::vector<entt::entity> delayDestroyQueue;
-	};
+    private:
+        entt::entity root = entt::null;
+        entt::entity tail = entt::null;
+        entt::registry ecsRegistry;
+        std::vector<entt::entity> delayDestroyQueue;
+    };
 }

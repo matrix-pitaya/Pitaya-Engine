@@ -53,7 +53,7 @@ namespace
                 constexpr const bool isRemovable = !std::is_same_v<Component, Pitaya::Game::Metadata> &&
                     !std::is_same_v<Component, Pitaya::Game::Transform>;
 
-                ImGui::PushID(static_cast<uint32_t>(e));
+                ImGui::PushID(name);
                 ImGui::SetNextItemAllowOverlap();
                 bool isOpen = ImGui::CollapsingHeader(name, ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowOverlap);
                 bool removeComponent = false;
@@ -462,33 +462,25 @@ namespace
 
                         if (open)
                         {
-                            auto BloomPanel = [step]() mutable
-                                {
-                                    Pitaya::Render::BloomParams p;
-                                    std::memcpy(&p, step.ShaderParams, sizeof(p));
-                                    bool c = false;
-                                    c |= ImGui::DragFloat("Threshold", &p.Threshold, 0.01f, 0.0f, 5.0f);
-                                    c |= ImGui::DragFloat("Intensity", &p.Intensity, 0.01f, 0.0f, 10.0f);
-                                    if (c) { step.SetParams(p); }
-                                };
-                            auto ToneMappingPanel = [step]() mutable
-                                {
-                                    Pitaya::Render::ToneMappingParams p;
-                                    std::memcpy(&p, step.ShaderParams, sizeof(p));
-                                    if (ImGui::DragFloat("Exposure", &p.Exposure, 0.01f, 0.0f, 10.0f)) { step.SetParams(p); }
-                                };
-                            auto GammaCorrectionPanel = [step]() mutable
-                                {
-                                    Pitaya::Render::GammaCorrectionParams p;
-                                    std::memcpy(&p, step.ShaderParams, sizeof(p));
-                                    if (ImGui::DragFloat("Gamma", &p.Gamma, 0.01f, 0.1f, 4.0f)) { step.SetParams(p); }
-                                };
-                            switch (step.Type)
+                            if (step.Type == Pitaya::Render::PostProcessType::Bloom)
                             {
-                                case Pitaya::Render::PostProcessType::Bloom:           BloomPanel();           break;
-                                case Pitaya::Render::PostProcessType::ToneMapping:     ToneMappingPanel();     break;
-                                case Pitaya::Render::PostProcessType::GammaCorrection: GammaCorrectionPanel(); break;
-                                default: break;
+                                Pitaya::Render::BloomParams p;
+                                std::memcpy(&p, step.ShaderParams, sizeof(p));
+                                if (ImGui::DragFloat("Threshold", &p.Threshold, 0.01f, 0.0f, 5.0f) || 
+                                    ImGui::DragFloat("Intensity", &p.Intensity, 0.01f, 0.0f, 10.0f))
+                                { step.SetParams(p); }
+                            }
+                            else if (step.Type == Pitaya::Render::PostProcessType::ToneMapping)
+                            {
+                                Pitaya::Render::ToneMappingParams p;
+                                std::memcpy(&p, step.ShaderParams, sizeof(p));
+                                if (ImGui::DragFloat("Exposure", &p.Exposure, 0.01f, 0.0f, 10.0f)) { step.SetParams(p); }
+                            }
+                            else if (step.Type == Pitaya::Render::PostProcessType::GammaCorrection)
+                            {
+                                Pitaya::Render::GammaCorrectionParams p;
+                                std::memcpy(&p, step.ShaderParams, sizeof(p));
+                                if (ImGui::DragFloat("Gamma", &p.Gamma, 0.01f, 0.1f, 4.0f)) { step.SetParams(p); }
                             }
                             ImGui::TreePop();
                         }

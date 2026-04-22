@@ -35,7 +35,7 @@ namespace Pitaya::Engine
 		FuncTable& operator=(FuncTable&&) = delete;
 
 	public:
-		inline bool Check() const
+		inline bool Verify() const
 		{
 			if (!OnLoadTexture) { throw std::runtime_error("FuncTable miss [Asset::OnLoadTexture] Function!"); }
 			if (!OnLoadShader) { throw std::runtime_error("FuncTable miss [Asset::OnLoadShader] Function!"); }
@@ -50,7 +50,7 @@ namespace Pitaya::Engine
 			if (!OnIsUploadedToGPU) { throw std::runtime_error("FuncTable miss [Asset::IsUploadedToGPU] Function!"); }
 			return true;
 		}
-		inline void UnRegister() noexcept
+		inline void Nullify() noexcept
 		{
 			OnLoadTexture = nullptr;
 			OnLoadShader = nullptr;

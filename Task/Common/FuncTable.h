@@ -21,12 +21,12 @@ namespace Pitaya::Engine
 		FuncTable& operator=(FuncTable&&) = delete;
 
 	public:
-		inline bool Check() const
+		inline bool Verify() const
 		{
 			if (!OnPostJob) { throw std::runtime_error("FuncTable miss [Task::PostJob] Function!"); }
 			return true;
 		}
-		inline void UnRegister() noexcept
+		inline void Nullify() noexcept
 		{
 			OnPostJob = nullptr;
 		}

@@ -157,7 +157,7 @@ bool Pitaya::Editor::GUI::Initialize_Main(void* nativeWindow)
 	ImGui::SetCurrentContext(context);
 	ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(nativeWindow), true);
 	imGuiContext.store(context, std::memory_order_release);
-	for (auto panel : panels.Each()) { panel->Initialize(); }
+	for (auto* panel : panels.Each()) { panel->Initialize(); }
 	while (!isRenderReady.load(std::memory_order_acquire)){ std::this_thread::yield(); }
 	return drawer.Initialize(nativeWindow);
 }
@@ -174,7 +174,7 @@ bool Pitaya::Editor::GUI::Initialize_Render()
 void Pitaya::Editor::GUI::Release_Main()
 {
 	drawer.Release();
-	for (auto panel : panels.Each()) { panel->Release(); }
+	for (auto* panel : panels.Each()) { panel->Release(); }
 	const auto start = std::chrono::steady_clock::now();
 	const auto wait = std::chrono::milliseconds(2000);
 	while (isRenderReady.load(std::memory_order_acquire))
@@ -411,7 +411,7 @@ void Pitaya::Editor::GUI::DrawMenuBar()
 	{
 		if (ImGui::BeginMenu("Panel"))
 		{
-			for (auto& panel : panels.Each())
+			for (auto* panel : panels.Each())
 			{
 				if (ImGui::MenuItem(panel->GetName().data(), nullptr, panel->GetOpenState()))
 				{
@@ -592,7 +592,7 @@ void Pitaya::Editor::GUI::DrawToolbar()
 }
 void Pitaya::Editor::GUI::DrawPanels()
 {
-	for (auto& panel : panels.Each())
+	for (auto* panel : panels.Each())
 	{
 		panel->Draw();
 	}

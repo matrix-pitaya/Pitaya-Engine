@@ -24,7 +24,7 @@ namespace Pitaya::Render
                 std::is_same_v<T, Pitaya::Render::ToneMappingParams> ||
                 std::is_same_v<T, Pitaya::Render::GammaCorrectionParams>,
                 "Unknow Asset!");
-            static_assert(sizeof(T) <= 64, "Requested number of bytes exceeds the maximum");
+            static_assert(sizeof(T) <= UniformBufferBytes, "Requested number of bytes exceeds the maximum");
 
             std::memcpy(ShaderParams, &data, sizeof(T));
             Size = sizeof(T);

@@ -22,14 +22,14 @@ namespace Pitaya::Engine
 		FuncTable& operator=(FuncTable&&) = delete;
 
 	public:
-		inline bool Check() const
+		inline bool Verify() const
 		{
 			if (!OnGetKeyDown) { throw std::runtime_error("FuncTable miss [Input::GetKeyDown] Function!"); }
 			if (!OnGetKeyPressed) { throw std::runtime_error("FuncTable miss [Input::GetKeyPressed] Function!"); }
 			if (!OnGetKeyReleased) { throw std::runtime_error("FuncTable miss [Input::GetKeyReleased] Function!"); }
 			return true;
 		}
-		inline void UnRegister() noexcept
+		inline void Nullify() noexcept
 		{
 			OnGetKeyDown = nullptr;
 			OnGetKeyPressed = nullptr;

@@ -21,7 +21,7 @@ namespace Pitaya::Engine
 		FuncTable& operator=(FuncTable&&) = delete;
 
 	public:
-		inline bool Check() const
+		inline bool Verify() const
 		{
 			if (!OnGetRenderAPI) { throw std::runtime_error("FuncTable miss [Config::GetRenderAPI] Function!"); }
 			if (!OnGetMaxFixupdataExecuteTimes) { throw std::runtime_error("FuncTable miss [Config::GetMaxFixupdataExecuteTimes] Function!"); }
@@ -29,7 +29,7 @@ namespace Pitaya::Engine
 			if (!OnGetEnableVSync) { throw std::runtime_error("FuncTable miss [Config::GetEnableVSync] Function!"); }
 			return true;
 		}
-		inline void UnRegister() noexcept
+		inline void Nullify() noexcept
 		{
 			OnGetRenderAPI = nullptr;
 			OnGetMaxFixupdataExecuteTimes = nullptr;

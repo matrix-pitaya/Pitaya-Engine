@@ -545,9 +545,7 @@ namespace Pitaya::Render
 		}
 		inline void BeginPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>, RenderPass& pass)
 		{
-			Pitaya::Render::BeginPassCommand beginPassCommand;
-			beginPassCommand.CameraSnapshot = pass.CameraSnapshot;
-			beginPassCommand.RenderTargetSnapshot = pass.RenderTargetSnapshot;
+			Pitaya::Render::BeginPassCommand beginPassCommand { pass.CameraSnapshot, pass.RenderTargetSnapshot };
 			renderPacket.PushCommand(beginPassCommand);
 		}
 		inline void Submit(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>, RenderItem& item)

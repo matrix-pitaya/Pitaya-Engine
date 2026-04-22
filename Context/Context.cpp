@@ -3,9 +3,9 @@
 #define MODULE(T) modules.T
 #define FUNCTABLE(T) funcTables.T
 
-bool Pitaya::Engine::Context::Check() const
+bool Pitaya::Engine::Context::Verify() const
 {
-	//Check Module
+	//Verify Module
 	do
 	{
 		if (!MODULE(Configurator)) { throw std::runtime_error("Context [Module] miss [Configurator]"); }
@@ -24,7 +24,7 @@ bool Pitaya::Engine::Context::Check() const
 		if (!MODULE(ScriptRuntime)) { throw std::runtime_error("Context [Module] miss [ScriptRuntime]"); }
 	} while (false);
 
-	//Check FuncTable
+	//Verify FuncTable
 	do
 	{
 		if (!FUNCTABLE(AssetHub)) { throw std::runtime_error("Context [FuncTable] miss [AssetHub]"); }
@@ -41,9 +41,9 @@ bool Pitaya::Engine::Context::Check() const
 	} while (false);
 	return true;
 }
-void Pitaya::Engine::Context::UnRegister() noexcept
+void Pitaya::Engine::Context::Nullify() noexcept
 {
-	//UnRegister Module
+	//Discard Module
 	do
 	{
 		MODULE(Renderer) = nullptr;
@@ -62,7 +62,7 @@ void Pitaya::Engine::Context::UnRegister() noexcept
 		MODULE(ScriptRuntime) = nullptr;
 	} while (false);
 
-	//UnRegister FuncTable
+	//Discard FuncTable
 	do
 	{
 		FUNCTABLE(Chronometer) = nullptr;

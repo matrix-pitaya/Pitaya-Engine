@@ -21,7 +21,7 @@ namespace Pitaya::Engine
 		FuncTable& operator=(FuncTable&&) = delete;
 
 	public:
-		inline bool Check() const
+		inline bool Verify() const
 		{
 			if (!Ondelta) { throw std::runtime_error("FuncTable miss [Time::delta] Function!"); }
 			if (!OnFixdelta) { throw std::runtime_error("FuncTable miss [Time::Fixdelta] Function!"); }
@@ -32,7 +32,7 @@ namespace Pitaya::Engine
 			if (!OnMilliseconds) { throw std::runtime_error("FuncTable miss [Time::Milliseconds] Function!"); }
 			return true;
 		}
-		inline void UnRegister() noexcept
+		inline void Nullify() noexcept
 		{
 			Ondelta = nullptr;
 			OnFixdelta = nullptr;

@@ -20,8 +20,8 @@ namespace Pitaya::Engine
 		FuncTable& operator=(const FuncTable&) = delete;
 		FuncTable(FuncTable&&) = delete;
 		FuncTable& operator=(FuncTable&&) = delete;
-
-		inline bool Check() const
+			
+		inline bool Verify() const
 		{
 			if (!OnRegisterThread) { throw std::runtime_error("FuncTable miss [Thread::RegisterThread] Function!"); }
 			if (!OnUnregisterThread) { throw std::runtime_error("FuncTable miss [Thread::UnregisterThread] Function!"); }
@@ -29,7 +29,7 @@ namespace Pitaya::Engine
 			if (!OnGetThreadIsRunning) { throw std::runtime_error("FuncTable miss [Thread::GetThreadIsRunning] Function!"); }
 			return true;
 		}
-		inline void UnRegister() noexcept
+		inline void Nullify() noexcept
 		{
 			OnRegisterThread = nullptr;
 			OnUnregisterThread = nullptr;

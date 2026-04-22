@@ -63,7 +63,7 @@
         Pitaya::Engine::Global_PreRenderContextRelease_Hook.Func = nullptr; Pitaya::Engine::Global_PreRenderContextRelease_Hook.Name = nullptr;                   \
         Pitaya::Engine::Global_PreRenderPipelineExecute_Hook.Func = nullptr; Pitaya::Engine::Global_PreRenderPipelineExecute_Hook.Name = nullptr;                 \
         Pitaya::Engine::Global_ShouldWakeupRenderThread_Hook.Func = nullptr; Pitaya::Engine::Global_ShouldWakeupRenderThread_Hook.Name = nullptr;                 \
-        Pitaya::Engine::Global_ShouldSubmitSceneCameraPass_Hook.Func = nullptr; Pitaya::Engine::Global_ShouldSubmitSceneCameraPass_Hook.Name = nullptr;                     \
+        Pitaya::Engine::Global_ShouldSubmitSceneCameraPass_Hook.Func = nullptr; Pitaya::Engine::Global_ShouldSubmitSceneCameraPass_Hook.Name = nullptr;           \
         Pitaya::Engine::Global_PostChronometerTick_Hook.Func = nullptr; Pitaya::Engine::Global_PostChronometerTick_Hook.Name = nullptr;                           \
         Pitaya::Engine::Global_PostLog_Hook.Func = nullptr; Pitaya::Engine::Global_PostLog_Hook.Name = nullptr;                                                   \
         Pitaya::Engine::Global_TerminateFixedUpdate_Hook.Func = nullptr; Pitaya::Engine::Global_TerminateFixedUpdate_Hook.Name = nullptr;                         \

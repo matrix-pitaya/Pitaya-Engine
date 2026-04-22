@@ -397,7 +397,7 @@ bool Pitaya::Engine::Engine::Initialize()
 
 #undef FILLCONTEXT
 
-		if (!Pitaya::Engine::Context::Instance().Check()) { return false; }
+		if (!Pitaya::Engine::Context::Instance().Verify()) { return false; }
 	} while (false);
 
 	//Fill FuncTables
@@ -515,20 +515,20 @@ bool Pitaya::Engine::Engine::Initialize()
 #pragma endregion
 	} while (false);
 
-	//Check FuncTables
+	//Verify FuncTables
 	do
 	{
-		if (!FUNCTABLE(AssetHub).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [AssetHub]!"); }
-		if (!FUNCTABLE(Configurator).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Configurator]!"); }
-		if (!FUNCTABLE(EventDispatcher).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [EventDispatcher]!"); }
-		if (!FUNCTABLE(RHIDevice).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [RHIDevice]!"); }
-		if (!FUNCTABLE(InputMonitor).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [InputMonitor]!"); }
-		if (!FUNCTABLE(Logger).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Logger]!"); }
-		if (!FUNCTABLE(TaskScheduler).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [TaskScheduler]!"); }
-		if (!FUNCTABLE(ThreadTracker).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [ThreadTracker]!"); }
-		if (!FUNCTABLE(Chronometer).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Chronometer]!"); }
-		if (!FUNCTABLE(Window).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [Window]!"); }
-		if (!FUNCTABLE(GameWorld).Check()) { throw std::runtime_error("Engine [FuncTable] Miss [GameWorld]!"); }
+		if (!FUNCTABLE(AssetHub).Verify()) { throw std::runtime_error("Engine [FuncTable] Miss [AssetHub]!"); }
+		if (!FUNCTABLE(Configurator).Verify()) { throw std::runtime_error("Engine [FuncTable] Miss [Configurator]!"); }
+		if (!FUNCTABLE(EventDispatcher).Verify()) { throw std::runtime_error("Engine [FuncTable] Miss [EventDispatcher]!"); }
+		if (!FUNCTABLE(RHIDevice).Verify()) { throw std::runtime_error("Engine [FuncTable] Miss [RHIDevice]!"); }
+		if (!FUNCTABLE(InputMonitor).Verify()) { throw std::runtime_error("Engine [FuncTable] Miss [InputMonitor]!"); }
+		if (!FUNCTABLE(Logger).Verify()) { throw std::runtime_error("Engine [FuncTable] Miss [Logger]!"); }
+		if (!FUNCTABLE(TaskScheduler).Verify()) { throw std::runtime_error("Engine [FuncTable] Miss [TaskScheduler]!"); }
+		if (!FUNCTABLE(ThreadTracker).Verify()) { throw std::runtime_error("Engine [FuncTable] Miss [ThreadTracker]!"); }
+		if (!FUNCTABLE(Chronometer).Verify()) { throw std::runtime_error("Engine [FuncTable] Miss [Chronometer]!"); }
+		if (!FUNCTABLE(Window).Verify()) { throw std::runtime_error("Engine [FuncTable] Miss [Window]!"); }
+		if (!FUNCTABLE(GameWorld).Verify()) { throw std::runtime_error("Engine [FuncTable] Miss [GameWorld]!"); }
 	} while (false);
 
 	//Create Modules
@@ -551,7 +551,7 @@ bool Pitaya::Engine::Engine::Initialize()
 		if (!MODULE(ScriptRuntime).Create()) { throw std::runtime_error("Engine [Module] [ScriptRuntime] Create Fail!"); }
 	} while (false);
 	
-	//Check Modules
+	//Verify Modules
 	do
 	{
 		if (!MODULE(Configurator)) { throw std::runtime_error("Engine [Module] Miss [Configurator]!"); }
@@ -727,24 +727,24 @@ void Pitaya::Engine::Engine::Release()
 		MODULE(Logger).Destroy();
 	} while (false);
 
-	//UnRegister FuncTables
+	//Nullify FuncTables
 	do
 	{
-		FUNCTABLE(AssetHub).UnRegister();
-		FUNCTABLE(Configurator).UnRegister();
-		FUNCTABLE(EventDispatcher).UnRegister();;
-		FUNCTABLE(RHIDevice).UnRegister();
-		FUNCTABLE(InputMonitor).UnRegister();
-		FUNCTABLE(Logger).UnRegister();
-		FUNCTABLE(TaskScheduler).UnRegister();
-		FUNCTABLE(ThreadTracker).UnRegister();
-		FUNCTABLE(Chronometer).UnRegister();
-		FUNCTABLE(Window).UnRegister();
-		FUNCTABLE(GameWorld).UnRegister();
+		FUNCTABLE(AssetHub).Nullify();
+		FUNCTABLE(Configurator).Nullify();
+		FUNCTABLE(EventDispatcher).Nullify();;
+		FUNCTABLE(RHIDevice).Nullify();
+		FUNCTABLE(InputMonitor).Nullify();
+		FUNCTABLE(Logger).Nullify();
+		FUNCTABLE(TaskScheduler).Nullify();
+		FUNCTABLE(ThreadTracker).Nullify();
+		FUNCTABLE(Chronometer).Nullify();
+		FUNCTABLE(Window).Nullify();
+		FUNCTABLE(GameWorld).Nullify();
 	} while (false);
 
-	//UnRegister Context
-	Pitaya::Engine::Context::Instance().UnRegister();
+	//Nullify Context
+	Pitaya::Engine::Context::Instance().Nullify();
 }
 
 #undef MODULE

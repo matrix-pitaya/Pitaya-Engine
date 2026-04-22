@@ -140,8 +140,8 @@ namespace Pitaya::Engine
 		}
 
 	private:
-		bool Check() const;
-		void UnRegister() noexcept;
+		bool Verify() const;
+		void Nullify() noexcept;
 
 	private:
 		Modules modules;

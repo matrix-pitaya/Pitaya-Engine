@@ -22,14 +22,14 @@ namespace Pitaya::Engine
 		FuncTable& operator=(FuncTable&&) = delete;
 
 	public:
-		inline bool Check() const
+		inline bool Verify() const
 		{
 			if (!OnSubscribe) { throw std::runtime_error("FuncTable miss [Event::Subscribe] Function!"); }
 			if (!OnUnSubscribe) { throw std::runtime_error("FuncTable miss [Event::UnSubscribe] Function!"); }
 			if (!OnEmit) { throw std::runtime_error("FuncTable miss [Event::Emit] Function!"); }
 			return true;
 		}
-		inline void UnRegister() noexcept
+		inline void Nullify() noexcept
 		{
 			OnSubscribe = nullptr;
 			OnUnSubscribe = nullptr;
