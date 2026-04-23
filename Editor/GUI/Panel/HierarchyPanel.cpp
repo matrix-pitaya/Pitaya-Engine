@@ -241,26 +241,27 @@ void Pitaya::Editor::HierarchyPanel::DrawEmptyPopup()
                     auto e = scene->CreateEntity("Cube");
                     scene->AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Cube);
                 }
-                if (ImGui::MenuItem("Backpack"))
+                ImGui::Separator();
+                if (ImGui::MenuItem("Sphere"))
                 {
-                    auto e = scene->CreateEntity("Backpack");
-                    scene->AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Backpack);
+                    auto e = scene->CreateEntity("Sphere");
+                    scene->AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Sphere);
                 }
+                ImGui::Separator();
                 if (ImGui::MenuItem("Panel"))
                 {
                     auto e = scene->CreateEntity("Panel");
                     scene->AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Panel);
                 }
-                if (ImGui::MenuItem("Planet"))
+
+                //TO REMOVE
+                /*ImGui::Separator();
+                if (ImGui::MenuItem("Backpack"))
                 {
-                    auto e = scene->CreateEntity("Planet");
-                    scene->AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Planet);
-                }
-                if (ImGui::MenuItem("Rock"))
-                {
-                    auto e = scene->CreateEntity("Rock");
-                    scene->AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Rock);
-                }
+                    auto e = scene->CreateEntity("Backpack");
+                    scene->AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Backpack);
+                }*/
+                //END TO REMOVE
             }
             ImGui::EndMenu();
         }

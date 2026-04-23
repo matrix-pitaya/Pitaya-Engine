@@ -12,7 +12,5 @@ namespace Pitaya::Asset
 	
 		//Shader 13-16
 		inline static constexpr const Pitaya::Core::GUID Default = Pitaya::Core::GUID("00000000-0000-0000-0001-000000000000");
-		inline static constexpr const Pitaya::Core::GUID Blit = Pitaya::Core::GUID("00000000-0000-0000-0002-000000000000");
-		inline static constexpr const Pitaya::Core::GUID GammaCorrection = Pitaya::Core::GUID("00000000-0000-0000-0003-000000000000");
 	};
 }

@@ -168,6 +168,8 @@ void Pitaya::Editor::Editor::OnMouseCurrsorMove(const Pitaya::Event::Event& even
 
 void Pitaya::Editor::Editor::AttachRuntimeEnv()
 {
+	//TODO 检测运行时环境
+
 	MOUNT_PREBEGINFRAME_HOOK(Pitaya::Editor::Editor::HookFunc::PreBeginFrame, "Editor::BeginFrame")
 	MOUNT_PREFIXEDUPDATE_HOOK(Pitaya::Editor::Editor::HookFunc::PreFixedUpdate, "Editor::FixUpdate")
 	MOUNT_PREUPDATE_HOOK(Pitaya::Editor::Editor::HookFunc::PreUpdate, "Editor::Update")

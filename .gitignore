@@ -34,5 +34,4 @@ CppProperties.json
 .DS_Store
 
 # 大文件
-resource/
 thirdparty/

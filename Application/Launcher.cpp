@@ -107,36 +107,6 @@ namespace
 			CheckFolder(workspace / "Asset" / "Scene");
 		}
 
-		//Resource Check
-		{
-			const constexpr std::string_view CheckList[] =
-			{
-				"fonts/fa-solid-900.ttf",
-				"fonts/segoeui.ttf",
-				"icon/default.png",
-				"rendertarget/editor.rt",
-				"rendertarget/game.rt",
-				"shader/blit/blit.frag",
-				"shader/blit/blit.shader",
-				"shader/blit/blit.vert",
-				"shader/GammaCorrection/GammaCorrection.frag",
-				"shader/GammaCorrection/GammaCorrection.shader",
-				"shader/GammaCorrection/GammaCorrection.vert",
-			};
-
-			const std::filesystem::path folder = Pitaya::Core::GetExecutableDirectory() / "resource";
-			for (const std::string_view fileName : CheckList)
-			{
-				if (fileName.empty()) { continue; }
-				std::filesystem::path absPath = folder / fileName;
-				if (!std::filesystem::exists(absPath))
-				{
-					MessageBoxA(NULL, ("miss resource core file: " + absPath.string()).c_str(), "Error", MB_OK);
-					exit(-1);
-				}
-			}
-		}
-
 		//Mono Check
 		{
 			const constexpr std::string_view CheckList[] =

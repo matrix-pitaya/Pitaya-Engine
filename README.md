@@ -1,4 +1,4 @@
-<img src="./Pitaya.png" alt="Pitaya" style="zoom:8%;" />
+<img src="./icon/default.png" alt="Pitaya" style="zoom:8%;" />
 
 # 🐉 Pitaya Engine 火龙果引擎
 

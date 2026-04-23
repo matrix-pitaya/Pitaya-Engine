@@ -211,12 +211,12 @@ void Pitaya::Editor::GUI::SetStyle()
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	// io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;	//TODO 涉及到同步点 暂时不做拖拽出窗口
-	io.Fonts->AddFontFromFileTTF((Pitaya::Core::GetExecutableDirectory() / "resource/fonts/segoeui.ttf").string().c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+	io.Fonts->AddFontFromFileTTF((Pitaya::Core::GetExecutableDirectory() / "editor/fonts/segoeui.ttf").string().c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 	ImFontConfig iconsConfig;
 	iconsConfig.MergeMode = true;
 	iconsConfig.PixelSnapH = true;
 	static const constexpr ImWchar iconsRanges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
-	io.Fonts->AddFontFromFileTTF((Pitaya::Core::GetExecutableDirectory() / "resource/fonts/fa-solid-900.ttf").string().c_str(), 16.0f, &iconsConfig, iconsRanges);
+	io.Fonts->AddFontFromFileTTF((Pitaya::Core::GetExecutableDirectory() / "editor/fonts/fa-solid-900.ttf").string().c_str(), 16.0f, &iconsConfig, iconsRanges);
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	ImGui::StyleColorsDark();

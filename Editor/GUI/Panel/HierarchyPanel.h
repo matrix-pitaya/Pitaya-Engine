@@ -25,6 +25,7 @@ namespace Pitaya::Editor
     public:
         HierarchyPanel(const HierarchyPanel&) = delete;
         HierarchyPanel& operator=(const HierarchyPanel&) = delete;
+
     private:
         void OnImGuiRender() override;
 

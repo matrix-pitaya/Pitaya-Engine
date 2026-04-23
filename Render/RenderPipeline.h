@@ -50,10 +50,6 @@ namespace Pitaya::Render
 			std::vector<RenderPass> Passes;
 			std::vector<RenderItem> Items;
 		};
-		struct PostProcessChain
-		{
-			Pitaya::Core::Asset<Pitaya::Asset::Shader> Shaders[static_cast<uint8_t>(Pitaya::Render::PostProcessType::Unknown)] = {};
-		};
 
 	private:
 		RenderPipeline() = default;
@@ -93,6 +89,5 @@ namespace Pitaya::Render
 
 	private:
 		RenderGraph graph;
-		PostProcessChain chain;
 	};
 }

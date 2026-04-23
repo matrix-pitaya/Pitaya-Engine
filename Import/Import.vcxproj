@@ -168,6 +168,7 @@
     <ClInclude Include="ShaderImporter\ShaderImporter.h" />
     <ClInclude Include="TextureImporter\Backend\StbImage\StbImageTextureImporter.h" />
     <ClInclude Include="TextureImporter\Backend\StbImage\stb_image.h" />
+    <ClInclude Include="TextureImporter\Backend\StbImage\stb_image_write.h" />
     <ClInclude Include="TextureImporter\Frontend\TextureImporter.h" />
   </ItemGroup>
   <ItemGroup>

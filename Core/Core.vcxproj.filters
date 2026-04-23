@@ -123,5 +123,8 @@
     <ClInclude Include="Utils\Math.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\BuildInRC.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

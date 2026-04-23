@@ -4,6 +4,7 @@
 #include<Core/Camera/CameraSnapshot.h>
 #include<Core/Asset/Asset.h>
 #include<Core/Utils/Console.h>
+#include<Core/Utils/BuildInRC.h>
 #include<Hook/def.h>
 #include<Thread/Common/FuncTable.h>
 #include<Log/Common/FuncTable.h>
@@ -31,6 +32,8 @@
 #include<Asset/Common/Texture.h>
 #include<Asset/Common/Material.h>
 
+#include<Application/resource.h>
+
 #include<algorithm>
 #include<atomic>
 #include<condition_variable>
@@ -42,6 +45,8 @@
 #include<memory>
 #include<cstddef>
 #include<future>
+#include<filesystem>
+#include<fstream>
 
 namespace Pitaya::Render
 {
@@ -75,131 +80,70 @@ namespace Pitaya::Render
 	protected:
 		struct GlobalRHI
 		{
+			Pitaya::GPU::Identifier<Pitaya::GPU::Shader> BlitShader;
+			Pitaya::GPU::Identifier<Pitaya::GPU::Shader> GammaCorrectionShader;
+			Pitaya::GPU::Identifier<Pitaya::GPU::Shader> FallbackShader;
 			Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> EmptyVAO;
+			Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> FallbackVAO;
+			Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> FallbackTexture;
 			Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> CameraSnapshotUBO;
 			Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> PostProcessUBO;
 			Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> InstanceModelTransformSSBO;
 			Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> BoneInverseMatriceSSBO;
-
-			//记录当前显存缓冲区的大小
-			size_t TransformSSBOCapacity = 0;
+			size_t TransformSSBOCapacity = 0;	//记录当前显存缓冲区的大小
 			size_t BoneSSBOCapacity = 0;
 
-			inline bool CreateGlobalRHI()
+			inline void Create(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
 			{
 				EmptyVAO = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
-				CameraSnapshotUBO = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), sizeof(Pitaya::Core::CameraSnapshot), static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::CameraSnapshot));
-				PostProcessUBO = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), Pitaya::Render::PostProcessStep::UniformBufferBytes, static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
+				CameraSnapshotUBO = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					sizeof(Pitaya::Core::CameraSnapshot), static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::CameraSnapshot));
+				PostProcessUBO = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					Pitaya::Render::PostProcessStep::UniformBufferBytes, static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
 				
 				// 初始分配1024个位置
-				TransformSSBOCapacity = 1024 * sizeof(glm::mat4); 
-				InstanceModelTransformSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), TransformSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform));
-
+				TransformSSBOCapacity = 1024 * sizeof(glm::mat4);	
+				InstanceModelTransformSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					TransformSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform));
+				
 				// 初始分配一段骨骼容量
-				BoneSSBOCapacity = 4096 * sizeof(glm::mat4); 
-				BoneInverseMatriceSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), BoneSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::BoneInverseMatrice));
-				return true;
-			}
-		};
-		struct FallbackRHI
-		{
-			Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> VAO;
-			Pitaya::GPU::Identifier<Pitaya::GPU::Shader> Shader;
-			Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> Texture;
+				BoneSSBOCapacity = 4096 * sizeof(glm::mat4);	
+				BoneInverseMatriceSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					BoneSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::BoneInverseMatrice));
+				
+				BlitShader = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					Pitaya::Core::LoadBuildInRC(IDR_BLIT_VERTEX_SHADER).c_str(),
+					Pitaya::Core::LoadBuildInRC(IDR_BLIT_FRAGMENT_SHADER).c_str());
+				GammaCorrectionShader = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					Pitaya::Core::LoadBuildInRC(IDR_GAMMA_CORRECTION_VERTEX_SHADER).c_str(),
+					Pitaya::Core::LoadBuildInRC(IDR_GAMMA_CORRECTION_FRAGMENT_SHADER).c_str());
 
-			// Fallback立方体渲染数据
-			inline static constexpr const uint32_t IndexCount = 36;
-			inline static constexpr const uint32_t BaseIndex = 0;
-			inline static constexpr const uint32_t BaseVertex = 0;
-
-			inline bool CreateFallbackRHI()
-			{
-				float ERROR_VERTICES[] = {
-					-0.5f, -0.5f, -0.5f,	 //左下后
-					 0.5f, -0.5f, -0.5f,	 //右下后
-					 0.5f,  0.5f, -0.5f,	 //右上后
-					-0.5f,  0.5f, -0.5f,	 //左上后
-					-0.5f, -0.5f,  0.5f,	 //左下前
-					 0.5f, -0.5f,  0.5f,	 //右下前
-					 0.5f,  0.5f,  0.5f,	 //右上前
-					-0.5f,  0.5f,  0.5f };   //左上前
-				uint32_t ERROR_INDICES[] = {
-					0, 1, 2,  2, 3, 0,		//后面
-					1, 5, 6,  6, 2, 1,		//右面
-					5, 4, 7,  7, 6, 5,		//前面
-					4, 0, 3,  3, 7, 4,		//左面
-					4, 5, 1,  1, 0, 4,		//底面
-					3, 2, 6,  6, 7, 3 };	//顶面
-				VAO = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
-				Pitaya::GPU::Identifier VBO = Pitaya::GPU::CreateVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), ERROR_VERTICES, sizeof(ERROR_VERTICES));
-				Pitaya::GPU::Identifier IBO = Pitaya::GPU::CreateIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), ERROR_INDICES, IndexCount);
-				Pitaya::GPU::VertexArray* vao = Pitaya::GPU::GetVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), VAO);
-				Pitaya::GPU::VertexBuffer* vbo = Pitaya::GPU::GetVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), VBO);
-				Pitaya::GPU::IndexBuffer* ibo = Pitaya::GPU::GetIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), IBO);
-				if (!vao || !vbo || !ibo)
+				FallbackVAO = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+				std::string fallbackVboData = Pitaya::Core::LoadBuildInRC(IDR_ERROR_VERTICES);
+				Pitaya::GPU::Identifier fallbackVBO = Pitaya::GPU::CreateVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					reinterpret_cast<float*>(fallbackVboData.data()), fallbackVboData.size());
+				std::string fallbackIboData = Pitaya::Core::LoadBuildInRC(IDR_ERROR_INDICES);
+				Pitaya::GPU::Identifier fallbackIBO = Pitaya::GPU::CreateIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					reinterpret_cast<uint32_t*>(fallbackIboData.data()), 36);
+				Pitaya::GPU::VertexArray* fallbackVaoPtr = Pitaya::GPU::GetVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), FallbackVAO);
+				Pitaya::GPU::VertexBuffer* fallbackVboPtr = Pitaya::GPU::GetVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), fallbackVBO);
+				Pitaya::GPU::IndexBuffer* fallbackIboPtr = Pitaya::GPU::GetIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), fallbackIBO);
+				if (!fallbackVaoPtr || !fallbackVboPtr || !fallbackIboPtr)
 				{
-					Pitaya::Log::Error("create global RHI error, from error vao or vbo or ibo is empty!");
-					if (!Pitaya::GPU::DestroyVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), VAO)) { Pitaya::Log::Error("destroy error VAO fail!"); }
-					if (!Pitaya::GPU::DestroyVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), VBO)) { Pitaya::Log::Error("destroy error VBO fail!"); }
-					if (!Pitaya::GPU::DestroyIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), IBO)) { Pitaya::Log::Error("destroy error IBO fail!"); }
-					return false;
+					// TODO 考虑一下渲染线程如何通知主线程失败
+					MessageBoxA(NULL, "Create Global RHI Failed! Check Log for Details.", "Error", MB_OK);
+					exit(-1);
 				}
-				vbo->SetLayout({ { Pitaya::GPU::ShaderVariableType::Float3, 0 } });
-				vao->AddVertexBuffer(vbo);
-				vao->SetIndexBuffer(ibo);
+				fallbackVboPtr->SetLayout({ { Pitaya::GPU::ShaderVariableType::Float3, 0 } });
+				fallbackVaoPtr->AddVertexBuffer(fallbackVboPtr);
+				fallbackVaoPtr->SetIndexBuffer(fallbackIboPtr);
 
-				constexpr int SIZE = 32;
-				unsigned char ERROR_TEXTURE_DATA[SIZE * SIZE * 4] = {};
-				for (int y = 0; y < SIZE; y++)
-				{
-					for (int x = 0; x < SIZE; x++)
-					{
-						int i = (y * SIZE + x) * 4;
-						bool checker = ((x + y) & 1) == 0;
-						ERROR_TEXTURE_DATA[i + 0] = checker ? 255 : 0;	//R
-						ERROR_TEXTURE_DATA[i + 1] = checker ? 255 : 0;	//G
-						ERROR_TEXTURE_DATA[i + 2] = checker ? 255 : 0;	//B
-						ERROR_TEXTURE_DATA[i + 3] = 255;				//A
-					}
-				}
-				Texture = Pitaya::GPU::CreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), ERROR_TEXTURE_DATA, SIZE, SIZE, 4, false, false, true);
-
-				const char* ERROR_VERTEX_SHADER =
-					"#version 460 core\n"
-					R"(
-						layout (location = 0) in vec3 aPos;
-						
-						layout(std140, binding = 0) uniform CameraSnapshot
-						{
-						    mat4 View;
-						    mat4 Projection;
-						    mat4 ViewProjection;
-						    vec4 Position;
-						};
-						
-						layout(std430, binding = 0) readonly buffer InstanceModelTransform
-						{
-						    mat4 Models[];
-						};
-						
-						void main()
-						{
-						    uint index = gl_BaseInstance + gl_InstanceID;
-						    gl_Position = ViewProjection * Models[index] * vec4(aPos,1.0f);
-						}
-					)";
-				const char* ERROR_FRAGMENT_SHADER =
-					"#version 460 core\n"
-					R"(
-						out vec4 FragColor;
-
-						void main()
-						{
-							FragColor = vec4(1.0f, 0.0f, 1.0f, 1.0f);
-						}
-					)";
-				Shader = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), ERROR_VERTEX_SHADER, ERROR_FRAGMENT_SHADER);
-				return true;
+				FallbackTexture = Pitaya::GPU::CreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					reinterpret_cast<unsigned char*>(Pitaya::Core::LoadBuildInRC(IDR_ERROR_TEXTURE).data()),
+					32, 32, 4, false, false, true);
+				FallbackShader = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					Pitaya::Core::LoadBuildInRC(IDR_ERROR_VERTEX_SHADER).c_str(),
+					Pitaya::Core::LoadBuildInRC(IDR_ERROR_FRAGMENT_SHADER).c_str());
 			}
 		};
 
@@ -476,7 +420,7 @@ namespace Pitaya::Render
 		Renderer(Renderer&&) = delete;
 		Renderer& operator=(Renderer&&) = delete;
 
-	protected:
+	private:
 		inline bool Initialize(void* nativeWindow)
 		{
 			isRunning.store(true, std::memory_order_release);
@@ -494,11 +438,14 @@ namespace Pitaya::Render
 		}
 
 	protected:
+		virtual bool InitializeRenderContext(void* nativeWindow) = 0;
+		virtual void ReleaseRenderContext() = 0;
+
+	private:
 		inline void RenderThread(void* nativeWindow)
 		{
 			InitializeRenderContext(nativeWindow);
-			globalRHI.CreateGlobalRHI();
-			fallbackRHI.CreateFallbackRHI();
+			globalRHI.Create(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
 			INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK
 
 			while (true)
@@ -521,14 +468,12 @@ namespace Pitaya::Render
 			Pitaya::GPU::DestroyAllGPUResource(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
 			ReleaseRenderContext();
 		}
-		virtual bool InitializeRenderContext(void* nativeWindow) = 0;
-		virtual void ReleaseRenderContext() = 0;
-
-	protected:
 		inline void ParseCommand()
 		{
 			renderPacket.ParseCommand(this);
 		}
+
+	protected:
 		virtual void NewRenderFrame() = 0;
 		virtual void SwapBuffer() const = 0;
 
@@ -568,10 +513,10 @@ namespace Pitaya::Render
 			else
 			{
 				//Mesh 异常 → fallback 立方体
-				cmd.VertexArray = fallbackRHI.VAO;
-				cmd.IndexCount = fallbackRHI.IndexCount;
-				cmd.BaseIndex = fallbackRHI.BaseIndex;
-				cmd.BaseVertex = fallbackRHI.BaseVertex;
+				cmd.VertexArray = globalRHI.FallbackVAO;
+				cmd.IndexCount = 36;
+				cmd.BaseIndex = 0;
+				cmd.BaseVertex = 0;
 				//异常情况无需骨骼数据
 			}
 
@@ -604,14 +549,14 @@ namespace Pitaya::Render
 					else
 					{
 						//纹理未就绪
-						cmd.Textures[j] = fallbackRHI.Texture;
+						cmd.Textures[j] = globalRHI.FallbackTexture;
 					}
 				}
 			}
 			else
 			{
 				//Material/Shader 异常 → fallback shader + texture
-				cmd.Shader = fallbackRHI.Shader;
+				cmd.Shader = globalRHI.FallbackShader;
 				cmd.MaterialId = 0;
 				cmd.SortKey = Pitaya::Render::GenerateSortKey(
 					Pitaya::Render::RenderQueue::Geometry,
@@ -622,7 +567,7 @@ namespace Pitaya::Render
 					0);
 
 				//异常Shader只会使用这一个纹理
-				cmd.Textures[static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Albedo)] = fallbackRHI.Texture;
+				cmd.Textures[static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Albedo)] = globalRHI.FallbackTexture;
 			}
 
 			renderPacket.PushDrawCommandToPass(cmd);
@@ -649,20 +594,21 @@ namespace Pitaya::Render
 			cond.notify_one();
 		}
 
-	protected:
+	private:
 		inline static void BootstrapRenderThread(void* renderer, void* nativeWindow)
 		{
 			static_cast<Pitaya::Render::Renderer*>(renderer)->RenderThread(nativeWindow);
 		}
-
+	
 	protected:
+		GlobalRHI globalRHI;
+		RenderPacket renderPacket;
+
+	private:
 		std::mutex mutex;
 		std::condition_variable cond;
 		std::atomic<bool> isRunning = false;
 		Pitaya::Core::Thread::Identifier renderThread;
-		Pitaya::Render::Renderer::RenderPacket renderPacket;
-		Pitaya::Render::Renderer::GlobalRHI globalRHI;
-		Pitaya::Render::Renderer::FallbackRHI fallbackRHI;
 	};
 }
 

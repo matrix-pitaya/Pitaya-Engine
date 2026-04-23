@@ -7,23 +7,14 @@
 
 bool Pitaya::Render::RenderPipeline::Initialize()
 {
-	graph.Passes.reserve(2);
-	graph.Items.reserve(100);
-
-	chain.Shaders[static_cast<uint8_t>(Pitaya::Render::PostProcessType::Bilt)] = Pitaya::Asset::LoadAsset<Pitaya::Asset::Shader>(Pitaya::Asset::Shader::Blit);
-	chain.Shaders[static_cast<uint8_t>(Pitaya::Render::PostProcessType::GammaCorrection)] = Pitaya::Asset::LoadAsset<Pitaya::Asset::Shader>(Pitaya::Asset::Shader::GammaCorrection);
+	graph.Passes.reserve(10);
+	graph.Items.reserve(5000);
 	return true;
 }
 void Pitaya::Render::RenderPipeline::Release()
 {
 	graph.Passes.clear();
 	graph.Items.clear();
-	
-	//chain.BiltShader = nullptr;
-	for (auto& shader : chain.Shaders)
-	{
-		shader = nullptr;
-	}
 }
 void Pitaya::Render::RenderPipeline::Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine> passkey, Pitaya::Render::Renderer* renderer)
 {
@@ -65,26 +56,13 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 		uint32_t pingpongIndex = 0;
 		uint32_t currentReadTexture = pass.RenderTargetSnapshot.SceneColorAttachment; //如果是多采样 这里得到的实际是内部的颜色纹理
 
-		//找出实际执行的后处理步骤
-		uint32_t validStepCount = 0;
-		uint8_t validSteps[Pitaya::Render::PostProcessSetting::MAX_STEPS] = {};
-		for (uint32_t i = 0; i < pass.PostProcessSetting.StepCount; i++) 
-		{
-			uint8_t typeIndex = static_cast<uint8_t>(pass.PostProcessSetting.Steps[i].Type);
-			if (chain.Shaders[typeIndex].IsReady()) { validSteps[validStepCount++] = i; }
-		}
-
 		//提交后处理
-		for (uint32_t v = 0; v < validStepCount; v++)
+		for (uint32_t i = 0; i < pass.PostProcessSetting.StepCount; i++)
 		{
-			uint8_t originalIndex = validSteps[v]; //映射回原本的下标
-			auto& currentStep = pass.PostProcessSetting.Steps[originalIndex];
-			uint8_t typeIndex = static_cast<uint8_t>(currentStep.Type);
+			auto& currentStep = pass.PostProcessSetting.Steps[i];
 
 			PostProcessCommand cmd;
 			cmd.PostProcessStep = currentStep;
-			cmd.PostProcessShader = chain.Shaders[typeIndex]->ID;
-
 			if (firstPass && pass.RenderTargetSnapshot.Multisample)
 			{
 				cmd.ResolveMSAA = true;
@@ -94,7 +72,7 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 			}
 
 			cmd.ReadTexture = currentReadTexture;
-			cmd.WriteFrameBuffer = (v == validStepCount - 1) ? pass.RenderTargetSnapshot.FinalFrameBuffer : pass.RenderTargetSnapshot.PingPongFrameBuffers[pingpongIndex];
+			cmd.WriteFrameBuffer = (i == pass.PostProcessSetting.StepCount - 1) ? pass.RenderTargetSnapshot.FinalFrameBuffer : pass.RenderTargetSnapshot.PingPongFrameBuffers[pingpongIndex];
 
 			currentReadTexture = pass.RenderTargetSnapshot.PingPongColorAttachments[pingpongIndex];
 			pingpongIndex = 1 - pingpongIndex;
@@ -105,10 +83,10 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 		}
 
 		//没有后处理则直接Scene帧缓冲区 Blit到 Final帧缓冲区
-		if (firstPass && chain.Shaders[static_cast<uint8_t>(Pitaya::Render::PostProcessType::Bilt)].IsReady())
+		if (firstPass)
 		{
 			PostProcessCommand cmd;
-			cmd.PostProcessShader = chain.Shaders[static_cast<uint8_t>(Pitaya::Render::PostProcessType::Bilt)]->ID;
+			cmd.PostProcessStep.Type = Pitaya::Render::PostProcessType::Bilt;
 			cmd.ReadTexture = pass.RenderTargetSnapshot.SceneColorAttachment;
 			cmd.WriteFrameBuffer = pass.RenderTargetSnapshot.FinalFrameBuffer; 
 			if (pass.RenderTargetSnapshot.Multisample)

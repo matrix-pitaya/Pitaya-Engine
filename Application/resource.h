@@ -2,7 +2,22 @@
 // Microsoft Visual C++ 生成的包含文件。
 // 供 Application.rc 使用
 //
-#define IDI_ICON1                       101
+
+// Icon
+#define IDI_ICON1								101
+
+// Error Fallback
+#define IDR_ERROR_TEXTURE						102
+#define IDR_ERROR_VERTICES 						103
+#define IDR_ERROR_INDICES						104
+#define IDR_ERROR_VERTEX_SHADER					105
+#define IDR_ERROR_FRAGMENT_SHADER				106
+
+// PostProcess Shader
+#define IDR_BLIT_VERTEX_SHADER					107
+#define IDR_BLIT_FRAGMENT_SHADER				108
+#define IDR_GAMMA_CORRECTION_VERTEX_SHADER		109
+#define IDR_GAMMA_CORRECTION_FRAGMENT_SHADER	110
 
 // Next default values for new objects
 // 

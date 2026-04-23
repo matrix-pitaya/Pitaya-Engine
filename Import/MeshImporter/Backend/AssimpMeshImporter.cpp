@@ -606,39 +606,30 @@ bool Pitaya::Import::AssimpMeshImporter::ParseMaterial(const aiMaterial* aimater
         if (!prop) { continue; }
 
         std::string propKey = prop->mKey.C_Str();
-
-        auto ParseMaterialProperty_FLOAT = [&prop, &propKey, &material]()
-            {
-                int numFloats = prop->mDataLength / sizeof(float);
-                const float* dataPtr = reinterpret_cast<const float*>(prop->mData);
-                if (numFloats == 1) { material.Property.Variables[propKey] = dataPtr[0]; }
-                else if (numFloats == 2) { material.Property.Variables[propKey] = glm::vec2(dataPtr[0], dataPtr[1]); }
-                else if (numFloats == 3) { material.Property.Variables[propKey] = glm::vec3(dataPtr[0], dataPtr[1], dataPtr[2]); }
-                else if (numFloats == 4) { material.Property.Variables[propKey] = glm::vec4(dataPtr[0], dataPtr[1], dataPtr[2], dataPtr[3]); }
-            };
-        auto ParseMaterialProperty_DOUBLE = [&prop, &propKey, &material]()
-            {
-                if (prop->mDataLength >= sizeof(double))
-                {
-                    double val = *reinterpret_cast<const double*>(prop->mData);
-                    material.Property.Variables[propKey] = static_cast<float>(val);
-                }
-            };
-        auto ParseMaterialProperty_INTERGER = [&prop, &propKey, &material]()
-            {
-                if (prop->mDataLength >= sizeof(int))
-                {
-                    int val = *reinterpret_cast<const int*>(prop->mData);
-                    material.Property.Variables[propKey] = val;
-                }
-            };
-
-        switch (prop->mType)
+        if (prop->mType == aiPTI_Float)
         {
-            case aiPTI_Float:   ParseMaterialProperty_FLOAT();      break;
-            case aiPTI_Double:  ParseMaterialProperty_DOUBLE();     break;
-            case aiPTI_Integer: ParseMaterialProperty_INTERGER();   break;
-            default: break;
+            int numFloats = prop->mDataLength / sizeof(float);
+            const float* dataPtr = reinterpret_cast<const float*>(prop->mData);
+            if (numFloats == 1) { material.Property.Variables[propKey] = dataPtr[0]; }
+            else if (numFloats == 2) { material.Property.Variables[propKey] = glm::vec2(dataPtr[0], dataPtr[1]); }
+            else if (numFloats == 3) { material.Property.Variables[propKey] = glm::vec3(dataPtr[0], dataPtr[1], dataPtr[2]); }
+            else if (numFloats == 4) { material.Property.Variables[propKey] = glm::vec4(dataPtr[0], dataPtr[1], dataPtr[2], dataPtr[3]); }
+        }
+        else if (prop->mType == aiPTI_Double)
+        {
+            if (prop->mDataLength >= sizeof(double))
+            {
+                double val = *reinterpret_cast<const double*>(prop->mData);
+                material.Property.Variables[propKey] = static_cast<float>(val);
+            }
+        }
+        else if (prop->mType == aiPTI_Integer)
+        {
+            if (prop->mDataLength >= sizeof(int))
+            {
+                int val = *reinterpret_cast<const int*>(prop->mData);
+                material.Property.Variables[propKey] = val;
+            }
         }
     }
 
@@ -648,13 +639,12 @@ bool Pitaya::Import::AssimpMeshImporter::ParseMaterial(const aiMaterial* aimater
         aiTextureType_HEIGHT, aiTextureType_NORMALS, aiTextureType_SHININESS, aiTextureType_OPACITY,
         aiTextureType_DISPLACEMENT, aiTextureType_LIGHTMAP, aiTextureType_REFLECTION,
         aiTextureType_BASE_COLOR, aiTextureType_METALNESS, aiTextureType_DIFFUSE_ROUGHNESS,
-        aiTextureType_AMBIENT_OCCLUSION, aiTextureType_UNKNOWN };
+        aiTextureType_AMBIENT_OCCLUSION };
 
     //dunmmyentry 用于material临时序列化
     Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry dummyAssetEntry_TEXTURES[static_cast<uint8_t>(Pitaya::GPU::TextureUsage::Unknown)] = {};
-    for (uint32_t t = 0; texTypes[t] != aiTextureType_UNKNOWN; ++t)
+    for (auto aiType : texTypes)
     {
-        aiTextureType aiType = texTypes[t];
         aiString path;
         if (aimaterial->GetTexture(aiType, 0, &path) == AI_SUCCESS)
         {

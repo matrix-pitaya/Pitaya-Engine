@@ -123,7 +123,7 @@ bool Pitaya::Asset::AssetHub::RegisterExternalFile(const std::filesystem::path& 
 	}
 
 	//如果是引擎内置资源
-	if (IsBuildInAsset(out_virtualpath.string()))
+	if (IsBuildInAsset(out_virtualpath))
 	{
 		Pitaya::Log::Error("register external file fail, cant registe engine buildin asset, path:" + inputPath.string());
 		return false;

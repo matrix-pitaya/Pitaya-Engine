@@ -35,9 +35,10 @@ namespace Pitaya::Asset
 
 		//Mesh 25-32
 		inline static constexpr const Pitaya::Core::GUID Cube = Pitaya::Core::GUID("00000001-0000-0000-0000-000000000000");
-		inline static constexpr const Pitaya::Core::GUID Panel = Pitaya::Core::GUID("00000002-0000-0000-0000-000000000000");
-		inline static constexpr const Pitaya::Core::GUID Backpack = Pitaya::Core::GUID("00000003-0000-0000-0000-000000000000");
-		inline static constexpr const Pitaya::Core::GUID Planet = Pitaya::Core::GUID("00000004-0000-0000-0000-000000000000");
-		inline static constexpr const Pitaya::Core::GUID Rock = Pitaya::Core::GUID("00000005-0000-0000-0000-000000000000");
+		inline static constexpr const Pitaya::Core::GUID Sphere = Pitaya::Core::GUID("00000002-0000-0000-0000-000000000000");
+		inline static constexpr const Pitaya::Core::GUID Panel = Pitaya::Core::GUID("00000003-0000-0000-0000-000000000000");
+		inline static constexpr const Pitaya::Core::GUID Backpack = Pitaya::Core::GUID("00000004-0000-0000-0000-000000000000");
+		inline static constexpr const Pitaya::Core::GUID Planet = Pitaya::Core::GUID("00000005-0000-0000-0000-000000000000");
+		inline static constexpr const Pitaya::Core::GUID Rock = Pitaya::Core::GUID("00000006-0000-0000-0000-000000000000");
 	};
 }

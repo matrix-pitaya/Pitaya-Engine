@@ -64,15 +64,15 @@ namespace Pitaya::Asset
 
 			Pitaya::Core::ThreadSafeBidirectionalMap<Core::GUID, std::filesystem::path> Map =
 			{
-#pragma region Shader
-				{Pitaya::Asset::Shader::Blit,std::filesystem::path("engine:/shader/blit/blit.shader")},
-				{Pitaya::Asset::Shader::GammaCorrection,std::filesystem::path("engine:/shader/GammaCorrection/GammaCorrection.shader")},
-				{Pitaya::Asset::Shader::Default,std::filesystem::path("engine:/shader/default/default.shader")},
-#pragma endregion
+				{ Pitaya::Asset::Shader::Default, std::filesystem::path("engine:/shader/default/default.shader")},
+				{ Pitaya::Asset::Texture::White, std::filesystem::path("engine:/texture/2D/white.png") },
+				{ Pitaya::Asset::Material::Default, std::filesystem::path("engine:/material/default.mat") },
+				{ Pitaya::Asset::Mesh::Cube, std::filesystem::path("engine:/mesh/cube/cube.obj") },
+				{ Pitaya::Asset::Mesh::Panel, std::filesystem::path("engine:/mesh/panel/panel.obj") },
+				{ Pitaya::Asset::Mesh::Sphere, std::filesystem::path("engine:/mesh/Sphere.obj") },
+				{ Pitaya::Asset::RenderTarget::Game,std::filesystem::path("engine:/rendertarget/game.rt") },
 
-
-#pragma region Tetxrue
-				{ Pitaya::Asset::Texture::White,std::filesystem::path("engine:/texture/2D/white.png") },
+#pragma region TOREMOVE
 				{ Pitaya::Asset::Texture::Box,std::filesystem::path("engine:/texture/2D/box.jpg") },
 				{ Pitaya::Asset::Texture::Face,std::filesystem::path("engine:/texture/2D/face.png") },
 				{ Pitaya::Asset::Texture::Gress,std::filesystem::path("engine:/texture/2D/gress.png") },
@@ -90,27 +90,11 @@ namespace Pitaya::Asset
 				{ Pitaya::Asset::Texture::Backpack_Specular,std::filesystem::path("engine:/mesh/backpack/specular.jpg") },
 				{ Pitaya::Asset::Texture::Planet_Quom,std::filesystem::path("engine:/mesh/planet/planet_Quom1200.png") },
 				{ Pitaya::Asset::Texture::Rock_Surface,std::filesystem::path("engine:/mesh/rock/Rock-Texture-Surface.jpg") },
-#pragma endregion
-
-
-#pragma region Material
-				{Pitaya::Asset::Material::Default,std::filesystem::path("engine:/material/default.mat") },
-				{Pitaya::Asset::Material::Backpack,std::filesystem::path("engine:/mesh/backpack/Scene_-_Root.mat") },
-				{Pitaya::Asset::Material::Planet,std::filesystem::path("engine:/mesh/planet/Material.001.mat") },
-				{Pitaya::Asset::Material::Rock,std::filesystem::path("engine:/mesh/rock/Material.mat") },
-#pragma endregion
-
-
-#pragma region RenderTarget
-				{Pitaya::Asset::RenderTarget::Editor,std::filesystem::path("engine:/rendertarget/editor.rt") },
-				{Pitaya::Asset::RenderTarget::Game,std::filesystem::path("engine:/rendertarget/game.rt") },
-#pragma endregion
-
-
-#pragma region Mesh
-				{Pitaya::Asset::Mesh::Cube,std::filesystem::path("engine:/mesh/cube/cube.obj") },
+				{ Pitaya::Asset::Material::Backpack,std::filesystem::path("engine:/mesh/backpack/Scene_-_Root.mat") },
+				{ Pitaya::Asset::Material::Planet,std::filesystem::path("engine:/mesh/planet/Material.001.mat") },
+				{ Pitaya::Asset::Material::Rock,std::filesystem::path("engine:/mesh/rock/Material.mat") },
+				{ Pitaya::Asset::RenderTarget::Editor,std::filesystem::path("engine:/rendertarget/editor.rt") },
 				{Pitaya::Asset::Mesh::Backpack,std::filesystem::path("engine:/mesh/backpack/backpack.obj") },
-				{Pitaya::Asset::Mesh::Panel,std::filesystem::path("engine:/mesh/panel/panel.obj") },
 				{Pitaya::Asset::Mesh::Planet,std::filesystem::path("engine:/mesh/planet/planet.obj")},
 				{Pitaya::Asset::Mesh::Rock,std::filesystem::path("engine:/mesh/rock/rock.obj") }
 #pragma endregion
@@ -380,9 +364,9 @@ namespace Pitaya::Asset
 		}
 
 	private:
-		inline bool IsBuildInAsset(const std::string& virtualPath)
+		inline bool IsBuildInAsset(const std::filesystem::path& virtualPath)
 		{
-			return virtualPath.starts_with("engine:/");
+			return virtualPath.string().starts_with("engine:/");
 		}
 
 	private:

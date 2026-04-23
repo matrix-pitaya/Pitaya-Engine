@@ -175,6 +175,7 @@
     <ClInclude Include="Container\SlotMap.h" />
     <ClInclude Include="Identifier\GUID.h" />
     <ClInclude Include="Identifier\UID.h" />
+    <ClInclude Include="Utils\BuildInRC.h" />
     <ClInclude Include="Utils\Console.h" />
     <ClInclude Include="Container\ObjectPool.h" />
     <ClInclude Include="Math\AABB.h" />

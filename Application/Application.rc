@@ -51,7 +51,20 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON                    "..\\Pitaya.ico"
+IDI_ICON1                       ICON                    "../resource/Pitaya.ico"
+
+// Error Vertices Resources
+IDR_ERROR_TEXTURE               RCDATA                  "../resource/Fallback/Texture.raw"
+IDR_ERROR_INDICES               RCDATA                  "../resource/Fallback/Indices.raw"
+IDR_ERROR_VERTICES              RCDATA                  "../resource/Fallback/Vertices.raw"
+IDR_ERROR_VERTEX_SHADER         RCDATA                  "../resource/Fallback/Shader.vert"
+IDR_ERROR_FRAGMENT_SHADER       RCDATA                  "../resource/Fallback/Shader.frag"
+
+// PostProcess Shader Resources
+IDR_BLIT_VERTEX_SHADER                  RCDATA          "../resource/PostProcess/blit/Shader.vert"
+IDR_BLIT_FRAGMENT_SHADER                RCDATA          "../resource/PostProcess/blit/Shader.frag"
+IDR_GAMMA_CORRECTION_VERTEX_SHADER      RCDATA          "../resource/PostProcess/GammaCorrection/Shader.vert"
+IDR_GAMMA_CORRECTION_FRAGMENT_SHADER    RCDATA          "../resource/PostProcess/GammaCorrection/Shader.frag"
 
 #endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////
