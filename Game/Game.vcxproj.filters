@@ -63,6 +63,15 @@
     <ClInclude Include="Component\Disabled.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Component\Animation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Animator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Sprite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameWorld.cpp">

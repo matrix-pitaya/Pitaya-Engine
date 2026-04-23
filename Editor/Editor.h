@@ -94,7 +94,7 @@ namespace Pitaya::Editor
 		}
 
 	public:
-		static void MountEngineHook();
+		static void AttachRuntimeEnv();
 
 	private:
 		Pitaya::Editor::GUI gui;

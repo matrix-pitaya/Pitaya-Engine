@@ -166,7 +166,7 @@ void Pitaya::Editor::Editor::OnMouseCurrsorMove(const Pitaya::Event::Event& even
 	if (gui.panels.sceneViewportPanel.GetIsFocused()) { camera.OnMouseCurrsorMove(args); }
 }
 
-void Pitaya::Editor::Editor::MountEngineHook()
+void Pitaya::Editor::Editor::AttachRuntimeEnv()
 {
 	MOUNT_PREBEGINFRAME_HOOK(Pitaya::Editor::Editor::HookFunc::PreBeginFrame, "Editor::BeginFrame")
 	MOUNT_PREFIXEDUPDATE_HOOK(Pitaya::Editor::Editor::HookFunc::PreFixedUpdate, "Editor::FixUpdate")

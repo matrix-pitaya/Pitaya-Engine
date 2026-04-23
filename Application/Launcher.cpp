@@ -25,7 +25,7 @@ namespace
 		Editordll = LoadLibraryA(dllPath.string().c_str());
 		if (Editordll)
 		{
-			auto func = reinterpret_cast<void(EDITOR_CALL*)()>(GetProcAddress(Editordll, "MountEngineHook"));
+			auto func = reinterpret_cast<void(EDITOR_CALL*)()>(GetProcAddress(Editordll, "AttachRuntimeEnv"));
 			if (func) { func(); }
 		}
 	}

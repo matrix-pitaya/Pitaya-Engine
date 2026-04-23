@@ -22,8 +22,19 @@ namespace Pitaya::Window
 		GLFWWindow& operator=(GLFWWindow&&) = delete;
 
 	private:
-		bool Initialize(int width,int height, const char* title) override;
+		bool Initialize(int width, int height, const char* title) override;
 		void Release() override;
+
+	private:
+		void SetWindowStyle();
+
+	public:
+		void PollEvents(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) const override;
+		void CloseWindow(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) const override;
+
+	public:
+		bool IsClose() const override;
+		void* GetNativeWindow() const override;
 
 	private:
 		inline void RegisterKeyMap() noexcept
@@ -124,20 +135,12 @@ namespace Pitaya::Window
 			map[GLFW_KEY_F12] = Pitaya::Input::KeyCode::F12;
 		}
 
-	private:
-		void SetTitleStyle();
-		void LoadWindowIcon();
-
 	public:
-		void PollEvents(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) const override;
-		void CloseWindow(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) const override;
-
-	public:
-		bool IsClose() const override;
-		void* GetNativeWindow() const override;
-
-	public:
-		void ResetSize(int width, int height);
+		inline void ResetSize(int width, int height) noexcept
+		{
+			this->width = width;
+			this->height = height;
+		}
 
 	private:
 		static void FramebufferResetSizeCallback(GLFWwindow* window, int width, int height);

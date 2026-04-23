@@ -1,9 +1,8 @@
 #include<Window/Backend/GLFW/GLFWWindow.h>
 #include<Task/Common/FuncTable.h>
 #include<Event/Common/FuncTable.h>
-#include<Import/Import.h>
-#include<Asset/Common/Texture.h>
 #include<Core/Utils/File.h>
+#include<Application/resource.h>	//获取exe图标Id宏
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include<GLFW/glfw3native.h>  
@@ -45,8 +44,7 @@ bool Pitaya::Window::GLFWWindow::Initialize(int width, int height, const char* t
 	glfwSetWindowCloseCallback(window, WindowCloseCallback);
 	glfwSetDropCallback(window, DropFileCallback);
 
-	SetTitleStyle();
-	LoadWindowIcon();
+	SetWindowStyle();
 	glfwShowWindow(window);
 	
 	RegisterKeyMap();
@@ -77,13 +75,9 @@ void* Pitaya::Window::GLFWWindow::GetNativeWindow() const
 {
 	return window;
 }
-void Pitaya::Window::GLFWWindow::ResetSize(int width, int height)
+void Pitaya::Window::GLFWWindow::SetWindowStyle()
 {
-	this->width = width;
-	this->height = height;
-}
-void Pitaya::Window::GLFWWindow::SetTitleStyle()
-{
+	// Title
 	HWND hwnd = glfwGetWin32Window(window);
 	BOOL darkTheme = TRUE;
 	DwmSetWindowAttribute(hwnd, 20, &darkTheme, sizeof(darkTheme));
@@ -93,16 +87,25 @@ void Pitaya::Window::GLFWWindow::SetTitleStyle()
 	DwmSetWindowAttribute(hwnd, 36, &textColor, sizeof(textColor));
 	DWORD backdropType = 1;
 	DwmSetWindowAttribute(hwnd, 38, &backdropType, sizeof(backdropType));
-}
-void Pitaya::Window::GLFWWindow::LoadWindowIcon()
-{
-	Pitaya::Import::Texture2DImportResult result;
-	Pitaya::Import::Import(Pitaya::Asset::Texture::Icon, Pitaya::Core::GetExecutableDirectory() / "resource/icon/default.png", false, true, result);
-	GLFWimage icon;
-	icon.width = result.Width;
-	icon.height = result.Height;
-	icon.pixels = result.Data.data();
-	glfwSetWindowIcon(window, 1, &icon);
+
+	// Icon
+	HINSTANCE hInst = GetModuleHandle(NULL);
+	HICON hIconBig = (HICON)LoadImage(	// ICON_BIG 对应任务栏图标
+		hInst,
+		MAKEINTRESOURCE(IDI_ICON1),
+		IMAGE_ICON,
+		GetSystemMetrics(SM_CXICON),
+		GetSystemMetrics(SM_CYICON),
+		LR_DEFAULTCOLOR);
+	HICON hIconSmall = (HICON)LoadImage(	// ICON_SMALL 对应标题栏图标
+		hInst,
+		MAKEINTRESOURCE(IDI_ICON1),
+		IMAGE_ICON,
+		GetSystemMetrics(SM_CXSMICON),
+		GetSystemMetrics(SM_CYSMICON),
+		LR_DEFAULTCOLOR);
+	if (hIconBig) { SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIconBig); }
+	if (hIconSmall) { SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIconSmall); }
 }
 void Pitaya::Window::GLFWWindow::FramebufferResetSizeCallback(GLFWwindow* glfwWindow, int width, int height)
 {

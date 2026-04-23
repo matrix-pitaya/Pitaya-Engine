@@ -803,7 +803,7 @@ bool Pitaya::Asset::AssetHub::CheckIsValidTexture2DFile(const std::filesystem::p
 	Pitaya::Core::ToLower(ext);
 	if (TextureExtensions.find(ext) == TextureExtensions.end())
 	{
-		Pitaya::Log::Warning("debug texture2D extension" + ext + ", path:" + file.string());
+		Pitaya::Log::Info("texture2D extension" + ext + ", path:" + file.string());
 		return false;
 	}
 	return true;
@@ -828,7 +828,7 @@ bool Pitaya::Asset::AssetHub::CheckIsValidTextureCubeMapFolder(const std::filesy
 			if (ext == ".cubemap") { continue; }
 			if (TextureExtensions.find(ext) == TextureExtensions.end())
 			{
-				Pitaya::Log::Warning("texturecubemap extension" + ext + ", path:" + path.string());
+				Pitaya::Log::Info("texturecubemap extension" + ext + ", path:" + path.string());
 				continue;
 			}
 
@@ -869,7 +869,7 @@ bool Pitaya::Asset::AssetHub::CheckIsValidShaderFloder(const std::filesystem::pa
 			auto extIt = ShaderExtensions.find(ext);
 			if (extIt == ShaderExtensions.end())
 			{
-				Pitaya::Log::Warning("unsupported shader file extension: " + ext + " in folder: " + folder.string());
+				Pitaya::Log::Info("unsupported shader file extension: " + ext + " in folder: " + folder.string());
 				continue;
 			}
 
@@ -924,7 +924,7 @@ bool Pitaya::Asset::AssetHub::CheckIsValidMeshFile(const std::filesystem::path& 
 	Pitaya::Core::ToLower(ext);
 	if (MeshExtensions.find(ext) == MeshExtensions.end())
 	{
-		Pitaya::Log::Warning("error mesh file extension" + ext);
+		Pitaya::Log::Info("error mesh file extension" + ext);
 		return false;
 	}
 	return true;
