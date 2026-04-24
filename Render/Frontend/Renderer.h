@@ -554,6 +554,7 @@ namespace Pitaya::Render
 			else
 			{
 				Pitaya::GPU::FrameBufferSpecification mainSceneSpec = Pitaya::Config::GetMainSceneSpec();
+				beginPassCommand.SceneFrameBuffer = globalRHI.MainSceneFrameBuffer;
 				beginPassCommand.ClearColor = Pitaya::Core::Color::SkyBlue;
 				beginPassCommand.Rect = { {0.0f, 0.0f}, { mainSceneSpec.Width, mainSceneSpec.Height } };
 				beginPassCommand.ClearDepth = true;

@@ -168,7 +168,11 @@ bool Pitaya::Editor::GUI::Initialize_Render(uint64_t rtId)
 	ImGui_ImplOpenGL3_Init("#version 130");
 	ImGui_ImplOpenGL3_CreateDeviceObjects();
 	panels.gameViewportPanel.textureId = reinterpret_cast<void*>(rtId);
+
+	//TODO 读取配置文件创建GPU资源
 	panels.sceneViewportPanel.RT = Pitaya::Asset::LoadAsset<Pitaya::Asset::RenderTarget>(Pitaya::Asset::RenderTarget::Editor);
+	//END TODO
+
 	isRenderReady.store(true, std::memory_order_release);
 	return true;
 }
@@ -226,7 +230,7 @@ void Pitaya::Editor::GUI::SetStyle()
 	style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
 
 	style.WindowRounding = 0.0f;                   // 主窗口纯直角
-	style.FrameRounding = 3.0f;                    // 输入框/按钮带有微微的圆角 (Unity风格)
+	style.FrameRounding = 3.0f;                    // 输入框/按钮带有微微的圆角
 	style.PopupRounding = 2.0f;
 	style.ScrollbarRounding = 9.0f;                // 滚动条极其圆润
 	style.GrabRounding = 3.0f;                     // 滑块圆角
