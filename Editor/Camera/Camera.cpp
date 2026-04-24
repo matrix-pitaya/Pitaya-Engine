@@ -9,7 +9,7 @@
 
 bool Pitaya::Editor::Camera::Initialize_Main()
 {
-	if (!renderTarget.DeserializeFromFile(Pitaya::Core::GetExecutableDirectory() / "editor/RenderTarget/Editor.rt")) { return false; }
+	renderTarget.DeserializeFromFile(Pitaya::Core::GetExecutableDirectory() / "editor/RenderTarget/Editor.rt");
 	falg.store(true, std::memory_order_release);
 	Pitaya::Render::PostProcessStep step;
 	Pitaya::Render::GammaCorrectionParams gama;

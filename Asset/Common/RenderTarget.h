@@ -13,15 +13,15 @@ namespace Pitaya::Asset
 		Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> SceneFrameBuffer = 0;
         Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> SceneInternalFrameBuffer = 0; //用于多采用解析
 		Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> SceneColorAttachment = 0;
-		Pitaya::GPU::FrameBufferSpecification SceneFrameBufferSpecification;
+		Pitaya::GPU::FrameBufferSpecification SceneFrameBufferSpecification = { 1600, 900, 4, false, true, true };
 
 		Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> PingPongFrameBuffers[2] = { 0, 0 };
 		Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> PingPongColorAttachments[2] = { 0, 0 };
-		Pitaya::GPU::FrameBufferSpecification PingPongFrameBufferSpecification;
+		Pitaya::GPU::FrameBufferSpecification PingPongFrameBufferSpecification = { 1600, 900, 1, false, true, false };
 
 		Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> FinalFrameBuffer = 0;
 		Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> FinalColorAttachment = 0;
-		Pitaya::GPU::FrameBufferSpecification FinalFrameBufferSpecification;
+		Pitaya::GPU::FrameBufferSpecification FinalFrameBufferSpecification = { 1600, 900, 1, false, false, false };
 
 		Pitaya::Core::Color ClearColor = Pitaya::Core::Color::SkyBlue;
 		bool ClearDepth = true;

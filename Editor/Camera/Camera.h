@@ -101,7 +101,7 @@ namespace Pitaya::Editor
 		//Render Base
 		Pitaya::Core::StateFlags<Pitaya::Render::RenderLayer> cullingMask = static_cast<Pitaya::Render::RenderLayer>(0xFFFFFFFF);
 		Pitaya::Asset::RenderTarget renderTarget;
-		Pitaya::Render::PostProcessSetting setting;		//TODO 换成Asset 然后生成PostProcessSetting 
+		Pitaya::Render::PostProcessSetting setting;
 		std::atomic<bool> falg = false;	
 
 		//Transform
