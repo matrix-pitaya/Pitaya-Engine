@@ -7,7 +7,6 @@
 
 #include<Event/Common/EventArgs.h>
 #include<Asset/Common/RenderTarget.h>
-#include<Render/Common/RenderTargetSnapshot.h>
 #include<Render/Common/PostProcessSetting.h>
 #include<Render/Common/RenderLayer.h>
 
@@ -65,30 +64,6 @@ namespace Pitaya::Editor
 			}
 			return snapshot;
 		}
-		inline const Pitaya::Render::RenderTargetSnapshot& GetRenderTarget() const noexcept
-		{
-			auto BuildRT = [this]() -> Pitaya::Render::RenderTargetSnapshot
-				{
-					return { renderTarget->SceneFrameBuffer, 
-							 renderTarget->SceneInternalFrameBuffer, 
-							 renderTarget->SceneColorAttachment,
-						   { renderTarget->PingPongFrameBuffers[0],renderTarget->PingPongFrameBuffers[1] },
-						   { renderTarget->PingPongColorAttachments[0],renderTarget->PingPongColorAttachments[1] },
-							 renderTarget->FinalFrameBuffer, 
-						     renderTarget->FinalColorAttachment,
-							 renderTarget->ClearColor,
-						   { {0.0f, 0.0f}, { renderTarget->SceneFrameBufferSpecification.Width, renderTarget->SceneFrameBufferSpecification.Height } },
-							 renderTarget->ClearDepth,
-							 renderTarget->ClearStencil,
-							 renderTarget->SceneFrameBufferSpecification.Samples > 1 };
-				};
-			if (dirtyRT)
-			{
-				rtSnapshot = BuildRT();
-				dirtyRT = false;
-			}
-			return rtSnapshot;
-		}
 		inline const Pitaya::Render::PostProcessSetting& GetPostProcessSettings() const noexcept
 		{
 			return setting;
@@ -125,7 +100,6 @@ namespace Pitaya::Editor
 		//Render Base
 		Pitaya::Core::StateFlags<Pitaya::Render::RenderLayer> cullingMask = static_cast<Pitaya::Render::RenderLayer>(0xFFFFFFFF);
 		Pitaya::Core::Asset<Pitaya::Asset::RenderTarget> renderTarget = nullptr;
-		mutable Pitaya::Render::RenderTargetSnapshot rtSnapshot;
 		Pitaya::Render::PostProcessSetting setting;		//TODO 换成Asset 然后生成PostProcessSetting 
 
 		//Transform

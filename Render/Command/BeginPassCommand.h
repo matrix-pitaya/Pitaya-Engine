@@ -1,9 +1,9 @@
 #pragma once
 
 #include<Core/Color/Color.h>
+#include<Core/Math/Rect.h>
 #include<Core/Camera/CameraSnapshot.h>
 #include<Render/Common/RenderCommandType.h>
-#include<Render/Common/RenderTargetSnapshot.h>
 #include<Render/Common/PostProcessSetting.h>
 
 #include<glm.hpp>

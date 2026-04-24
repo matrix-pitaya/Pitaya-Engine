@@ -2,7 +2,6 @@
 
 #include<Core/StateFlags/StateFlags.h>
 #include<Core/Camera/CameraSnapshot.h>
-#include<Render/Common/RenderTargetSnapshot.h>
 #include<Render/Command/PostProcessCommand.h>
 #include<Render/Common/PostProcessSetting.h>
 #include<Render/Common/RenderLayer.h>

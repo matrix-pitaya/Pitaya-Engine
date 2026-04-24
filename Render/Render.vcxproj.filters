@@ -54,9 +54,6 @@
     <ClInclude Include="Specific\RenderTargetSnapshot.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\RenderTargetSnapshot.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Common\PostProcessStep.h">
       <Filter>头文件</Filter>
     </ClInclude>
