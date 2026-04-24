@@ -194,15 +194,7 @@ void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::PostPr
 			GL_NEAREST); // 由于尺寸完全一致，NEAREST 即可
 	}
 
-	Pitaya::GPU::Identifier<Pitaya::GPU::Shader> ProcessShader = Pitaya::GPU::Identifier<Pitaya::GPU::Shader>::Invalid;
-	switch (command->PostProcessStep.Type)
-	{
-		case Pitaya::Render::PostProcessType::Bilt:				ProcessShader = globalRHI.BlitShader;			 break;
-		case Pitaya::Render::PostProcessType::GammaCorrection:  ProcessShader = globalRHI.GammaCorrectionShader; break;
-		default: ProcessShader = globalRHI.BlitShader; break;	// 防止Ping-Pong链截断
-	}
-
-	if (ProcessShader > 0)
+	if (command->ProcessShader > 0)
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, command->WriteFrameBuffer);
 
@@ -211,7 +203,7 @@ void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::PostPr
 		glDisable(GL_CULL_FACE);
 		glDisable(GL_BLEND);
 
-		glUseProgram(ProcessShader);
+		glUseProgram(command->ProcessShader);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, command->ReadTexture);

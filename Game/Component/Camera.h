@@ -45,6 +45,10 @@ namespace Pitaya::Game
 		{
 			return renderTarget.IsReady();
 		}
+		inline bool HasCustomRenderTarget() const noexcept
+		{
+			return renderTarget != nullptr;
+		}
 
 	public:
 		inline void SetCameraState(Pitaya::Core::CameraState state) noexcept

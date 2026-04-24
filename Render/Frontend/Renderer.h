@@ -152,7 +152,7 @@ namespace Pitaya::Render
 		{
 			friend class Renderer;
 		public:
-			struct alignas(16) Buffer
+			struct Buffer
 			{
 				std::vector<std::byte> CommandBuffer;
 				std::vector<glm::mat4> InstanceModelTransforms;
@@ -174,9 +174,6 @@ namespace Pitaya::Render
 		private:
 			struct CommandHeader
 			{
-				CommandHeader(Pitaya::Render::RenderCommandType type = Pitaya::Render::RenderCommandType::Unknown, uint32_t size = 0)
-					:type(type), size(size) {}
-
 				Pitaya::Render::RenderCommandType type = Pitaya::Render::RenderCommandType::Unknown;
 				uint32_t size = 0;
 			};
@@ -259,7 +256,7 @@ namespace Pitaya::Render
 
 				std::byte* writePtr = front.CommandBuffer.data() + alignedOffset;
 
-				CommandHeader header(T::Type, static_cast<uint32_t>(sizeof(T)));
+				CommandHeader header = { T::Type, static_cast<uint32_t>(sizeof(T)) };
 				std::memcpy(writePtr, &header, sizeof(CommandHeader));
 				std::memcpy(writePtr + sizeof(CommandHeader), &command, sizeof(T));
 			}
@@ -572,9 +569,72 @@ namespace Pitaya::Render
 
 			renderPacket.PushDrawCommandToPass(cmd);
 		}
-		inline void SubmitPostProcess(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>, const PostProcessCommand& cmd)
+		inline void SubmitPostProcess(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>, RenderPass& pass)
 		{
-			renderPacket.PushCommand(cmd);
+			//Pass后处理
+			bool firstPass = true;
+			uint32_t pingpongIndex = 0;
+			uint32_t currentReadTexture = pass.RenderTargetSnapshot.SceneColorAttachment; //如果是多采样 这里得到的实际是内部的颜色纹理
+
+			//提交后处理
+			for (uint32_t i = 0; i < pass.PostProcessSetting.StepCount; i++)
+			{
+				auto& currentStep = pass.PostProcessSetting.Steps[i];
+
+				PostProcessCommand cmd;
+				cmd.PostProcessStep = currentStep;
+				switch (currentStep.Type)
+				{
+					case Pitaya::Render::PostProcessType::Bilt:				
+						cmd.ProcessShader = globalRHI.BlitShader;
+						break;
+
+					case Pitaya::Render::PostProcessType::GammaCorrection:  
+						cmd.ProcessShader = globalRHI.GammaCorrectionShader;
+						break;
+
+					case Pitaya::Render::PostProcessType::Unknown:
+					default: 
+						cmd.ProcessShader = globalRHI.BlitShader;	// 防止Ping-Pong链截断
+						break;	
+				}
+				if (firstPass && pass.RenderTargetSnapshot.Multisample)
+				{
+					cmd.ResolveMSAA = true;
+					cmd.ResolveReadFrameBuffer = pass.RenderTargetSnapshot.SceneFrameBuffer;
+					cmd.ResolveWriteFrameBuffer = pass.RenderTargetSnapshot.SceneInternalFrameBuffer;
+					cmd.ResolveSize = pass.RenderTargetSnapshot.Rect.Size;
+				}
+
+				cmd.ReadTexture = currentReadTexture;
+				cmd.WriteFrameBuffer = (i == pass.PostProcessSetting.StepCount - 1) ? pass.RenderTargetSnapshot.FinalFrameBuffer : pass.RenderTargetSnapshot.PingPongFrameBuffers[pingpongIndex];
+
+				currentReadTexture = pass.RenderTargetSnapshot.PingPongColorAttachments[pingpongIndex];
+				pingpongIndex = 1 - pingpongIndex;
+				firstPass = false;
+
+				renderPacket.PushCommand(cmd);
+				Pitaya::Core::Print(Pitaya::Core::Color::Purple, "Post Process: %s", Pitaya::Render::ToString(currentStep.Type).data());
+			}
+
+			//没有后处理则直接Scene帧缓冲区 Blit到 Final帧缓冲区
+			if (firstPass)
+			{
+				PostProcessCommand cmd;
+				cmd.ProcessShader = globalRHI.BlitShader;
+				cmd.ReadTexture = pass.RenderTargetSnapshot.SceneColorAttachment;
+				cmd.WriteFrameBuffer = pass.RenderTargetSnapshot.FinalFrameBuffer;
+				if (pass.RenderTargetSnapshot.Multisample)
+				{
+					cmd.ResolveMSAA = true;
+					cmd.ResolveReadFrameBuffer = pass.RenderTargetSnapshot.SceneFrameBuffer;
+					cmd.ResolveWriteFrameBuffer = pass.RenderTargetSnapshot.SceneInternalFrameBuffer;
+					cmd.ResolveSize = pass.RenderTargetSnapshot.Rect.Size;
+				}
+
+				renderPacket.PushCommand(cmd);
+				Pitaya::Core::Print(Pitaya::Core::Color::Purple, "Post Process Resolve To Final (Bypass)");
+			}
 		}
 		inline void EndPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>)
 		{

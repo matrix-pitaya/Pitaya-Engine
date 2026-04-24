@@ -49,57 +49,8 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 		}
 		Pitaya::Core::Print(Pitaya::Core::Color::Blue, "Commit Count:%d", submitCount);
 		renderer->EndPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>()); //对当前Pass提交的Draw命令进行排序并和批处理 生成InstanceDraw命令写入front缓冲区
+		renderer->SubmitPostProcess(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), pass);
 		Pitaya::Core::Print(Pitaya::Core::Color::Yellow, "End Pass");
-
-		//Pass后处理
-		bool firstPass = true;
-		uint32_t pingpongIndex = 0;
-		uint32_t currentReadTexture = pass.RenderTargetSnapshot.SceneColorAttachment; //如果是多采样 这里得到的实际是内部的颜色纹理
-
-		//提交后处理
-		for (uint32_t i = 0; i < pass.PostProcessSetting.StepCount; i++)
-		{
-			auto& currentStep = pass.PostProcessSetting.Steps[i];
-
-			PostProcessCommand cmd;
-			cmd.PostProcessStep = currentStep;
-			if (firstPass && pass.RenderTargetSnapshot.Multisample)
-			{
-				cmd.ResolveMSAA = true;
-				cmd.ResolveReadFrameBuffer = pass.RenderTargetSnapshot.SceneFrameBuffer;
-				cmd.ResolveWriteFrameBuffer = pass.RenderTargetSnapshot.SceneInternalFrameBuffer;
-				cmd.ResolveSize = pass.RenderTargetSnapshot.Rect.Size;
-			}
-
-			cmd.ReadTexture = currentReadTexture;
-			cmd.WriteFrameBuffer = (i == pass.PostProcessSetting.StepCount - 1) ? pass.RenderTargetSnapshot.FinalFrameBuffer : pass.RenderTargetSnapshot.PingPongFrameBuffers[pingpongIndex];
-
-			currentReadTexture = pass.RenderTargetSnapshot.PingPongColorAttachments[pingpongIndex];
-			pingpongIndex = 1 - pingpongIndex;
-			firstPass = false;
-
-			renderer->SubmitPostProcess(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), cmd);
-			Pitaya::Core::Print(Pitaya::Core::Color::Purple, "Post Process: %s", Pitaya::Render::ToString(currentStep.Type).data());
-		}
-
-		//没有后处理则直接Scene帧缓冲区 Blit到 Final帧缓冲区
-		if (firstPass)
-		{
-			PostProcessCommand cmd;
-			cmd.PostProcessStep.Type = Pitaya::Render::PostProcessType::Bilt;
-			cmd.ReadTexture = pass.RenderTargetSnapshot.SceneColorAttachment;
-			cmd.WriteFrameBuffer = pass.RenderTargetSnapshot.FinalFrameBuffer; 
-			if (pass.RenderTargetSnapshot.Multisample)
-			{
-				cmd.ResolveMSAA = true;
-				cmd.ResolveReadFrameBuffer = pass.RenderTargetSnapshot.SceneFrameBuffer;
-				cmd.ResolveWriteFrameBuffer = pass.RenderTargetSnapshot.SceneInternalFrameBuffer;
-				cmd.ResolveSize = pass.RenderTargetSnapshot.Rect.Size;
-			}
-
-			renderer->SubmitPostProcess(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), cmd);
-			Pitaya::Core::Print(Pitaya::Core::Color::Purple, "Post Process Resolve To Final (Bypass)");
-		}
 	}
 
 	// TODO 所有Pass结束后 单独提交一个后处理 用于交换Game缓冲区到0号 利用钩子函数判断是否交换缓冲区到0号 做一个劫持
