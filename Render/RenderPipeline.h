@@ -72,9 +72,9 @@ namespace Pitaya::Render
 			graph.Passes.clear();
 			graph.Items.clear();
 		}
-		inline void AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, const Pitaya::Core::CameraSnapshot& cameraSnapshot, const Pitaya::Render::RenderTargetSnapshot& renderTargetSnapshot, const Pitaya::Render::PostProcessSetting& setting, Pitaya::Render::RenderLayer cullingMask)
+		inline void AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, const Pitaya::Core::CameraSnapshot& cameraSnapshot,  const Pitaya::Render::PostProcessSetting& setting, Pitaya::Render::RenderLayer cullingMask, Pitaya::Asset::RenderTarget* rt)
 		{
-			graph.Passes.emplace_back(cameraSnapshot, renderTargetSnapshot, setting, cullingMask);
+			graph.Passes.emplace_back(cameraSnapshot, setting, cullingMask, rt);
 		}
 		inline void AddRenderItem(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Asset::Mesh* mesh, Pitaya::Asset::Material* material, Pitaya::Render::RenderLayer layerMask, const glm::mat4& model, uint32_t subMeshIndex)
 		{

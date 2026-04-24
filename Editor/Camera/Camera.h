@@ -112,6 +112,10 @@ namespace Pitaya::Editor
 			if (mode == CameraMode::Orbit) { pivot = position + forward * distance; }
 			dirty = true;
 		}
+		inline Pitaya::Asset::RenderTarget* GetNativeRT()
+		{
+			return renderTarget.GetNativeAssetData();
+		}
 
 	private:
 		//Camera Base

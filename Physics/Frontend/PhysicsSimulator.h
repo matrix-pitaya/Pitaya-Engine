@@ -51,5 +51,8 @@ namespace Pitaya::Physics
 		virtual bool Initialize() = 0;
 		virtual void Release() = 0;
 		virtual void FixedUpdate() = 0;
+
+	public:
+		inline static constexpr const uint32_t MaxFixupdataExecuteTimes = 5;
 	};
 }

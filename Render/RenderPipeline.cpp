@@ -53,5 +53,7 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 		Pitaya::Core::Print(Pitaya::Core::Color::Yellow, "End Pass");
 	}
 
-	// TODO 所有Pass结束后 单独提交一个后处理 用于交换Game缓冲区到0号 利用钩子函数判断是否交换缓冲区到0号 做一个劫持
+	INVOKE_TERMINATERENDERPIPELINESUBMITFINALBLIT_HOOK
+	renderer->SubmitBlitToScreen(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>());
+	Pitaya::Core::Print(Pitaya::Core::Color::Red, "Blit Main To Screnn Back Buffer");
 }

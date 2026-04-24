@@ -157,24 +157,24 @@ bool Pitaya::Editor::GUI::Initialize_Main(void* nativeWindow)
 	ImGui::SetCurrentContext(context);
 	ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(nativeWindow), true);
 	imGuiContext.store(context, std::memory_order_release);
-	for (auto* panel : panels.Each()) { panel->Initialize(); }
 	while (!isRenderReady.load(std::memory_order_acquire)){ std::this_thread::yield(); }
 	return drawer.Initialize(nativeWindow);
 }
-bool Pitaya::Editor::GUI::Initialize_Render()
+bool Pitaya::Editor::GUI::Initialize_Render(uint64_t rtId)
 {
 	ImGuiContext* context = nullptr;
 	while (!(context = imGuiContext.load(std::memory_order_acquire))) { std::this_thread::yield(); }
 	ImGui::SetCurrentContext(context);
 	ImGui_ImplOpenGL3_Init("#version 130");
 	ImGui_ImplOpenGL3_CreateDeviceObjects();
+	panels.gameViewportPanel.textureId = reinterpret_cast<void*>(rtId);
+	panels.sceneViewportPanel.RT = Pitaya::Asset::LoadAsset<Pitaya::Asset::RenderTarget>(Pitaya::Asset::RenderTarget::Editor);
 	isRenderReady.store(true, std::memory_order_release);
 	return true;
 }
 void Pitaya::Editor::GUI::Release_Main()
 {
 	drawer.Release();
-	for (auto* panel : panels.Each()) { panel->Release(); }
 	const auto start = std::chrono::steady_clock::now();
 	const auto wait = std::chrono::milliseconds(2000);
 	while (isRenderReady.load(std::memory_order_acquire))
@@ -634,9 +634,7 @@ void Pitaya::Editor::GUI::Drawer::Draw(Pitaya::Core::PassKey<Editor>)
 	//}
 #endif
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	int width, height;
-	glfwGetFramebufferSize(static_cast<GLFWwindow*>(nativeWindow), &width, &height);
-	glViewport(0, 0, width, height);
+	glViewport(0, 0, size[backBufferIndex].x, size[backBufferIndex].y);
 	glClearColor(Pitaya::Core::Color::Dark.r, Pitaya::Core::Color::Dark.g, Pitaya::Core::Color::Dark.b, Pitaya::Core::Color::Dark.a);
 	glClearDepth(1.0f);
 	glClearStencil(0x00);

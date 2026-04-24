@@ -7,6 +7,8 @@
 #include<Window/Common/Platform.h>
 #include<Window/Frontend/Window.h>
 
+#include<glm.hpp>
+
 namespace Pitaya::Window
 {
 	class Window
@@ -58,6 +60,9 @@ namespace Pitaya::Window
 		virtual bool IsClose() const = 0;
 		virtual void* GetNativeWindow() const = 0;
 
+	public:
+		virtual glm::uvec2 GetWindowSize() const = 0;
+
 	protected:
 		inline Pitaya::Input::KeyCode IntToKeyCode(int key) const noexcept
 		{
@@ -66,9 +71,5 @@ namespace Pitaya::Window
 
 	protected:
 		Pitaya::Input::KeyCode map[512] = {};
-
-	protected:
-		int width = 0;
-		int height = 0;
 	};
 }

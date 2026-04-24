@@ -9,6 +9,7 @@ namespace Pitaya::Render
 		BeginPass = 0,
 		InstanceDraw,
 		PostProcess,
+		BlitToScreen,
 
 		Unknown
 	};

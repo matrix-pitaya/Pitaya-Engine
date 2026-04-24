@@ -2,10 +2,12 @@
 
 #include<Core/Allocate/Allocate.h>
 #include<Core/PassKey/PassKey.h>
+#include<Core/Color/Color.h>
 #include<Serialize/Serializable.h>
 #include<Render/Common/API.h>
 #include<Physics/Common/API.h>
 #include<Window/Common/Platform.h>
+#include<GPU/Common/FrameBufferSpecification.h>
 #include<Config/Common/FunctionTable.h>
 
 #include<string>
@@ -52,20 +54,19 @@ namespace Pitaya::Config
 			std::string Version = "1.0.0";
 
 			//Physics
-			size_t MaxFixupdataExecuteTimes = 5;
 			Pitaya::Physics::API PhysicsAPI = Pitaya::Physics::API::Bullet;
 
 			//Render
 			Pitaya::Render::API RenderAPI = Pitaya::Render::API::OpenGL;
+			Pitaya::GPU::FrameBufferSpecification MainSceneSpec = { 1600, 900, 4, false, true, true };
+			Pitaya::GPU::FrameBufferSpecification MainPingPongSpec = { 1600, 900, 1, false, true, false };
+			Pitaya::GPU::FrameBufferSpecification MainFinalSpec = { 1600, 900, 1, false, false, false };
 			bool EnableVSync = true;
 
 			//Window
 			Pitaya::Window::Platform WindowPlatform = Pitaya::Window::Platform::GLFW;
 			int32_t WindowWidth = 1600;
 			int32_t WindowHeight = 900;
-
-			//GPU
-			uint32_t MaxBonesPerInstance = 100;
 
 		public:
 			void Serialize(Pitaya::Serialize::SerializeContext& context) const override;
@@ -103,7 +104,19 @@ namespace Pitaya::Config
 		{
 			return info.WindowPlatform;
 		}
-		inline const std::string& GetWindowName()  const noexcept
+		inline Pitaya::GPU::FrameBufferSpecification GetMainSceneSpec() const noexcept
+		{
+			return info.MainSceneSpec;
+		}
+		inline Pitaya::GPU::FrameBufferSpecification GetMainPingPongSpec() const noexcept
+		{
+			return info.MainPingPongSpec;
+		}
+		inline Pitaya::GPU::FrameBufferSpecification GetMainFinalSpec() const noexcept
+		{
+			return info.MainFinalSpec;
+		}
+		inline std::string_view GetWindowName()  const noexcept
 		{
 			return info.Name;
 		}
@@ -114,14 +127,6 @@ namespace Pitaya::Config
 		inline int32_t GetWindowHeight() const noexcept
 		{
 			return info.WindowHeight;
-		}
-		inline size_t GetMaxFixupdataExecuteTimes() const noexcept
-		{
-			return info.MaxFixupdataExecuteTimes;
-		}
-		inline uint32_t GetMaxBonesPerInstance() const noexcept
-		{
-			return info.MaxBonesPerInstance;
 		}
 		inline bool GetEnableVSync() const noexcept
 		{

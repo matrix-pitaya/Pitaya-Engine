@@ -2,6 +2,7 @@
 
 #include<Context/Context.h>
 #include<Render/Common/API.h>
+#include<GPU/Common/FrameBufferSpecification.h>
 #include<stdexcept>
 
 namespace Pitaya::Engine 
@@ -24,17 +25,19 @@ namespace Pitaya::Engine
 		inline bool Verify() const
 		{
 			if (!OnGetRenderAPI) { throw std::runtime_error("FuncTable miss [Config::GetRenderAPI] Function!"); }
-			if (!OnGetMaxFixupdataExecuteTimes) { throw std::runtime_error("FuncTable miss [Config::GetMaxFixupdataExecuteTimes] Function!"); }
-			if (!OnGetMaxBonesPerInstance) { throw std::runtime_error("FuncTable miss [Config::GetMaxBonesPerInstance] Function!"); }
 			if (!OnGetEnableVSync) { throw std::runtime_error("FuncTable miss [Config::GetEnableVSync] Function!"); }
+			if (!OnGetMainSceneSpec) { throw std::runtime_error("FuncTable miss [Config::GetMainSceneSpec] Function!"); }
+			if (!OnGetMainPingPongSpec) { throw std::runtime_error("FuncTable miss [Config::GetMainPingPongSpec] Function!"); }
+			if (!OnGetMainFinalSpec) { throw std::runtime_error("FuncTable miss [Config::GetMainFinalSpec] Function!"); }
 			return true;
 		}
 		inline void Nullify() noexcept
 		{
 			OnGetRenderAPI = nullptr;
-			OnGetMaxFixupdataExecuteTimes = nullptr;
-			OnGetMaxBonesPerInstance = nullptr;
 			OnGetEnableVSync = nullptr;
+			OnGetMainSceneSpec = nullptr;
+			OnGetMainPingPongSpec = nullptr;
+			OnGetMainFinalSpec = nullptr;
 		}
 
 	public:
@@ -42,24 +45,29 @@ namespace Pitaya::Engine
 		{
 			return OnGetRenderAPI();
 		}
-		inline size_t InvokeOnGetMaxFixupdataExecuteTimes() noexcept
-		{
-			return OnGetMaxFixupdataExecuteTimes();
-		}
-		inline uint32_t InvokeOnGetMaxBonesPerInstance() const noexcept
-		{
-			return OnGetMaxBonesPerInstance();
-		}
 		inline bool InvokeOnGetEnableVSync() const noexcept
 		{
 			return OnGetEnableVSync();
 		}
+		inline Pitaya::GPU::FrameBufferSpecification InvokeOnGetMainSceneSpec() const noexcept
+		{
+			return OnGetMainSceneSpec();
+		}
+		inline Pitaya::GPU::FrameBufferSpecification InvokeOnGetMainPingPongSpec() const noexcept
+		{
+			return OnGetMainPingPongSpec();
+		}
+		inline Pitaya::GPU::FrameBufferSpecification InvokeOnGetMainFinalSpec() const noexcept
+		{
+			return OnGetMainFinalSpec();
+		}
 
 	private:
 		Pitaya::Render::API (ENGINE_CALL *OnGetRenderAPI)() noexcept = nullptr;
-		size_t (ENGINE_CALL *OnGetMaxFixupdataExecuteTimes)() noexcept = nullptr;
-		uint32_t (ENGINE_CALL *OnGetMaxBonesPerInstance)() noexcept = nullptr;
 		bool (ENGINE_CALL *OnGetEnableVSync)() noexcept = nullptr;
+		Pitaya::GPU::FrameBufferSpecification (ENGINE_CALL *OnGetMainSceneSpec)() noexcept = nullptr;
+		Pitaya::GPU::FrameBufferSpecification (ENGINE_CALL *OnGetMainPingPongSpec)() noexcept = nullptr;
+		Pitaya::GPU::FrameBufferSpecification (ENGINE_CALL *OnGetMainFinalSpec)() noexcept = nullptr;
 	};
 }
 
@@ -69,16 +77,20 @@ namespace Pitaya::Config
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Config::Configurator>().InvokeOnGetRenderAPI();
 	}
-	inline size_t GetMaxFixupdataExecuteTimes() noexcept
-	{
-		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Config::Configurator>().InvokeOnGetMaxFixupdataExecuteTimes();
-	}
-	inline uint32_t GetMaxBonesPerInstance() noexcept
-	{
-		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Config::Configurator>().InvokeOnGetMaxBonesPerInstance();
-	}
 	inline bool GetEnableVSync() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Config::Configurator>().InvokeOnGetEnableVSync();
+	}
+	inline Pitaya::GPU::FrameBufferSpecification GetMainSceneSpec() noexcept
+	{
+		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Config::Configurator>().InvokeOnGetMainSceneSpec();
+	}
+	inline Pitaya::GPU::FrameBufferSpecification GetMainPingPongSpec() noexcept
+	{
+		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Config::Configurator>().InvokeOnGetMainPingPongSpec();
+	}
+	inline Pitaya::GPU::FrameBufferSpecification GetMainFinalSpec() noexcept
+	{
+		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Config::Configurator>().InvokeOnGetMainFinalSpec();
 	}
 }

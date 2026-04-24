@@ -180,17 +180,21 @@ namespace
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetRenderAPI();
 	}
-	size_t ENGINE_CALL OnGetMaxFixupdataExecuteTimes() noexcept
-	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetMaxFixupdataExecuteTimes();
-	}
-	uint32_t ENGINE_CALL OnGetMaxBonesPerInstance() noexcept
-	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetMaxBonesPerInstance();
-	}
 	bool ENGINE_CALL OnGetEnableVSync() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetEnableVSync();
+	}
+	Pitaya::GPU::FrameBufferSpecification OnGetMainSceneSpec() noexcept
+	{
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetMainSceneSpec();
+	}
+	Pitaya::GPU::FrameBufferSpecification OnGetMainPingPongSpec() noexcept
+	{
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetMainPingPongSpec();
+	}
+	Pitaya::GPU::FrameBufferSpecification OnGetMainFinalSpec() noexcept
+	{
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Config::Configurator>()->GetMainFinalSpec();
 	}
 #pragma endregion
 
@@ -199,6 +203,10 @@ namespace
 	void* ENGINE_CALL OnGetNativeWindow()
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Window::Window>()->GetNativeWindow();
+	}
+	glm::uvec2 ENGINE_CALL OnGetWindowSize()
+	{
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Window::Window>()->GetWindowSize();
 	}
 #pragma endregion
 
@@ -463,14 +471,16 @@ bool Pitaya::Engine::Engine::Initialize()
 
 #pragma region Config
 		FUNCTABLE(Configurator).OnGetRenderAPI = OnGetRenderAPI;
-		FUNCTABLE(Configurator).OnGetMaxFixupdataExecuteTimes = OnGetMaxFixupdataExecuteTimes;
-		FUNCTABLE(Configurator).OnGetMaxBonesPerInstance = OnGetMaxBonesPerInstance;
 		FUNCTABLE(Configurator).OnGetEnableVSync = OnGetEnableVSync;
+		FUNCTABLE(Configurator).OnGetMainSceneSpec = OnGetMainSceneSpec;
+		FUNCTABLE(Configurator).OnGetMainPingPongSpec = OnGetMainPingPongSpec;
+		FUNCTABLE(Configurator).OnGetMainFinalSpec = OnGetMainFinalSpec;
 #pragma endregion
 
 
 #pragma region Window
 		FUNCTABLE(Window).OnGetNativeWindow = OnGetNativeWindow;
+		FUNCTABLE(Window).OnGetWindowSize = OnGetWindowSize;
 #pragma endregion
 
 
@@ -583,7 +593,7 @@ bool Pitaya::Engine::Engine::Initialize()
 		//if (!MODULE(ScriptRuntime).Initialize()) { throw std::runtime_error("Engine [ScriptRuntime] Module Initialize Fail!"); }
 		if (!MODULE(PhysicsSimulator).Initialize()) { throw std::runtime_error("Engine [PhysicsSimulator] Module Initialize Fail!"); }
 		if (!MODULE(RHIDevice).Initialize()) { throw std::runtime_error("Engine [RHIDevice] Module Initialize Fail!"); }
-		if (!MODULE(Window).Initialize(MODULE(Configurator)->GetWindowWidth(), MODULE(Configurator)->GetWindowHeight(), MODULE(Configurator)->GetWindowName().c_str())) { throw std::runtime_error("Engine [Window] Module Initialize Fail!"); }
+		if (!MODULE(Window).Initialize(MODULE(Configurator)->GetWindowWidth(), MODULE(Configurator)->GetWindowHeight(), MODULE(Configurator)->GetWindowName().data())) { throw std::runtime_error("Engine [Window] Module Initialize Fail!"); }
 		if (!MODULE(RenderPipeline).Initialize()) { throw std::runtime_error("[RenderPipeline] Module Initialize Fail!"); }
 		if (!MODULE(Renderer).Initialize(MODULE(Window)->GetNativeWindow())) { throw std::runtime_error("[Renderer] Module Initialize Fail!"); }
 		if (!MODULE(Chronometer).Initialize()) { throw std::runtime_error("Engine [Chronometer] Module Initialize Fail!"); }
@@ -663,11 +673,17 @@ void Pitaya::Engine::Engine::Render()
 			//提交Pass
 			for (auto [entity, camera, transform] : scene->GetView<Pitaya::Game::Camera, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each())
 			{
-				if (camera.GetRenderTargetIsReady())
+				if (camera.GetIsRenderToMainDisplayRT())
 				{
 					MODULE(RenderPipeline)->AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
 						camera.GetCameraState().BuildSnapshot(transform.GetWorldPosition(), transform.GetWorldForward(), transform.GetWorldUp()),
-						camera.RenderTargetSnapshot(), camera.GetPostProcessSetting(), camera.GetCullingMask());
+						camera.GetPostProcessSetting(), camera.GetCullingMask(), nullptr);	//提交nullptr渲染到MainRT
+				}
+				else if(camera.GetRenderTargetIsReady())
+				{
+					MODULE(RenderPipeline)->AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
+						camera.GetCameraState().BuildSnapshot(transform.GetWorldPosition(), transform.GetWorldForward(), transform.GetWorldUp()),
+						camera.GetPostProcessSetting(), camera.GetCullingMask(), camera.GetNativeRenderTarget());	//提交到自定义RT
 				}
 			}
 		}

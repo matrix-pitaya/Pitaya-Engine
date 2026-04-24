@@ -1,6 +1,7 @@
 #pragma once
 
 #include<GPU/Common/Identifier.h>
+#include<Render/Common/RenderCommandType.h>
 
 namespace Pitaya::Render
 {

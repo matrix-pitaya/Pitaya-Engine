@@ -34,6 +34,7 @@ namespace Pitaya::Render
 		void ExecuteCommand(const Pitaya::Render::BeginPassCommand* command) const override;
 		void ExecuteCommand(const Pitaya::Render::InstancedDrawCommand* command) const override;
 		void ExecuteCommand(const Pitaya::Render::PostProcessCommand* command) const override;
+		void ExecuteCommand(const Pitaya::Render::BlitToScreenCommand* command) const override;
 
 	private:
 		GLFWwindow* glfwWindow = nullptr;

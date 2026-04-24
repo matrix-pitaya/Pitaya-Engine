@@ -9,14 +9,14 @@ namespace Pitaya::Render
         inline static constexpr const uint8_t MAX_STEPS = 8;
 
         PostProcessStep Steps[MAX_STEPS] = {};
-        uint8_t StepCount = 0;
+        uint32_t StepCount = 0;
 
         inline void AddStep(const PostProcessStep& step)   //追加到末尾
         {
             if (StepCount >= MAX_STEPS) { return; }
             Steps[StepCount++] = step;
         }
-        inline void AddStep(const PostProcessStep& step, uint8_t index) //插入到指定位置，越界则追加
+        inline void AddStep(const PostProcessStep& step, uint32_t index) //插入到指定位置，越界则追加
         {
             if (StepCount >= MAX_STEPS) { return; }
             if (index > StepCount) { AddStep(step); return; }
@@ -32,7 +32,7 @@ namespace Pitaya::Render
             if (StepCount == 0) { return; }
             StepCount--;
         }
-        inline void RemoveStep(uint8_t index)   //移除指定位置 越界则移除最后一个
+        inline void RemoveStep(uint32_t index)   //移除指定位置 越界则移除最后一个
         {
             if (index >= StepCount) { RemoveStep(); return; }
             for (uint8_t i = index; i < StepCount - 1; ++i)     //将 index 之后的元素全部向前移动一位
@@ -41,7 +41,7 @@ namespace Pitaya::Render
             }
             StepCount--;
         }
-        inline void SwapSteps(uint8_t indexA, uint8_t indexB) noexcept  //交换两个位置
+        inline void SwapSteps(uint32_t indexA, uint32_t indexB) noexcept  //交换两个位置
         {
             if (indexA < StepCount && indexB < StepCount)
             {

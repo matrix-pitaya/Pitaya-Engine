@@ -32,9 +32,9 @@ void Pitaya::Editor::Editor::HookFunc::PostRendererRelease()
 {
 	Pitaya::Editor::Editor::Instance().Release_Main();
 }
-void Pitaya::Editor::Editor::HookFunc::PostRenderContextInitialized()
+void Pitaya::Editor::Editor::HookFunc::PostRenderContextInitialized(uint64_t rtId)
 {
-	Pitaya::Editor::Editor::Instance().Initialize_Render();
+	Pitaya::Editor::Editor::Instance().Initialize_Render(rtId);
 }
 void Pitaya::Editor::Editor::HookFunc::PreRenderContextReleased()
 {
@@ -73,8 +73,8 @@ void Pitaya::Editor::Editor::HookFunc::PreRenderPipelineExecute(Pitaya::Core::Pa
 		}
 		
 		renderPipeline->AddRenderPass(passkey,
-			Pitaya::Editor::Editor::Instance().camera.GetCameraSnapshot(), Pitaya::Editor::Editor::Instance().camera.GetRenderTarget(),
-			Pitaya::Editor::Editor::Instance().camera.GetPostProcessSettings(), Pitaya::Editor::Editor::Instance().camera.GetCullingMask());
+			Pitaya::Editor::Editor::Instance().camera.GetCameraSnapshot(), Pitaya::Editor::Editor::Instance().camera.GetPostProcessSettings(), 
+			Pitaya::Editor::Editor::Instance().camera.GetCullingMask(), Pitaya::Editor::Editor::Instance().camera.GetNativeRT());
 	}
 
 	//提交UI
@@ -105,6 +105,10 @@ bool Pitaya::Editor::Editor::HookFunc::TerminateFixedUpdate()
 {
 	return Pitaya::Editor::Editor::Instance().stateMachine.GetCurrentState() == Pitaya::Editor::EngineState::Edit;
 }
+bool Pitaya::Editor::Editor::HookFunc::TerminateRenderPipelineSubmitFinalBlit()
+{
+	return true;	//只要有Editor.dll挂载 就应该将MainDisplayRT渲染到Imgui 再由Imgui渲染到0号缓冲区
+}
 
 bool Pitaya::Editor::Editor::Initialize_Main(void* nativeWindow)
 {
@@ -118,9 +122,9 @@ bool Pitaya::Editor::Editor::Initialize_Main(void* nativeWindow)
 	
 	return camera.Initialize() && gui.Initialize_Main(nativeWindow);
 }
-bool Pitaya::Editor::Editor::Initialize_Render()
+bool Pitaya::Editor::Editor::Initialize_Render(uint64_t rtId)
 {
-	return gui.Initialize_Render();
+	return gui.Initialize_Render(rtId);
 }
 void Pitaya::Editor::Editor::Release_Main()
 {
@@ -189,6 +193,7 @@ void Pitaya::Editor::Editor::AttachRuntimeEnv()
 	MOUNT_POSTCHRONOMETERTICK_HOOK(Pitaya::Editor::Editor::HookFunc::PostChronometerTick, "Editor::Profiler::UploadTimeState")
 	MOUNT_POSTLOG_HOOK(Pitaya::Editor::Editor::HookFunc::PostLog, "Editor::GUI::Console")
 	MOUNT_TERMINATEFIXEDUPDATE_HOOK(Pitaya::Editor::Editor::HookFunc::TerminateFixedUpdate, "Editor::StateMachine::IsEdit")
+	MOUNT_TERMINATERENDERPIPELINESUBMITFINALBLIT_HOOK(Pitaya::Editor::Editor::HookFunc::TerminateRenderPipelineSubmitFinalBlit,"Editor::TerminateRenderPipelineSubmitFinalBlit")
 }
 
 template<>

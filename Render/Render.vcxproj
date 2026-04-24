@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="Backend\OpenGL\OpenGLRenderer.h" />
     <ClInclude Include="Command\BeginPassCommand.h" />
+    <ClInclude Include="Command\BlitToScreenCommand.h" />
     <ClInclude Include="Command\DrawCommand.h" />
     <ClInclude Include="Command\InstancedDrawCommand.h" />
     <ClInclude Include="Command\PostProcessCommand.h" />

@@ -100,17 +100,16 @@ void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::BeginP
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(Pitaya::Core::CameraSnapshot), &command->CameraSnapshot);
 
 	//绑定Framebuffer
-	const Pitaya::Render::RenderTargetSnapshot& renderTarget = command->RenderTargetSnapshot;
-	glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.SceneFrameBuffer);
-	glViewport(renderTarget.Rect.Position.x, renderTarget.Rect.Position.y, renderTarget.Rect.Size.x, renderTarget.Rect.Size.y);
-	glClearColor(renderTarget.ClearColor.r, renderTarget.ClearColor.g, renderTarget.ClearColor.b, renderTarget.ClearColor.a);
+	glBindFramebuffer(GL_FRAMEBUFFER, command->SceneFrameBuffer);
+	glViewport(command->Rect.Position.x, command->Rect.Position.y, command->Rect.Size.x, command->Rect.Size.y);
+	glClearColor(command->ClearColor.r, command->ClearColor.g, command->ClearColor.b, command->ClearColor.a);
 	uint64_t clearBit = GL_COLOR_BUFFER_BIT;
-	if (renderTarget.ClearDepth)
+	if (command->ClearDepth)
 	{
 		glClearDepth(1.0f);
 		clearBit |= GL_DEPTH_BUFFER_BIT;
 	}
-	if (renderTarget.ClearStencil)
+	if (command->ClearStencil)
 	{
 		glClearStencil(0x00);
 		clearBit |= GL_STENCIL_BUFFER_BIT;
@@ -216,4 +215,26 @@ void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::PostPr
 		glBindVertexArray(0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+}
+void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::BlitToScreenCommand* command) const
+{
+	if (!command) { return; }
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, command->Size.x, command->Size.y);
+	glClearColor(Pitaya::Core::Color::Dark.r, Pitaya::Core::Color::Dark.g, Pitaya::Core::Color::Dark.b, Pitaya::Core::Color::Dark.a);
+	glClearDepth(1.0f);
+	glClearStencil(0x00);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	glUseProgram(globalRHI.BlitShader);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, globalRHI.MainFinalColorAttachment);
+
+	glBindVertexArray(globalRHI.EmptyVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

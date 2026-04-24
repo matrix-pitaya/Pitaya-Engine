@@ -1,8 +1,8 @@
 #pragma once
 
+#include<Physics/Frontend/PhysicsSimulator.h>
 #include<Physics/Common/RigidBodyType.h>
 #include<Time/Common/FuncTable.h>
-#include<Config/Common/FunctionTable.h>
 
 #include<btBulletDynamicsCommon.h>
 #include<BulletCollision/CollisionDispatch/btCollisionDispatcherMt.h>
@@ -279,7 +279,7 @@ namespace Pitaya::Physics
         }
         inline void Simulation()
         {
-            dynamicsWorld->stepSimulation(Pitaya::Time::delta(), Pitaya::Config::GetMaxFixupdataExecuteTimes(), Pitaya::Time::Fixdelta());
+            dynamicsWorld->stepSimulation(Pitaya::Time::delta(), Pitaya::Physics::PhysicsSimulator::MaxFixupdataExecuteTimes, Pitaya::Time::Fixdelta());
         }
         inline bool RaycastClosest(const btVector3& from, const btVector3& to, btCollisionWorld::ClosestRayResultCallback& resultOut)
         {

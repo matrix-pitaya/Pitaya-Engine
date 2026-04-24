@@ -1,7 +1,7 @@
 #pragma once
 
 #include<Core/PassKey/PassKey.h>
-
+#include<Window/Common/FuncTable.h>
 #include<Editor/GUI/Panel/HierarchyPanel.h>
 #include<Editor/GUI/Panel/SceneViewportPanel.h>
 #include<Editor/GUI/Panel/GameViewportPanel.h>
@@ -10,12 +10,12 @@
 #include<Editor/GUI/Panel/ProfilerPanel.h>
 #include<Editor/GUI//Panel/PreferencesPanel.h>
 #include<Editor/GUI/Panel/ProjectPanel.h>
-
 #include<Editor/Common/TransformTool.h>
 
 #include<string>
 #include<atomic>
 #include<array>
+#include<glm.hpp>
 
 namespace Pitaya::Editor
 {
@@ -38,9 +38,12 @@ namespace Pitaya::Editor
 			Drawer& operator=(Drawer&&) = delete;
 
 		private:
-			inline bool Initialize(void* nativeWindow) noexcept
+			inline bool Initialize(void* nativeWindow)
 			{
 				this->nativeWindow = nativeWindow;
+				glm::uvec2 windowSize = Pitaya::Window::GetWindowSize();
+				size[0] = windowSize;
+				size[1] = windowSize;
 				return true;
 			}
 			inline void Release()
@@ -90,6 +93,7 @@ namespace Pitaya::Editor
 					ImDrawList* dstList = srcList->CloneOutput();
 					buffer[index].CmdLists.push_back(dstList);
 				}
+				size[index] = Pitaya::Window::GetWindowSize();
 			}
 			inline void ReleaseDrawData(uint8_t index)
 			{
@@ -102,6 +106,7 @@ namespace Pitaya::Editor
 
 		private:
 			ImDrawData buffer[2] = {};
+			glm::uvec2 size[2] = {};		//窗口尺寸
 			uint8_t frontBufferIndex = 0;	//主线程写入
 			uint8_t backBufferIndex = 1;	//渲染线程读取
 			void* nativeWindow = nullptr;
@@ -183,7 +188,7 @@ namespace Pitaya::Editor
 
 	private:
 		bool Initialize_Main(void* nativeWindow);
-		bool Initialize_Render();
+		bool Initialize_Render(uint64_t rtId);
 		void Release_Main();
 		void Release_Render();
 

@@ -24,7 +24,7 @@ namespace Pitaya::Editor
 			static void PreEndFrame();
 			static void PostRendererIntialize(void*);
 			static void PostRendererRelease();
-			static void PostRenderContextInitialized();
+			static void PostRenderContextInitialized(uint64_t rtId);
 			static void PreRenderContextReleased();
 			static void PostRendererSwapBuffer();
 			static void PreRendererEndRenderFrame();
@@ -36,6 +36,7 @@ namespace Pitaya::Editor
 			static void PostChronometerTick();
 			static void PostLog(Pitaya::Log::LogLevel, std::string_view);
 			static bool TerminateFixedUpdate();
+			static bool TerminateRenderPipelineSubmitFinalBlit();
 		};
 
 	private:
@@ -51,7 +52,7 @@ namespace Pitaya::Editor
 	private:
 		bool Initialize_Main(void* nativeWindow);
 		void Release_Main();
-		bool Initialize_Render();
+		bool Initialize_Render(uint64_t rtId);
 		void Release_Render();
 
 	private:

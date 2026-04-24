@@ -35,6 +35,7 @@ namespace Pitaya::Window
 	public:
 		bool IsClose() const override;
 		void* GetNativeWindow() const override;
+		glm::uvec2 GetWindowSize() const override;
 
 	private:
 		inline void RegisterKeyMap() noexcept
@@ -133,13 +134,6 @@ namespace Pitaya::Window
 			map[GLFW_KEY_F10] = Pitaya::Input::KeyCode::F10;
 			map[GLFW_KEY_F11] = Pitaya::Input::KeyCode::F11;
 			map[GLFW_KEY_F12] = Pitaya::Input::KeyCode::F12;
-		}
-
-	public:
-		inline void ResetSize(int width, int height) noexcept
-		{
-			this->width = width;
-			this->height = height;
 		}
 
 	private:

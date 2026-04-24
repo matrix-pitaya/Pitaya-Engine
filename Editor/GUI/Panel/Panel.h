@@ -90,16 +90,6 @@ namespace Pitaya::Editor
             return ImGuiWindowFlags_None;
         }
 
-        //子类可以自定义初始化 释放函数
-        virtual bool Initialize()
-        {
-            return true;
-        }
-        virtual void Release()
-        {
-
-        }
-
     protected:
         std::string name;
         bool isOpen = true;

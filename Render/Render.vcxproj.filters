@@ -72,6 +72,9 @@
     <ClInclude Include="Specific\RenderItem.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Command\BlitToScreenCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backend\OpenGL\OpenGLRenderer.cpp">

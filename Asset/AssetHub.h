@@ -70,7 +70,6 @@ namespace Pitaya::Asset
 				{ Pitaya::Asset::Mesh::Cube, std::filesystem::path("engine:/mesh/cube/cube.obj") },
 				{ Pitaya::Asset::Mesh::Panel, std::filesystem::path("engine:/mesh/panel/panel.obj") },
 				{ Pitaya::Asset::Mesh::Sphere, std::filesystem::path("engine:/mesh/Sphere.obj") },
-				{ Pitaya::Asset::RenderTarget::Game,std::filesystem::path("engine:/rendertarget/game.rt") },
 
 #pragma region TOREMOVE
 				{ Pitaya::Asset::Texture::Box,std::filesystem::path("engine:/texture/2D/box.jpg") },

@@ -22,16 +22,14 @@ namespace Pitaya::Editor
         SceneViewportPanel(SceneViewportPanel&&) = delete;
         SceneViewportPanel& operator=(SceneViewportPanel&&) = delete;
 
-    public:
-        bool Initialize() override
-        {
-            RT = Pitaya::Asset::LoadAsset<Pitaya::Asset::RenderTarget>(Pitaya::Asset::RenderTarget::Editor);
-            return true;
-        }
-
     private:
         void OnImGuiRender() override
         {
+            if (!textureId && RT.IsReady())
+            {
+                textureId = (void*)(ImTextureID)(intptr_t)RT->FinalColorAttachment;
+            }
+
             DrawMenuBar();
             ViewportPanel::OnImGuiRender();
             DrawGizmos();
@@ -44,5 +42,8 @@ namespace Pitaya::Editor
     private:
 		void DrawMenuBar();
         void DrawGizmos();
+
+    private:
+        Pitaya::Core::Asset<Pitaya::Asset::RenderTarget> RT = nullptr;
     };
 }

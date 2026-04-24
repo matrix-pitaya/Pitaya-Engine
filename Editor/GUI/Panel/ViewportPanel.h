@@ -47,11 +47,6 @@ namespace Pitaya::Editor
             viewportPos = ImGui::GetCursorScreenPos();
             viewportBoundsMin = ImVec2(viewportPos.x + offsetX, viewportPos.y + offsetY);
 
-            if (!textureId && RT.IsReady()) 
-            { 
-                textureId = (void*)(ImTextureID)(intptr_t)RT->FinalColorAttachment; 
-            }
-
             ImVec2 cursorPos = ImGui::GetCursorPos();
             if (textureId)
             {
@@ -64,10 +59,6 @@ namespace Pitaya::Editor
                 ImGui::Text("No Framebuffer Texture");
             }
         }
-        void Release() override
-        {
-            RT = nullptr;
-        }
         ImGuiWindowFlags GetWindowFlags() override
         {
             return ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -79,6 +70,5 @@ namespace Pitaya::Editor
         ImVec2 viewportPos = ImVec2(0, 0);
         ImVec2 viewportSize = ImVec2(0, 0);
         ImVec2 viewportBoundsMin = ImVec2(0, 0);
-        Pitaya::Core::Asset<Pitaya::Asset::RenderTarget> RT = nullptr;
     };
 }

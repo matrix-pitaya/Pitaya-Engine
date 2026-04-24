@@ -9,7 +9,7 @@ bool Pitaya::Game::GameWorld::Initialize()
 
 	//TODOD 序列化场景
 	entt::entity entity = activeScene->CreateEntity("Main Camera", "Main Camera");
-	activeScene->AddComponent<Camera>(entity).SetRenderTarget(Pitaya::Asset::RenderTarget::Game);
+	activeScene->AddComponent<Camera>(entity);
 
 	return true;
 }

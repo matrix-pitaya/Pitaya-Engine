@@ -36,11 +36,11 @@ namespace
         return scene && scene->HasComponent<T>(e);
     }
     inline constexpr const auto AvailableComponents = std::to_array<ComponentItem>({
-            { ICON_FA_CUBES,          "Mesh Renderer",      AddComponentAction<Pitaya::Game::MeshRenderer>,         HasComponentAction<Pitaya::Game::MeshRenderer> },
-            { ICON_FA_PAINT_ROLLER,   "Material Override",  AddComponentAction<Pitaya::Game::MaterialOverride>,     HasComponentAction<Pitaya::Game::MaterialOverride> },
-            { ICON_FA_CAMERA,         "Camera",             AddComponentAction<Pitaya::Game::Camera>,               HasComponentAction<Pitaya::Game::Camera> },
-            { ICON_FA_WEIGHT_HANGING, "Rigidbody",          AddComponentAction<Pitaya::Game::RigidBody>,            HasComponentAction<Pitaya::Game::RigidBody> },
-            { ICON_FA_FILE_CODE,      "Script",             AddComponentAction<Pitaya::Game::Script>,               HasComponentAction<Pitaya::Game::Script> } });
+            { ICON_FA_CUBES,          "Mesh Renderer",              AddComponentAction<Pitaya::Game::MeshRenderer>,             HasComponentAction<Pitaya::Game::MeshRenderer> },
+            { ICON_FA_PAINT_ROLLER,   "Material Override",          AddComponentAction<Pitaya::Game::MaterialOverride>,         HasComponentAction<Pitaya::Game::MaterialOverride> },
+            { ICON_FA_CAMERA,         "Camera",                     AddComponentAction<Pitaya::Game::Camera>,                   HasComponentAction<Pitaya::Game::Camera> },
+            { ICON_FA_WEIGHT_HANGING, "Rigidbody",                  AddComponentAction<Pitaya::Game::RigidBody>,                HasComponentAction<Pitaya::Game::RigidBody> },
+            { ICON_FA_FILE_CODE,      "Script",                     AddComponentAction<Pitaya::Game::Script>,                   HasComponentAction<Pitaya::Game::Script> } });
 
 
     template<typename Component, typename DrawFunc>
@@ -90,7 +90,7 @@ namespace
                 if (isOpen && !removeComponent)
                 {
                     ImGui::Indent(16.0f);
-                    drawfunc(component);
+                    drawfunc(scene, component);
                     ImGui::Unindent(16.0f);
                 }
 
@@ -106,7 +106,7 @@ namespace
     inline void DrawMetadataUI(entt::entity e)
     {
         DrawComponentUI<Pitaya::Game::Metadata>(e, ICON_FA_TAG " Metadata",
-            [](Pitaya::Game::Metadata* metadata)
+            [](Pitaya::Game::Scene*, Pitaya::Game::Metadata* metadata)
             {
                 ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.0f, 1.0f));
                 ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4.0f, 4.0f));
@@ -143,7 +143,7 @@ namespace
     inline void DrawTransformUI(entt::entity e)
     {
         DrawComponentUI<Pitaya::Game::Transform>(e, ICON_FA_ARROWS_UP_DOWN_LEFT_RIGHT " Transform",
-            [](Pitaya::Game::Transform* transform)
+            [](Pitaya::Game::Scene*, Pitaya::Game::Transform* transform)
             {
                 constexpr const float LABEL_WIDTH = 70.0f;
                 float availWidth = ImGui::GetContentRegionAvail().x;
@@ -201,7 +201,7 @@ namespace
     inline void DrawMeshRendererUI(entt::entity e)
     {
         DrawComponentUI<Pitaya::Game::MeshRenderer>(e, ICON_FA_CUBES " Mesh Renderer",
-            [](Pitaya::Game::MeshRenderer* meshRenderer)
+            [](Pitaya::Game::Scene*, Pitaya::Game::MeshRenderer* meshRenderer)
             {
                 constexpr const float LABEL_WIDTH = 90.0f;
                 constexpr const float RIGHT_PADDING = 8.0f;
@@ -269,7 +269,7 @@ namespace
     inline void DrawMaterialOverrideUI(entt::entity e)
     {
         DrawComponentUI<Pitaya::Game::MaterialOverride>(e, ICON_FA_PAINT_ROLLER " Material Override",
-            [](Pitaya::Game::MaterialOverride* materialOverride)
+            [](Pitaya::Game::Scene*, Pitaya::Game::MaterialOverride* materialOverride)
             {
                 constexpr float LABEL_WIDTH = 90.0f;
                 auto& materials = materialOverride->GetOverrideMaterials();
@@ -335,7 +335,7 @@ namespace
     inline void DrawCameraUI(entt::entity e)
     {
         DrawComponentUI<Pitaya::Game::Camera>(e, ICON_FA_CAMERA " Camera",
-            [](Pitaya::Game::Camera* camera)
+            [](Pitaya::Game::Scene* scene, Pitaya::Game::Camera* camera)
             {
                 constexpr float LABEL_WIDTH = 90.0f;
                 constexpr float RIGHT_PADDING = 8.0f;
@@ -378,7 +378,7 @@ namespace
                     ImGui::TextUnformatted("Target");
                     ImGui::SameLine(LABEL_WIDTH);
 
-                    const char* rtName = camera->GetRenderTargetIsReady() ? ICON_FA_IMAGE " Custom RenderTarget" : ICON_FA_DISPLAY " Screen Backbuffer";
+                    const char* rtName = camera->GetIsRenderToMainDisplayRT() ? ICON_FA_DISPLAY " Screen Backbuffer" : ICON_FA_IMAGE " Custom RenderTarget";
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.12f, 0.12f, 0.12f, 1.0f));
                     ImGui::Button(rtName, ImVec2(ImGui::GetContentRegionAvail().x - RIGHT_PADDING, 0));
                     ImGui::PopStyleColor();
@@ -508,7 +508,7 @@ namespace
     inline void DrawRigidbodyUI(entt::entity e)
     {
         DrawComponentUI<Pitaya::Game::RigidBody>(e, ICON_FA_WEIGHT_HANGING " RigidBody",
-            [](Pitaya::Game::RigidBody* rigidBody)
+            [](Pitaya::Game::Scene*, Pitaya::Game::RigidBody* rigidBody)
             {
                 constexpr const float LABEL_WIDTH = 90.0f;
                 constexpr const float RIGHT_PADDING = 8.0f;
@@ -545,7 +545,7 @@ namespace
     inline void DrawScriptUI(entt::entity e)
     {
         DrawComponentUI<Pitaya::Game::Script>(e, ICON_FA_FILE_CODE " Script",
-            [](Pitaya::Game::Script* script)
+            [](Pitaya::Game::Scene*, Pitaya::Game::Script* script)
             {
                 int scriptIndex = 0;
                 for (const auto& scriptInstance : script->GetScriptInstance())
@@ -565,7 +565,7 @@ namespace
             });
     }
     inline constexpr const auto ComponentDrawFuncs = std::to_array<void(*)(entt::entity)>(
-        { DrawMetadataUI, DrawTransformUI, DrawMeshRendererUI, DrawMaterialOverrideUI, DrawCameraUI, DrawRigidbodyUI, DrawScriptUI });
+        { DrawMetadataUI, DrawTransformUI, DrawMeshRendererUI, DrawMaterialOverrideUI, DrawCameraUI , DrawRigidbodyUI, DrawScriptUI });
 }
 
 void Pitaya::Editor::InspectorPanel::OnImGuiRender()

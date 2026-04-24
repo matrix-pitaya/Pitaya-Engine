@@ -46,11 +46,8 @@ bool Pitaya::Window::GLFWWindow::Initialize(int width, int height, const char* t
 
 	SetWindowStyle();
 	glfwShowWindow(window);
-	
 	RegisterKeyMap();
-	this->width = width;
-	this->height = height;
-	
+
 	return true;
 }
 void Pitaya::Window::GLFWWindow::Release()
@@ -74,6 +71,12 @@ void Pitaya::Window::GLFWWindow::CloseWindow(Pitaya::Core::PassKey<Pitaya::Engin
 void* Pitaya::Window::GLFWWindow::GetNativeWindow() const
 {
 	return window;
+}
+glm::uvec2 Pitaya::Window::GLFWWindow::GetWindowSize() const
+{
+	int width, height;
+	glfwGetFramebufferSize(window, &width, &height);
+	return { width, height };
 }
 void Pitaya::Window::GLFWWindow::SetWindowStyle()
 {
@@ -109,9 +112,6 @@ void Pitaya::Window::GLFWWindow::SetWindowStyle()
 }
 void Pitaya::Window::GLFWWindow::FramebufferResetSizeCallback(GLFWwindow* glfwWindow, int width, int height)
 {
-	Pitaya::Window::GLFWWindow* window = static_cast<GLFWWindow*>(glfwGetWindowUserPointer(glfwWindow));
-	if (window) { window->ResetSize(width, height); }
-	
 	if ((width > 0) && (height > 0))
 	{
 		Pitaya::Event::FramebufferResetSizeEventArgs args = Pitaya::Event::FramebufferResetSizeEventArgs(width, height);
