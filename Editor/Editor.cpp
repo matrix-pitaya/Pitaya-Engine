@@ -26,15 +26,23 @@ void Pitaya::Editor::Editor::HookFunc::PreEndFrame()
 }
 void Pitaya::Editor::Editor::HookFunc::PostRendererIntialize(void* nativeWindow)
 {
-	Pitaya::Editor::Editor::Instance().Initialize_Main(nativeWindow);
+	if (!Pitaya::Editor::Editor::Instance().Initialize_Main(nativeWindow))
+	{
+		throw std::runtime_error("Editor Main Initialzie Fail!");
+	}
 }
 void Pitaya::Editor::Editor::HookFunc::PostRendererRelease()
 {
 	Pitaya::Editor::Editor::Instance().Release_Main();
 }
-void Pitaya::Editor::Editor::HookFunc::PostRenderContextInitialized(uint64_t rtId)
+void Pitaya::Editor::Editor::HookFunc::PostRenderContextInitialized(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint64_t rtId)
 {
-	Pitaya::Editor::Editor::Instance().Initialize_Render(rtId);
+	if (!Pitaya::Editor::Editor::Instance().Initialize_Render(passkey, rtId))
+	{
+		// TODO 考虑一下渲染线程如何通知主线程失败
+		MessageBoxA(NULL, "Editor Render Initialize Fail!", "Error", MB_OK);
+		exit(-1);
+	}
 }
 void Pitaya::Editor::Editor::HookFunc::PreRenderContextReleased()
 {
@@ -63,10 +71,9 @@ bool Pitaya::Editor::Editor::HookFunc::ShouldSubmitSceneCameraPass()
 void Pitaya::Editor::Editor::HookFunc::PreRenderPipelineExecute(Pitaya::Core::PassKey<Pitaya::Engine::Engine> passkey, Pitaya::Render::RenderPipeline* renderPipeline)
 {
 	//提交EditorCamera
-	if (Pitaya::Editor::Editor::Instance().gui.panels.sceneViewportPanel.GetIsVisable() && 
-		Pitaya::Editor::Editor::Instance().camera.GetRenderTargetIsReady())
+	if (Pitaya::Editor::Editor::Instance().gui.panels.sceneViewportPanel.GetIsVisable())
 	{
-		//TODO 增加特殊网格对象 天空盒对象
+		//TODO 增加特殊网格对象
 		if (Pitaya::Editor::Editor::Instance().gui.context.GizmoState.ShowGrid)
 		{
 			//renderPipeline->AddRenderObject();
@@ -74,7 +81,7 @@ void Pitaya::Editor::Editor::HookFunc::PreRenderPipelineExecute(Pitaya::Core::Pa
 		
 		renderPipeline->AddRenderPass(passkey,
 			Pitaya::Editor::Editor::Instance().camera.GetCameraSnapshot(), Pitaya::Editor::Editor::Instance().camera.GetPostProcessSettings(), 
-			Pitaya::Editor::Editor::Instance().camera.GetCullingMask(), Pitaya::Editor::Editor::Instance().camera.GetNativeRT());
+			Pitaya::Editor::Editor::Instance().camera.GetCullingMask(), Pitaya::Editor::Editor::Instance().camera.GetNativeRenderTarget());
 	}
 
 	//提交UI
@@ -120,21 +127,22 @@ bool Pitaya::Editor::Editor::Initialize_Main(void* nativeWindow)
 		Pitaya::Event::EventType::MouseCurrsorMove,
 		&Pitaya::Editor::Editor::OnMouseCurrsorMove, this);
 	
-	return camera.Initialize() && gui.Initialize_Main(nativeWindow);
+	return camera.Initialize_Main() && gui.Initialize_Main(nativeWindow);
 }
-bool Pitaya::Editor::Editor::Initialize_Render(uint64_t rtId)
+bool Pitaya::Editor::Editor::Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint64_t rtId)
 {
-	return gui.Initialize_Render(rtId);
+	return camera.Initialize_Render(passkey) && gui.Initialize_Render(rtId, camera.renderTarget.FinalColorAttachment);
 }
 void Pitaya::Editor::Editor::Release_Main()
 {
 	Pitaya::Event::UnSubscribe(mouseScrollToken);
 	Pitaya::Event::UnSubscribe(mouseCurrsorMoveToken);
-	camera.Release();
+	camera.Release_Main();
 	gui.Release_Main();
 }
 void Pitaya::Editor::Editor::Release_Render()
 {
+	camera.Release_Render();
 	gui.Release_Render();
 }
 void Pitaya::Editor::Editor::BeginFrame()

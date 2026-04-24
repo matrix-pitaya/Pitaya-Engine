@@ -24,7 +24,7 @@ namespace Pitaya::Editor
 			static void PreEndFrame();
 			static void PostRendererIntialize(void*);
 			static void PostRendererRelease();
-			static void PostRenderContextInitialized(uint64_t rtId);
+			static void PostRenderContextInitialized(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, uint64_t);
 			static void PreRenderContextReleased();
 			static void PostRendererSwapBuffer();
 			static void PreRendererEndRenderFrame();
@@ -52,7 +52,7 @@ namespace Pitaya::Editor
 	private:
 		bool Initialize_Main(void* nativeWindow);
 		void Release_Main();
-		bool Initialize_Render(uint64_t rtId);
+		bool Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint64_t rtId);
 		void Release_Render();
 
 	private:

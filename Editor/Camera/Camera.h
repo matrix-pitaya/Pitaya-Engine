@@ -4,11 +4,14 @@
 #include<Core/Common/Direction.h>
 #include<Core/Asset/Asset.h>
 #include<Core/StateFlags/StateFlags.h>
+#include<Core/PassKey/PassKey.h>
 
 #include<Event/Common/EventArgs.h>
 #include<Asset/Common/RenderTarget.h>
 #include<Render/Common/PostProcessSetting.h>
 #include<Render/Common/RenderLayer.h>
+
+namespace Pitaya::Render { class Renderer; }
 
 namespace Pitaya::Editor
 {
@@ -35,8 +38,10 @@ namespace Pitaya::Editor
 		Camera& operator=(Camera&&) = delete;
 
 	private:
-		bool Initialize();
-		void Release();
+		bool Initialize_Main();
+		bool Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer>);
+		void Release_Main();
+		void Release_Render();
 
 	private:
 		void Update();
@@ -72,10 +77,6 @@ namespace Pitaya::Editor
 		{
 			return cullingMask.GetEnum();
 		}
-		inline bool GetRenderTargetIsReady() const noexcept
-		{
-			return renderTarget.IsReady();
-		}
 		inline void ApplyViewMatrix(const glm::mat4& newViewMatrix)
 		{
 			glm::mat4 invView = glm::inverse(newViewMatrix);
@@ -87,9 +88,9 @@ namespace Pitaya::Editor
 			if (mode == CameraMode::Orbit) { pivot = position + forward * distance; }
 			dirty = true;
 		}
-		inline Pitaya::Asset::RenderTarget* GetNativeRT()
+		inline Pitaya::Asset::RenderTarget* GetNativeRenderTarget()
 		{
-			return renderTarget.GetNativeAssetData();
+			return &renderTarget;
 		}
 
 	private:
@@ -99,8 +100,9 @@ namespace Pitaya::Editor
 
 		//Render Base
 		Pitaya::Core::StateFlags<Pitaya::Render::RenderLayer> cullingMask = static_cast<Pitaya::Render::RenderLayer>(0xFFFFFFFF);
-		Pitaya::Core::Asset<Pitaya::Asset::RenderTarget> renderTarget = nullptr;
+		Pitaya::Asset::RenderTarget renderTarget;
 		Pitaya::Render::PostProcessSetting setting;		//TODO 换成Asset 然后生成PostProcessSetting 
+		std::atomic<bool> falg = false;	
 
 		//Transform
 		glm::vec3 position = glm::vec3(0.0f);

@@ -4,7 +4,7 @@
 
 namespace
 {
-    std::unique_ptr<Pitaya::Serialize::SerializeContext> CreateSerializeContext(Pitaya::Serialize::API api) noexcept
+    inline std::unique_ptr<Pitaya::Serialize::SerializeContext> CreateSerializeContext(Pitaya::Serialize::API api)
     {
         switch (api)
         {
@@ -20,7 +20,7 @@ namespace
                 return std::make_unique<Pitaya::Serialize::YAMLSerializeContext>();
         }
     }
-    std::unique_ptr<Pitaya::Serialize::DeserializeContext> CreateDeserializeContext(Pitaya::Serialize::API api) noexcept
+    inline std::unique_ptr<Pitaya::Serialize::DeserializeContext> CreateDeserializeContext(Pitaya::Serialize::API api)
     {
         switch (api)
         {

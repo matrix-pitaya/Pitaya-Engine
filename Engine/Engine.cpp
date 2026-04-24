@@ -677,13 +677,13 @@ void Pitaya::Engine::Engine::Render()
 				{
 					MODULE(RenderPipeline)->AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
 						camera.GetCameraState().BuildSnapshot(transform.GetWorldPosition(), transform.GetWorldForward(), transform.GetWorldUp()),
-						camera.GetPostProcessSetting(), camera.GetCullingMask(), nullptr);	//提交nullptr渲染到MainRT
+						camera.GetPostProcessSetting(), camera.GetCullingMask(), nullptr);	//提交nullptr渲染到MainDisplayRT
 				}
 				else if(camera.GetRenderTargetIsReady())
 				{
 					MODULE(RenderPipeline)->AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
 						camera.GetCameraState().BuildSnapshot(transform.GetWorldPosition(), transform.GetWorldForward(), transform.GetWorldUp()),
-						camera.GetPostProcessSetting(), camera.GetCullingMask(), camera.GetNativeRenderTarget());	//提交到自定义RT
+						camera.GetPostProcessSetting(), camera.GetCullingMask(), camera.GetNativeRenderTarget());	//提交资产RT
 				}
 			}
 		}

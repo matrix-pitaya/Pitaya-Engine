@@ -6,7 +6,7 @@
 #include<Engine/API/def.h>
 
 namespace Pitaya::Engine { class Engine; }
-namespace Pitaya::Render { class RenderPipeline; }
+namespace Pitaya::Render { class Renderer; class RenderPipeline; }
 
 namespace Pitaya::Engine
 {
@@ -24,7 +24,7 @@ namespace Pitaya::Engine
 	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Global_PostRendererSwapBuffer_Hook;
 	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Global_PostRendererBeginRenderFrame_Hook;
 	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Global_PreRendereEndRenderFrame_Hook;
-	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)(uint64_t)> Global_PostRenderContextInitialized_Hook;
+	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, uint64_t)> Global_PostRenderContextInitialized_Hook;
 	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Global_PreRenderContextRelease_Hook;
 	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Render::RenderPipeline*)> Global_PreRenderPipelineExecute_Hook;
 	extern "C" ENGINE_API extern Hook<bool(ENGINE_CALL)()> Global_ShouldWakeupRenderThread_Hook;

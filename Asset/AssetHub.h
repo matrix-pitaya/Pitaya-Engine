@@ -92,7 +92,6 @@ namespace Pitaya::Asset
 				{ Pitaya::Asset::Material::Backpack,std::filesystem::path("engine:/mesh/backpack/Scene_-_Root.mat") },
 				{ Pitaya::Asset::Material::Planet,std::filesystem::path("engine:/mesh/planet/Material.001.mat") },
 				{ Pitaya::Asset::Material::Rock,std::filesystem::path("engine:/mesh/rock/Material.mat") },
-				{ Pitaya::Asset::RenderTarget::Editor,std::filesystem::path("engine:/rendertarget/editor.rt") },
 				{Pitaya::Asset::Mesh::Backpack,std::filesystem::path("engine:/mesh/backpack/backpack.obj") },
 				{Pitaya::Asset::Mesh::Planet,std::filesystem::path("engine:/mesh/planet/planet.obj")},
 				{Pitaya::Asset::Mesh::Rock,std::filesystem::path("engine:/mesh/rock/rock.obj") }

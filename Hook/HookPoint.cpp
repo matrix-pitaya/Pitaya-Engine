@@ -14,7 +14,7 @@ Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Global_PostRendererPar
 Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Global_PostRendererSwapBuffer_Hook;
 Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Global_PostRendererBeginRenderFrame_Hook;
 Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Global_PreRendereEndRenderFrame_Hook;
-Pitaya::Engine::Hook<void(ENGINE_CALL)(uint64_t)> Pitaya::Engine::Global_PostRenderContextInitialized_Hook;
+Pitaya::Engine::Hook<void(ENGINE_CALL)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, uint64_t)> Pitaya::Engine::Global_PostRenderContextInitialized_Hook;
 Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Global_PreRenderContextRelease_Hook;
 Pitaya::Engine::Hook<void(ENGINE_CALL)(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Render::RenderPipeline*)> Pitaya::Engine::Global_PreRenderPipelineExecute_Hook;
 Pitaya::Engine::Hook<bool(ENGINE_CALL)()> Pitaya::Engine::Global_ShouldWakeupRenderThread_Hook;

@@ -496,7 +496,7 @@ namespace Pitaya::Render
 		{
 			InitializeRenderContext(nativeWindow);
 			globalRHI.Create(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
-			INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(globalRHI.MainFinalColorAttachment)
+			INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), globalRHI.MainFinalColorAttachment)
 
 			while (true)
 			{

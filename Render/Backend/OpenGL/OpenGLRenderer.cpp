@@ -10,7 +10,9 @@ bool Pitaya::Render::OpenGLRenderer::InitializeRenderContext(void* nativeWindow)
 	glfwWindow = reinterpret_cast<GLFWwindow*>(nativeWindow);
 	if (!glfwWindow)
 	{
-		Pitaya::Log::Error("OpenGL Window Get Fail!");
+		// TODO 考虑一下渲染线程如何通知主线程失败
+		MessageBoxA(NULL, "Initialize OpenGL Context Failed! Reinterpret Cast NativeWindow Fail!", "Error", MB_OK);
+		exit(-1);
 		return false;
 	}
 
@@ -21,6 +23,9 @@ bool Pitaya::Render::OpenGLRenderer::InitializeRenderContext(void* nativeWindow)
 	//初始化GLEW
 	if (glewInit() != GLEW_OK) 
 	{ 
+		// TODO 考虑一下渲染线程如何通知主线程失败
+		MessageBoxA(NULL, "Initialize OpenGL Context Failed! GLEW InitFail!", "Error", MB_OK);
+		exit(-1);
 		return false; 
 	}
 

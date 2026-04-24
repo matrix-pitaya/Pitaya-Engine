@@ -27,9 +27,6 @@ namespace Pitaya::Asset
 		bool ClearDepth = true;
 		bool ClearStencil = true;
 
-		//RenderTarget 23-24
-		inline static constexpr const Pitaya::Core::GUID Editor = Pitaya::Core::GUID("00000000-0200-0000-0000-000000000000");
-
     private:
         void Serialize(Pitaya::Serialize::SerializeContext& context) const override
         {

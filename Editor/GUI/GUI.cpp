@@ -160,19 +160,15 @@ bool Pitaya::Editor::GUI::Initialize_Main(void* nativeWindow)
 	while (!isRenderReady.load(std::memory_order_acquire)){ std::this_thread::yield(); }
 	return drawer.Initialize(nativeWindow);
 }
-bool Pitaya::Editor::GUI::Initialize_Render(uint64_t rtId)
+bool Pitaya::Editor::GUI::Initialize_Render(uint64_t gameRT, uint64_t editorRT)
 {
 	ImGuiContext* context = nullptr;
 	while (!(context = imGuiContext.load(std::memory_order_acquire))) { std::this_thread::yield(); }
 	ImGui::SetCurrentContext(context);
 	ImGui_ImplOpenGL3_Init("#version 130");
 	ImGui_ImplOpenGL3_CreateDeviceObjects();
-	panels.gameViewportPanel.textureId = reinterpret_cast<void*>(rtId);
-
-	//TODO 读取配置文件创建GPU资源
-	panels.sceneViewportPanel.RT = Pitaya::Asset::LoadAsset<Pitaya::Asset::RenderTarget>(Pitaya::Asset::RenderTarget::Editor);
-	//END TODO
-
+	panels.gameViewportPanel.textureId = reinterpret_cast<void*>(gameRT);
+	panels.sceneViewportPanel.textureId = reinterpret_cast<void*>(editorRT);
 	isRenderReady.store(true, std::memory_order_release);
 	return true;
 }

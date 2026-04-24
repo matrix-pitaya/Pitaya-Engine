@@ -188,7 +188,7 @@ namespace Pitaya::Editor
 
 	private:
 		bool Initialize_Main(void* nativeWindow);
-		bool Initialize_Render(uint64_t rtId);
+		bool Initialize_Render(uint64_t gameRT, uint64_t editorRT);
 		void Release_Main();
 		void Release_Render();
 

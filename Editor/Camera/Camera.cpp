@@ -2,22 +2,53 @@
 #include<Asset/Common/FuncTable.h>
 #include<Input/Common/FuncTable.h>
 #include<Time/Common/FuncTable.h>
+#include<GPU/Common/FuncTable.h>
+#include<Core/Utils/File.h>
 
-bool Pitaya::Editor::Camera::Initialize()
+#include<thread>
+
+bool Pitaya::Editor::Camera::Initialize_Main()
 {
-	renderTarget = Pitaya::Asset::LoadAsset<Pitaya::Asset::RenderTarget>(Pitaya::Asset::RenderTarget::Editor);
-
-	//TOOD 改成Asset资产，然后根据资产去动态创建PostProcessSettin
+	if (!renderTarget.DeserializeFromFile(Pitaya::Core::GetExecutableDirectory() / "editor/RenderTarget/Editor.rt")) { return false; }
+	falg.store(true, std::memory_order_release);
 	Pitaya::Render::PostProcessStep step;
 	Pitaya::Render::GammaCorrectionParams gama;
 	step.SetParams(gama);
 	setting.AddStep(step);
-	
+	while (falg.load(std::memory_order_acquire)) { std::this_thread::yield(); }
 	return true;
 }
-void Pitaya::Editor::Camera::Release()
+void Pitaya::Editor::Camera::Release_Main()
 {
-	renderTarget = nullptr;
+	renderTarget.SerializeToFile(Pitaya::Core::GetExecutableDirectory() / "editor/RenderTarget/Editor.rt");
+}
+bool Pitaya::Editor::Camera::Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
+{
+	while (!falg.load(std::memory_order_acquire)) { std::this_thread::yield(); }
+	Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> mainSceneGPUIdentifier = Pitaya::GPU::CreateFrameBuffer(passkey, renderTarget.SceneFrameBufferSpecification);
+	Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> mainPingPongGPUIdentifier[2] = {
+		Pitaya::GPU::CreateFrameBuffer(passkey, renderTarget.PingPongFrameBufferSpecification),
+		Pitaya::GPU::CreateFrameBuffer(passkey, renderTarget.PingPongFrameBufferSpecification) };
+	Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> mainFinalGPUIdentifier = Pitaya::GPU::CreateFrameBuffer(passkey, renderTarget.FinalFrameBufferSpecification);
+	Pitaya::GPU::FrameBuffer* sceneFrambuffer = Pitaya::GPU::GetFrameBuffer(passkey, mainSceneGPUIdentifier);
+	Pitaya::GPU::FrameBuffer* pingPongFrambuffer[2] = { Pitaya::GPU::GetFrameBuffer(passkey, mainPingPongGPUIdentifier[0]), Pitaya::GPU::GetFrameBuffer(passkey, mainPingPongGPUIdentifier[1]) };
+	Pitaya::GPU::FrameBuffer* finalFrambuffer = Pitaya::GPU::GetFrameBuffer(passkey, mainFinalGPUIdentifier);
+	if (!sceneFrambuffer || !pingPongFrambuffer[0] || !pingPongFrambuffer[1] || !finalFrambuffer) { return false; }
+	renderTarget.SceneFrameBuffer = mainSceneGPUIdentifier;
+	renderTarget.SceneInternalFrameBuffer = sceneFrambuffer->GetInternalGPUIdentifier();
+	renderTarget.SceneColorAttachment = sceneFrambuffer->GetColorAttachmentGPUIdentifier();
+	renderTarget.PingPongFrameBuffers[0] = mainPingPongGPUIdentifier[0];
+	renderTarget.PingPongColorAttachments[0] = pingPongFrambuffer[0]->GetColorAttachmentGPUIdentifier();
+	renderTarget.PingPongFrameBuffers[1] = mainPingPongGPUIdentifier[1];
+	renderTarget.PingPongColorAttachments[1] = pingPongFrambuffer[1]->GetColorAttachmentGPUIdentifier();
+	renderTarget.FinalFrameBuffer = mainFinalGPUIdentifier;
+	renderTarget.FinalColorAttachment = finalFrambuffer->GetColorAttachmentGPUIdentifier();
+	falg.store(false, std::memory_order_release);
+	return true;
+}
+void Pitaya::Editor::Camera::Release_Render()
+{
+
 }
 void Pitaya::Editor::Camera::Update()
 {
