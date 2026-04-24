@@ -546,37 +546,18 @@ namespace Pitaya::Render
 			if (pass.RenderTarget)
 			{
 				beginPassCommand.SceneFrameBuffer = pass.RenderTarget->SceneFrameBuffer;
-				beginPassCommand.SceneInternalFrameBuffer = pass.RenderTarget->SceneInternalFrameBuffer;
-				beginPassCommand.SceneColorAttachment = pass.RenderTarget->SceneColorAttachment;
-				beginPassCommand.PingPongFrameBuffers[0] = pass.RenderTarget->PingPongFrameBuffers[0];
-				beginPassCommand.PingPongFrameBuffers[1] = pass.RenderTarget->PingPongFrameBuffers[1];
-				beginPassCommand.PingPongColorAttachments[0] = pass.RenderTarget->PingPongColorAttachments[0];
-				beginPassCommand.PingPongColorAttachments[1] = pass.RenderTarget->PingPongColorAttachments[1];
-				beginPassCommand.FinalFrameBuffer = pass.RenderTarget->FinalFrameBuffer;
-				beginPassCommand.FinalColorAttachment = pass.RenderTarget->FinalColorAttachment;
 				beginPassCommand.ClearColor = pass.RenderTarget->ClearColor;
 				beginPassCommand.Rect = { {0.0f, 0.0f}, { pass.RenderTarget->SceneFrameBufferSpecification.Width, pass.RenderTarget->SceneFrameBufferSpecification.Height } };
 				beginPassCommand.ClearDepth = pass.RenderTarget->ClearDepth;
 				beginPassCommand.ClearStencil = pass.RenderTarget->ClearStencil;
-				beginPassCommand.Multisample = pass.RenderTarget->SceneFrameBufferSpecification.Samples > 1;
 			}
 			else
 			{
 				Pitaya::GPU::FrameBufferSpecification mainSceneSpec = Pitaya::Config::GetMainSceneSpec();
-				beginPassCommand.SceneFrameBuffer = globalRHI.MainSceneFrameBuffer;
-				beginPassCommand.SceneInternalFrameBuffer = globalRHI.MainSceneInternalFrameBuffer;
-				beginPassCommand.SceneColorAttachment = globalRHI.MainSceneColorAttachment;
-				beginPassCommand.PingPongFrameBuffers[0] = globalRHI.MainPingPongFrameBuffers[0];
-				beginPassCommand.PingPongFrameBuffers[1] = globalRHI.MainPingPongFrameBuffers[1];
-				beginPassCommand.PingPongColorAttachments[0] = globalRHI.MainPingPongColorAttachments[0];
-				beginPassCommand.PingPongColorAttachments[1] = globalRHI.MainPingPongColorAttachments[1];
-				beginPassCommand.FinalFrameBuffer = globalRHI.MainFinalFrameBuffer;
-				beginPassCommand.FinalColorAttachment = globalRHI.MainFinalColorAttachment;
 				beginPassCommand.ClearColor = Pitaya::Core::Color::SkyBlue;
 				beginPassCommand.Rect = { {0.0f, 0.0f}, { mainSceneSpec.Width, mainSceneSpec.Height } };
 				beginPassCommand.ClearDepth = true;
 				beginPassCommand.ClearStencil = true;
-				beginPassCommand.Multisample = mainSceneSpec.Samples > 1;
 			}
 			renderPacket.PushCommand(beginPassCommand);
 		}
