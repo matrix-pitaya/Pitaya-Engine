@@ -13,7 +13,7 @@
 
 namespace
 {
-	//辅助构建Cube、Panel数据
+	//辅助构建网格数据
 	struct StaticMeshVertex 
 	{
 		glm::vec3 Position;

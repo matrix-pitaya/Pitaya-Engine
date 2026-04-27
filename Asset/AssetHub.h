@@ -62,41 +62,7 @@ namespace Pitaya::Asset
 			void Serialize(Pitaya::Serialize::SerializeContext&) const override;
 			void Deserialize(const Pitaya::Serialize::DeserializeContext&) override;
 
-			Pitaya::Core::ThreadSafeBidirectionalMap<Core::GUID, std::filesystem::path> Map =
-			{
-				{ Pitaya::Asset::Shader::Default, std::filesystem::path("engine:/shader/default/default.shader")},
-				{ Pitaya::Asset::Texture::White, std::filesystem::path("engine:/texture/2D/white.png") },
-				{ Pitaya::Asset::Material::Default, std::filesystem::path("engine:/material/default.mat") },
-				{ Pitaya::Asset::Mesh::Cube, std::filesystem::path("engine:/mesh/cube/cube.obj") },
-				{ Pitaya::Asset::Mesh::Panel, std::filesystem::path("engine:/mesh/panel/panel.obj") },
-				{ Pitaya::Asset::Mesh::Sphere, std::filesystem::path("engine:/mesh/Sphere.obj") },
-
-#pragma region TOREMOVE
-				{ Pitaya::Asset::Texture::Box,std::filesystem::path("engine:/texture/2D/box.jpg") },
-				{ Pitaya::Asset::Texture::Face,std::filesystem::path("engine:/texture/2D/face.png") },
-				{ Pitaya::Asset::Texture::Gress,std::filesystem::path("engine:/texture/2D/gress.png") },
-				{ Pitaya::Asset::Texture::Huolg,std::filesystem::path("engine:/texture/2D/Huolg.png") },
-				{ Pitaya::Asset::Texture::Irony,std::filesystem::path("engine:/texture/2D/irony.png") },
-				{ Pitaya::Asset::Texture::TrasnformWindow,std::filesystem::path("engine:/texture/2D/trasnform_window.png") },
-				{ Pitaya::Asset::Texture::Wood,std::filesystem::path("engine:/texture/2D/wood.png") },
-				{ Pitaya::Asset::Texture::Wall,std::filesystem::path("engine:/texture/2D/wall.jpg") },
-				{ Pitaya::Asset::Texture::Glacier,std::filesystem::path("engine:/texture/Cubemap/glacier/glacier.cubemap") },
-				{ Pitaya::Asset::Texture::Palace,std::filesystem::path("engine:/texture/Cubemap/palace/palace.cubemap") },
-				{ Pitaya::Asset::Texture::Backpack_Ao,std::filesystem::path("engine:/mesh/backpack/ao.jpg") },
-				{ Pitaya::Asset::Texture::Backpack_Diffuse,std::filesystem::path("engine:/mesh/backpack/diffuse.jpg") },
-				{ Pitaya::Asset::Texture::Backpack_Normal,std::filesystem::path("engine:/mesh/backpack/normal.png") },
-				{ Pitaya::Asset::Texture::Backpack_Roughness,std::filesystem::path("engine:/mesh/backpack/roughness.jpg") },
-				{ Pitaya::Asset::Texture::Backpack_Specular,std::filesystem::path("engine:/mesh/backpack/specular.jpg") },
-				{ Pitaya::Asset::Texture::Planet_Quom,std::filesystem::path("engine:/mesh/planet/planet_Quom1200.png") },
-				{ Pitaya::Asset::Texture::Rock_Surface,std::filesystem::path("engine:/mesh/rock/Rock-Texture-Surface.jpg") },
-				{ Pitaya::Asset::Material::Backpack,std::filesystem::path("engine:/mesh/backpack/Scene_-_Root.mat") },
-				{ Pitaya::Asset::Material::Planet,std::filesystem::path("engine:/mesh/planet/Material.001.mat") },
-				{ Pitaya::Asset::Material::Rock,std::filesystem::path("engine:/mesh/rock/Material.mat") },
-				{Pitaya::Asset::Mesh::Backpack,std::filesystem::path("engine:/mesh/backpack/backpack.obj") },
-				{Pitaya::Asset::Mesh::Planet,std::filesystem::path("engine:/mesh/planet/planet.obj")},
-				{Pitaya::Asset::Mesh::Rock,std::filesystem::path("engine:/mesh/rock/rock.obj") }
-#pragma endregion
-			};
+			Pitaya::Core::ThreadSafeBidirectionalMap<Core::GUID, std::filesystem::path> Map;
 		};
 		struct BuildInAsset
 		{
@@ -133,7 +99,7 @@ namespace Pitaya::Asset
 				std::is_same_v<T, Pitaya::Asset::Material>,
 				"Unknow Asset!");
 
-			if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { if (guid == Pitaya::Asset::Shader::Default) { Pitaya::Core::Asset<Pitaya::Asset::Shader>(&buildIn.DefaultShader); } }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { if (guid == Pitaya::Asset::Shader::Default) { return Pitaya::Core::Asset<Pitaya::Asset::Shader>(&buildIn.DefaultShader); } }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Material>) { if (guid == Pitaya::Asset::Material::Default) { return Pitaya::Core::Asset<Pitaya::Asset::Material>(&buildIn.DefaultMaterial); } }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Texture>) { if (guid == Pitaya::Asset::Texture::White) { return Pitaya::Core::Asset<Pitaya::Asset::Texture>(&buildIn.White); } }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Mesh>) { if (guid == Pitaya::Asset::Mesh::Sphere) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Sphere); } else if (guid == Pitaya::Asset::Mesh::Cube) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Cube); } else if (guid == Pitaya::Asset::Mesh::Panel) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Panel); } }

@@ -112,9 +112,6 @@ namespace Pitaya::Asset
 	public:
 		//Material 17-22
 		inline static constexpr const Pitaya::Core::GUID Default = Pitaya::Core::GUID("00000000-0000-0001-0000-000000000000");
-		inline static constexpr const Pitaya::Core::GUID Backpack = Pitaya::Core::GUID("00000000-0000-0002-0000-000000000000");
-		inline static constexpr const Pitaya::Core::GUID Planet = Pitaya::Core::GUID("00000000-0000-0003-0000-000000000000");
-		inline static constexpr const Pitaya::Core::GUID Rock = Pitaya::Core::GUID("00000000-0000-0004-0000-000000000000");
 
 	private:
 		inline static uint32_t Next() noexcept
