@@ -22,7 +22,7 @@ namespace Pitaya::Asset
 		inline static constexpr const Pitaya::Core::GUID TrasnformWindow = Pitaya::Core::GUID("00000000-0000-0000-0000-000000000007");
 		inline static constexpr const Pitaya::Core::GUID Wall = Pitaya::Core::GUID("00000000-0000-0000-0000-000000000008");
 		inline static constexpr const Pitaya::Core::GUID Wood = Pitaya::Core::GUID("00000000-0000-0000-0000-000000000009");
-		inline static constexpr const Pitaya::Core::GUID Glacier = Pitaya::Core::GUID("00000000-0000-0000-0000-0000000000010");
+		inline static constexpr const Pitaya::Core::GUID Glacier = Pitaya::Core::GUID("00000000-0000-0000-0000-000000000010");
 		inline static constexpr const Pitaya::Core::GUID Palace = Pitaya::Core::GUID("00000000-0000-0000-0000-000000000011");
 		inline static constexpr const Pitaya::Core::GUID Backpack_Ao = Pitaya::Core::GUID("00000000-0000-0000-0000-000000000012");
 		inline static constexpr const Pitaya::Core::GUID Backpack_Diffuse = Pitaya::Core::GUID("00000000-0000-0000-0000-000000000013");

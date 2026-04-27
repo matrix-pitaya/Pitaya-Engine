@@ -151,7 +151,6 @@ namespace Pitaya::Render
 				Pitaya::GPU::IndexBuffer* fallbackIboPtr = Pitaya::GPU::GetIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), fallbackIBO);
 				if (!fallbackVaoPtr || !fallbackVboPtr || !fallbackIboPtr)
 				{
-					// TODO 考虑一下渲染线程如何通知主线程失败
 					MessageBoxA(NULL, "Create Global RHI Failed! Check Log for Details.", "Error", MB_OK);
 					exit(-1);
 				}
@@ -180,7 +179,6 @@ namespace Pitaya::Render
 				Pitaya::GPU::FrameBuffer* finalFrambuffer = Pitaya::GPU::GetFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainFinalGPUIdentifier);
 				if (!sceneFrambuffer || !pingPongFrambuffer[0] || !pingPongFrambuffer[1] || !finalFrambuffer)
 				{
-					// TODO 考虑一下渲染线程如何通知主线程失败
 					MessageBoxA(NULL, "Create Global RHI Failed! Check Log for Details.", "Error", MB_OK);
 					exit(-1);
 				}
@@ -509,7 +507,7 @@ namespace Pitaya::Render
 				if (renderPacket.IsRemain() || INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK)
 				{
 					NewRenderFrame();
-					ParseCommand();
+					renderPacket.ParseCommand(this);
 					SwapBuffer();
 				}
 			}
@@ -517,10 +515,6 @@ namespace Pitaya::Render
 			INVOKE_PRERENDERCONTEXTINRELEASED_HOOK
 			Pitaya::GPU::DestroyAllGPUResource(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
 			ReleaseRenderContext();
-		}
-		inline void ParseCommand()
-		{
-			renderPacket.ParseCommand(this);
 		}
 
 	protected:
@@ -665,22 +659,23 @@ namespace Pitaya::Render
 				auto& currentStep = pass.PostProcessSetting.Steps[i];
 				auto pingPongFrameBuffers = pass.RenderTarget ? pass.RenderTarget->PingPongFrameBuffers[pingpongIndex] : globalRHI.MainPingPongFrameBuffers[pingpongIndex];
 				auto pingPongColorAttachments = pass.RenderTarget ? pass.RenderTarget->PingPongColorAttachments[pingpongIndex] : globalRHI.MainPingPongColorAttachments[pingpongIndex];
+				
 				PostProcessCommand cmd;
 				cmd.PostProcessStep = currentStep;
 				switch (currentStep.Type)
 				{
-				case Pitaya::Render::PostProcessType::Bilt:
-					cmd.ProcessShader = globalRHI.BlitShader;
-					break;
+					case Pitaya::Render::PostProcessType::Bilt:
+						cmd.ProcessShader = globalRHI.BlitShader;
+						break;
 
-				case Pitaya::Render::PostProcessType::GammaCorrection:
-					cmd.ProcessShader = globalRHI.GammaCorrectionShader;
-					break;
+					case Pitaya::Render::PostProcessType::GammaCorrection:
+						cmd.ProcessShader = globalRHI.GammaCorrectionShader;
+						break;
 
-				case Pitaya::Render::PostProcessType::Unknown:
-				default:
-					cmd.ProcessShader = globalRHI.BlitShader;	// 防止Ping-Pong链截断
-					break;
+					case Pitaya::Render::PostProcessType::Unknown:
+					default:
+						cmd.ProcessShader = globalRHI.BlitShader;	// 防止Ping-Pong链截断
+						break;
 				}
 				if (firstPass && isMultisample)
 				{

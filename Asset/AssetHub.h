@@ -98,6 +98,15 @@ namespace Pitaya::Asset
 #pragma endregion
 			};
 		};
+		struct BuildInAsset
+		{
+			Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry White;
+			Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry DefaultShader;
+			Pitaya::Core::Asset<Pitaya::Asset::Material>::AssetEntry DefaultMaterial;
+			Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry Cube;
+			Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry Panel;
+			Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry Sphere;
+		};
 
 	private:
 		AssetHub() = default;
@@ -124,6 +133,11 @@ namespace Pitaya::Asset
 				std::is_same_v<T, Pitaya::Asset::Material>,
 				"Unknow Asset!");
 
+			if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { if (guid == Pitaya::Asset::Shader::Default) { Pitaya::Core::Asset<Pitaya::Asset::Shader>(&buildIn.DefaultShader); } }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::Material>) { if (guid == Pitaya::Asset::Material::Default) { return Pitaya::Core::Asset<Pitaya::Asset::Material>(&buildIn.DefaultMaterial); } }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::Texture>) { if (guid == Pitaya::Asset::Texture::White) { return Pitaya::Core::Asset<Pitaya::Asset::Texture>(&buildIn.White); } }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::Mesh>) { if (guid == Pitaya::Asset::Mesh::Sphere) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Sphere); } else if (guid == Pitaya::Asset::Mesh::Cube) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Cube); } else if (guid == Pitaya::Asset::Mesh::Panel) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Panel); } }
+
 			std::filesystem::path path;
 			if (!GetAssetPathByGUID(guid, path))
 			{
@@ -133,7 +147,7 @@ namespace Pitaya::Asset
 			return LoadAsset<T>(guid, path);
 		}
 		template<typename T>
-		inline Pitaya::Core::Asset<T> LoadAsset(const std::filesystem::path& path)
+		inline bool UnloadAsset(Pitaya::Core::GUID guid)
 		{
 			static_assert(std::is_same_v<T, Pitaya::Asset::Texture> ||
 				std::is_same_v<T, Pitaya::Asset::Shader> ||
@@ -142,14 +156,43 @@ namespace Pitaya::Asset
 				std::is_same_v<T, Pitaya::Asset::Material>,
 				"Unknow Asset!");
 
-			Pitaya::Core::GUID guid;
-			if (!GetAssetGUIDByPath(path, guid))
+			if (IsBuildInAsset<T>(guid))
 			{
-				Pitaya::Log::Error(path.string() + " asset cant find GUID");
-				return nullptr;
+				Pitaya::Log::Write(Pitaya::Log::LogLevel::Warning, "Can't Unload Buildin Asset!");
+				return false;
 			}
-			return LoadAsset<T>(guid, path);
+
+			std::string log;
+			Pitaya::Log::LogLevel level = Pitaya::Log::LogLevel::Info;
+			bool success = false;
+			auto& map = GetAssetEntryMap<T>();
+			map.FindOperateKV(guid,
+				[&success, &log, &level](Pitaya::Core::GUID _guid, typename Pitaya::Core::Asset<T>::AssetEntry* _entry)
+				{
+					if (!_entry)
+					{
+						level = Pitaya::Log::LogLevel::Error;
+						log = "asset entry is empty GUID:" + _guid.ToString();
+						success = false;
+						return;
+					}
+
+					_entry->State.SetBits(Pitaya::Core::AssetState::Unload);
+					level = Pitaya::Log::LogLevel::Info;
+					log = "asset entry set unloads";
+					success = true;
+				},
+				[&success, &log, &level](Pitaya::Core::GUID _guid)
+				{
+					level = Pitaya::Log::LogLevel::Error;
+					log = "cant find asset entry GUID:" + _guid.ToString();
+					success = false;
+				});
+			Pitaya::Log::Write(level, log);
+			return success;
 		}
+
+	private:
 		template<typename T>
 		inline Pitaya::Core::Asset<T> LoadAsset(Pitaya::Core::GUID guid, const std::filesystem::path& path)
 		{
@@ -175,7 +218,6 @@ namespace Pitaya::Asset
 
 			std::string log;
 			Pitaya::Log::LogLevel level = Pitaya::Log::LogLevel::Info;
-
 			bool asyncLoad = false;
 			typename Pitaya::Core::Asset<T> asset = nullptr;
 			auto& map = GetAssetEntryMap<T>();
@@ -204,56 +246,15 @@ namespace Pitaya::Asset
 					log = "asset entry inexistence, create asset entry GUID:" + _guid.ToString();
 
 					asyncLoad = true;
-					typename Pitaya::Core::Asset<T>::AssetEntry* entry = new typename Pitaya::Core::Asset<T>::AssetEntry();
+					typename Pitaya::Core::Asset<T>::AssetEntry* entry = Pitaya::Core::New<typename Pitaya::Core::Asset<T>::AssetEntry>();
 					entry->GUID = _guid;
-					entry->Data.store(new T(), std::memory_order_release);
+					entry->Data.store(Pitaya::Core::New<T>(), std::memory_order_release);
 					asset = entry;
 					return std::make_pair(_guid, entry);
 				});
 			Pitaya::Log::Write(level, log);
 			if (asyncLoad) { AsyncLoadAsset<T>(guid, resolvePath); }
 			return asset;
-		}
-
-		template<typename T>
-		inline bool UnloadAsset(Pitaya::Core::GUID guid)
-		{
-			static_assert(std::is_same_v<T, Pitaya::Asset::Texture> ||
-				std::is_same_v<T, Pitaya::Asset::Shader> ||
-				std::is_same_v<T, Pitaya::Asset::Mesh> ||
-				std::is_same_v<T, Pitaya::Asset::RenderTarget> ||
-				std::is_same_v<T, Pitaya::Asset::Material>,
-				"Unknow Asset!");
-
-			std::string log;
-			Pitaya::Log::LogLevel level = Pitaya::Log::LogLevel::Info;
-
-			bool success = false;
-			auto& map = GetAssetEntryMap<T>();
-			map.FindOperateKV(guid,
-				[&success, &log, &level](Pitaya::Core::GUID _guid, typename Pitaya::Core::Asset<T>::AssetEntry* _entry)
-				{
-					if (!_entry)
-					{
-						level = Pitaya::Log::LogLevel::Error;
-						log = "asset entry is empty GUID:" + _guid.ToString();
-						success = false;
-						return;
-					}
-
-					_entry->State.SetBits(Pitaya::Core::AssetState::Unload);
-					level = Pitaya::Log::LogLevel::Info;
-					log = "asset entry set unloads";
-					success = true;
-				},
-				[&success, &log, &level](Pitaya::Core::GUID _guid)
-				{
-					level = Pitaya::Log::LogLevel::Error;
-					log = "cant find asset entry GUID:" + _guid.ToString();
-					success = false;
-				});
-			Pitaya::Log::Write(level, log);
-			return success;
 		}
 
 	private:
@@ -362,6 +363,22 @@ namespace Pitaya::Asset
 		}
 
 	private:
+		template<typename T>
+		inline bool IsBuildInAsset(Pitaya::Core::GUID guid)
+		{
+			static_assert(std::is_same_v<T, Pitaya::Asset::Texture> ||
+				std::is_same_v<T, Pitaya::Asset::Shader> ||
+				std::is_same_v<T, Pitaya::Asset::Mesh> ||
+				std::is_same_v<T, Pitaya::Asset::RenderTarget> ||
+				std::is_same_v<T, Pitaya::Asset::Material>,
+				"Unknow Asset!");
+
+			if constexpr (std::is_same_v<T, Pitaya::Asset::Texture>) { return guid == Pitaya::Asset::Texture::White; }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { return guid == Pitaya::Asset::Shader::Default; }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::Mesh>) { return guid == Pitaya::Asset::Mesh::Cube || guid == Pitaya::Asset::Mesh::Panel || guid == Pitaya::Asset::Mesh::Sphere; }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::Material>) { return guid == Pitaya::Asset::Material::Default; }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::RenderTarget>) { return false; }
+		}
 		inline bool IsBuildInAsset(const std::filesystem::path& virtualPath)
 		{
 			return virtualPath.string().starts_with("engine:/");
@@ -479,9 +496,11 @@ namespace Pitaya::Asset
 		std::queue<Pitaya::Asset::AssetOperate> cacheAssetOperateQueue;	//渲染线程处理资源操作时的临时队列 避免长时间占用锁
 
 		Pitaya::Asset::AssetHub::AssetRegistry registry;
+		Pitaya::Asset::AssetHub::BuildInAsset buildIn;
 	};
 }
 
+// TODO 重构一下AssetHub 抽象出VirtualFileSystem , 现在AssetHub耦合性太高了
 
 /*
 bool CanUnloadAsset(AssetEntry* entry) {

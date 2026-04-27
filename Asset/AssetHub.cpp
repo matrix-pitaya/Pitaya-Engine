@@ -8,70 +8,377 @@
 #include<GPU/Frontend/Buffer/FrameBuffer.h>
 #include<Import/Import.h>
 #include<Core/Utils/File.h>
+#include<Core/Utils/BuildInRC.h>
+#include<Application/resource.h>
+
+namespace
+{
+	//辅助构建Cube、Panel数据
+	struct StaticMeshVertex 
+	{
+		glm::vec3 Position;
+		glm::vec3 Normal;
+		glm::vec2 UV;
+		glm::vec4 Tangent;
+	};
+
+	//离线预烘培（.obj → .war） 
+	bool OfflinePreBakingStaticMesh(const Pitaya::Import::StaticMeshImportResult& result, const std::filesystem::path& warPath)
+	{
+		std::ofstream out(warPath, std::ios::binary);
+		if (!out.is_open()) { return false; }
+
+		// 写基础信息
+		out.write(reinterpret_cast<const char*>(&result.GUID), sizeof(Pitaya::Core::GUID));
+		out.write(reinterpret_cast<const char*>(&result.IsValid), sizeof(bool));
+		out.write(reinterpret_cast<const char*>(&result.BoundingBox), sizeof(Pitaya::Core::AABB));
+
+		// 写入浮点顶点数组
+		uint32_t vertexCount = static_cast<uint32_t>(result.Vertices.size());
+		out.write(reinterpret_cast<const char*>(&vertexCount), sizeof(uint32_t));
+		if (vertexCount > 0) { out.write(reinterpret_cast<const char*>(result.Vertices.data()), vertexCount * sizeof(float)); }
+
+		// 写入索引数组
+		uint32_t indexCount = static_cast<uint32_t>(result.Indices.size());
+		out.write(reinterpret_cast<const char*>(&indexCount), sizeof(uint32_t));
+		if (indexCount > 0) { out.write(reinterpret_cast<const char*>(result.Indices.data()), indexCount * sizeof(uint32_t)); }
+
+		// 写入 SubMesh 数组 因为其内部只有基础数据所以直接写整块内存
+		uint32_t subMeshCount = static_cast<uint32_t>(result.SubMeshs.size());
+		out.write(reinterpret_cast<const char*>(&subMeshCount), sizeof(uint32_t));
+		if (subMeshCount > 0) { out.write(reinterpret_cast<const char*>(result.SubMeshs.data()), subMeshCount * sizeof(Pitaya::Asset::Mesh::SubMesh)); }
+
+		// 写入材质 GUID 数组
+		uint32_t matCount = static_cast<uint32_t>(result.MaterialGUIDs.size());
+		out.write(reinterpret_cast<const char*>(&matCount), sizeof(uint32_t));
+		if (matCount > 0) { out.write(reinterpret_cast<const char*>(result.MaterialGUIDs.data()), matCount * sizeof(Pitaya::Core::GUID)); }
+
+		out.close();
+		return true;
+	}
+}
 
 bool Pitaya::Asset::AssetHub::Initialize()
 {
 	engineRoot = Pitaya::Core::GetExecutableDirectory() / "resource";
 	projectRoot = Pitaya::Core::GetWorkspace() / "Asset" / "Resource";
 	//registry.DeserializeFromFile();	//TOOD 反序列化数据
+	
+	//加载内置资源
+	do
+	{
+		//Default Shader
+		{	
+			buildIn.DefaultShader.Data.store(Pitaya::Core::New<Pitaya::Asset::Shader>(), std::memory_order_release);
+			buildIn.DefaultShader.GUID = Pitaya::Asset::Shader::Default;
+			buildIn.DefaultShader.State.SetBits(Pitaya::Core::AssetState::CPULoading);
+			Pitaya::Import::ShaderImportResult result;
+			result.VertexSource = Pitaya::Core::LoadBuildInRC(IDR_BUILDIN_DEFAULT_VERTEX_SHADER);
+			result.FragmentSource = Pitaya::Core::LoadBuildInRC(IDR_BUILDIN_DEFAULT_FRAGMENT_SHADER);
+			result.Type = Pitaya::GPU::Shader::VF;
+			result.GUID = Pitaya::Asset::Shader::Default;
+			buildIn.DefaultShader.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
+			shaders.Emplace(Pitaya::Asset::Shader::Default, &buildIn.DefaultShader);
+			cacheAssetOperateQueue.push({ result });
+		}
+
+		//Default Material
+		{	
+			buildIn.DefaultMaterial.Data.store(Pitaya::Core::New<Pitaya::Asset::Material>(), std::memory_order_release);
+			buildIn.DefaultMaterial.GUID = Pitaya::Asset::Material::Default;
+			buildIn.DefaultMaterial.State.SetBits(Pitaya::Core::AssetState::CPULoading);
+			auto* materialNativeData = buildIn.DefaultMaterial.Data.load(std::memory_order_acquire);
+			materialNativeData->Shader = LoadAsset<Pitaya::Asset::Shader>(Pitaya::Asset::Shader::Default);
+			materialNativeData->Textures[static_cast<uint8_t>(Pitaya::GPU::TextureUsage::Albedo)] = LoadAsset<Pitaya::Asset::Texture>(Pitaya::Asset::Texture::White);
+			buildIn.DefaultMaterial.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
+			buildIn.DefaultMaterial.State.SetBits(Pitaya::Core::AssetState::GPULoaded);
+			materials.Emplace(Pitaya::Asset::Material::Default, &buildIn.DefaultMaterial);
+		}
+
+		//White Texture
+		{
+			buildIn.White.Data.store(Pitaya::Core::New<Pitaya::Asset::Texture>(), std::memory_order_release);
+			buildIn.White.GUID = Pitaya::Asset::Texture::White;
+			buildIn.White.State.SetBits(Pitaya::Core::AssetState::CPULoading);
+			Pitaya::Import::Texture2DImportResult result;
+			result.Width = 1;
+			result.Height = 1;
+			result.Channels = 4;
+			result.IsGenerateMipmap = false;
+			result.IsSRGB = true;
+			result.isNearest = true;
+			result.Data = { 255, 255, 255, 255 };	//纯白贴图
+			result.GUID = Pitaya::Asset::Texture::White;
+			buildIn.White.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
+			textures.Emplace(Pitaya::Asset::Texture::White, &buildIn.White);
+			cacheAssetOperateQueue.push({ result });
+		}
+
+		//Cube Mesh
+		{
+			buildIn.Cube.Data.store(Pitaya::Core::New<Pitaya::Asset::Mesh>(), std::memory_order_release);
+			buildIn.Cube.GUID = Pitaya::Asset::Mesh::Cube;
+			buildIn.Cube.State.SetBits(Pitaya::Core::AssetState::CPULoading);
+			Pitaya::Import::StaticMeshImportResult result;
+			result.GUID = Pitaya::Asset::Mesh::Cube;
+			result.IsValid = true;
+			std::vector<StaticMeshVertex> vertices = {
+				// 前面 (+Z)
+				{{-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+				{{ 0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+				{{ 0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+				{{-0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+
+				// 后面 (-Z)
+				{{ 0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f, 1.0f}},
+				{{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f, 1.0f}},
+				{{-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f, 1.0f}},
+				{{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f, 1.0f}},
+
+				// 左面 (-X)
+				{{-0.5f, -0.5f, -0.5f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}},
+				{{-0.5f, -0.5f,  0.5f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}},
+				{{-0.5f,  0.5f,  0.5f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}},
+				{{-0.5f,  0.5f, -0.5f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}},
+
+				// 右面 (+X)
+				{{ 0.5f, -0.5f,  0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, {0.0f, 0.0f, -1.0f, 1.0f}},
+				{{ 0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, {0.0f, 0.0f, -1.0f, 1.0f}},
+				{{ 0.5f,  0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 0.0f, -1.0f, 1.0f}},
+				{{ 0.5f,  0.5f,  0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, {0.0f, 0.0f, -1.0f, 1.0f}},
+
+				// 上面 (+Y)
+				{{-0.5f,  0.5f,  0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+				{{ 0.5f,  0.5f,  0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+				{{ 0.5f,  0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+				{{-0.5f,  0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+
+				// 下面 (-Y)
+				{{-0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+				{{ 0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+				{{ 0.5f, -0.5f,  0.5f}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+				{{-0.5f, -0.5f,  0.5f}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
+			};
+			result.Vertices.resize(vertices.size() * 12);
+			std::memcpy(result.Vertices.data(), vertices.data(), vertices.size() * sizeof(StaticMeshVertex));
+			for (uint32_t i = 0; i < 6; ++i)
+			{
+				uint32_t start = i * 4;
+				result.Indices.push_back(start + 0);	// 三角形1
+				result.Indices.push_back(start + 1);
+				result.Indices.push_back(start + 2);
+				result.Indices.push_back(start + 2);	// 三角形2
+				result.Indices.push_back(start + 3);
+				result.Indices.push_back(start + 0);
+			}
+			result.BoundingBox.Min = glm::vec3(-0.5f);
+			result.BoundingBox.Max = glm::vec3(0.5f);
+			Pitaya::Asset::Mesh::SubMesh sub;
+			sub.BaseIndex = 0;
+			sub.BaseVertex = 0;
+			sub.IndexCount = 36;
+			sub.MaterialIndex = 0;
+			sub.BoundingBox = result.BoundingBox;
+			result.SubMeshs.push_back(sub);
+			result.VertexLayout = {
+				{ Pitaya::GPU::ShaderVariableType::Float3, 0 },
+				{ Pitaya::GPU::ShaderVariableType::Float3, 1 },
+				{ Pitaya::GPU::ShaderVariableType::Float2, 2 },
+				{ Pitaya::GPU::ShaderVariableType::Float4, 3 } };
+			result.MaterialGUIDs.push_back(Pitaya::Asset::Material::Default);
+			buildIn.Cube.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
+			meshes.Emplace(Pitaya::Asset::Mesh::Cube, &buildIn.Cube);
+			cacheAssetOperateQueue.push({ result });
+		}
+
+		//Panel Mesh
+		{
+			buildIn.Panel.Data.store(Pitaya::Core::New<Pitaya::Asset::Mesh>(), std::memory_order_release);
+			buildIn.Panel.GUID = Pitaya::Asset::Mesh::Panel;
+			buildIn.Panel.State.SetBits(Pitaya::Core::AssetState::CPULoading);
+			Pitaya::Import::StaticMeshImportResult result;
+			result.GUID = Pitaya::Asset::Mesh::Panel; 
+			result.IsValid = true;
+			std::vector<StaticMeshVertex> vertices = 
+			{
+				// Position            | Normal          | UV          | Tangent (Handedness 1.0)
+				{{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+				{{ 0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+				{{ 0.5f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+				{{-0.5f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
+			};
+			result.Vertices.resize(vertices.size() * 12);
+			memcpy(result.Vertices.data(), vertices.data(), vertices.size() * sizeof(StaticMeshVertex));
+			result.Indices = { 0, 1, 2, 2, 3, 0 };
+			Pitaya::Asset::Mesh::SubMesh sub;
+			sub.IndexCount = 6;
+			sub.BaseIndex = 0;
+			sub.BaseVertex = 0;
+			sub.MaterialIndex = 0;
+			sub.BoundingBox = { {-0.5f, -0.5f, 0.0f}, {0.5f, 0.5f, 0.0f} };
+			result.SubMeshs.push_back(sub);
+			result.VertexLayout = {
+				{ Pitaya::GPU::ShaderVariableType::Float3, 0 },
+				{ Pitaya::GPU::ShaderVariableType::Float3, 1 },
+				{ Pitaya::GPU::ShaderVariableType::Float2, 2 },
+				{ Pitaya::GPU::ShaderVariableType::Float4, 3 } };
+			result.BoundingBox = sub.BoundingBox;
+			result.MaterialGUIDs.push_back(Pitaya::Asset::Material::Default);
+			buildIn.Panel.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
+			meshes.Emplace(Pitaya::Asset::Mesh::Panel, &buildIn.Panel);
+			cacheAssetOperateQueue.push({ result });
+		}
+
+		//Sphere Mesh
+		{
+			buildIn.Sphere.Data.store(Pitaya::Core::New<Pitaya::Asset::Mesh>(), std::memory_order_release);
+			buildIn.Sphere.GUID = Pitaya::Asset::Mesh::Sphere;
+			buildIn.Sphere.State.SetBits(Pitaya::Core::AssetState::CPULoading);
+			// 获取离线预烘培的.war网格数据
+			std::string sphereMeshRawData = Pitaya::Core::LoadBuildInRC(IDR_BUILDIN_SPHERE_MESH);
+			const char* ptr = sphereMeshRawData.data();
+			size_t currentOffset = 0;
+			size_t totalSize = sphereMeshRawData.size();
+			// 定义安全指针读取函数 带边界检查
+			auto ReadBytes = [&](void* dest, size_t sizeBytes) -> bool 
+				{
+					if (currentOffset + sizeBytes > totalSize) { return false; } // 越界保护
+					std::memcpy(dest, ptr + currentOffset, sizeBytes);
+					currentOffset += sizeBytes;
+					return true;
+				};
+			// 根据离线预烘培的.war数据进行加载
+			Pitaya::Import::StaticMeshImportResult result;
+			if (!ReadBytes(&result.GUID, sizeof(Pitaya::Core::GUID))) { return false; }
+			if (!ReadBytes(&result.IsValid, sizeof(bool))) { return false; }
+			if (!ReadBytes(&result.BoundingBox, sizeof(Pitaya::Core::AABB))) { return false; }
+			if (!result.IsValid) { return false; }
+			uint32_t vertexCount = 0;	// 读顶点
+			if (!ReadBytes(&vertexCount, sizeof(uint32_t))) { return false; }
+			if (vertexCount > 0) 
+			{
+				result.Vertices.resize(vertexCount);
+				if (!ReadBytes(result.Vertices.data(), vertexCount * sizeof(float))) { return false; }
+			}
+			uint32_t indexCount = 0;	// 读索引
+			if (!ReadBytes(&indexCount, sizeof(uint32_t))) { return false; }
+			if (indexCount > 0) 
+			{
+				result.Indices.resize(indexCount);
+				if (!ReadBytes(result.Indices.data(), indexCount * sizeof(uint32_t))) { return false; }
+			}
+			uint32_t subMeshCount = 0;	// 读 SubMesh 描述数组
+			if (!ReadBytes(&subMeshCount, sizeof(uint32_t))) { return false; }
+			if (subMeshCount > 0) 
+			{
+				result.SubMeshs.resize(subMeshCount);
+				if (!ReadBytes(result.SubMeshs.data(), subMeshCount * sizeof(Pitaya::Asset::Mesh::SubMesh))) { return false; }
+			}
+			uint32_t matCount = 0;	// 读所需材质的 GUID
+			if (!ReadBytes(&matCount, sizeof(uint32_t))) { return false; }
+			if (matCount > 0) 
+			{
+				result.MaterialGUIDs.resize(matCount);
+				if (!ReadBytes(result.MaterialGUIDs.data(), matCount * sizeof(Pitaya::Core::GUID))) { return false; }
+			}
+			result.VertexLayout = {	// 硬编码恢复静态网格的 VertexLayout 
+				{ Pitaya::GPU::ShaderVariableType::Float3, 0 },
+				{ Pitaya::GPU::ShaderVariableType::Float3, 1 },
+				{ Pitaya::GPU::ShaderVariableType::Float2, 2 },
+				{ Pitaya::GPU::ShaderVariableType::Float4, 3 } };
+			buildIn.Sphere.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
+			meshes.Emplace(Pitaya::Asset::Mesh::Sphere, &buildIn.Sphere);
+			cacheAssetOperateQueue.push({ result });
+		}
+	} while (false);
+	
 	return true;
 }
 void Pitaya::Asset::AssetHub::Release()
 {
-	meshes.ForEachCheckErase(
-		[](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry*& _entry)
-		{
-			if (_entry)
+	//清理资源
+	do
+	{
+		meshes.ForEachCheckErase(
+			[](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry*& _entry)
 			{
-				delete _entry;
-				_entry = nullptr;
-			}
-			return true;
-		});
+				if (_entry)
+				{
+					//清除Entry内部data数据
+					Pitaya::Core::Delete(_entry->Data.load(std::memory_order_acquire));
+					_entry->Data.store(nullptr, std::memory_order_release);
 
-	textures.ForEachCheckErase(
-		[](Pitaya::Core::GUID _guid,Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry*& _entry)
-		{
-			if (_entry)
-			{
-				delete _entry;
-				_entry = nullptr;
-			}
-			return true;
-		});
+					//清除Entry
+					Pitaya::Core::Delete(_entry);
+					_entry = nullptr;
+				}
+				return true;
+			});
 
-	shaders.ForEachCheckErase(
-		[](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry*& _entry)
-		{
-			if (_entry)
+		textures.ForEachCheckErase(
+			[](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry*& _entry)
 			{
-				delete _entry;
-				_entry = nullptr;
-			}
-			return true;
-		});
+				if (_entry)
+				{
+					//清除Entry内部data数据
+					Pitaya::Core::Delete(_entry->Data.load(std::memory_order_acquire));
+					_entry->Data.store(nullptr, std::memory_order_release);
 
-	materials.ForEachCheckErase(
-		[](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Material>::AssetEntry*& _entry)
-		{
-			if (_entry)
-			{
-				delete _entry;
-				_entry = nullptr;
-			}
-			return true;
-		});
+					//清除Entry
+					Pitaya::Core::Delete(_entry);
+					_entry = nullptr;
+				}
+				return true;
+			});
 
-	rendertargets.ForEachCheckErase(
-		[](Pitaya::Core::GUID, Pitaya::Core::Asset<Pitaya::Asset::RenderTarget>::AssetEntry*& _entry)
-		{
-			if (_entry)
+		shaders.ForEachCheckErase(
+			[](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry*& _entry)
 			{
-				delete _entry;
-				_entry = nullptr;
-			}
-			return true;
-		});
+				if (_entry)
+				{
+					//清除Entry内部data数据
+					Pitaya::Core::Delete(_entry->Data.load(std::memory_order_acquire));
+					_entry->Data.store(nullptr, std::memory_order_release);
+
+					//清除Entry
+					Pitaya::Core::Delete(_entry);
+					_entry = nullptr;
+				}
+				return true;
+			});
+
+		materials.ForEachCheckErase(
+			[](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Material>::AssetEntry*& _entry)
+			{
+				if (_entry)
+				{
+					//清除Entry内部data数据
+					Pitaya::Core::Delete(_entry->Data.load(std::memory_order_acquire));
+					_entry->Data.store(nullptr, std::memory_order_release);
+
+					//清除Entry
+					Pitaya::Core::Delete(_entry);
+					_entry = nullptr;
+				}
+				return true;
+			});
+
+		rendertargets.ForEachCheckErase(
+			[](Pitaya::Core::GUID, Pitaya::Core::Asset<Pitaya::Asset::RenderTarget>::AssetEntry*& _entry)
+			{
+				if (_entry)
+				{
+					//清除Entry内部data数据
+					Pitaya::Core::Delete(_entry->Data.load(std::memory_order_acquire));
+					_entry->Data.store(nullptr, std::memory_order_release);
+
+					//清除Entry
+					Pitaya::Core::Delete(_entry);
+					_entry = nullptr;
+				}
+				return true;
+			});
+	} while (false);
 
 	//registry.SerializeToFile();  //TOOD 序列化数据
 }
@@ -939,9 +1246,7 @@ void Pitaya::Asset::AssetHub::LoadTextureAsset(Pitaya::Core::GUID guid, const st
 		if (LoadTexture2DAsset(guid, path, cpuOpResult_Inner))
 		{
 			Pitaya::Log::Info(path.string() + "Load Success");
-			Pitaya::Asset::AssetOperate cpuOpResult_Out;
-			cpuOpResult_Out.Data = cpuOpResult_Inner;
-			assetOperateQueue.Push(cpuOpResult_Out);
+			assetOperateQueue.Push({ cpuOpResult_Inner });
 		}
 		else
 		{
@@ -1121,9 +1426,7 @@ void Pitaya::Asset::AssetHub::LoadShaderAsset(Pitaya::Core::GUID guid, const std
 		if (LoadVFShaderAsset(guid, folder, vertexPath, fragmentPath, cpuOpResult_Inner))
 		{
 			Pitaya::Log::Info(folder.string() + " load success, in shader VF");
-			Pitaya::Asset::AssetOperate cpuOpResult_Out;
-			cpuOpResult_Out.Data = cpuOpResult_Inner;
-			assetOperateQueue.Push(cpuOpResult_Out);
+			assetOperateQueue.Push({ cpuOpResult_Inner });
 		}
 		else
 		{

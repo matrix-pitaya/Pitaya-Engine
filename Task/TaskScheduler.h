@@ -57,7 +57,7 @@ namespace Pitaya::Task
 			{
 				if (!func)
 				{
-					Pitaya::Log::Error(name + " Job Is Empty!");
+					Pitaya::Log::Warning(name + " Job Is Empty!");
 					return;
 				}
 
