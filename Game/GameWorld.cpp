@@ -2,14 +2,15 @@
 #include<Game/Scene/Scene.h>
 #include<Game/Component/Camera.h>
 #include<Game/Component/Parent.h>
+#include<Game/Component/Light.h>
 
 bool Pitaya::Game::GameWorld::Initialize()
 {
 	activeScene = PITAYA_NEW(Scene);
 
 	//TODOD 序列化场景
-	entt::entity entity = activeScene->CreateEntity("Main Camera", "Main Camera");
-	activeScene->AddComponent<Camera>(entity);
+	activeScene->AddComponent<Camera>(activeScene->CreateEntity("Main Camera"));
+	activeScene->AddComponent<Light>(activeScene->CreateEntity("Light"));
 
 	return true;
 }

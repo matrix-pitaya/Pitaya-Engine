@@ -166,6 +166,8 @@
     <ClInclude Include="Command\InstancedDrawCommand.h" />
     <ClInclude Include="Command\PostProcessCommand.h" />
     <ClInclude Include="Common\API.h" />
+    <ClInclude Include="Common\InstanceTransformInfo.h" />
+    <ClInclude Include="Common\LightInfo.h" />
     <ClInclude Include="Common\PostProcessSetting.h" />
     <ClInclude Include="Common\PostProcessParams.h" />
     <ClInclude Include="Common\PostProcessStep.h" />

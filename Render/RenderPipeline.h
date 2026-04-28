@@ -7,6 +7,7 @@
 #include<Context/Context.h>
 #include<Asset/Common/Shader.h>
 #include<Render/Common/PostProcessType.h>
+#include<Render/Common/LightInfo.h>
 #include<Render/Specific/RenderPass.h>
 #include<Render/Specific/RenderItem.h>
 
@@ -49,6 +50,7 @@ namespace Pitaya::Render
 		{
 			std::vector<RenderPass> Passes;
 			std::vector<RenderItem> Items;
+			std::vector<LightInfo> Lights;
 		};
 
 	private:
@@ -71,6 +73,7 @@ namespace Pitaya::Render
 			//清空上一帧残留数据
 			graph.Passes.clear();
 			graph.Items.clear();
+			graph.Lights.clear();
 		}
 		inline void AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, const Pitaya::Core::CameraSnapshot& cameraSnapshot,  const Pitaya::Render::PostProcessSetting& setting, Pitaya::Render::RenderLayer cullingMask, Pitaya::Asset::RenderTarget* rt)
 		{
@@ -79,6 +82,10 @@ namespace Pitaya::Render
 		inline void AddRenderItem(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Asset::Mesh* mesh, Pitaya::Asset::Material* material, Pitaya::Render::RenderLayer layerMask, const glm::mat4& model, uint32_t subMeshIndex)
 		{
 			graph.Items.emplace_back(mesh, material, layerMask, model, subMeshIndex);
+		}
+		inline void AddSceneLight(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, const Pitaya::Render::LightInfo& light)
+		{
+			graph.Lights.emplace_back(light);
 		}
 
 	public:

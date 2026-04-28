@@ -20,6 +20,7 @@
 #include<Game/Component/Camera.h>
 #include<Game/Component/MaterialOverride.h>
 #include<Game/Component/Disabled.h>
+#include<Game/Component/Light.h>
 #include<Hook/def.h>
 
 #define NOMINMAX
@@ -637,6 +638,16 @@ void Pitaya::Engine::Engine::Render()
 	//获取当前激活场景
 	if (auto* scene = MODULE(GameWorld)->GetActiveScene())
 	{
+		//提交Ligt
+		for (auto [entity, light, transform] : scene->GetView<Pitaya::Game::Light, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each())
+		{
+			MODULE(RenderPipeline)->AddSceneLight(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(), 
+				{ glm::vec4(transform.GetWorldPosition(), static_cast<float>(light.GetType())) ,
+				  glm::vec4(transform.GetWorldForward(), 0.0f) ,
+				  glm::vec4(light.GetColor(), light.GetIntensity()),
+				  glm::vec4(light.GetRadius(), glm::cos(glm::radians(light.GetInnerAngle())), glm::cos(glm::radians(light.GetOuterAngle())), 0.0f) });
+		}
+		
 		//提交MeshRenderer
 		for (auto [entity, meshrenderer, transform] : scene->GetGroup<Pitaya::Game::MeshRenderer>(entt::get<Pitaya::Game::Transform>, entt::exclude<Pitaya::Game::Disabled>).each())
 		{

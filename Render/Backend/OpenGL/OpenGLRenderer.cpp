@@ -59,7 +59,7 @@ void Pitaya::Render::OpenGLRenderer::NewRenderFrame()
 	size_t uploadTransformCount = back.InstanceModelTransforms.size();
 	if (uploadTransformCount > 0)
 	{
-		size_t requiredSize = uploadTransformCount * sizeof(glm::mat4);
+		size_t requiredSize = uploadTransformCount * sizeof(InstanceTransformInfo);
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER,
 			static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform),
 			globalRHI.InstanceModelTransformSSBO);
@@ -93,6 +93,29 @@ void Pitaya::Render::OpenGLRenderer::NewRenderFrame()
 		}
 
 		glNamedBufferSubData(globalRHI.BoneInverseMatriceSSBO, 0, requiredBoneSize, back.BoneMatrices.data());
+	}
+
+	// 动态扩容/上传 Light SSBO
+	size_t uploadLightCount = back.Lights.size();
+	size_t headerSize = 4 * sizeof(uint32_t);	// Header固定16字节对齐 (1个有效uint + 3个padding)
+	size_t dataSize = uploadLightCount * sizeof(Pitaya::Render::LightInfo);
+	size_t requiredLightSize = headerSize + dataSize;
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER,
+		static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::SceneLights),
+		globalRHI.SceneLightsSSBO);
+	if (requiredLightSize > globalRHI.LightSSBOCapacity)	// 判断是否需要扩容
+	{
+		// 1.5 倍扩容
+		globalRHI.LightSSBOCapacity = requiredLightSize + (requiredLightSize / 2);
+		glNamedBufferData(globalRHI.SceneLightsSSBO, globalRHI.LightSSBOCapacity, nullptr, GL_DYNAMIC_DRAW);
+	}
+	// 始终上传 16 字节头部信息 告诉 GPU 真实有效光源数
+	uint32_t lightHeader[4] = { static_cast<uint32_t>(uploadLightCount), 0, 0, 0 };	
+	glNamedBufferSubData(globalRHI.SceneLightsSSBO, 0, headerSize, lightHeader);
+	// 数据头上传之后 上传真实的结构体数组数据
+	if (uploadLightCount > 0)
+	{
+		glNamedBufferSubData(globalRHI.SceneLightsSSBO, headerSize, dataSize, back.Lights.data());
 	}
 }
 

@@ -48,6 +48,9 @@
     <ClInclude Include="TextureImporter\Backend\StbImage\stb_image_write.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Common\MeshVertex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Import.cpp">

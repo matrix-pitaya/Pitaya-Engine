@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Common\MeshVertex.h" />
     <ClInclude Include="Import.h" />
     <ClInclude Include="Common\ImportResult.h" />
     <ClInclude Include="Common\MeshAPI.h" />

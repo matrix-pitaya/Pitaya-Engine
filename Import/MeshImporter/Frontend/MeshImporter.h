@@ -5,7 +5,7 @@
 #include<filesystem>
 
 namespace Pitaya::Import
-{
+{ 
 	class MeshImporter
 	{
 	public:

@@ -6,7 +6,7 @@
 
 namespace Pitaya::Core
 {
-	//绑定点0
+	//GPU
 	struct alignas(16) CameraSnapshot
 	{
 		glm::mat4 View;

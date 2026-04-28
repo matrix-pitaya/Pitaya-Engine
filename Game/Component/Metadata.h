@@ -9,10 +9,9 @@ namespace Pitaya::Game
 	struct Metadata
 	{
 	public:
-		Metadata(std::string_view name, std::string_view label)
+		Metadata(std::string_view name)
 		{
 			Pitaya::Core::CopyStringToCharArray(name, this->name);
-			Pitaya::Core::CopyStringToCharArray(label, this->label);
 		}
 
 	public:
@@ -20,19 +19,11 @@ namespace Pitaya::Game
 		{
 			return name;
 		}
-		inline std::string_view GetLabel() const noexcept
-		{
-			return label;
-		}
 
 	public:
 		inline void SetName(std::string_view name) noexcept
 		{
 			Pitaya::Core::CopyStringToCharArray(name, this->name);
-		}
-		inline void SetLabel(std::string_view label) noexcept
-		{
-			Pitaya::Core::CopyStringToCharArray(label, this->label);
 		}
 		inline void SetActive(bool active) noexcept
 		{
@@ -68,7 +59,6 @@ namespace Pitaya::Game
 
 	private:
 		char name[MAX_STR_SIZE] = {};
-		char label[MAX_STR_SIZE] = {};
 		bool active = true;	// 处理物体是否激活
 		bool dirty = true;	// 活性脏标记
 	};

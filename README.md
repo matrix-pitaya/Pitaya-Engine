@@ -71,7 +71,7 @@ Pitaya 采用严格的分层架构，确保核心逻辑与底层实现解耦：
     git clone --recursive https://github.com/matrix-pitaya/Pitaya-Engine.git
     ```
     
-    下载GitHub仓库Release中的 `Pitaya-Engine-res-mono-third-vx.x.x.zip` 压缩包并解压缩 `thirdparty` 文件夹到`Pitaya.sln`目录。
+    下载GitHub仓库Release中的 `Pitaya-Engine-third-mono-editor-vx.x.x.zip` 压缩包并解压缩 `thirdparty` 文件夹到`Pitaya.sln`目录。
     
 2.  **打开工程:**
     使用 Visual Studio 2022 打开根目录下的 `Pitaya.sln`。
@@ -80,7 +80,7 @@ Pitaya 采用严格的分层架构，确保核心逻辑与底层实现解耦：
     确保构建配置设为`Release` (x64)。
     
 4.  **运行项目:**
-    右键重新生成解决方案并将 `mono` 和 `resource` 文件夹 以及 以下 `dll` 拷贝到 `exe` 目录下，返回 `VS` 将 `Application` 设为启动项目并按 `F5` 运行。
+    右键重新生成解决方案并将 `mono` 和 `editor` 文件夹 以及 以下 `dll` 拷贝到 `exe` 目录下，返回 `VS` 将 `Application` 设为启动项目并按 `F5` 运行。
     
     ```
     thirdparty/mimalloc/dll  中的  mimalloc.dll 和 mimalloc-redirect.dll

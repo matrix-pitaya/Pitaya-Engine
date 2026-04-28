@@ -3,6 +3,7 @@
 #include<Editor/Editor.h>
 #include<Game/Common/FuncTable.h>
 #include<Game/Component/Disabled.h>
+#include<Game/Component/Light.h>
 #include<Core/Utils/Math.h>
 #include<gtc/epsilon.hpp>
 
@@ -203,6 +204,115 @@ void Pitaya::Editor::SceneViewportPanel::DrawGizmos()
                     // 画四大透视连接棱
                     ImGuiDrawLine(worldCorners[0], worldCorners[4]); ImGuiDrawLine(worldCorners[1], worldCorners[5]);
                     ImGuiDrawLine(worldCorners[2], worldCorners[6]); ImGuiDrawLine(worldCorners[3], worldCorners[7]);
+                }
+            }
+        }
+
+        if (gizmoState.ShowLightGizmo)
+        {
+            auto DrawGizmoLine = [&](const glm::vec3& worldA, const glm::vec3& worldB, ImU32 color, float thickness = 1.0f)
+                {
+                    glm::vec4 clipA = editorCameraViewProj * glm::vec4(worldA, 1.0f);
+                    glm::vec4 clipB = editorCameraViewProj * glm::vec4(worldB, 1.0f);
+                    constexpr const float W_MIN = 0.1f;
+                    if (clipA.w < W_MIN && clipB.w < W_MIN) { return; }
+                    if (clipA.w < W_MIN || clipB.w < W_MIN)
+                    {
+                        float t = (W_MIN - clipA.w) / (clipB.w - clipA.w);
+                        glm::vec4 intersect = clipA + t * (clipB - clipA);
+                        if (clipA.w < W_MIN) { clipA = intersect; }
+                        else { clipB = intersect; }
+                    }
+                    glm::vec3 ndcA = glm::vec3(clipA) / clipA.w;
+                    glm::vec3 ndcB = glm::vec3(clipB) / clipB.w;
+                    ImVec2 screenA(viewportBoundsMin.x + (ndcA.x + 1.0f) * 0.5f * viewportWidth,
+                        viewportBoundsMin.y + (1.0f - ndcA.y) * 0.5f * viewportHeight);
+                    ImVec2 screenB(viewportBoundsMin.x + (ndcB.x + 1.0f) * 0.5f * viewportWidth,
+                        viewportBoundsMin.y + (1.0f - ndcB.y) * 0.5f * viewportHeight);
+                    drawList->AddLine(screenA, screenB, color, thickness);
+                };
+            auto DrawGizmoCircle = [&](const glm::vec3& center, const glm::vec3& right, const glm::vec3& up, float radius, ImU32 color, int segments = 32)
+                {
+                    float angleStep = glm::two_pi<float>() / segments;
+                    glm::vec3 prevPoint = center + right * radius;
+                    for (int i = 1; i <= segments; ++i)
+                    {
+                        float angle = i * angleStep;
+                        glm::vec3 nextPoint = center + right * (radius * cos(angle)) + up * (radius * sin(angle));
+                        DrawGizmoLine(prevPoint, nextPoint, color);
+                        prevPoint = nextPoint;
+                    }
+                };
+
+            for (auto [entity, light, transform] : scene->GetView<Pitaya::Game::Light, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each())
+            {
+                glm::vec3 worldPos = transform.GetWorldPosition();
+
+                glm::vec4 clipSpacePos = editorCameraViewProj * glm::vec4(worldPos, 1.0f);
+                if (clipSpacePos.w > 0.2f)
+                {
+                    glm::vec3 ndcSpacePos = glm::vec3(clipSpacePos) / clipSpacePos.w;
+                    ImVec2 screenPos = ImVec2(
+                        viewportBoundsMin.x + (ndcSpacePos.x + 1.0f) * 0.5f * viewportWidth,
+                        viewportBoundsMin.y + (1.0f - ndcSpacePos.y) * 0.5f * viewportHeight);
+
+                    ImU32 iconColor = IM_COL32(255, 235, 120, 210); // 暖偏黄色
+                    const char* icon = ICON_FA_LIGHTBULB;
+                    ImFont* font = ImGui::GetFont();
+                    float iconSize = 32.0f;
+                    ImVec2 textSize = font->CalcTextSizeA(iconSize, FLT_MAX, 0.0f, icon);
+                    screenPos.x -= textSize.x * 0.5f;
+                    screenPos.y -= textSize.y * 0.5f;
+                    drawList->AddText(font, iconSize, screenPos, iconColor, icon);
+                }
+
+                // 如果且被选中 画出三维线框阵列
+                if (selection.SelectedEntity == entity)
+                {
+                    // 获取空间朝向
+                    glm::vec3 fwd = transform.GetWorldForward();
+                    glm::vec3 up = transform.GetWorldUp();
+                    glm::vec3 right = transform.GetWorldRight();
+
+                    // 读取你在Inspector面板调好的真实颜色作为线条颜色
+                    glm::vec3 lColor = light.GetColor();
+                    ImU32 lineColor = IM_COL32(
+                        glm::clamp(static_cast<int>(lColor.x * 255), 0, 255),
+                        glm::clamp(static_cast<int>(lColor.y * 255), 0, 255),
+                        glm::clamp(static_cast<int>(lColor.z * 255), 0, 255),
+                        200); // 200 用于保留一定透明度以免喧宾夺主
+
+                    auto type = light.GetType();
+                    if (type == Pitaya::Game::LightType::Directional) // 方向光 Directional
+                    {
+                        float r = 1.0f;
+                        DrawGizmoCircle(worldPos, right, up, r, lineColor);
+                        DrawGizmoLine(worldPos, worldPos + fwd * 4.0f, lineColor, 2.0f); // 突出的主干粗线
+                        DrawGizmoLine(worldPos + right * r, worldPos + right * r + fwd * 4.0f, lineColor);  // 边缘平行的那四根阳光射线
+                        DrawGizmoLine(worldPos - right * r, worldPos - right * r + fwd * 4.0f, lineColor);
+                        DrawGizmoLine(worldPos + up * r, worldPos + up * r + fwd * 4.0f, lineColor);
+                        DrawGizmoLine(worldPos - up * r, worldPos - up * r + fwd * 4.0f, lineColor);
+                    }
+                    else if (type == Pitaya::Game::LightType::Point) // 点光源 Point
+                    {
+                        float r = light.GetRadius();
+                        DrawGizmoCircle(worldPos, right, up, r, lineColor);  // XY 切面
+                        DrawGizmoCircle(worldPos, fwd, up, r, lineColor);    // ZY 切面
+                        DrawGizmoCircle(worldPos, right, fwd, r, lineColor); // XZ 切面
+                    }
+                    else if (type == Pitaya::Game::LightType::Spot) // 聚光灯 Spot
+                    {
+                        float r = light.GetRadius();
+                        float outerAngle = glm::radians(light.GetOuterAngle());
+                        float coneRadius = r * glm::tan(outerAngle * 0.5f); // 计算远端光斑圆锥底面的切面与圆心
+                        glm::vec3 centerFar = worldPos + fwd * r;
+                        DrawGizmoCircle(centerFar, right, up, coneRadius, lineColor);   // 画最远端大圆
+                        DrawGizmoLine(worldPos, centerFar + right * coneRadius, lineColor); // 塔尖圆心到远端四个角画边线
+                        DrawGizmoLine(worldPos, centerFar - right * coneRadius, lineColor);
+                        DrawGizmoLine(worldPos, centerFar + up * coneRadius, lineColor);
+                        DrawGizmoLine(worldPos, centerFar - up * coneRadius, lineColor);
+                        DrawGizmoLine(worldPos, centerFar, lineColor, 1.5f);    // 顺带一根实心轴
+                    }
                 }
             }
         }

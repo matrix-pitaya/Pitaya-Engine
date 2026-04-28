@@ -14,6 +14,8 @@
 #include<Render/Common/API.h>
 #include<Render/Common/RenderCommandType.h>
 #include<Render/Common/RenderQueue.h>
+#include<Render/Common/LightInfo.h>
+#include<Render/Common/InstanceTransformInfo.h>
 #include<Render/Command/BeginPassCommand.h>
 #include<Render/Command/DrawCommand.h>
 #include<Render/Command/InstancedDrawCommand.h>
@@ -102,8 +104,10 @@ namespace Pitaya::Render
 			//ShaderStorageBuffer
 			Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> InstanceModelTransformSSBO;
 			Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> BoneInverseMatriceSSBO;
+			Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> SceneLightsSSBO;
 			size_t TransformSSBOCapacity = 0;	//记录当前显存缓冲区的大小
 			size_t BoneSSBOCapacity = 0;
+			size_t LightSSBOCapacity = 0;
 
 			//MainDisplayRT
 			Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> MainSceneFrameBuffer = 0;
@@ -123,7 +127,7 @@ namespace Pitaya::Render
 					Pitaya::Render::PostProcessStep::UniformBufferBytes, static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
 				
 				// 初始分配1024个位置
-				TransformSSBOCapacity = 1024 * sizeof(glm::mat4);	
+				TransformSSBOCapacity = 1024 * sizeof(InstanceTransformInfo);
 				InstanceModelTransformSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					TransformSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform));
 				
@@ -132,6 +136,11 @@ namespace Pitaya::Render
 				BoneInverseMatriceSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					BoneSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::BoneInverseMatrice));
 				
+				// 初始分配10个光源位置
+				LightSSBOCapacity = 10 * sizeof(Pitaya::Render::LightInfo);
+				SceneLightsSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					LightSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::SceneLights));
+
 				BlitShader = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					Pitaya::Core::LoadBuildInRC(IDR_BLIT_VERTEX_SHADER).c_str(),
 					Pitaya::Core::LoadBuildInRC(IDR_BLIT_FRAGMENT_SHADER).c_str());
@@ -202,8 +211,9 @@ namespace Pitaya::Render
 			struct Buffer
 			{
 				std::vector<std::byte> CommandBuffer;
-				std::vector<glm::mat4> InstanceModelTransforms;
+				std::vector<InstanceTransformInfo> InstanceModelTransforms;
 				std::vector<glm::mat4> BoneMatrices;
+				std::vector<LightInfo> Lights;
 
 				inline void Clear() noexcept
 				{
@@ -215,6 +225,9 @@ namespace Pitaya::Render
 
 					BoneMatrices.clear();
 					BoneMatrices.reserve(1024);
+
+					Lights.clear();
+					Lights.reserve(10);
 				}
 			};
 
@@ -398,7 +411,7 @@ namespace Pitaya::Render
 							}
 
 							// Transform SSBO
-							front.InstanceModelTransforms.push_back(cmd.ModelMatrix);
+							front.InstanceModelTransforms.push_back({ cmd.ModelMatrix ,glm::transpose(glm::inverse(cmd.ModelMatrix)) });
 
 							// 只有蒙皮渲染队列才去处理骨骼
 							if (isSkinnedBatch)
@@ -442,10 +455,6 @@ namespace Pitaya::Render
 			}
 
 		public:
-			inline Buffer& GetFrontBuffer() noexcept
-			{
-				return front;
-			}
 			inline const Buffer& GetBackBuffer() const noexcept
 			{
 				return back;
@@ -530,7 +539,7 @@ namespace Pitaya::Render
 	public:
 		inline void BeginRenderFrame(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>)
 		{
-			renderPacket.GetFrontBuffer().Clear();
+			renderPacket.front.Clear(); 
 			INVOKE_POSTRENDERERBEGINRENDERFRAME_HOOK
 		}
 		inline void BeginPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>, RenderPass& pass)
@@ -713,6 +722,10 @@ namespace Pitaya::Render
 				renderPacket.PushCommand(cmd);
 				Pitaya::Core::Print(Pitaya::Core::Color::Purple, "Post Process Resolve To Final (Bypass)");
 			}
+		}
+		inline void SubmitLight(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>, LightInfo& light)
+		{
+			renderPacket.front.Lights.emplace_back(light);
 		}
 		inline void SubmitBlitToScreen(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>)
 		{

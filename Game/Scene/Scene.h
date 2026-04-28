@@ -34,10 +34,10 @@ namespace Pitaya::Game
         {
             return root;
         }
-        inline entt::entity CreateEntity(std::string_view name = "GameObject", std::string_view label = "default")
+        inline entt::entity CreateEntity(std::string_view name = "GameObject")
         {
             entt::entity entity = ecsRegistry.create();
-            AddComponent<Metadata>(entity, name, label);
+            AddComponent<Metadata>(entity, name);
             AddComponent<Transform>(entity);
             if (root == entt::null)
             {

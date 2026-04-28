@@ -72,6 +72,12 @@
     <ClInclude Include="Component\Sprite.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Component\Light.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\LightType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameWorld.cpp">

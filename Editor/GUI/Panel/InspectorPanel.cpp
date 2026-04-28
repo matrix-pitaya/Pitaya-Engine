@@ -7,10 +7,12 @@
 #include<Game/Component/Camera.h>
 #include<Game/Component/RigidBody.h>
 #include<Game/Component/Script.h>
+#include<Game/Component/Light.h>
 
 #include<entt/entt.hpp>
 #include<glm.hpp>
 #include<type_traits> 
+#include<gtc/type_ptr.hpp>
 
 namespace
 {
@@ -36,9 +38,10 @@ namespace
         return scene && scene->HasComponent<T>(e);
     }
     inline constexpr const auto AvailableComponents = std::to_array<ComponentItem>({
+            { ICON_FA_LIGHTBULB,      "Light",                      AddComponentAction<Pitaya::Game::Light>,                    HasComponentAction<Pitaya::Game::Light> },
+            { ICON_FA_CAMERA,         "Camera",                     AddComponentAction<Pitaya::Game::Camera>,                   HasComponentAction<Pitaya::Game::Camera> },
             { ICON_FA_CUBES,          "Mesh Renderer",              AddComponentAction<Pitaya::Game::MeshRenderer>,             HasComponentAction<Pitaya::Game::MeshRenderer> },
             { ICON_FA_PAINT_ROLLER,   "Material Override",          AddComponentAction<Pitaya::Game::MaterialOverride>,         HasComponentAction<Pitaya::Game::MaterialOverride> },
-            { ICON_FA_CAMERA,         "Camera",                     AddComponentAction<Pitaya::Game::Camera>,                   HasComponentAction<Pitaya::Game::Camera> },
             { ICON_FA_WEIGHT_HANGING, "Rigidbody",                  AddComponentAction<Pitaya::Game::RigidBody>,                HasComponentAction<Pitaya::Game::RigidBody> },
             { ICON_FA_FILE_CODE,      "Script",                     AddComponentAction<Pitaya::Game::Script>,                   HasComponentAction<Pitaya::Game::Script> } });
 
@@ -126,17 +129,6 @@ namespace
                 if (ImGui::InputText("##Name", nameBuffer, Pitaya::Game::Metadata::MAX_STR_SIZE)) { metadata->SetName(nameBuffer); }
                 ImGui::PopItemWidth();
 
-                // [Tag Label] [Tag Input]
-                ImGui::AlignTextToFramePadding();
-                ImGui::TextUnformatted("Tag");
-                ImGui::SameLine(40.0f);
-
-                char labelBuffer[Pitaya::Game::Metadata::MAX_STR_SIZE] = {};
-                Pitaya::Core::CopyStringToCharArray(metadata->GetLabel(), labelBuffer);
-                ImGui::PushItemWidth(-1.0f);
-                if (ImGui::InputText("##Tag", labelBuffer, Pitaya::Game::Metadata::MAX_STR_SIZE)) { metadata->SetLabel(labelBuffer); }
-                ImGui::PopItemWidth();
-
                 ImGui::PopStyleVar(2);
             });
     }
@@ -196,140 +188,6 @@ namespace
                     if (ImGui::DragFloat("##ScaleZ", &scale.z, 0.1f, 0.001f, 1000.0f)) { transform->SetLocalScale(scale); }
                     ImGui::PopItemWidth();
                 }
-            });
-    }
-    inline void DrawMeshRendererUI(entt::entity e)
-    {
-        DrawComponentUI<Pitaya::Game::MeshRenderer>(e, ICON_FA_CUBES " Mesh Renderer",
-            [](Pitaya::Game::Scene*, Pitaya::Game::MeshRenderer* meshRenderer)
-            {
-                constexpr const float LABEL_WIDTH = 90.0f;
-                constexpr const float RIGHT_PADDING = 8.0f;
-
-                {   // Mesh切换
-                    ImGui::AlignTextToFramePadding();
-                    ImGui::TextUnformatted("Mesh");
-                    ImGui::SameLine(LABEL_WIDTH);
-
-                    char meshLabel[256] = {};
-                    const auto& currentMesh = meshRenderer->GetMesh();
-                    if (currentMesh)
-                    {
-                        std::snprintf(meshLabel, sizeof(meshLabel), "%s %s (Mesh)", ICON_FA_CUBES, "TODO 获取MeshName");
-                    }
-                    else
-                    {
-                        std::snprintf(meshLabel, sizeof(meshLabel), ICON_FA_CUBE " None (Mesh)");
-                    }
-
-                    float frameWidth = ImGui::GetContentRegionAvail().x - RIGHT_PADDING;
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.15f, 0.15f, 0.15f, 1.0f));
-                    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.25f, 0.25f, 0.25f, 1.0f));
-                    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
-
-                    ImGui::Button(meshLabel, ImVec2(frameWidth, 0));
-
-                    ImGui::PopStyleColor(3);
-
-                    if (ImGui::BeginDragDropTarget())
-                    {
-                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-                        {
-                            // TODO 
-                        }
-                        ImGui::EndDragDropTarget();
-                    }
-                    ImGui::Spacing();
-                }
-
-                {   // LayerMask
-                    Pitaya::Render::RenderLayer currentLayer = meshRenderer->GetLayerMask();
-                    ImGui::AlignTextToFramePadding();
-                    ImGui::TextUnformatted("Layer");
-                    ImGui::SameLine(LABEL_WIDTH);
-                    ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - RIGHT_PADDING);
-                    if (ImGui::BeginCombo("##LayerCombo", Pitaya::Render::ToString(currentLayer).data()))
-                    {
-                        auto DrawLayerSelectable = [&](const char* label, Pitaya::Render::RenderLayer layerVal) 
-                            {
-                                bool isSelected = (currentLayer == layerVal);
-                                if (ImGui::Selectable(label, isSelected)) { meshRenderer->SetLayerMask(layerVal); }
-                                if (isSelected) { ImGui::SetItemDefaultFocus(); }
-                            };
-                        DrawLayerSelectable("Default", Pitaya::Render::RenderLayer::Default);
-                        DrawLayerSelectable("Transparent", Pitaya::Render::RenderLayer::Transparent);
-                        DrawLayerSelectable("UI", Pitaya::Render::RenderLayer::UI);
-                        DrawLayerSelectable("Editor Only", Pitaya::Render::RenderLayer::EditorOnly);
-                        ImGui::EndCombo();
-                    }
-                    ImGui::PopItemWidth();
-                }
-            });
-    }
-    inline void DrawMaterialOverrideUI(entt::entity e)
-    {
-        DrawComponentUI<Pitaya::Game::MaterialOverride>(e, ICON_FA_PAINT_ROLLER " Material Override",
-            [](Pitaya::Game::Scene*, Pitaya::Game::MaterialOverride* materialOverride)
-            {
-                constexpr float LABEL_WIDTH = 90.0f;
-                auto& materials = materialOverride->GetOverrideMaterials();
-                int indexToRemove = -1;
-                for (size_t i = 0; i < materials.size(); ++i)
-                {
-                    ImGui::PushID(static_cast<int>(i));
-                    ImGui::BeginGroup();
-
-                    ImGui::AlignTextToFramePadding();
-                    ImGui::TextUnformatted(ICON_FA_GRIP_LINES);
-                    ImGui::SameLine();
-
-                    if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
-                    {
-                        ImGui::SetDragDropPayload("MATERIAL_MOVE_PROJ", &i, sizeof(size_t));
-                        ImGui::Text("Moving Element %zu", i);
-                        ImGui::EndDragDropSource();
-                    }
-                    if (ImGui::BeginDragDropTarget())
-                    {
-                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MATERIAL_MOVE_PROJ"))
-                        {
-                            size_t sourceIdx = *static_cast<const size_t*>(payload->Data);
-                            if (sourceIdx != i) { std::swap(materials[sourceIdx], materials[i]); }
-                        }
-                        ImGui::EndDragDropTarget();
-                    }
-
-                    ImGui::Text("Element %zu", i);
-                    ImGui::SameLine(LABEL_WIDTH);
-
-                    float deleteBtnWidth = 30.0f;
-                    float slotWidth = ImGui::GetContentRegionAvail().x - deleteBtnWidth - 5.0f;
-
-                    const char* matName = materials[i] ? ICON_FA_FILE_IMAGE " Material Asset" : ICON_FA_FILE " None (Material)";
-
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.15f, 0.15f, 0.15f, 1.0f));
-                    ImGui::Button(matName, ImVec2(slotWidth, 0));
-                    ImGui::PopStyleColor();
-
-                    if (ImGui::BeginDragDropTarget())
-                    {
-                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-                        {
-                            // TODO
-                        }
-                        ImGui::EndDragDropTarget();
-                    }
-
-                    ImGui::SameLine();
-                    if (ImGui::Button(ICON_FA_TRASH_CAN, ImVec2(deleteBtnWidth, 0))) { indexToRemove = (int)i; }
-
-                    ImGui::EndGroup();
-                    ImGui::PopID();
-                }
-
-                if (indexToRemove != -1) { materials.erase(materials.begin() + indexToRemove); }
-
-                if (ImGui::Button(ICON_FA_PLUS " Add Slot", ImVec2(ImGui::GetContentRegionAvail().x, 0))) { materials.emplace_back(); }
             });
     }
     inline void DrawCameraUI(entt::entity e)
@@ -466,9 +324,11 @@ namespace
                             {
                                 Pitaya::Render::BloomParams p;
                                 std::memcpy(&p, step.ShaderParams, sizeof(p));
-                                if (ImGui::DragFloat("Threshold", &p.Threshold, 0.01f, 0.0f, 5.0f) || 
+                                if (ImGui::DragFloat("Threshold", &p.Threshold, 0.01f, 0.0f, 5.0f) ||
                                     ImGui::DragFloat("Intensity", &p.Intensity, 0.01f, 0.0f, 10.0f))
-                                { step.SetParams(p); }
+                                {
+                                    step.SetParams(p);
+                                }
                             }
                             else if (step.Type == Pitaya::Render::PostProcessType::ToneMapping)
                             {
@@ -503,6 +363,213 @@ namespace
                         }
                     }
                 }
+            });
+    }
+    inline void DrawLightUI(entt::entity e)
+    {
+        DrawComponentUI<Pitaya::Game::Light>(e, ICON_FA_LIGHTBULB " Light",
+            [](Pitaya::Game::Scene*, Pitaya::Game::Light* light)
+            {
+                constexpr float LABEL_WIDTH = 90.0f;
+                constexpr float RIGHT_PADDING = 8.0f;
+
+                auto DrawLabel = [](const char* text)
+                    {
+                        ImGui::AlignTextToFramePadding();
+                        ImGui::TextUnformatted(text);
+                        ImGui::SameLine(LABEL_WIDTH);
+                    };
+
+                {   // Type
+                    DrawLabel("Type");
+                    int currentType = static_cast<int>(light->GetType());
+                    const char* typeNames[] = { "Directional", "Point", "Spot" };
+                    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - RIGHT_PADDING);
+                    if (ImGui::Combo("##LightType", &currentType, typeNames, 3)) { light->SetType(static_cast<decltype(light->GetType())>(currentType)); }
+                }
+                
+                {   // Color
+                    DrawLabel("Color");
+                    glm::vec3 color = light->GetColor();
+                    float fieldWidth = ImGui::GetContentRegionAvail().x - RIGHT_PADDING;
+                    ImVec4 imColor = ImVec4(color.x, color.y, color.z, 1.0f);
+                    if (ImGui::ColorButton("##LightColorBtn", imColor, ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_HDR, ImVec2(fieldWidth, 0.0f))) { ImGui::OpenPopup("LightColorPickerPopup"); }
+                    if (ImGui::BeginPopup("LightColorPickerPopup"))
+                    {
+                        if (ImGui::ColorPicker3("##picker", glm::value_ptr(color), ImGuiColorEditFlags_HDR | ImGuiColorEditFlags_Float)) { light->SetColor(color); }
+                        ImGui::EndPopup();
+                    }
+                }
+
+                {   // Intensity
+                    DrawLabel("Intensity");
+                    float intensity = light->GetIntensity();
+                    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - RIGHT_PADDING);
+                    if (ImGui::DragFloat("##LightIntensity", &intensity, 0.05f, 0.0f, 1000.0f)) { light->SetIntensity(intensity); }
+                }
+
+                auto typeCheck = light->GetType();
+
+                {   // Radius
+                    if (typeCheck == Pitaya::Game::LightType::Point || typeCheck == Pitaya::Game::LightType::Spot)
+                    {
+                        DrawLabel("Radius");
+                        float radius = light->GetRadius();
+                        ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - RIGHT_PADDING);
+                        if (ImGui::DragFloat("##LightRadius", &radius, 0.1f, 0.01f, 1000.0f)) { light->SetRadius(radius); }
+                    }
+                }
+                
+                {   // Angles
+                    if (typeCheck == Pitaya::Game::LightType::Spot)
+                    {
+                        DrawLabel("Inner Angle");
+                        float inner = light->GetInnerAngle();
+                        ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - RIGHT_PADDING);
+                        if (ImGui::DragFloat("##LightInner", &inner, 0.5f, 0.0f, light->GetOuterAngle())) { light->SetInnerAngle(inner); }
+
+                        DrawLabel("Outer Angle");
+                        float outer = light->GetOuterAngle();
+                        ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - RIGHT_PADDING);
+                        if (ImGui::DragFloat("##LightOuter", &outer, 0.5f, light->GetInnerAngle(), 180.0f)) { light->SetOuterAngle(outer); }
+                    }
+                }
+
+                ImGui::Dummy(ImVec2(0.0f, 2.0f));
+            });
+    }
+    inline void DrawMeshRendererUI(entt::entity e)
+    {
+        DrawComponentUI<Pitaya::Game::MeshRenderer>(e, ICON_FA_CUBES " Mesh Renderer",
+            [](Pitaya::Game::Scene*, Pitaya::Game::MeshRenderer* meshRenderer)
+            {
+                constexpr const float LABEL_WIDTH = 90.0f;
+                constexpr const float RIGHT_PADDING = 8.0f;
+
+                {   // Mesh切换
+                    ImGui::AlignTextToFramePadding();
+                    ImGui::TextUnformatted("Mesh");
+                    ImGui::SameLine(LABEL_WIDTH);
+
+                    char meshLabel[256] = {};
+                    const auto& currentMesh = meshRenderer->GetMesh();
+                    if (currentMesh)
+                    {
+                        std::snprintf(meshLabel, sizeof(meshLabel), "%s %s (Mesh)", ICON_FA_CUBES, "TODO 获取MeshName");
+                    }
+                    else
+                    {
+                        std::snprintf(meshLabel, sizeof(meshLabel), ICON_FA_CUBE " None (Mesh)");
+                    }
+
+                    float frameWidth = ImGui::GetContentRegionAvail().x - RIGHT_PADDING;
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.15f, 0.15f, 0.15f, 1.0f));
+                    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.25f, 0.25f, 0.25f, 1.0f));
+                    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+
+                    ImGui::Button(meshLabel, ImVec2(frameWidth, 0));
+
+                    ImGui::PopStyleColor(3);
+
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+                        {
+                            // TODO 
+                        }
+                        ImGui::EndDragDropTarget();
+                    }
+                    ImGui::Spacing();
+                }
+
+                {   // LayerMask
+                    Pitaya::Render::RenderLayer currentLayer = meshRenderer->GetLayerMask();
+                    ImGui::AlignTextToFramePadding();
+                    ImGui::TextUnformatted("Layer");
+                    ImGui::SameLine(LABEL_WIDTH);
+                    ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - RIGHT_PADDING);
+                    if (ImGui::BeginCombo("##LayerCombo", Pitaya::Render::ToString(currentLayer).data()))
+                    {
+                        auto DrawLayerSelectable = [&](const char* label, Pitaya::Render::RenderLayer layerVal) 
+                            {
+                                bool isSelected = (currentLayer == layerVal);
+                                if (ImGui::Selectable(label, isSelected)) { meshRenderer->SetLayerMask(layerVal); }
+                                if (isSelected) { ImGui::SetItemDefaultFocus(); }
+                            };
+                        DrawLayerSelectable("Default", Pitaya::Render::RenderLayer::Default);
+                        DrawLayerSelectable("Transparent", Pitaya::Render::RenderLayer::Transparent);
+                        DrawLayerSelectable("UI", Pitaya::Render::RenderLayer::UI);
+                        DrawLayerSelectable("Editor Only", Pitaya::Render::RenderLayer::EditorOnly);
+                        ImGui::EndCombo();
+                    }
+                    ImGui::PopItemWidth();
+                }
+            });
+    }
+    inline void DrawMaterialOverrideUI(entt::entity e)
+    {
+        DrawComponentUI<Pitaya::Game::MaterialOverride>(e, ICON_FA_PAINT_ROLLER " Material Override",
+            [](Pitaya::Game::Scene*, Pitaya::Game::MaterialOverride* materialOverride)
+            {
+                constexpr float LABEL_WIDTH = 90.0f;
+                auto& materials = materialOverride->GetOverrideMaterials();
+                int indexToRemove = -1;
+                for (size_t i = 0; i < materials.size(); ++i)
+                {
+                    ImGui::PushID(static_cast<int>(i));
+                    ImGui::BeginGroup();
+
+                    ImGui::AlignTextToFramePadding();
+                    ImGui::TextUnformatted(ICON_FA_GRIP_LINES);
+                    ImGui::SameLine();
+
+                    if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+                    {
+                        ImGui::SetDragDropPayload("MATERIAL_MOVE_PROJ", &i, sizeof(size_t));
+                        ImGui::Text("Moving Element %zu", i);
+                        ImGui::EndDragDropSource();
+                    }
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MATERIAL_MOVE_PROJ"))
+                        {
+                            size_t sourceIdx = *static_cast<const size_t*>(payload->Data);
+                            if (sourceIdx != i) { std::swap(materials[sourceIdx], materials[i]); }
+                        }
+                        ImGui::EndDragDropTarget();
+                    }
+
+                    ImGui::Text("Element %zu", i);
+                    ImGui::SameLine(LABEL_WIDTH);
+
+                    float deleteBtnWidth = 30.0f;
+                    float slotWidth = ImGui::GetContentRegionAvail().x - deleteBtnWidth - 5.0f;
+
+                    const char* matName = materials[i] ? ICON_FA_FILE_IMAGE " Material Asset" : ICON_FA_FILE " None (Material)";
+
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.15f, 0.15f, 0.15f, 1.0f));
+                    ImGui::Button(matName, ImVec2(slotWidth, 0));
+                    ImGui::PopStyleColor();
+
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+                        {
+                            // TODO
+                        }
+                        ImGui::EndDragDropTarget();
+                    }
+
+                    ImGui::SameLine();
+                    if (ImGui::Button(ICON_FA_TRASH_CAN, ImVec2(deleteBtnWidth, 0))) { indexToRemove = (int)i; }
+
+                    ImGui::EndGroup();
+                    ImGui::PopID();
+                }
+
+                if (indexToRemove != -1) { materials.erase(materials.begin() + indexToRemove); }
+
+                if (ImGui::Button(ICON_FA_PLUS " Add Slot", ImVec2(ImGui::GetContentRegionAvail().x, 0))) { materials.emplace_back(); }
             });
     }
     inline void DrawRigidbodyUI(entt::entity e)
@@ -565,7 +632,8 @@ namespace
             });
     }
     inline constexpr const auto ComponentDrawFuncs = std::to_array<void(*)(entt::entity)>(
-        { DrawMetadataUI, DrawTransformUI, DrawMeshRendererUI, DrawMaterialOverrideUI, DrawCameraUI , DrawRigidbodyUI, DrawScriptUI });
+        { DrawMetadataUI, DrawTransformUI, DrawLightUI, DrawCameraUI, DrawMeshRendererUI, 
+        DrawMaterialOverrideUI, DrawRigidbodyUI, DrawScriptUI });
 }
 
 void Pitaya::Editor::InspectorPanel::OnImGuiRender()

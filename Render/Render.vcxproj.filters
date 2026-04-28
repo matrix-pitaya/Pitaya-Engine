@@ -72,6 +72,12 @@
     <ClInclude Include="Command\BlitToScreenCommand.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Common\LightInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\InstanceTransformInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backend\OpenGL\OpenGLRenderer.cpp">

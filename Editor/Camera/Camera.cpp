@@ -4,12 +4,11 @@
 #include<Time/Common/FuncTable.h>
 #include<GPU/Common/FuncTable.h>
 #include<Core/Utils/File.h>
-
 #include<thread>
 
 bool Pitaya::Editor::Camera::Initialize_Main()
 {
-	renderTarget.DeserializeFromFile(Pitaya::Core::GetExecutableDirectory() / "editor/RenderTarget/Editor.rt");
+	renderTarget.DeserializeFromFile(Pitaya::Core::GetExecutableDirectory() / "editor/rt/EditorViewPort.rt");
 	falg.store(true, std::memory_order_release);
 	Pitaya::Render::PostProcessStep step;
 	Pitaya::Render::GammaCorrectionParams gama;
@@ -20,7 +19,7 @@ bool Pitaya::Editor::Camera::Initialize_Main()
 }
 void Pitaya::Editor::Camera::Release_Main()
 {
-	renderTarget.SerializeToFile(Pitaya::Core::GetExecutableDirectory() / "editor/RenderTarget/Editor.rt");
+	renderTarget.SerializeToFile(Pitaya::Core::GetExecutableDirectory() / "editor/rt/EditorViewPort.rt");
 }
 bool Pitaya::Editor::Camera::Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
 {

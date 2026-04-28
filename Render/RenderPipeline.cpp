@@ -9,12 +9,14 @@ bool Pitaya::Render::RenderPipeline::Initialize()
 {
 	graph.Passes.reserve(10);
 	graph.Items.reserve(5000);
+	graph.Lights.reserve(10);
 	return true;
 }
 void Pitaya::Render::RenderPipeline::Release()
 {
 	graph.Passes.clear();
 	graph.Items.clear();
+	graph.Lights.clear();
 }
 void Pitaya::Render::RenderPipeline::Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine> passkey, Pitaya::Render::Renderer* renderer)
 {
@@ -51,6 +53,11 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 		renderer->EndPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>()); //对当前Pass提交的Draw命令进行排序并和批处理 生成InstanceDraw命令写入front缓冲区
 		renderer->SubmitPostProcess(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), pass);
 		Pitaya::Core::Print(Pitaya::Core::Color::Yellow, "End Pass");
+	}
+
+	for (auto& light : graph.Lights) //处理所有光源信息
+	{
+		renderer->SubmitLight(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), light);
 	}
 
 	INVOKE_TERMINATERENDERPIPELINESUBMITFINALBLIT_HOOK
