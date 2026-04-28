@@ -3,7 +3,6 @@
 #include<Core/Allocate/Allocate.h>
 #include<Core/PassKey/PassKey.h>
 #include<Core/Container/ObjectPool.h>
-#include<Game/Entity/GameObject.h>
 #include<Game/Component/Metadata.h>
 #include<Game/Component/Transform.h>
 #include<Game/Component/Parent.h>

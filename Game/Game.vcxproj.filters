@@ -30,19 +30,10 @@
     <ClInclude Include="Component\Transform.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Entity\Entity.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity\GameObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="GameWorld.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Component\Metadata.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity\GameObjectTreeView.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Component\Script.h">
@@ -81,9 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameWorld.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity\GameObjectTreeView.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

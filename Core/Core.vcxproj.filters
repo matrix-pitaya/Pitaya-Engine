@@ -87,9 +87,6 @@
     <ClInclude Include="RefCount\AtomicRefCount.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Object.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Camera\CameraSnapshot.h">
       <Filter>头文件</Filter>
     </ClInclude>

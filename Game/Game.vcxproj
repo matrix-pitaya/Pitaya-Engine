@@ -170,19 +170,15 @@
     <ClInclude Include="Component\Parent.h" />
     <ClInclude Include="Component\Script.h" />
     <ClInclude Include="Component\Sprite.h" />
-    <ClInclude Include="Entity\GameObjectTreeView.h" />
     <ClInclude Include="Component\Camera.h" />
     <ClInclude Include="Component\MeshRenderer.h" />
     <ClInclude Include="Component\RigidBody.h" />
     <ClInclude Include="Component\Metadata.h" />
     <ClInclude Include="Component\Transform.h" />
-    <ClInclude Include="Entity\Entity.h" />
-    <ClInclude Include="Entity\GameObject.h" />
     <ClInclude Include="GameWorld.h" />
     <ClInclude Include="Scene\Scene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Entity\GameObjectTreeView.cpp" />
     <ClCompile Include="GameWorld.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
