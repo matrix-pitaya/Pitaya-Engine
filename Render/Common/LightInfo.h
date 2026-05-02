@@ -1,11 +1,11 @@
 #pragma once
 
+#include<Render/Common/def.h>
 #include<glm.hpp>
 
 namespace Pitaya::Render
 {
-	//GPU
-	struct alignas(16) LightInfo
+	struct STD140_LAYOUT LightInfo
 	{
 		glm::vec4 Position_Type;	// xyz: 位置或方向 w: 光源类型 (0:平行光, 1:点光源, 2:聚光灯)
 		glm::vec4 Direction;		// xyz: 光源方向(平行光/聚光灯用) w: 预留

@@ -111,6 +111,12 @@
     <ClInclude Include="Common\FuncTable.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Frontend\Texture\Texture2DArray.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Backend\OpenGL\Texture\OpenGLTexture2DArray.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frontend\Buffer\FrameBuffer.cpp">
@@ -141,6 +147,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="RHIDevice.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Frontend\Texture\Texture2DArray.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

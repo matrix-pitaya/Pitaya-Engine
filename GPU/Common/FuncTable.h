@@ -30,13 +30,14 @@ namespace Pitaya::Engine
 			if (!OnCreateVertexArray) { throw std::runtime_error("FuncTable miss [GPU::CreateVertexArray] Function!"); }
 			if (!OnCreateVertexBuffer) { throw std::runtime_error("FuncTable miss [GPU::CreateVertexBuffer] Function!"); }
 			if (!OnCreateIndexBuffer) { throw std::runtime_error("FuncTable miss [GPU::CreateIndexBuffer] Function!"); }
-			if (!OnCreateShaderVF) { throw std::runtime_error("FuncTable miss [GPU::OnCreateShaderVF] Function!"); }
-			if (!OnCreateShaderVFG) { throw std::runtime_error("FuncTable miss [GPU::OnCreateShaderVFG] Function!"); }
-			if (!OnCreateTexture2D) { throw std::runtime_error("FuncTable miss [GPU::OnCreateTexture2D] Function!"); }
-			if (!OnCreateTextureCubemap) { throw std::runtime_error("FuncTable miss [GPU::OnCreateTextureCubemap] Function!"); }
-			if (!OnCreateUniformBuffer) { throw std::runtime_error("FuncTable miss [GPU::OnCreateUniformBuffer] Function!"); }
-			if (!OnCreateFrameBuffer) { throw std::runtime_error("FuncTable miss [GPU::OnCreateFrameBuffer] Function!"); }
-			if (!OnCreateShaderStorageBuffer) { throw std::runtime_error("FuncTable miss [GPU::OnCreateShaderStorageBuffer] Function!"); }
+			if (!OnCreateShaderVF) { throw std::runtime_error("FuncTable miss [GPU::CreateShaderVF] Function!"); }
+			if (!OnCreateShaderVFG) { throw std::runtime_error("FuncTable miss [GPU::CreateShaderVFG] Function!"); }
+			if (!OnCreateTexture2D) { throw std::runtime_error("FuncTable miss [GPU::CreateTexture2D] Function!"); }
+			if (!OnCreateTexture2DArray) { throw std::runtime_error("FuncTable miss [GPU::CreateTexture2DArray] Function!"); }
+			if (!OnCreateTextureCubemap) { throw std::runtime_error("FuncTable miss [GPU::CreateTextureCubemap] Function!"); }
+			if (!OnCreateUniformBuffer) { throw std::runtime_error("FuncTable miss [GPU::CreateUniformBuffer] Function!"); }
+			if (!OnCreateFrameBuffer) { throw std::runtime_error("FuncTable miss [GPU::CreateFrameBuffer] Function!"); }
+			if (!OnCreateShaderStorageBuffer) { throw std::runtime_error("FuncTable miss [GPU::CreateShaderStorageBuffer] Function!"); }
 
 			if (!OnDestroyVertexArray) { throw std::runtime_error("FuncTable miss [GPU::DestroyVertexArray] Function!"); }
 			if (!OnDestroyVertexBuffer) { throw std::runtime_error("FuncTable miss [GPU::DestroyVertexBuffer] Function!"); }
@@ -44,6 +45,7 @@ namespace Pitaya::Engine
 			if (!OnDestroyShader) { throw std::runtime_error("FuncTable miss [GPU::DestroyShader] Function!"); }
 			if (!OnDestroyTexture2D) { throw std::runtime_error("FuncTable miss [GPU::DestroyTexture2D] Function!"); }
 			if (!OnDestroyTextureCubemap) { throw std::runtime_error("FuncTable miss [GPU::DestroyTextureCubemap] Function!"); }
+			if (!OnDestroyTexture2DArray) { throw std::runtime_error("FuncTable miss [GPU::DestroyTexture2DArray] Function!"); }
 			if (!OnDestroyUniformBuffer) { throw std::runtime_error("FuncTable miss [GPU::DestroyUniformBuffer] Function!"); }
 			if (!OnDestroyFrameBuffer) { throw std::runtime_error("FuncTable miss [GPU::DestroyFrameBuffer] Function!"); }
 			if (!OnDestroyShaderStorageBuffer) { throw std::runtime_error("FuncTable miss [GPU::DestroyShaderStorageBuffer] Function!"); }
@@ -54,6 +56,7 @@ namespace Pitaya::Engine
 			if (!OnGetShader) { throw std::runtime_error("FuncTable miss [GPU::GetShader] Function!"); }
 			if (!OnGetTexture2D) { throw std::runtime_error("FuncTable miss [GPU::GetTexture2D] Function!"); }
 			if (!OnGetTextureCubemap) { throw std::runtime_error("FuncTable miss [GPU::GetTextureCubemap] Function!"); }
+			if (!OnGetTexture2DArray) { throw std::runtime_error("FuncTable miss [GPU::GetTexture2DArray] Function!"); }
 			if (!OnGetUniformBuffer) { throw std::runtime_error("FuncTable miss [GPU::GetUniformBuffer] Function!"); }
 			if (!OnGetFrameBuffer) { throw std::runtime_error("FuncTable miss [GPU::GetFrameBuffer] Function!"); }
 			if (!OnGetShaderStorageBuffer) { throw std::runtime_error("FuncTable miss [GPU::GetShaderStorageBuffer] Function!"); }
@@ -71,6 +74,7 @@ namespace Pitaya::Engine
 			OnCreateShaderVFG = nullptr;
 			OnCreateTexture2D = nullptr;
 			OnCreateTextureCubemap = nullptr;
+			OnCreateTexture2DArray = nullptr;
 			OnCreateUniformBuffer = nullptr;
 			OnCreateFrameBuffer = nullptr;
 			OnCreateShaderStorageBuffer = nullptr;
@@ -81,6 +85,7 @@ namespace Pitaya::Engine
 			OnDestroyShader = nullptr;
 			OnDestroyTexture2D = nullptr;
 			OnDestroyTextureCubemap = nullptr;
+			OnDestroyTexture2DArray = nullptr;
 			OnDestroyUniformBuffer = nullptr;
 			OnDestroyFrameBuffer = nullptr;
 			OnDestroyShaderStorageBuffer = nullptr;
@@ -91,6 +96,7 @@ namespace Pitaya::Engine
 			OnGetShader = nullptr;
 			OnGetTexture2D = nullptr;
 			OnGetTextureCubemap = nullptr;
+			OnGetTexture2DArray = nullptr;
 			OnGetUniformBuffer = nullptr;
 			OnGetFrameBuffer = nullptr;
 			OnGetShaderStorageBuffer = nullptr;
@@ -130,6 +136,10 @@ namespace Pitaya::Engine
 		{
 			return OnCreateTextureCubemap(passkey, datas, widths, heights, channels, isGenerateMipmap, isSRGB, isNearest);
 		}
+		inline Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> InvokeOnCreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, int width, int height, int layers, bool isDepth) const
+		{
+			return OnCreateTexture2DArray(passkey, width, height, layers, isDepth);
+		}
 		inline Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> InvokeOnCreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint32_t size, uint32_t bindingPoint) const
 		{
 			return OnCreateUniformBuffer(passkey, size, bindingPoint);
@@ -166,6 +176,10 @@ namespace Pitaya::Engine
 		inline bool InvokeOnDestroyTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> id) const
 		{
 			return OnDestroyTextureCubemap(passkey, id);
+		}
+		inline bool InvokeOnDestroyTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> id) const
+		{
+			return OnDestroyTexture2DArray(passkey,id);
 		}
 		inline bool InvokeOnDestroyUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id) const
 		{
@@ -204,6 +218,10 @@ namespace Pitaya::Engine
 		{
 			return OnGetTextureCubemap(passkey, id);
 		}
+		inline Pitaya::GPU::Texture2DArray* InvokeOnGetTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> id) const
+		{
+			return OnGetTexture2DArray(passkey, id);
+		}
 		inline Pitaya::GPU::UniformBuffer* InvokeOnGetUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id) const
 		{
 			return OnGetUniformBuffer(passkey, id);
@@ -227,6 +245,7 @@ namespace Pitaya::Engine
 		Pitaya::GPU::Identifier<Pitaya::GPU::Shader> (ENGINE_CALL *OnCreateShaderVFG)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, const char*, const char*, const char*) = nullptr;
 		Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> (ENGINE_CALL *OnCreateTexture2D)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, unsigned char*, int, int, int, bool, bool, bool) = nullptr;
 		Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> (ENGINE_CALL *OnCreateTextureCubemap)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, unsigned char**, int*, int*, int*, bool, bool, bool) = nullptr;
+		Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> (ENGINE_CALL *OnCreateTexture2DArray)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, int, int, int, bool) = nullptr;
 		Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> (ENGINE_CALL *OnCreateUniformBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, uint32_t, uint32_t) = nullptr;
 		Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> (ENGINE_CALL *OnCreateFrameBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, const Pitaya::GPU::FrameBufferSpecification&) = nullptr;
 		Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> (ENGINE_CALL *OnCreateShaderStorageBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, uint32_t, uint32_t) = nullptr;
@@ -237,6 +256,7 @@ namespace Pitaya::Engine
 		bool (ENGINE_CALL *OnDestroyShader)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::Shader>) = nullptr;
 		bool (ENGINE_CALL *OnDestroyTexture2D)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D>) = nullptr;
 		bool (ENGINE_CALL *OnDestroyTextureCubemap)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap>) = nullptr;
+		bool (ENGINE_CALL *OnDestroyTexture2DArray)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray>) = nullptr;
 		bool (ENGINE_CALL *OnDestroyUniformBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer>) = nullptr;
 		bool (ENGINE_CALL *OnDestroyFrameBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer>) = nullptr;
 		bool (ENGINE_CALL *OnDestroyShaderStorageBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer>) = nullptr;
@@ -247,6 +267,7 @@ namespace Pitaya::Engine
 		Pitaya::GPU::Shader* (ENGINE_CALL *OnGetShader)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::Shader>) = nullptr;
 		Pitaya::GPU::Texture2D* (ENGINE_CALL *OnGetTexture2D)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D>) = nullptr;
 		Pitaya::GPU::TextureCubemap* (ENGINE_CALL *OnGetTextureCubemap)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap>) = nullptr;
+		Pitaya::GPU::Texture2DArray* (ENGINE_CALL *OnGetTexture2DArray)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray>) = nullptr;
 		Pitaya::GPU::UniformBuffer* (ENGINE_CALL *OnGetUniformBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer>) = nullptr;
 		Pitaya::GPU::FrameBuffer* (ENGINE_CALL *OnGetFrameBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer>) = nullptr;
 		Pitaya::GPU::ShaderStorageBuffer* (ENGINE_CALL *OnGetShaderStorageBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer>) = nullptr;
@@ -288,6 +309,10 @@ namespace Pitaya::GPU
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnCreateTextureCubemap(passkey, datas, widths, heights, channels, isGenerateMipmap, isSRGB, isNearest);
 	}
+	inline Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> CreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, int width, int height, int layers, bool isDepth)
+	{
+		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnCreateTexture2DArray(passkey, width, height, layers, isDepth);
+	}
 	inline Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint32_t size, uint32_t bindingPoint)
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnCreateUniformBuffer(passkey, size, bindingPoint);
@@ -325,6 +350,10 @@ namespace Pitaya::GPU
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnDestroyTextureCubemap(passkey, id);
 	}
+	inline bool DestroyTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> id)
+	{
+		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnDestroyTexture2DArray(passkey, id);
+	}
 	inline bool DestroyUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnDestroyUniformBuffer(passkey, id);
@@ -361,6 +390,10 @@ namespace Pitaya::GPU
 	inline Pitaya::GPU::TextureCubemap* GetTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> id)
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnGetTextureCubemap(passkey, id);
+	}
+	inline Pitaya::GPU::Texture2DArray* GetTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> id)
+	{
+		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnGetTexture2DArray(passkey, id);
 	}
 	inline Pitaya::GPU::UniformBuffer* GetUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
 	{

@@ -8,6 +8,7 @@ namespace Pitaya::GPU
 {
     class Texture;
     class Texture2D;
+    class Texture2DArray;
     class TextureCubemap;
 
     class Shader;
@@ -34,6 +35,7 @@ namespace Pitaya::GPU
             std::is_same_v<T, Pitaya::GPU::Shader> ||
             std::is_same_v<T, Pitaya::GPU::VertexArray> ||
             std::is_same_v<T, Pitaya::GPU::VertexBuffer> ||
+            std::is_same_v<T, Pitaya::GPU::Texture2DArray> ||
             std::is_same_v<T, Pitaya::GPU::IndexBuffer> ||
             std::is_same_v<T, Pitaya::GPU::UniformBuffer> ||
             std::is_same_v<T, Pitaya::GPU::ShaderStorageBuffer> ||

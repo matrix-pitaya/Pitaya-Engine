@@ -78,6 +78,15 @@
     <ClInclude Include="Common\InstanceTransformInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Common\def.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\CSMShadowInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\CSMShadowPassInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backend\OpenGL\OpenGLRenderer.cpp">

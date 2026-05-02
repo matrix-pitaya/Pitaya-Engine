@@ -7,6 +7,7 @@
 #include<GPU/Common/BindPoint.h>
 #include<GPU/Frontend/Texture/Texture2D.h>
 #include<GPU/Frontend/Texture/TextureCubemap.h>
+#include<GPU/Frontend/Texture/Texture2DArray.h>
 #include<GPU/Frontend/Shader/Shader.h>
 #include<GPU/Frontend/Buffer/FrameBuffer.h>
 #include<GPU/Frontend/Buffer/IndexBuffer.h>
@@ -57,12 +58,138 @@ namespace Pitaya::GPU
 	private:
 		struct RHIRegistry
 		{
+		public:
+			inline void DestroyAll()
+			{
+				for (auto& [key, value] : VertexArrays)
+				{
+					if (value)
+					{
+						PITAYA_DELETE(value);
+						value = nullptr;
+					}
+				}
+				for (auto& [key, value] : VertexBuffers)
+				{
+					if (value)
+					{
+						PITAYA_DELETE(value);
+						value = nullptr;
+					}
+				}
+				for (auto& [key, value] : IndexBuffers)
+				{
+					if (value)
+					{
+						PITAYA_DELETE(value);
+						value = nullptr;
+					}
+				}
+				for (auto& [key, value] : Shaders)
+				{
+					if (value)
+					{
+						PITAYA_DELETE(value);
+						value = nullptr;
+					}
+				}
+				for (auto& [key, value] : Texture2Ds)
+				{
+					if (value)
+					{
+						PITAYA_DELETE(value);
+						value = nullptr;
+					}
+				}
+				for (auto& [key, value] : TextureCubemaps)
+				{
+					if (value)
+					{
+						PITAYA_DELETE(value);
+						value = nullptr;
+					}
+				}
+				for (auto& [key, value] : Texture2DArrays)
+				{
+					if (value)
+					{
+						PITAYA_DELETE(value);
+						value = nullptr;
+					}
+				}
+				for (auto& [key, value] : UniformBuffers)
+				{
+					if (value)
+					{
+						PITAYA_DELETE(value);
+						value = nullptr;
+					}
+				}
+				for (auto& [key, value] : FrameBuffers)
+				{
+					if (value)
+					{
+						PITAYA_DELETE(value);
+						value = nullptr;
+					}
+				}
+				for (auto& [key, value] : ShaderStorageBuffers)
+				{
+					if (value)
+					{
+						PITAYA_DELETE(value);
+						value = nullptr;
+					}
+				}
+				VertexArrays.clear();
+				VertexBuffers.clear();
+				IndexBuffers.clear();
+				Shaders.clear();
+				Texture2Ds.clear();
+				TextureCubemaps.clear();
+				Texture2DArrays.clear();
+				UniformBuffers.clear();
+				FrameBuffers.clear();
+				ShaderStorageBuffers.clear();
+			}
+			inline auto Create(int width, int height, int layers, bool isDepth)
+			{
+				Pitaya::GPU::Texture2DArray* texture2DArray = Pitaya::GPU::Texture2DArray::Create(width, height, layers, isDepth);
+				Pitaya::GPU::Identifier gpuIdentifier = texture2DArray->GetGPUIdentifier();
+				Texture2DArrays.emplace(gpuIdentifier, texture2DArray);
+				return gpuIdentifier;
+			}
+			inline bool Destroy(Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> id)
+			{
+				auto iterator = Texture2DArrays.find(id);
+				if (iterator == Texture2DArrays.end()) { return false; }
+
+				if (!iterator->second)
+				{
+					Pitaya::Log::Warning("GPU TextureCubemap Empty Destroy!");
+					Texture2DArrays.erase(iterator);
+					return false;
+				}
+
+				PITAYA_DELETE(iterator->second);
+				iterator->second = nullptr;
+				Texture2DArrays.erase(iterator);
+				return true;
+			}
+			inline auto Get(Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> id)
+			{
+				auto iterator = Texture2DArrays.find(id);
+				return iterator != Texture2DArrays.end() ? iterator->second : nullptr;
+			}
+
+		public:
 			std::unordered_map<Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray>, Pitaya::GPU::VertexArray*> VertexArrays;
 			std::unordered_map<Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer>, Pitaya::GPU::VertexBuffer*> VertexBuffers;
 			std::unordered_map<Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer>, Pitaya::GPU::IndexBuffer*> IndexBuffers;
 			std::unordered_map<Pitaya::GPU::Identifier<Pitaya::GPU::Shader>, Pitaya::GPU::Shader*> Shaders;
 			std::unordered_map<Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D>, Pitaya::GPU::Texture2D*> Texture2Ds;
 			std::unordered_map<Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap>, Pitaya::GPU::TextureCubemap*> TextureCubemaps;
+			std::unordered_map< Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray>, Pitaya::GPU::Texture2DArray*> Texture2DArrays;
 			std::unordered_map<Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer>, Pitaya::GPU::UniformBuffer*> UniformBuffers;
 			std::unordered_map<Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer>, Pitaya::GPU::FrameBuffer*> FrameBuffers;
 			std::unordered_map<Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer>, Pitaya::GPU::ShaderStorageBuffer*> ShaderStorageBuffers;
@@ -85,69 +212,7 @@ namespace Pitaya::GPU
 	public:
 		inline void DestroyAllGPUResource(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
 		{
-			for (auto& [key, value] : registry.VertexArrays)
-			{
-				if (!value) { continue; }
-				delete value;
-				value = nullptr;
-			}
-			for (auto& [key, value] : registry.VertexBuffers)
-			{
-				if (!value) { continue; }
-				delete value;
-				value = nullptr;
-			}
-			for (auto& [key, value] : registry.IndexBuffers)
-			{
-				if (!value) { continue; }
-				delete value;
-				value = nullptr;
-			}
-			for (auto& [key, value] : registry.Shaders)
-			{
-				if (!value) { continue; }
-				delete value;
-				value = nullptr;
-			}
-			for (auto& [key, value] : registry.Texture2Ds)
-			{
-				if (!value) { continue; }
-				delete value;
-				value = nullptr;
-			}
-			for (auto& [key, value] : registry.TextureCubemaps)
-			{
-				if (!value) { continue; }
-				delete value;
-				value = nullptr;
-			}
-			for (auto& [key, value] : registry.UniformBuffers)
-			{
-				if (!value) { continue; }
-				delete value;
-				value = nullptr;
-			}
-			for (auto& [key, value] : registry.FrameBuffers)
-			{
-				if (!value) { continue; }
-				delete value;
-				value = nullptr;
-			}
-			for (auto& [key, value] : registry.ShaderStorageBuffers)
-			{
-				if (!value) { continue; }
-				delete value;
-				value = nullptr;
-			}
-			registry.VertexArrays.clear();
-			registry.VertexBuffers.clear();
-			registry.IndexBuffers.clear();
-			registry.Shaders.clear();
-			registry.Texture2Ds.clear();
-			registry.TextureCubemaps.clear();
-			registry.UniformBuffers.clear();
-			registry.FrameBuffers.clear();
-			registry.ShaderStorageBuffers.clear();
+			registry.DestroyAll();
 		}
 		 
 	public:				
@@ -225,6 +290,10 @@ namespace Pitaya::GPU
 			Pitaya::GPU::Identifier gpuIdentifier = textureCubemap->GetGPUIdentifier();
 			registry.TextureCubemaps.emplace(gpuIdentifier, textureCubemap);
 			return gpuIdentifier;
+		}
+		inline Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> CreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, int width, int height, int layers, bool isDepth)
+		{
+			return registry.Create(width, height, layers, isDepth);
 		}
 		inline Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, uint32_t size, uint32_t bindingPoint)
 		{
@@ -363,6 +432,10 @@ namespace Pitaya::GPU
 			registry.TextureCubemaps.erase(iterator);
 			return true;
 		}
+		inline bool DestroyTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> id)
+		{
+			return registry.Destroy(id);
+		}
 		inline bool DestroyUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
 		{
 			auto iterator = registry.UniformBuffers.find(id);
@@ -444,6 +517,10 @@ namespace Pitaya::GPU
 		{
 			auto iterator = registry.TextureCubemaps.find(id);
 			return iterator != registry.TextureCubemaps.end() ? iterator->second : nullptr;
+		}
+		inline Pitaya::GPU::Texture2DArray* GetTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> id)
+		{
+			return registry.Get(id);
 		}
 		inline Pitaya::GPU::UniformBuffer* GetUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
 		{

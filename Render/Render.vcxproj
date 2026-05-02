@@ -166,6 +166,9 @@
     <ClInclude Include="Command\InstancedDrawCommand.h" />
     <ClInclude Include="Command\PostProcessCommand.h" />
     <ClInclude Include="Common\API.h" />
+    <ClInclude Include="Common\CSMShadowInfo.h" />
+    <ClInclude Include="Common\CSMShadowPassInfo.h" />
+    <ClInclude Include="Common\def.h" />
     <ClInclude Include="Common\InstanceTransformInfo.h" />
     <ClInclude Include="Common\LightInfo.h" />
     <ClInclude Include="Common\PostProcessSetting.h" />
