@@ -8,6 +8,7 @@
 #include<Physics/Common/API.h>
 #include<Window/Common/Platform.h>
 #include<GPU/Common/FrameBufferSpecification.h>
+#include<Event/Common/Event.h>
 #include<Config/Common/FunctionTable.h>
 
 #include<string>
@@ -47,7 +48,7 @@ namespace Pitaya::Config
 		};
 
 	private:
-		struct ConfigInfo : public Pitaya::Serialize::Serializable
+		struct ConfigInfo final : public Pitaya::Serialize::Serializable
 		{
 			//Engine
 			std::string Name = "Pitaya";
@@ -134,7 +135,17 @@ namespace Pitaya::Config
 		}
 
 	private:
+		void OnWindowFramebufferResetSize(const Pitaya::Event::Event& event);
+
+	private:
+		inline static void OnWindowFramebufferResetSize(void* listener, const Pitaya::Event::Event& event)
+		{
+			static_cast<Configurator*>(listener)->OnWindowFramebufferResetSize(event);
+		}
+
+	private:
 		Pitaya::Config::Configurator::ConfigInfo info;
+		Pitaya::Event::EventToken windowFramebufferResetSizeToken;
 
 	private:
 		inline static constexpr const char* fileName = "engine.cfg";

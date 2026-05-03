@@ -10,7 +10,7 @@
 
 namespace Pitaya::Editor
 {
-	class ConsolePanel : public Panel
+	class ConsolePanel final : public Panel
 	{
 		friend class  Pitaya::Editor::GUI;
     private:

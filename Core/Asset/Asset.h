@@ -15,12 +15,13 @@ namespace Pitaya::Core
 	class Asset
 	{
 	public:
-		struct AssetEntry : public Pitaya::Core::AtomicRefCount
+		struct AssetEntry final : public Pitaya::Core::AtomicRefCount
 		{
 			std::atomic<T*> Data = nullptr;
 			Pitaya::Core::AtomicStateFlags<AssetState> State = AssetState::Empty;
 			Pitaya::Core::GUID GUID;
 		};
+
 	public:
 		Asset() noexcept = default;
 		~Asset() noexcept

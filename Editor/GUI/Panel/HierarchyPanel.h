@@ -13,7 +13,7 @@
 
 namespace Pitaya::Editor
 {
-    class HierarchyPanel : public Panel
+    class HierarchyPanel final : public Panel
     {
         friend class Pitaya::Editor::GUI;
 

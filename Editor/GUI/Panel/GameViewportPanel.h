@@ -4,7 +4,7 @@
 
 namespace Pitaya::Editor
 {
-    class GameViewportPanel : public ViewportPanel
+    class GameViewportPanel final : public ViewportPanel
     {
         friend class GUI;
     private:

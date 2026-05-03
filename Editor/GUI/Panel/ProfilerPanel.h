@@ -5,7 +5,7 @@
 
 namespace Pitaya::Editor
 {
-    class ProfilerPanel : public Panel
+    class ProfilerPanel final : public Panel
     {
         friend class Pitaya::Editor::GUI;
     private:

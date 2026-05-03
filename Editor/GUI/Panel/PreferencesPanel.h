@@ -4,7 +4,7 @@
 
 namespace Pitaya::Editor
 {
-    class PreferencesPanel : public Panel
+    class PreferencesPanel final : public Panel
     {
         friend class Pitaya::Editor::GUI;
     private:

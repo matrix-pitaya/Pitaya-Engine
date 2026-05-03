@@ -1,7 +1,7 @@
 #pragma once
 
 #include<Core/Camera/CameraState.h>
-#include<Core/Common/Direction.h>
+#include<Core/Direction/Direction.h>
 #include<Core/Asset/Asset.h>
 #include<Core/StateFlags/StateFlags.h>
 #include<Core/PassKey/PassKey.h>
@@ -105,7 +105,7 @@ namespace Pitaya::Editor
 		std::atomic<bool> falg = false;	
 
 		//Transform
-		glm::vec3 position = glm::vec3(0.0f);
+		glm::vec3 position = glm::vec3(0.0f, 0.0f, 10.0f);
 		glm::vec3 forward = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 		float yaw = -90.0f;
@@ -129,7 +129,6 @@ namespace Pitaya::Editor
 		float sensitivity = 0.1f;
 		bool firstMove = true;
 		mutable bool dirty = true;
-		mutable bool dirtyRT = true;
 		CameraMode mode = CameraMode::Fly;
 	};
 }

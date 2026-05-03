@@ -93,7 +93,7 @@
     <ClInclude Include="Camera\CameraState.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\Direction.h">
+    <ClInclude Include="Direction\Direction.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Camera\CameraType.h">
@@ -124,6 +124,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Storage\Storage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Layout\def.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

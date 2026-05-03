@@ -168,10 +168,11 @@
     <ClInclude Include="Camera\CameraSnapshot.h" />
     <ClInclude Include="Camera\CameraState.h" />
     <ClInclude Include="Color\Color.h" />
+    <ClInclude Include="Layout\def.h" />
     <ClInclude Include="Container\BidirectionalMap.h" />
     <ClInclude Include="Asset\AssetState.h" />
     <ClInclude Include="Camera\CameraType.h" />
-    <ClInclude Include="Common\Direction.h" />
+    <ClInclude Include="Direction\Direction.h" />
     <ClInclude Include="Container\SlotMap.h" />
     <ClInclude Include="Identifier\GUID.h" />
     <ClInclude Include="Identifier\UID.h" />

@@ -11,8 +11,6 @@ namespace Pitaya::Event
 	{
 		EventToken(EventType type = EventType::Invalid)
 			: type(type) {}
-		EventToken(const EventToken&) = default;
-		EventToken& operator=(const EventToken&) = default;
 
 		bool operator==(const EventToken& other) const noexcept
 		{

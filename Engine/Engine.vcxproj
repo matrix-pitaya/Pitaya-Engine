@@ -111,7 +111,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_OPENGL;PITAYA_USE_GLFW;PITAYA_USE_BULLET;BE_IMPL=;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_OPENGL;PITAYA_USE_GLFW;PITAYA_USE_BULLET;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\mimalloc\include\;$(SolutionDir)thirdparty\eastl\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\Mono\include\mono-2.0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -158,7 +158,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_OPENGL;PITAYA_USE_GLFW;PITAYA_USE_BULLET;BE_IMPL=;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_OPENGL;PITAYA_USE_GLFW;PITAYA_USE_BULLET;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\mimalloc\include\;$(SolutionDir)thirdparty\eastl\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\Mono\include\mono-2.0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

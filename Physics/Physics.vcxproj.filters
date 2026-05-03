@@ -29,8 +29,5 @@
     <ClInclude Include="Common\API.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Backend\Bullet\BulletPhysicsWorld.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

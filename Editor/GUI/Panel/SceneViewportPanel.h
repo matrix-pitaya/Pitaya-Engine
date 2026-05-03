@@ -8,7 +8,7 @@
 
 namespace Pitaya::Editor
 {
-    class SceneViewportPanel : public ViewportPanel
+    class SceneViewportPanel final : public ViewportPanel
     {
         friend class GUI;
     private:

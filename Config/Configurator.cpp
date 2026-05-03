@@ -1,17 +1,21 @@
 #include<Config/Configurator.h>
 #include<Core/Utils/File.h>
 #include<Log/Common/FuncTable.h>
+#include<Event/Common/FuncTable.h>
 
 bool Pitaya::Config::Configurator::Initialize()
 {
+	windowFramebufferResetSizeToken = Pitaya::Event::Subscribe(
+		Pitaya::Event::EventType::WindowFramebufferResetSize,
+		&Pitaya::Config::Configurator::OnWindowFramebufferResetSize, this);
+
 	return true;
 }
 void Pitaya::Config::Configurator::Release()
 {
-	if (!Export())
-	{
-		Pitaya::Log::Error("config export fail!");
-	}
+	Pitaya::Event::UnSubscribe(windowFramebufferResetSizeToken);
+
+	if (!Export()) { Pitaya::Log::Error("config export fail!"); }
 }
 bool Pitaya::Config::Configurator::Import()
 {
@@ -23,6 +27,13 @@ bool Pitaya::Config::Configurator::Export()
 {
 	const std::filesystem::path path = std::filesystem::path(Pitaya::Core::GetWorkspace()) / fileName;
 	return info.SerializeToFile(path, Pitaya::Serialize::API::YAML);
+}
+void Pitaya::Config::Configurator::OnWindowFramebufferResetSize(const Pitaya::Event::Event& event)
+{
+	if (event.type != Pitaya::Event::EventType::WindowFramebufferResetSize) { return; }
+	const Pitaya::Event::FramebufferResetSizeEventArgs& args = static_cast<const Pitaya::Event::FramebufferResetSizeEventArgs&>(event.args);
+	info.WindowWidth = args.width;
+	info.WindowHeight = args.height;
 }
 
 void Pitaya::Config::Configurator::ConfigInfo::Serialize(Pitaya::Serialize::SerializeContext& context) const

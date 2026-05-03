@@ -51,10 +51,8 @@ namespace Pitaya::Core
         };
 
     public:
-        SlotMap()
-        {
-            pool.reserve(256);
-        }
+        SlotMap(size_t count = 256)
+            : pool(count){ }
         ~SlotMap() = default;
 
     public:

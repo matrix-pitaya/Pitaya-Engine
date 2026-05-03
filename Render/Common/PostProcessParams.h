@@ -1,7 +1,7 @@
 #pragma once
 
+#include<Core/Layout/def.h>
 #include<Render/Common/PostProcessType.h>
-#include<Render/Common/def.h>
 
 namespace Pitaya::Render
 {

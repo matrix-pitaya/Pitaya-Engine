@@ -1,5 +1,6 @@
 #pragma once
 
+#include<Core/Layout/def.h>
 #include<Core/Math/Frustum.h>
 
 #include<glm.hpp>
@@ -7,7 +8,7 @@
 namespace Pitaya::Core
 {
 	//GPU
-	struct alignas(16) CameraSnapshot
+	struct STD140_LAYOUT CameraSnapshot
 	{
 		glm::mat4 View;
 		glm::mat4 Projection;

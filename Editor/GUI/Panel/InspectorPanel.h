@@ -11,7 +11,7 @@ namespace Pitaya::Game
 
 namespace Pitaya::Editor
 {
-    class InspectorPanel : public Panel
+    class InspectorPanel final : public Panel
     {
         friend class Pitaya::Editor::GUI;
     private:
