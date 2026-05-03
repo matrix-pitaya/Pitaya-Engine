@@ -18,17 +18,8 @@
     <ClCompile Include="Backend\Bullet\BulletPhysicsSimulator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Backend\Bullet\BulletPhysicsWorld.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Backend\Factory.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Backend\Bullet\BulletPhysicsSimulator.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Common\RigidBodyType.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -36,6 +27,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Common\API.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Backend\Bullet\BulletPhysicsWorld.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

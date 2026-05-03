@@ -56,11 +56,11 @@ namespace Pitaya::Input
 	public:
 		inline void PrepareNewFrame(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) noexcept
 		{
-			memcpy(previousFrameState, currentFrameState, sizeof(previousFrameState));
+			std::memcpy(previousFrameState, currentFrameState, sizeof(previousFrameState));
 		}
 		inline void UpdateSnapshots(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) noexcept
 		{
-			memcpy(currentFrameState, hardwareState, sizeof(currentFrameState));
+			std::memcpy(currentFrameState, hardwareState, sizeof(currentFrameState));
 		}
 
 	public:

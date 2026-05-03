@@ -1,6 +1,7 @@
 #pragma once
 
 #include<Core/Allocate/Allocate.h>
+#include<Core/Storage/Storage.h>
 #include<Core/PassKey/PassKey.h>
 #include<Context/Common/Module.h>
 #include<Input/Common/KeyCode.h>
@@ -63,13 +64,14 @@ namespace Pitaya::Window
 	public:
 		virtual glm::uvec2 GetWindowSize() const = 0;
 
-	protected:
-		inline Pitaya::Input::KeyCode IntToKeyCode(int key) const noexcept
+	public:
+		inline Pitaya::Input::KeyCode ToKeyCode(int key) const noexcept
 		{
 			return (key < 0 || key >= 512) ? Pitaya::Input::KeyCode::Unknown : map[key];
 		}
 
 	protected:
 		Pitaya::Input::KeyCode map[512] = {};
+		Pitaya::Core::Storage<8> backendStorage;
 	};
 }

@@ -137,15 +137,6 @@ namespace Pitaya::Window
 		}
 
 	private:
-		static void FramebufferResetSizeCallback(GLFWwindow* window, int width, int height);
-		static void MouseCursorMoveCallback(GLFWwindow* window, double xPosition, double yPosition);
-		static void MouseScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
-		static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-		static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-		static void WindowCloseCallback(GLFWwindow* window);
-		static void DropFileCallback(GLFWwindow* window, int count, const char** paths);
-
-	private:
 		GLFWwindow* window = nullptr;
 	};
 }

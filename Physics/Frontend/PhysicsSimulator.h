@@ -1,6 +1,7 @@
 #pragma once
 
 #include<Core/Allocate/Allocate.h>
+#include<Core/Storage/Storage.h>
 #include<Context/Common/Module.h>
 #include<Physics/Common/API.h>
 
@@ -13,7 +14,10 @@ namespace Pitaya::Physics
 		{
 			friend class Pitaya::Engine::Module<PhysicsSimulator>;
 		private:
-			static PhysicsSimulator* Create(Pitaya::Physics::API);
+			static PhysicsSimulator* Create()
+			{
+				return PITAYA_NEW(PhysicsSimulator);
+			}
 			static void Destroy(PhysicsSimulator* physicsSimulator)
 			{
 				PITAYA_DELETE(physicsSimulator);
@@ -37,9 +41,9 @@ namespace Pitaya::Physics
 			}
 		};
 
-	protected:
+	private:
 		PhysicsSimulator() = default;
-		virtual ~PhysicsSimulator() = default;
+		~PhysicsSimulator() = default;
 
 	public:
 		PhysicsSimulator(const PhysicsSimulator&) = delete;
@@ -47,12 +51,15 @@ namespace Pitaya::Physics
 		PhysicsSimulator(PhysicsSimulator&&) = delete;
 		PhysicsSimulator& operator=(PhysicsSimulator&&) = delete;
 
-	protected:
-		virtual bool Initialize() = 0;
-		virtual void Release() = 0;
-		virtual void FixedUpdate() = 0;
+	private:
+		bool Initialize();
+		void Release();
+		void FixedUpdate();
 
 	public:
 		inline static constexpr const uint32_t MaxFixupdataExecuteTimes = 5;
+
+	private:
+		Pitaya::Core::Storage<128> backendStorage;
 	};
 }

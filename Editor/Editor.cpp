@@ -4,6 +4,14 @@
 #include<Hook/def.h>
 #include<Time/Common/FuncTable.h> 
 
+namespace
+{
+	extern "C" EDITOR_API void EDITOR_CALL AttachRuntimeEnv()
+	{
+		Pitaya::Editor::Editor::AttachRuntimeEnv();
+	}
+}
+
 void Pitaya::Editor::Editor::HookFunc::PreBeginFrame()
 {
 	Pitaya::Editor::Editor::Instance().BeginFrame();

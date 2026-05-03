@@ -84,7 +84,7 @@
     <ClInclude Include="Common\CSMShadowInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\CSMShadowPassInfo.h">
+    <ClInclude Include="Common\CSMShadowGeneratePass.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

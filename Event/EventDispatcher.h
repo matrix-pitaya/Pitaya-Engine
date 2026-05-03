@@ -48,7 +48,37 @@ namespace Pitaya::Event
 		};
 		struct EventRegistry
 		{
-			std::vector<std::unordered_map<::Pitaya::Event::EventToken,CallBack>> Map;
+		public:
+			inline void Clear() noexcept
+			{
+				for (auto& map : maps)
+				{
+					map.clear();
+				}
+			}
+			inline bool Emplace(EventType type, EventToken token, CallBack callback) noexcept
+			{
+				return maps[static_cast<uint8_t>(type)].emplace(token, callback).second;
+			}
+			inline bool Contains(EventToken token)
+			{
+				return maps[static_cast<uint8_t>(token.type)].contains(token);
+			}
+			inline bool Erase(EventToken token)
+			{
+				return maps[static_cast<uint8_t>(token.type)].erase(token) > 0;
+			}
+			template<typename Func>
+			inline void ForEach(EventType type, Func func)
+			{
+				for (const auto& pair : maps[static_cast<uint8_t>(type)])
+				{
+					func(pair.first, pair.second);
+				}
+			}
+
+		private:
+			std::unordered_map<EventToken, CallBack> maps[static_cast<uint8_t>(EventType::Invalid)] = {};
 		};
 
 	private:

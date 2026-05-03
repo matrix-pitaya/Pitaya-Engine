@@ -109,7 +109,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_BULLET;BE_IMPL=;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -145,7 +145,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_BULLET;BE_IMPL=;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -160,11 +160,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Backend\Bullet\BulletPhysicsSimulator.cpp" />
-    <ClCompile Include="Backend\Bullet\BulletPhysicsWorld.cpp" />
-    <ClCompile Include="Backend\Factory.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Backend\Bullet\BulletPhysicsSimulator.h" />
+    <ClInclude Include="Backend\Bullet\BulletPhysicsWorld.h" />
     <ClInclude Include="Common\API.h" />
     <ClInclude Include="Common\RigidBodyType.h" />
     <ClInclude Include="Frontend\PhysicsSimulator.h" />

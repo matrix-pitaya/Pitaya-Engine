@@ -72,9 +72,6 @@
     <ClInclude Include="API\def.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="API\func.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Profiler\Profiler.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -129,9 +126,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GUI\ImGui\Backends\imgui_impl_opengl3.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="API\func.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Profiler\Profiler.cpp">

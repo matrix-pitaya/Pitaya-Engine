@@ -61,8 +61,31 @@ namespace Pitaya::Thread
 		};
 		struct ThreadRegistry
 		{
-			std::unordered_map<Pitaya::Core::Thread::Identifier, 
-				ThreadInfo> Map;
+		public:
+			inline bool Emplace(Pitaya::Core::Thread::Identifier id, ThreadInfo&& info)
+			{
+				return map.emplace(id, std::move(info)).second;
+			}
+			inline auto Find(Pitaya::Core::Thread::Identifier id)
+			{
+				auto iterator = map.find(id);
+				return std::make_pair(iterator, iterator != map.end());
+			}
+			inline auto Erase(auto iterator)
+			{
+				return map.erase(iterator);
+			}
+			template<typename Func>
+			inline void ForEach(Func func)
+			{
+				for (auto& pair : map)
+				{
+					func(pair.first, pair.second);
+				}
+			}
+
+		private:
+			std::unordered_map<Pitaya::Core::Thread::Identifier, ThreadInfo> map;
 		};
 
 	private:
@@ -85,66 +108,64 @@ namespace Pitaya::Thread
 		{
 			ThreadInfo threadInfo = ThreadInfo(name, std::forward<Func>(func), std::forward<Args>(args)...);
 			Pitaya::Core::Thread::Identifier id = threadInfo.thread.GetThreadId();
-			registry.Map.emplace(id, std::move(threadInfo));
+			registry.Emplace(id, std::move(threadInfo));
 			Pitaya::Log::Info(std::string(name) + " thread created and registered");
 			return id;
 		}
 		inline bool UnregisterThread(Pitaya::Core::Thread::Identifier id)
 		{
-			auto iterator = registry.Map.find(id);
-			if (iterator == registry.Map.end())
+			auto [iterator, valid] = registry.Find(id);
+			if (!valid)
 			{
 				Pitaya::Log::Error("unregistered uhread id:" + std::to_string(id));
 				return false;
 			}
-
+			
 			if (iterator->second.thread.Join())
 			{
 				Pitaya::Log::Info(GetThreadName(id) + " thread join success");
-				registry.Map.erase(iterator);
+				registry.Erase(iterator);
 				return true;
 			}
 
 			Pitaya::Log::Error(GetThreadName(id) + " thread join fail");
-			registry.Map.erase(iterator);
-			return false;
+			registry.Erase(iterator);
+			return true;
 		}
 		inline bool UnregisterThread(Pitaya::Core::Thread::Identifier id, const std::chrono::milliseconds& timeout)
 		{
-			auto iterator = registry.Map.find(id);
-			if (iterator == registry.Map.end())
+			auto [iterator, valid] = registry.Find(id);
+			if (!valid)
 			{
-				Pitaya::Log::Error("unregistered thread id:" + std::to_string(id));
+				Pitaya::Log::Error("unregistered uhread id:" + std::to_string(id));
 				return false;
 			}
 
 			if (iterator->second.thread.JoinWaitForMilliseconds(timeout))
 			{
 				Pitaya::Log::Info(GetThreadName(id) + " thread join success");
-				registry.Map.erase(iterator);
+				registry.Erase(iterator);
 				return true;
 			}
 
 			Pitaya::Log::Error(GetThreadName(id) + " thread join timeout and terminated");
-			registry.Map.erase(iterator);
+			registry.Erase(iterator);
 			return false;
 		}
 		inline std::string GetThreadName(Pitaya::Core::Thread::Identifier id)
 		{
-			auto iterator = registry.Map.find(id);
-			return iterator == registry.Map.end() ?
-				"try find unregistered thread id:" + std::to_string(id) : 
-				iterator->second.name;
+			auto [iterator, valid] = registry.Find(id);
+			return valid ? iterator->second.name :
+				"try find unregistered thread id:" + std::to_string(id);
 		}
 		inline bool GetThreadIsRunning(Pitaya::Core::Thread::Identifier id)
 		{
-			auto iterator = registry.Map.find(id);
-			if (iterator == registry.Map.end())
+			auto [iterator, valid] = registry.Find(id);
+			if (!valid)
 			{
 				Pitaya::Log::Error("try find unregistered thread id:" + std::to_string(id));
 				return false;
 			}
-
 			return iterator->second.thread.IsRunning();
 		}
 

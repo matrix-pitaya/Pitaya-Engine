@@ -4,6 +4,7 @@
 #include<Physics/Common/RigidBodyType.h>
 #include<Time/Common/FuncTable.h>
 
+#if defined(PITAYA_USE_BULLET)
 #include<btBulletDynamicsCommon.h>
 #include<BulletCollision/CollisionDispatch/btCollisionDispatcherMt.h>
 #include<BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolverMt.h>
@@ -315,3 +316,4 @@ namespace Pitaya::Physics
         btDiscreteDynamicsWorldMt* dynamicsWorld = nullptr;
     };
 }
+#endif

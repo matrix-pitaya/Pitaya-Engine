@@ -109,7 +109,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_OPENGL;BE_IMPL=;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -151,7 +151,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_OPENGL;BE_IMPL=;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -172,7 +172,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="API\def.h" />
-    <ClInclude Include="API\func.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Common\EngineState.h" />
     <ClInclude Include="Common\TransformTool.h" />
@@ -202,7 +201,6 @@
     <ClInclude Include="StateMachine\StateMachine.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="API\func.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="GUI\ImGui\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="GUI\ImGui\Backends\imgui_impl_glfw.cpp" />

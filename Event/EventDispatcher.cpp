@@ -3,12 +3,11 @@
 
 bool Pitaya::Event::EventDispatcher::Initialize()
 {
-	registry.Map.resize(static_cast<uint8_t>(Pitaya::Event::EventType::Invalid));
 	return true;
 }
 void Pitaya::Event::EventDispatcher::Release()
 {
-	registry.Map.clear();
+	registry.Clear();
 }
 Pitaya::Event::EventToken Pitaya::Event::EventDispatcher::Subscribe(Pitaya::Event::EventType type, void (*OnCallBack)(void*, const ::Pitaya::Event::Event&), void* listener) noexcept
 {
@@ -18,8 +17,12 @@ Pitaya::Event::EventToken Pitaya::Event::EventDispatcher::Subscribe(Pitaya::Even
 		return Pitaya::Event::EventToken(Pitaya::Event::EventType::Invalid);
 	}
 
-	Pitaya::Event::EventToken eventToken = Pitaya::Event::EventToken( type);
-	registry.Map[static_cast<uint8_t>(type)][eventToken] = { OnCallBack ,listener };
+	Pitaya::Event::EventToken eventToken = Pitaya::Event::EventToken(type);
+	if (!registry.Emplace(type, eventToken, { OnCallBack ,listener }))
+	{
+		Pitaya::Log::Error("Event Registry Emplace Fail");
+		return Pitaya::Event::EventToken(Pitaya::Event::EventType::Invalid);
+	}
 	return eventToken;
 }
 bool Pitaya::Event::EventDispatcher::UnSubscribe(const Pitaya::Event::EventToken& eventToken) noexcept
@@ -30,15 +33,18 @@ bool Pitaya::Event::EventDispatcher::UnSubscribe(const Pitaya::Event::EventToken
 		return false;
 	}
 	
-	auto& map = registry.Map[static_cast<uint8_t>(eventToken.type)];
-	auto iterator = map.find(eventToken);
-	if (iterator == map.end())
+	if (!registry.Contains(eventToken))
 	{
 		Pitaya::Log::Warning("event token not in event map");
 		return false;
 	}
 
-	map.erase(iterator);
+	if (!registry.Erase(eventToken))
+	{
+		Pitaya::Log::Error("event registry erase fail");
+		return false;
+	}
+
 	return true;
 }
 void Pitaya::Event::EventDispatcher::Emit(const Pitaya::Event::Event& event) noexcept
@@ -49,9 +55,6 @@ void Pitaya::Event::EventDispatcher::Emit(const Pitaya::Event::Event& event) noe
 		return;
 	}
 
-	auto& map = registry.Map[static_cast<uint8_t>(event.type)];
-	for (const auto& pair : map)
-	{
-		pair.second.OnCallBack(pair.second.listener, event);
-	}
+	registry.ForEach(event.type, 
+		[&event](EventToken, CallBack callback) { callback.OnCallBack(callback.listener, event); });
 }

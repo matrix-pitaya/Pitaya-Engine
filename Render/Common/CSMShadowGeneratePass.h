@@ -5,8 +5,8 @@
 
 namespace Pitaya::Renderer
 {
-	struct STD140_LAYOUT CSMShadowPassInfo
+	struct STD140_LAYOUT CSMShadowGeneratePass
 	{
-
+		glm::mat4 LightVP;
 	};
 }
