@@ -16,7 +16,7 @@ namespace Pitaya::Event
 
 		bool operator==(const EventToken& other) const noexcept
 		{
-			return id == other.id;
+			return id == other.id && type == other.type;
 		}
 
 	public:

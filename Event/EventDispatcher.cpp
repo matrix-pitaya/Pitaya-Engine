@@ -17,7 +17,7 @@ Pitaya::Event::EventToken Pitaya::Event::EventDispatcher::Subscribe(Pitaya::Even
 		return Pitaya::Event::EventToken(Pitaya::Event::EventType::Invalid);
 	}
 
-	Pitaya::Event::EventToken eventToken = Pitaya::Event::EventToken(type);
+	Pitaya::Event::EventToken eventToken { type };
 	if (!registry.Emplace(type, eventToken, { OnCallBack ,listener }))
 	{
 		Pitaya::Log::Error("Event Registry Emplace Fail");

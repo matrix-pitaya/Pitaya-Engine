@@ -106,7 +106,7 @@ namespace Pitaya::Thread
 		template<class Func, class... Args>
 		inline Pitaya::Core::Thread::Identifier RegisterThread(std::string_view name, Func&& func, Args&&... args)
 		{
-			ThreadInfo threadInfo = ThreadInfo(name, std::forward<Func>(func), std::forward<Args>(args)...);
+			ThreadInfo threadInfo { name, std::forward<Func>(func), std::forward<Args>(args)... };
 			Pitaya::Core::Thread::Identifier id = threadInfo.thread.GetThreadId();
 			registry.Emplace(id, std::move(threadInfo));
 			Pitaya::Log::Info(std::string(name) + " thread created and registered");
