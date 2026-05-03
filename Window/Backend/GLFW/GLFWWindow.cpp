@@ -24,21 +24,21 @@ namespace
 	{
 		if ((width > 0) && (height > 0))
 		{
-			Pitaya::Event::FramebufferResetSizeEventArgs args = Pitaya::Event::FramebufferResetSizeEventArgs(width, height);
-			Pitaya::Event::Event event = Pitaya::Event::Event(Pitaya::Event::EventType::WindowFramebufferResetSize, args);
+			Pitaya::Event::FramebufferResetSizeEventArgs args { width, height };
+			Pitaya::Event::Event event { Pitaya::Event::EventType::WindowFramebufferResetSize, args };
 			Pitaya::Event::Emit(event);
 		}
 	}
 	void MouseCursorMoveCallback(GLFWwindow* glfwWindow, double xPosition, double yPosition)
 	{
-		Pitaya::Event::MouseCurrsorMoveEventArgs args = Pitaya::Event::MouseCurrsorMoveEventArgs(xPosition, yPosition);
-		Pitaya::Event::Event event = Pitaya::Event::Event(Pitaya::Event::EventType::MouseCurrsorMove, args);
+		Pitaya::Event::MouseCurrsorMoveEventArgs args { xPosition, yPosition };
+		Pitaya::Event::Event event { Pitaya::Event::EventType::MouseCurrsorMove, args };
 		Pitaya::Event::Emit(event);
 	}
 	void MouseScrollCallback(GLFWwindow* glfwWindow, double xOffset, double yOffset)
 	{
-		Pitaya::Event::MouseScrollEventArgs args = Pitaya::Event::MouseScrollEventArgs(xOffset, yOffset);
-		Pitaya::Event::Event event = Pitaya::Event::Event(Pitaya::Event::EventType::MouseScroll, args);
+		Pitaya::Event::MouseScrollEventArgs args { xOffset, yOffset };
+		Pitaya::Event::Event event { Pitaya::Event::EventType::MouseScroll, args };
 		Pitaya::Event::Emit(event);
 	}
 	void KeyCallback(GLFWwindow* glfwWindow, int key, int scancode, int action, int mods)
@@ -46,8 +46,8 @@ namespace
 		Pitaya::Window::Window* window = static_cast<Pitaya::Window::Window*>(glfwGetWindowUserPointer(glfwWindow));
 		if (!window) { return; }
 
-		Pitaya::Event::KeyEventArgs args = Pitaya::Event::KeyEventArgs(window->ToKeyCode(key), scancode, action, mods);
-		Pitaya::Event::Event event = Pitaya::Event::Event(Pitaya::Event::EventType::Key, args);
+		Pitaya::Event::KeyEventArgs args { window->ToKeyCode(key), scancode, action, mods };
+		Pitaya::Event::Event event { Pitaya::Event::EventType::Key, args };
 		Pitaya::Event::Emit(event);
 	}
 	void MouseButtonCallback(GLFWwindow* glfwWindow, int button, int action, int mods)
@@ -55,20 +55,20 @@ namespace
 		Pitaya::Window::Window* window = static_cast<Pitaya::Window::Window*>(glfwGetWindowUserPointer(glfwWindow));
 		if (!window) { return; }
 
-		Pitaya::Event::MouseButtonEventArgs args = Pitaya::Event::MouseButtonEventArgs(window->ToKeyCode(button), action, mods);
-		Pitaya::Event::Event event = Pitaya::Event::Event(Pitaya::Event::EventType::MouseButton, args);
+		Pitaya::Event::MouseButtonEventArgs args { window->ToKeyCode(button), action, mods };
+		Pitaya::Event::Event event { Pitaya::Event::EventType::MouseButton, args };
 		Pitaya::Event::Emit(event);
 	}
 	void WindowCloseCallback(GLFWwindow* glfwWindow)
 	{
-		Pitaya::Event::CloseEventArgs args = Pitaya::Event::CloseEventArgs();
-		Pitaya::Event::Event event = Pitaya::Event::Event(Pitaya::Event::EventType::WindowClose, args);
+		Pitaya::Event::CloseEventArgs args { };
+		Pitaya::Event::Event event { Pitaya::Event::EventType::WindowClose, args };
 		Pitaya::Event::Emit(event);
 	}
 	void DropFileCallback(GLFWwindow* glfwWindow, int count, const char** paths)
 	{
-		Pitaya::Event::DropFileEventArgs args = Pitaya::Event::DropFileEventArgs(count, paths);
-		Pitaya::Event::Event event = Pitaya::Event::Event(Pitaya::Event::EventType::DropFile, args);
+		Pitaya::Event::DropFileEventArgs args { count, paths };
+		Pitaya::Event::Event event { Pitaya::Event::EventType::DropFile, args };
 		Pitaya::Event::Emit(event);
 	}
 
