@@ -18,14 +18,8 @@
     <ClCompile Include="Backend\GLFW\GLFWWindow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Backend\Factory.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Backend\GLFW\GLFWWindow.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Common\Platform.h">
       <Filter>头文件</Filter>
     </ClInclude>

@@ -159,7 +159,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Backend\OpenGL\OpenGLRenderer.h" />
     <ClInclude Include="Command\BeginPassCommand.h" />
     <ClInclude Include="Command\BlitToScreenCommand.h" />
     <ClInclude Include="Command\DrawCommand.h" />
@@ -186,7 +185,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backend\OpenGL\OpenGLRenderer.cpp" />
-    <ClCompile Include="Backend\Factory.cpp" />
     <ClCompile Include="RenderPipeline.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

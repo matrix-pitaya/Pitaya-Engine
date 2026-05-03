@@ -570,8 +570,8 @@ bool Pitaya::Engine::Engine::Initialize()
 		if (!MODULE(AssetHub).Create()) { throw std::runtime_error("Engine [Module] [AssetHub] Create Fail!"); }
 		if (!MODULE(RenderPipeline).Create()) { throw std::runtime_error("Engine [Module] [RenderPipeline] Create Fail!"); }
 		if (!MODULE(Configurator).Create()) { throw std::runtime_error("Engine [Module] [Configurator] Create Fail!"); }
-		if (!MODULE(Renderer).Create(MODULE(Configurator)->GetRenderAPI())) { throw std::runtime_error("Engine [Module] [Renderer] Create Fail!"); }
-		if (!MODULE(Window).Create(MODULE(Configurator)->GetWindowPlatform())) { throw std::runtime_error("Engine [Module] [Window] Create Fail!"); }
+		if (!MODULE(Renderer).Create()) { throw std::runtime_error("Engine [Module] [Renderer] Create Fail!"); }
+		if (!MODULE(Window).Create()) { throw std::runtime_error("Engine [Module] [Window] Create Fail!"); }
 		if (!MODULE(PhysicsSimulator).Create()) { throw std::runtime_error("Engine [Module] [PhysicsSimulator] Create Fail!"); }
 		if (!MODULE(GameWorld).Create()) { throw std::runtime_error("Engine [Module] [GameWorld] Create Fail!"); }
 		if (!MODULE(ScriptRuntime).Create()) { throw std::runtime_error("Engine [Module] [ScriptRuntime] Create Fail!"); }

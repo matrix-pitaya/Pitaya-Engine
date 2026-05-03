@@ -18,9 +18,6 @@
     <ClInclude Include="Frontend\Renderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Backend\OpenGL\OpenGLRenderer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Command\BeginPassCommand.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -90,9 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backend\OpenGL\OpenGLRenderer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Backend\Factory.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="RenderPipeline.cpp">

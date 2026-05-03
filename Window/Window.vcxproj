@@ -159,11 +159,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Backend\Factory.cpp" />
     <ClCompile Include="Backend\GLFW\GLFWWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Backend\GLFW\GLFWWindow.h" />
     <ClInclude Include="Common\FuncTable.h" />
     <ClInclude Include="Common\Platform.h" />
     <ClInclude Include="Frontend\Window.h" />

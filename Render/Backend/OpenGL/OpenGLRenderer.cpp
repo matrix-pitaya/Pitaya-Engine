@@ -1,13 +1,26 @@
-#include<Render/Backend/OpenGL/OpenGLRenderer.h>
+#include<Render/Frontend/Renderer.h>
 #include<GPU/Common/BindPoint.h>
 #include<Log/Common/FuncTable.h>
 
+#include<gtc/type_ptr.hpp>
 #include<stdexcept>
 #include<string>
 
-bool Pitaya::Render::OpenGLRenderer::InitializeRenderContext(void* nativeWindow)
+#if defined(PITAYA_USE_OPENGL)
+#include<GL/glew.h>
+#include<GLFW/glfw3.h>
+
+namespace
 {
-	glfwWindow = reinterpret_cast<GLFWwindow*>(nativeWindow);
+	struct OpenGLGraphicsContext
+	{
+		GLFWwindow* Window = nullptr;
+	};
+}
+
+bool Pitaya::Render::Renderer::InitializeRenderContext(void* nativeWindow)
+{
+	auto glfwWindow = reinterpret_cast<GLFWwindow*>(nativeWindow);
 	if (!glfwWindow)
 	{
 		MessageBoxA(NULL, "Initialize OpenGL Context Failed! Reinterpret Cast NativeWindow Fail!", "Error", MB_OK);
@@ -38,23 +51,22 @@ bool Pitaya::Render::OpenGLRenderer::InitializeRenderContext(void* nativeWindow)
 	glEnable(GL_MULTISAMPLE);					//启用多重采样抗锯齿
 	//glEnable(GL_FRAMEBUFFER_SRGB);			//开启SRGB帧缓冲区进行Gamma矫正（通过后处理进行矫正）
 
+	backendStorage.Cast<OpenGLGraphicsContext>().Window = glfwWindow;
 	return true;
 }
-void Pitaya::Render::OpenGLRenderer::ReleaseRenderContext()
+void Pitaya::Render::Renderer::ReleaseRenderContext()
 {
-	glfwWindow = nullptr;
+	backendStorage.Cast<OpenGLGraphicsContext>().Window = nullptr;
 }
 
-void Pitaya::Render::OpenGLRenderer::SwapBuffer() const
+void Pitaya::Render::Renderer::SwapBuffer() const
 {
-	glfwSwapBuffers(glfwWindow);
+	glfwSwapBuffers(backendStorage.Cast<OpenGLGraphicsContext>().Window);
 }
-void Pitaya::Render::OpenGLRenderer::NewRenderFrame()
+void Pitaya::Render::Renderer::NewRenderFrame()
 {
-	const auto& back = renderPacket.GetBackBuffer();
-
 	// 动态扩容/上传 Transform SSBO
-	size_t uploadTransformCount = back.InstanceModelTransforms.size();
+	size_t uploadTransformCount = renderPacket.back.InstanceModelTransforms.size();
 	if (uploadTransformCount > 0)
 	{
 		size_t requiredSize = uploadTransformCount * sizeof(InstanceTransformInfo);
@@ -71,11 +83,11 @@ void Pitaya::Render::OpenGLRenderer::NewRenderFrame()
 		}
 
 		// 将最新推算好的数据安全更新到 SSBO 中
-		glNamedBufferSubData(globalRHI.InstanceModelTransformSSBO, 0, requiredSize, back.InstanceModelTransforms.data());
+		glNamedBufferSubData(globalRHI.InstanceModelTransformSSBO, 0, requiredSize, renderPacket.back.InstanceModelTransforms.data());
 	}
 
 	// 动态扩容/上传 Bone SSBO
-	size_t uploadBoneCount = back.BoneMatrices.size();
+	size_t uploadBoneCount = renderPacket.back.BoneMatrices.size();
 	if (uploadBoneCount > 0)
 	{
 		size_t requiredBoneSize = uploadBoneCount * sizeof(glm::mat4);
@@ -90,11 +102,11 @@ void Pitaya::Render::OpenGLRenderer::NewRenderFrame()
 			glNamedBufferData(globalRHI.BoneInverseMatriceSSBO, globalRHI.BoneSSBOCapacity, nullptr, GL_DYNAMIC_DRAW);
 		}
 
-		glNamedBufferSubData(globalRHI.BoneInverseMatriceSSBO, 0, requiredBoneSize, back.BoneMatrices.data());
+		glNamedBufferSubData(globalRHI.BoneInverseMatriceSSBO, 0, requiredBoneSize, renderPacket.back.BoneMatrices.data());
 	}
 
 	// 动态扩容/上传 Light SSBO
-	size_t uploadLightCount = back.Lights.size();
+	size_t uploadLightCount = renderPacket.back.Lights.size();
 	size_t headerSize = 4 * sizeof(uint32_t);	// Header固定16字节对齐 (1个有效uint + 3个padding)
 	size_t dataSize = uploadLightCount * sizeof(Pitaya::Render::LightInfo);
 	size_t requiredLightSize = headerSize + dataSize;
@@ -113,11 +125,11 @@ void Pitaya::Render::OpenGLRenderer::NewRenderFrame()
 	// 数据头上传之后 上传真实的结构体数组数据
 	if (uploadLightCount > 0)
 	{
-		glNamedBufferSubData(globalRHI.SceneLightsSSBO, headerSize, dataSize, back.Lights.data());
+		glNamedBufferSubData(globalRHI.SceneLightsSSBO, headerSize, dataSize, renderPacket.back.Lights.data());
 	}
 }
 
-void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::BeginPassCommand* command) const
+void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::BeginPassCommand* command) const
 {
 	if (!command) { return; }
 
@@ -142,7 +154,7 @@ void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::BeginP
 	}
 	glClear(clearBit);
 }
-void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::InstancedDrawCommand* command) const
+void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::InstancedDrawCommand* command) const
 {
 	if (!command || command->InstanceCount == 0) { return; }
 
@@ -193,7 +205,7 @@ void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::Instan
 		command->BaseVertex,    // basevertex (VBO 偏移)
 		command->BaseInstance); // baseinstance (矩阵数组在 SSBO 里的起始位置)
 }
-void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::PostProcessCommand* command) const
+void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::PostProcessCommand* command) const
 {
 	if (!command) { return; }
 
@@ -242,7 +254,7 @@ void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::PostPr
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
-void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::BlitToScreenCommand* command) const
+void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::BlitToScreenCommand* command) const
 {
 	if (!command) { return; }
 	
@@ -264,3 +276,4 @@ void Pitaya::Render::OpenGLRenderer::ExecuteCommand(const Pitaya::Render::BlitTo
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+#endif

@@ -1,6 +1,7 @@
 #pragma once
 
 #include<Core/Allocate/Allocate.h>
+#include<Core/Storage/Storage.h>
 #include<Core/Camera/CameraSnapshot.h>
 #include<Core/Asset/Asset.h>
 #include<Core/Utils/Console.h>
@@ -62,7 +63,10 @@ namespace Pitaya::Render
 		{
 			friend class Pitaya::Engine::Module<Renderer>;
 		private:
-			static Renderer* Create(Pitaya::Render::API);
+			static Renderer* Create()
+			{
+				return PITAYA_NEW(Renderer);
+			}
 			static void Destroy(Renderer* renderer)
 			{
 				PITAYA_DELETE(renderer);
@@ -82,7 +86,7 @@ namespace Pitaya::Render
 			}
 		};
 
-	protected:
+	private:
 		struct GlobalRHI
 		{
 			//Specific
@@ -203,7 +207,7 @@ namespace Pitaya::Render
 			}
 		};
 
-	protected:
+	private:
 		class RenderPacket
 		{
 			friend class Renderer;
@@ -454,12 +458,6 @@ namespace Pitaya::Render
 				INVOKE_POSTRENDERERSWAPBUFFER_HOOK
 			}
 
-		public:
-			inline const Buffer& GetBackBuffer() const noexcept
-			{
-				return back;
-			}
-
 		private:
 			Buffer front;												//主线程写入渲染命令、实例化Models、骨骼动画
 			Buffer back;												//渲染线程执行渲染命令
@@ -467,9 +465,9 @@ namespace Pitaya::Render
 			std::vector<Pitaya::Render::DrawCommand> staticPass;
 		};
 
-	protected:
+	private:
 		Renderer() = default;
-		virtual ~Renderer() = default;
+		~Renderer() = default;
 
 	public:
 		Renderer(const Renderer&) = delete;
@@ -494,9 +492,9 @@ namespace Pitaya::Render
 			INVOKE_POSTRENDERERRELEASE_HOOK
 		}
 
-	protected:
-		virtual bool InitializeRenderContext(void* nativeWindow) = 0;
-		virtual void ReleaseRenderContext() = 0;
+	private:
+		bool InitializeRenderContext(void* nativeWindow);
+		void ReleaseRenderContext();
 
 	private:
 		inline void RenderThread(void* nativeWindow)
@@ -526,15 +524,15 @@ namespace Pitaya::Render
 			ReleaseRenderContext();
 		}
 
-	protected:
-		virtual void NewRenderFrame() = 0;
-		virtual void SwapBuffer() const = 0;
+	private:
+		void NewRenderFrame();
+		void SwapBuffer() const;
 
-	protected:
-		virtual void ExecuteCommand(const Pitaya::Render::BeginPassCommand* command) const = 0;
-		virtual void ExecuteCommand(const Pitaya::Render::InstancedDrawCommand* command) const = 0;
-		virtual void ExecuteCommand(const Pitaya::Render::PostProcessCommand* command) const = 0;
-		virtual void ExecuteCommand(const Pitaya::Render::BlitToScreenCommand* command) const = 0;
+	private:
+		void ExecuteCommand(const Pitaya::Render::BeginPassCommand* command) const;
+		void ExecuteCommand(const Pitaya::Render::InstancedDrawCommand* command) const;
+		void ExecuteCommand(const Pitaya::Render::PostProcessCommand* command) const;
+		void ExecuteCommand(const Pitaya::Render::BlitToScreenCommand* command) const;
 
 	public:
 		inline void BeginRenderFrame(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>)
@@ -752,15 +750,15 @@ namespace Pitaya::Render
 			static_cast<Pitaya::Render::Renderer*>(renderer)->RenderThread(nativeWindow);
 		}
 	
-	protected:
+	private:
 		GlobalRHI globalRHI;
 		RenderPacket renderPacket;
 
-	private:
 		std::mutex mutex;
 		std::condition_variable cond;
 		std::atomic<bool> isRunning = false;
 		Pitaya::Core::Thread::Identifier renderThread;
+		Pitaya::Core::Storage<8> backendStorage;
 	};
 }
 

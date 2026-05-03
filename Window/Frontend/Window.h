@@ -19,7 +19,10 @@ namespace Pitaya::Window
 		{
 			friend class Pitaya::Engine::Module<Window>;
 		private:
-			static Window* Create(Pitaya::Window::Platform);
+			static Window* Create()
+			{
+				return PITAYA_NEW(Window);
+			}
 			static void Destroy(Window* renderer)
 			{
 				PITAYA_DELETE(renderer);
@@ -39,9 +42,9 @@ namespace Pitaya::Window
 			}
 		};
 
-	protected:
+	private:
 		Window() = default;
-		virtual ~Window() = default;
+		~Window() = default;
 
 	public:
 		Window(const Window&) = delete;
@@ -49,28 +52,26 @@ namespace Pitaya::Window
 		Window(Window&&) = delete;
 		Window& operator=(Window&&) = delete;
 
-	protected:
-		virtual bool Initialize(int width, int height, const char* title) = 0;
-		virtual void Release() = 0;
+	private:
+		bool Initialize(int width, int height, const char* title);
+		void Release();
 
 	public:
-		virtual void PollEvents(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) const = 0;
-		virtual	void CloseWindow(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) const = 0;
+		void PollEvents(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) const;
+		void CloseWindow(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) const;
 
 	public:
-		virtual bool IsClose() const = 0;
-		virtual void* GetNativeWindow() const = 0;
-
-	public:
-		virtual glm::uvec2 GetWindowSize() const = 0;
-
+		bool IsClose() const;
+		void* GetNativeWindow() const;
+		glm::uvec2 GetWindowSize() const;
+		
 	public:
 		inline Pitaya::Input::KeyCode ToKeyCode(int key) const noexcept
 		{
 			return (key < 0 || key >= 512) ? Pitaya::Input::KeyCode::Unknown : map[key];
 		}
 
-	protected:
+	private:
 		Pitaya::Input::KeyCode map[512] = {};
 		Pitaya::Core::Storage<8> backendStorage;
 	};
