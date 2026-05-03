@@ -1,8 +1,6 @@
 #include<Editor/GUI/GUI.h>
 #include<Editor/Common/EngineState.h>
 #include<Editor/GUI/ImGui/imgui.h>
-#include<Editor/GUI/ImGui/Backends/imgui_impl_glfw.h>
-#include<Editor/GUI/ImGui/Backends/imgui_impl_opengl3.h>
 #include<Editor/GUI/ImGui/imgui_internal.h>
 #include<Editor/GUI/IconFontCppHeaders/IconsFontAwesome6.h>
 #include<Editor/StateMachine/StateMachine.h>
@@ -13,8 +11,13 @@
 #include<Core/Utils/File.h>
 #include<Hook/def.h>
 
+#if defined(PITAYA_USE_GLFW) && defined(PITAYA_USE_OPENGL)
+#include<Editor/GUI/ImGui/Backends/imgui_impl_glfw.h>
+#include<Editor/GUI/ImGui/Backends/imgui_impl_opengl3.h>
+
 #include<GL/glew.h>
 #include<GLFW/glfw3.h>
+#endif
 
 #include<mimalloc.h>
 #include<exception>
@@ -155,7 +158,9 @@ bool Pitaya::Editor::GUI::Initialize_Main(void* nativeWindow)
 	auto* context = ImGui::CreateContext();
 	SetStyle();
 	ImGui::SetCurrentContext(context);
+#if defined(PITAYA_USE_GLFW) && defined(PITAYA_USE_OPENGL)
 	ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(nativeWindow), true);
+#endif
 	imGuiContext.store(context, std::memory_order_release);
 	while (!isRenderReady.load(std::memory_order_acquire)){ std::this_thread::yield(); }
 	return drawer.Initialize(nativeWindow);
@@ -165,8 +170,10 @@ bool Pitaya::Editor::GUI::Initialize_Render(uint64_t gameRT, uint64_t editorRT)
 	ImGuiContext* context = nullptr;
 	while (!(context = imGuiContext.load(std::memory_order_acquire))) { std::this_thread::yield(); }
 	ImGui::SetCurrentContext(context);
+#if defined(PITAYA_USE_OPENGL)
 	ImGui_ImplOpenGL3_Init("#version 130");
 	ImGui_ImplOpenGL3_CreateDeviceObjects();
+#endif
 	panels.gameViewportPanel.textureId = reinterpret_cast<void*>(gameRT);
 	panels.sceneViewportPanel.textureId = reinterpret_cast<void*>(editorRT);
 	isRenderReady.store(true, std::memory_order_release);
@@ -192,14 +199,18 @@ void Pitaya::Editor::GUI::Release_Main()
 	if (context)
 	{
 		ImGui::SetCurrentContext(context);
+#if defined(PITAYA_USE_GLFW)
 		ImGui_ImplGlfw_Shutdown();
+#endif
 		ImGui::DestroyContext(context);
 		imGuiContext.store(nullptr, std::memory_order_release);
 	}
 }
 void Pitaya::Editor::GUI::Release_Render()
 {
+#if defined(PITAYA_USE_OPENGL)
 	ImGui_ImplOpenGL3_Shutdown();
+#endif
 	ImGui::SetCurrentContext(nullptr);
 	isRenderReady.store(false, std::memory_order_release);
 }
@@ -335,7 +346,9 @@ void Pitaya::Editor::GUI::NewFrame()
 }
 void Pitaya::Editor::GUI::BeginFrame()
 {
+#if defined(PITAYA_USE_GLFW)
 	ImGui_ImplGlfw_NewFrame();
+#endif
 	ImGui::NewFrame(); 
 	ImGuizmo::BeginFrame();
 }
@@ -613,6 +626,7 @@ void Pitaya::Editor::GUI::EndFrame()
 
 void Pitaya::Editor::GUI::Drawer::Draw(Pitaya::Core::PassKey<Editor>)
 {
+#if defined(PITAYA_USE_OPENGL)
 #if PITAYA_VERSION >= 100
 	//[VERSION >= 100] 通过预处理实现Hanlde映射Texture
 	//[VERSION  < 100] 通过修改ImGui_ImplOpenGL3_RenderDrawData源码实现Hanlde映射Texture
@@ -641,4 +655,5 @@ void Pitaya::Editor::GUI::Drawer::Draw(Pitaya::Core::PassKey<Editor>)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplOpenGL3_RenderDrawData(&buffer[backBufferIndex]);
+#endif
 }

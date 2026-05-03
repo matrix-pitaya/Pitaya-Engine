@@ -109,7 +109,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_OPENGL;BE_IMPL=;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_OPENGL;PITAYA_USE_GLFW;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -151,7 +151,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_OPENGL;BE_IMPL=;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_OPENGL;PITAYA_USE_GLFW;EDITOR_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>

@@ -122,7 +122,7 @@ namespace Pitaya::Render
 			Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> MainFinalFrameBuffer = 0;
 			Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> MainFinalColorAttachment = 0;
 
-			inline void Create(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
+			inline void Create()
 			{
 				EmptyVAO = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
 				CameraSnapshotUBO = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
@@ -206,8 +206,6 @@ namespace Pitaya::Render
 				MainFinalColorAttachment = finalFrambuffer->GetColorAttachmentGPUIdentifier();
 			}
 		};
-
-	private:
 		class RenderPacket
 		{
 			friend class Renderer;
@@ -500,8 +498,10 @@ namespace Pitaya::Render
 		inline void RenderThread(void* nativeWindow)
 		{
 			InitializeRenderContext(nativeWindow);
-			globalRHI.Create(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
-			INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), globalRHI.MainFinalColorAttachment)
+			globalRHI.Create();
+			INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(
+				Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), 
+				globalRHI.MainFinalColorAttachment)
 
 			while (true)
 			{
