@@ -1,22 +1,20 @@
 #pragma once
 
 #include<GPU/Common/Identifier.h>
-#include<GPU/Frontend/Texture/Texture.h>
 
 namespace Pitaya::GPU
 {
 	class RHIDevice;
-	class TextureCubemap : public Texture
+	struct TextureCubemap
 	{
-		friend class Pitaya::GPU::RHIDevice;
-	public:
-		TextureCubemap(unsigned char** datas, int* widths, int* heights, int* channels, bool isGenerateMipmap, bool isSRGB, bool isNearest) {}
-		virtual ~TextureCubemap() = default;
+		struct Factory
+		{
+			friend class RHIDevice;
+		private:
+			static TextureCubemap Create(unsigned char** datas, int* widths, int* heights, int* channels, bool isGenerateMipmap, bool isSRGB, bool isNearest);
+			static void Destroy(TextureCubemap);
+		};
 
-	public:
-		virtual Pitaya::GPU::Identifier<TextureCubemap> GetGPUIdentifier() const = 0;
-
-	private:
-		static Pitaya::GPU::TextureCubemap* Create(unsigned char** datas, int* widths, int* heights, int* channels, bool isGenerateMipmap, bool isSRGB, bool isNearest);
+		Pitaya::GPU::Identifier<TextureCubemap> Id = 0;
 	};
 }

@@ -18,33 +18,6 @@
     <ClInclude Include="RHIDevice.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Backend\OpenGL\Buffer\OpenGLFrameBuffer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Backend\OpenGL\Buffer\OpenGLIndexBuffer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Backend\OpenGL\Buffer\OpenGLShaderStorageBuffer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Backend\OpenGL\Buffer\OpenGLUniformBuffer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Backend\OpenGL\Buffer\OpenGLVertexArray.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Backend\OpenGL\Buffer\OpenGLVertexBuffer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Backend\OpenGL\Shader\OpenGLShader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Backend\OpenGL\Texture\OpenGLTexture2D.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Backend\OpenGL\Texture\OpenGLTextureCubemap.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Frontend\Buffer\FrameBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -64,9 +37,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Frontend\Shader\Shader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Frontend\Texture\Texture.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Frontend\Texture\Texture2D.h">
@@ -114,42 +84,42 @@
     <ClInclude Include="Frontend\Texture\Texture2DArray.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Backend\OpenGL\Texture\OpenGLTexture2DArray.h">
+    <ClInclude Include="Common\GPUObjectType.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Frontend\Buffer\FrameBuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\Buffer\IndexBuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\Buffer\ShaderStorageBuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\Buffer\UniformBuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\Buffer\VertexArray.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\Buffer\VertexBuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\Shader\Shader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\Texture\Texture2D.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\Texture\TextureCubemap.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="RHIDevice.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Frontend\Texture\Texture2DArray.cpp">
+    <ClCompile Include="Backend\OpenGL\Texture\OpenGLTexture2D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Backend\OpenGL\Texture\OpenGLTexture2DArray.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Backend\OpenGL\Texture\OpenGLTextureCubemap.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Backend\OpenGL\Shader\OpenGLShader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Backend\OpenGL\Buffer\OpenGLVertexBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Backend\OpenGL\Buffer\OpenGLIndexBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Backend\OpenGL\Buffer\OpenGLVertexArray.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Backend\OpenGL\Buffer\OpenGLUniformBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Backend\OpenGL\Buffer\OpenGLShaderStorageBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Backend\OpenGL\Buffer\OpenGLFrameBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

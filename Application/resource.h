@@ -22,7 +22,6 @@
 // BuildIn Asset
 #define IDR_BUILDIN_DEFAULT_VERTEX_SHADER		111
 #define IDR_BUILDIN_DEFAULT_FRAGMENT_SHADER		112
-#define IDR_BUILDIN_SPHERE_MESH					113
 
 // Next default values for new objects
 // 

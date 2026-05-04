@@ -5,7 +5,7 @@
 
 namespace Pitaya::Render
 {
-	enum class RenderQueue : uint16_t
+	enum class RenderQueue : uint32_t
 	{
 		Background = 1000,
 		Geometry = 2000,

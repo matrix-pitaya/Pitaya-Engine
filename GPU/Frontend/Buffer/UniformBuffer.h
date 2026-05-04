@@ -5,32 +5,17 @@
 namespace Pitaya::GPU
 {
 	class RHIDevice;
-	class UniformBuffer
+	struct UniformBuffer
 	{
-		friend class Pitaya::GPU::RHIDevice;
-	public:
-		UniformBuffer(uint32_t size, uint32_t bindingPoint)
-			:size(size), bindingPoint(bindingPoint) {}
-		virtual ~UniformBuffer() = default;
-
-	public:
-		virtual void SetData(const void* data, uint32_t size, uint32_t offset = 0) const = 0;
-		virtual Pitaya::GPU::Identifier<UniformBuffer> GetGPUIdentifier() const = 0;
-
-	public:
-		inline uint32_t GetSize() const noexcept
+		struct Factory
 		{
-			return size;
-		}
-		inline uint32_t GetBindingPoint() const noexcept
-		{
-			return bindingPoint;
-		}
+			friend class RHIDevice;
+		private:
+			static UniformBuffer Create(uint32_t size, uint32_t bindingPoint);
+			static void Destroy(UniformBuffer);
+		};
 
-	private:
-		static Pitaya::GPU::UniformBuffer* Create(uint32_t size, uint32_t bindingPoint);
-
-	protected:
+		Pitaya::GPU::Identifier<UniformBuffer> Id = 0;;
 		uint32_t size = 0;
 		uint32_t bindingPoint = 0;
 	};

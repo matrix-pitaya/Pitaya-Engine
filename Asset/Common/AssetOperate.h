@@ -1,12 +1,13 @@
 #pragma once
 
+#include<Core/Container/SlotMap.h>
 #include<Import/Common/ImportResult.h>
 
 namespace Pitaya::Asset
 {
 	struct Texture2DUnloadRequire
 	{
-		Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> ID = 0;
+		Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle Texture2DHandle;
 	};
 
 	struct AssetOperate

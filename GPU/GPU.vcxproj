@@ -159,19 +159,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Backend\OpenGL\Buffer\OpenGLFrameBuffer.h" />
-    <ClInclude Include="Backend\OpenGL\Buffer\OpenGLIndexBuffer.h" />
-    <ClInclude Include="Backend\OpenGL\Buffer\OpenGLShaderStorageBuffer.h" />
-    <ClInclude Include="Backend\OpenGL\Buffer\OpenGLUniformBuffer.h" />
-    <ClInclude Include="Backend\OpenGL\Buffer\OpenGLVertexArray.h" />
-    <ClInclude Include="Backend\OpenGL\Buffer\OpenGLVertexBuffer.h" />
-    <ClInclude Include="Backend\OpenGL\Shader\OpenGLShader.h" />
-    <ClInclude Include="Backend\OpenGL\Texture\OpenGLTexture2D.h" />
-    <ClInclude Include="Backend\OpenGL\Texture\OpenGLTexture2DArray.h" />
-    <ClInclude Include="Backend\OpenGL\Texture\OpenGLTextureCubemap.h" />
     <ClInclude Include="Common\BindPoint.h" />
     <ClInclude Include="Common\FrameBufferSpecification.h" />
     <ClInclude Include="Common\FuncTable.h" />
+    <ClInclude Include="Common\GPUObjectType.h" />
     <ClInclude Include="Common\MeshType.h" />
     <ClInclude Include="Common\ShaderType.h" />
     <ClInclude Include="Common\ShaderVariableType.h" />
@@ -185,7 +176,6 @@
     <ClInclude Include="Frontend\Buffer\VertexArray.h" />
     <ClInclude Include="Frontend\Buffer\VertexBuffer.h" />
     <ClInclude Include="Frontend\Shader\Shader.h" />
-    <ClInclude Include="Frontend\Texture\Texture.h" />
     <ClInclude Include="Frontend\Texture\Texture2D.h" />
     <ClInclude Include="Frontend\Texture\Texture2DArray.h" />
     <ClInclude Include="Frontend\Texture\TextureCubemap.h" />
@@ -195,16 +185,16 @@
     <ClInclude Include="Layout\BufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Frontend\Buffer\FrameBuffer.cpp" />
-    <ClCompile Include="Frontend\Buffer\IndexBuffer.cpp" />
-    <ClCompile Include="Frontend\Buffer\ShaderStorageBuffer.cpp" />
-    <ClCompile Include="Frontend\Buffer\UniformBuffer.cpp" />
-    <ClCompile Include="Frontend\Buffer\VertexArray.cpp" />
-    <ClCompile Include="Frontend\Buffer\VertexBuffer.cpp" />
-    <ClCompile Include="Frontend\Shader\Shader.cpp" />
-    <ClCompile Include="Frontend\Texture\Texture2D.cpp" />
-    <ClCompile Include="Frontend\Texture\Texture2DArray.cpp" />
-    <ClCompile Include="Frontend\Texture\TextureCubemap.cpp" />
+    <ClCompile Include="Backend\OpenGL\Buffer\OpenGLFrameBuffer.cpp" />
+    <ClCompile Include="Backend\OpenGL\Buffer\OpenGLIndexBuffer.cpp" />
+    <ClCompile Include="Backend\OpenGL\Buffer\OpenGLShaderStorageBuffer.cpp" />
+    <ClCompile Include="Backend\OpenGL\Buffer\OpenGLUniformBuffer.cpp" />
+    <ClCompile Include="Backend\OpenGL\Buffer\OpenGLVertexArray.cpp" />
+    <ClCompile Include="Backend\OpenGL\Buffer\OpenGLVertexBuffer.cpp" />
+    <ClCompile Include="Backend\OpenGL\Shader\OpenGLShader.cpp" />
+    <ClCompile Include="Backend\OpenGL\Texture\OpenGLTexture2D.cpp" />
+    <ClCompile Include="Backend\OpenGL\Texture\OpenGLTexture2DArray.cpp" />
+    <ClCompile Include="Backend\OpenGL\Texture\OpenGLTextureCubemap.cpp" />
     <ClCompile Include="RHIDevice.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

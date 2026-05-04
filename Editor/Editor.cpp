@@ -40,9 +40,9 @@ void Pitaya::Editor::Editor::HookFunc::PostRendererRelease()
 {
 	Pitaya::Editor::Editor::Instance().Release_Main();
 }
-void Pitaya::Editor::Editor::HookFunc::PostRenderContextInitialized(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint64_t rtId)
+void Pitaya::Editor::Editor::HookFunc::PostRenderContextInitialized(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle rtHandle)
 {
-	if (!Pitaya::Editor::Editor::Instance().Initialize_Render(passkey, rtId))
+	if (!Pitaya::Editor::Editor::Instance().Initialize_Render(passkey, rtHandle))
 	{
 		// TODO 考虑一下渲染线程如何通知主线程失败
 		MessageBoxA(NULL, "Editor Render Initialize Fail!", "Error", MB_OK);
@@ -134,9 +134,9 @@ bool Pitaya::Editor::Editor::Initialize_Main(void* nativeWindow)
 	
 	return camera.Initialize_Main() && gui.Initialize_Main(nativeWindow);
 }
-bool Pitaya::Editor::Editor::Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint64_t rtId)
+bool Pitaya::Editor::Editor::Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle rtHandle)
 {
-	return camera.Initialize_Render(passkey) && gui.Initialize_Render(rtId, camera.renderTarget.FinalColorAttachment);
+	return camera.Initialize_Render(passkey) && gui.Initialize_Render(passkey, rtHandle, camera.renderTarget.FinalFrameBufferHandle);
 }
 void Pitaya::Editor::Editor::Release_Main()
 {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include<Core/Identifier/GUID.h>
+#include<Core/Container/SlotMap.h>
 #include<GPU/Common/Identifier.h>
 #include<GPU/Common/TextureType.h>
 
@@ -8,7 +9,12 @@ namespace Pitaya::Asset
 {
 	struct Texture
 	{
-		Pitaya::GPU::Identifier<GPU::Texture> Id;
+		union
+		{
+			Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle Texture2DHandle = {};
+			Pitaya::Core::SlotMap<Pitaya::GPU::Texture2DArray>::Handle Texture2DArrayHandle;
+			Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle TextureCubemapHandle;
+		};
 		Pitaya::GPU::TextureType Type = GPU::TextureType::Texture2D;
 
 		//Texture 1-12

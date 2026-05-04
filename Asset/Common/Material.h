@@ -104,10 +104,13 @@ namespace Pitaya::Asset
 
 		Pitaya::Core::Asset<Pitaya::Asset::Shader> Shader = nullptr;
 		Pitaya::Core::Asset<Pitaya::Asset::Texture> Textures[static_cast<size_t>(Pitaya::GPU::TextureUsage::Unknown)] = {};
+		Material::Property Property;
 		Pitaya::Render::RenderQueue RenderQueue = Pitaya::Render::RenderQueue::Geometry;
-		uint8_t DrawOrder = 0;
 		uint32_t SortId = Next();		//用于生成DrawCommand的SortKey
-		Property Property;
+		uint8_t DrawOrder = 0;
+		bool DepthTest = true;
+		bool Blend = false;
+		bool CullFace = true;
 
 	public:
 		//Material 17-22
@@ -166,6 +169,12 @@ namespace Pitaya::Asset
 					default:break;
 				}
 			}
+		
+			//drawstate
+			auto& drawState = context.GetSubContext("DrawState");
+			drawState.Write("DepthTest", DepthTest);
+			drawState.Write("Blend", Blend);
+			drawState.Write("CullFace", CullFace);
 		}
 		void Deserialize(const Pitaya::Serialize::DeserializeContext& context) override
 		{

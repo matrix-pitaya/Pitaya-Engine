@@ -6,35 +6,21 @@
 namespace Pitaya::GPU
 {
     class RHIDevice;
-    class FrameBuffer
+    struct FrameBuffer
     {
-        friend class Pitaya::GPU::RHIDevice;
-    public:
-        FrameBuffer(const Pitaya::GPU::FrameBufferSpecification& spec)
-            :specification(spec) {}
-        virtual ~FrameBuffer() = default;
-
-    public:
-        virtual void Bind() const = 0;
-        virtual void Unbind() const = 0;
-
-        virtual void Resize(uint32_t width, uint32_t height) = 0;
-
-        virtual Identifier<FrameBuffer> GetGPUIdentifier() const = 0;
-        virtual Identifier<FrameBuffer> GetInternalGPUIdentifier() const = 0;
-        virtual Identifier<Texture2D> GetColorAttachmentGPUIdentifier() const = 0;
-        virtual Identifier<Texture2D> GetDepthAttachmentGPUIdentifier() const = 0;
-
-    public:
-        inline FrameBufferSpecification GetSpecification() const noexcept
+        struct Factory
         {
-            return specification;
-        }
+            friend class RHIDevice;
+        private:
+            static FrameBuffer Create(Pitaya::GPU::FrameBufferSpecification spec);
+            static void Destroy(FrameBuffer);
+        };
 
-    private:
-        static Pitaya::GPU::FrameBuffer* Create(const Pitaya::GPU::FrameBufferSpecification& spec);
-    
-    protected:
-        FrameBufferSpecification specification;
+        Identifier<FrameBuffer> Id = 0;
+        Identifier<FrameBuffer> InternalId = 0;
+        Identifier<Texture2D> ColorAttachmentId = 0;
+        Identifier<Texture2D> InternalColorAttachmentId = 0;
+        Identifier<Texture2D> DepthAttachmentId = 0;
+        FrameBufferSpecification Specification;
     };
 }

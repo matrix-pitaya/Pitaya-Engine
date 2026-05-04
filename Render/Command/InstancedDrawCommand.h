@@ -1,7 +1,26 @@
 #pragma once
 
-#include<GPU/Common/Identifier.h>
+#include<Core/Container/SlotMap.h>
 #include<Render/Common/RenderCommandType.h>
+
+namespace Pitaya::GPU
+{
+    class Texture;
+    class Texture2D;
+    class Texture2DArray;
+    class TextureCubemap;
+
+    class Shader;
+
+    class VertexArray;
+    class VertexBuffer;
+    class IndexBuffer;
+
+    class UniformBuffer;
+    class ShaderStorageBuffer;
+
+    class FrameBuffer;
+}
 
 namespace Pitaya::Render
 {
@@ -9,13 +28,14 @@ namespace Pitaya::Render
     {
         inline static constexpr const RenderCommandType Type = RenderCommandType::InstanceDraw;
 
-        Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> VertexArray = 0;
-        Pitaya::GPU::Identifier<Pitaya::GPU::Shader> Shader = 0;
-        Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> Textures[static_cast<size_t>(Pitaya::GPU::TextureUsage::Unknown)] = {};
+        Pitaya::Core::SlotMap<Pitaya::GPU::VertexArray>::Handle VertexArrayHandle;
+        Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle ShaderHandle;
+        Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle TextureHandles[static_cast<size_t>(Pitaya::GPU::TextureUsage::Unknown)] = {};
 
         //渲染状态
         bool DepthTest = true;
         bool Blend = false;
+        bool CullFace = true;
 
         //索引缓冲参数
         uint32_t IndexCount = 0;

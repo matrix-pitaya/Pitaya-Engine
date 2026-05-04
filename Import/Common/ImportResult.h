@@ -110,8 +110,5 @@ namespace Pitaya::Import
 	struct RenderTargetImportResult
 	{
 		Pitaya::Core::GUID GUID;
-		Pitaya::GPU::FrameBufferSpecification SceneFrameBufferSpecification;
-		Pitaya::GPU::FrameBufferSpecification PingPongFrameBufferSpecification;
-		Pitaya::GPU::FrameBufferSpecification FinalFrameBufferSpecification;
 	};
 }

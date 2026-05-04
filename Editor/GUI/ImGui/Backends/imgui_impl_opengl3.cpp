@@ -667,31 +667,11 @@ void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
                 if (clip_max.x <= clip_min.x || clip_max.y <= clip_min.y)
                     continue;
 
-#if PITAYA_VERSION >= 100
                 // Apply scissor/clipping rectangle (Y is inverted in OpenGL)
                 GL_CALL(glScissor((int)clip_min.x, (int)((float)fb_height - clip_max.y), (int)(clip_max.x - clip_min.x), (int)(clip_max.y - clip_min.y)));
 
                 // Bind texture, Draw
                 GL_CALL(glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->GetTexID()));
-#else
-                // Apply scissor/clipping rectangle (Y is inverted in OpenGL)
-                GL_CALL(glScissor((int)clip_min.x, (int)((float)fb_height - clip_max.y), (int)(clip_max.x - clip_min.x), (int)(clip_max.y - clip_min.y)));
-                
-                // Handle map Real GPU Texture
-                GLuint realBindId = 0;
-                if (pcmd->TexRef._TexData != nullptr)
-                {
-                    realBindId = (GLuint)(intptr_t)pcmd->GetTexID();
-                }
-                else if (pcmd->TexRef._TexID != 0)
-                {
-                    uint32_t handleId = (uint32_t)(intptr_t)pcmd->TexRef._TexID;
-                    realBindId = handleId; // TODO: 将 handle_id 映射成真实的 OpenGL Texture ID
-                }
-
-                // Bind texture, Draw
-                GL_CALL(glBindTexture(GL_TEXTURE_2D, realBindId));
-#endif
 
 #ifdef IMGUI_IMPL_OPENGL_MAY_HAVE_VTX_OFFSET
                 if (bd->GlVersion >= 320)

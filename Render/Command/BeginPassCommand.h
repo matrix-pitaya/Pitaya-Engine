@@ -3,10 +3,30 @@
 #include<Core/Color/Color.h>
 #include<Core/Math/Rect.h>
 #include<Core/Camera/CameraSnapshot.h>
+#include<Core/Container/SlotMap.h>
 #include<Render/Common/RenderCommandType.h>
 #include<Render/Common/PostProcessSetting.h>
 
 #include<glm.hpp>
+
+namespace Pitaya::GPU
+{
+    class Texture;
+    class Texture2D;
+    class Texture2DArray;
+    class TextureCubemap;
+
+    class Shader;
+
+    class VertexArray;
+    class VertexBuffer;
+    class IndexBuffer;
+
+    class UniformBuffer;
+    class ShaderStorageBuffer;
+
+    class FrameBuffer;
+}
 
 namespace Pitaya::Render
 {
@@ -15,7 +35,7 @@ namespace Pitaya::Render
 		inline static constexpr const RenderCommandType Type = RenderCommandType::BeginPass;
 
 		Pitaya::Core::CameraSnapshot CameraSnapshot;
-		Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> SceneFrameBuffer = 0;
+		Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle SceneFrameBufferHandle;
 		Pitaya::Core::Color ClearColor = Pitaya::Core::Color::SkyBlue;
 		Pitaya::Core::Rect Rect;
 		bool ClearDepth = true;

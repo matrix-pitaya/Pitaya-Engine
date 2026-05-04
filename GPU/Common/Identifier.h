@@ -1,60 +1,29 @@
 #pragma once
 
+#include<GPU/Common/GPUObjectType.h>
+
 #include<cstdint>
 #include<functional>
 #include<type_traits>
 
 namespace Pitaya::GPU
 {
-    class Texture;
-    class Texture2D;
-    class Texture2DArray;
-    class TextureCubemap;
-
-    class Shader;
-
-    class VertexArray;
-    class VertexBuffer;
-    class IndexBuffer;
-
-    class UniformBuffer;
-    class ShaderStorageBuffer;
-
-    class FrameBuffer;
-}
-
-namespace Pitaya::GPU
-{
-    template<typename T>
+    template<GPUObjectType T>
 	struct Identifier
 	{
-        static_assert(
-            std::is_same_v<T, Pitaya::GPU::Texture> ||
-            std::is_same_v<T, Pitaya::GPU::Texture2D> ||
-            std::is_same_v<T, Pitaya::GPU::TextureCubemap> ||
-            std::is_same_v<T, Pitaya::GPU::Shader> ||
-            std::is_same_v<T, Pitaya::GPU::VertexArray> ||
-            std::is_same_v<T, Pitaya::GPU::VertexBuffer> ||
-            std::is_same_v<T, Pitaya::GPU::Texture2DArray> ||
-            std::is_same_v<T, Pitaya::GPU::IndexBuffer> ||
-            std::is_same_v<T, Pitaya::GPU::UniformBuffer> ||
-            std::is_same_v<T, Pitaya::GPU::ShaderStorageBuffer> ||
-            std::is_same_v<T, Pitaya::GPU::FrameBuffer>,
-            "Identifier<T>: T must be GPU Handle Type");
-
         constexpr Identifier(uint64_t value = 0) noexcept
             : value(value) {}
 
-        template<typename U>
+        template<GPUObjectType U>
         constexpr Identifier(const Identifier<U>&) = delete;
-        template<typename U>
+        template<GPUObjectType U>
         Identifier& operator=(const Identifier<U>&) = delete;
-        template<typename U>
+        template<GPUObjectType U>
         constexpr Identifier(Identifier<U>&&) = delete;
-        template<typename U>
+        template<GPUObjectType U>
         Identifier& operator=(Identifier<U>&&) = delete;
 
-        template<typename U>
+        template<GPUObjectType U>
         constexpr Identifier<U> As() const noexcept
         {
             return Identifier<U>(this->value);
@@ -73,12 +42,13 @@ namespace Pitaya::GPU
             return value < other.value;
         }
 
-        template<typename U>
+        template<GPUObjectType U>
         constexpr bool operator==(const Identifier<U>&) const noexcept = delete;
-        template<typename U>
+        template<GPUObjectType U>
         constexpr bool operator!=(const Identifier<U>&) const noexcept = delete;
-        template<typename U>
+        template<GPUObjectType U>
         constexpr bool operator<(const Identifier<U>&) const noexcept = delete;
+        
 
         explicit constexpr operator bool() const noexcept
         {
@@ -101,13 +71,13 @@ namespace Pitaya::GPU
         uint64_t value = 0;
 	};
 
-    template <typename T>
+    template <GPUObjectType T>
     inline constexpr const Identifier<T> Identifier<T>::Invalid = Identifier(0);
 }
 
 namespace std
 {
-    template <typename T>
+    template <GPUObjectType T>
     struct hash<::Pitaya::GPU::Identifier<T>>
     {
         size_t operator()(const ::Pitaya::GPU::Identifier<T>& GPUID) const noexcept

@@ -1,22 +1,20 @@
 #pragma once
 
 #include<GPU/Common/Identifier.h>
-#include<GPU/Frontend/Texture/Texture.h>
 
 namespace Pitaya::GPU
 {
     class RHIDevice;
-    class Texture2DArray : public Texture
+    struct Texture2DArray
     {
-        friend class Pitaya::GPU::RHIDevice;
-    public:
-        Texture2DArray(int width, int height, int layers, bool isDepth) {}
-        virtual ~Texture2DArray() override = default;
+        struct Factory
+        {
+            friend class RHIDevice;
+        private:
+            static Texture2DArray Create(int width, int height, int layers, bool isDepth);
+            static void Destroy(Texture2DArray);
+        };
 
-    public:
-        virtual Identifier<Texture2DArray> GetGPUIdentifier() const = 0;
-
-    private:
-        static Texture2DArray* Create(int width, int height, int layers, bool isDepth);
+        Identifier<Texture2DArray> Id = 0;
     };
 }

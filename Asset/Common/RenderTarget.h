@@ -2,7 +2,7 @@
 
 #include<Core/Color/Color.h>
 #include<Core/Identifier/GUID.h>
-
+#include<Core/Container/SlotMap.h>
 #include<GPU/Frontend/Buffer/FrameBuffer.h>
 #include<Serialize/Serializable.h>
 
@@ -10,17 +10,13 @@ namespace Pitaya::Asset
 {
 	struct RenderTarget : Pitaya::Serialize::Serializable
 	{
-		Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> SceneFrameBuffer = 0;
-        Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> SceneInternalFrameBuffer = 0; //用于多采用解析
-		Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> SceneColorAttachment = 0;
+        Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle SceneFrameBufferHandle;
 		Pitaya::GPU::FrameBufferSpecification SceneFrameBufferSpecification = { 1600, 900, 4, false, true, true };
 
-		Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> PingPongFrameBuffers[2] = { 0, 0 };
-		Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> PingPongColorAttachments[2] = { 0, 0 };
+		Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle PingPongFrameBufferHandles[2] = { };
 		Pitaya::GPU::FrameBufferSpecification PingPongFrameBufferSpecification = { 1600, 900, 1, false, true, false };
 
-		Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> FinalFrameBuffer = 0;
-		Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> FinalColorAttachment = 0;
+		Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle FinalFrameBufferHandle;
 		Pitaya::GPU::FrameBufferSpecification FinalFrameBufferSpecification = { 1600, 900, 1, false, false, false };
 
 		Pitaya::Core::Color ClearColor = Pitaya::Core::Color::SkyBlue;

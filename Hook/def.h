@@ -36,7 +36,7 @@
 #define INVOKE_POSTRENDERERSWAPBUFFER_HOOK if(Pitaya::Engine::Global_PostRendererSwapBuffer_Hook.Func) { Pitaya::Engine::Global_PostRendererSwapBuffer_Hook.Func(); }
 #define INVOKE_POSTRENDERERBEGINRENDERFRAME_HOOK if(Pitaya::Engine::Global_PostRendererBeginRenderFrame_Hook.Func){ Pitaya::Engine::Global_PostRendererBeginRenderFrame_Hook.Func(); } 
 #define INVOKE_PRERENDERERENDRENDERFRAME_HOOK if(Pitaya::Engine::Global_PreRendereEndRenderFrame_Hook.Func) { Pitaya::Engine::Global_PreRendereEndRenderFrame_Hook.Func(); }
-#define INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(Passkey, RTId) if(Pitaya::Engine::Global_PostRenderContextInitialized_Hook.Func) { Pitaya::Engine::Global_PostRenderContextInitialized_Hook.Func(Passkey, RTId); }
+#define INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(Passkey, RtHandle) if(Pitaya::Engine::Global_PostRenderContextInitialized_Hook.Func) { Pitaya::Engine::Global_PostRenderContextInitialized_Hook.Func(Passkey, RtHandle); }
 #define INVOKE_PRERENDERCONTEXTINRELEASED_HOOK if(Pitaya::Engine::Global_PreRenderContextRelease_Hook.Func) { Pitaya::Engine::Global_PreRenderContextRelease_Hook.Func(); }
 #define INVOKE_PRERENDERPIPELINEEXECUTE_HOOK(PassKey, RenderPipeline) if(Pitaya::Engine::Global_PreRenderPipelineExecute_Hook.Func) { Pitaya::Engine::Global_PreRenderPipelineExecute_Hook.Func(PassKey, RenderPipeline); }
 #define INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK (Pitaya::Engine::Global_ShouldWakeupRenderThread_Hook.Func ? Pitaya::Engine::Global_ShouldWakeupRenderThread_Hook.Func() : false)

@@ -218,69 +218,114 @@ bool Pitaya::Asset::AssetHub::Initialize()
 		meshes.Emplace(Pitaya::Asset::Mesh::Panel, &buildIn.Panel);
 		cacheAssetOperateQueue.push({ result });
 	}
-
+	
 	//Sphere Mesh
 	{
 		buildIn.Sphere.Data.store(Pitaya::Core::New<Pitaya::Asset::Mesh>(), std::memory_order_release);
 		buildIn.Sphere.GUID = Pitaya::Asset::Mesh::Sphere;
 		buildIn.Sphere.State.SetBits(Pitaya::Core::AssetState::CPULoading);
-		// 获取离线预烘培的.war网格数据
-		std::string sphereMeshRawData = Pitaya::Core::LoadBuildInRC(IDR_BUILDIN_SPHERE_MESH);
-		const char* ptr = sphereMeshRawData.data();
-		size_t currentOffset = 0;
-		size_t totalSize = sphereMeshRawData.size();
-		// 定义安全指针读取函数 带边界检查
-		auto ReadBytes = [&](void* dest, size_t sizeBytes) -> bool
-			{
-				if (currentOffset + sizeBytes > totalSize) { return false; } // 越界保护
-				std::memcpy(dest, ptr + currentOffset, sizeBytes);
-				currentOffset += sizeBytes;
-				return true;
-			};
-		// 根据离线预烘培的.war数据进行加载
+
 		Pitaya::Import::StaticMeshImportResult result;
-		if (!ReadBytes(&result.GUID, sizeof(Pitaya::Core::GUID))) { return false; }
-		if (!ReadBytes(&result.IsValid, sizeof(bool))) { return false; }
-		if (!ReadBytes(&result.BoundingBox, sizeof(Pitaya::Core::AABB))) { return false; }
-		if (!result.IsValid) { return false; }
-		uint32_t vertexCount = 0;	// 读顶点
-		if (!ReadBytes(&vertexCount, sizeof(uint32_t))) { return false; }
-		if (vertexCount > 0)
+		result.GUID = Pitaya::Asset::Mesh::Sphere;
+		result.IsValid = true;
+
+		// 算法生成 CCW 球体
+		std::vector<Pitaya::Import::StaticMeshVertex> vertices;
+		constexpr const float radius = 0.5f;           // 球体半径
+		constexpr const uint32_t sectorCount = 36;     // 经线段数
+		constexpr const uint32_t stackCount = 18;      // 纬线段数
+		constexpr const float PI = 3.14159265359f;
+
+		float sectorStep = 2.0f * PI / sectorCount;
+		float stackStep = PI / stackCount;
+
+		// 生成顶点 (Position, Normal, UV, Tangent)
+		for (uint32_t i = 0; i <= stackCount; ++i)
 		{
-			result.Vertices.resize(vertexCount);
-			if (!ReadBytes(result.Vertices.data(), vertexCount * sizeof(float))) { return false; }
+			// y纬度角：从顶部的 PI/2 逐渐降到底部的 -PI/2
+			float stackAngle = PI / 2.0f - i * stackStep;
+			float xz = radius * std::cos(stackAngle);
+			float y = radius * std::sin(stackAngle);
+
+			for (uint32_t j = 0; j <= sectorCount; ++j)
+			{
+				float sectorAngle = j * sectorStep;
+
+				float x = xz * std::sin(sectorAngle);
+				float z = xz * std::cos(sectorAngle);
+
+				glm::vec3 position = { x, y, z };
+				glm::vec3 normal = { x / radius, y / radius, z / radius };
+
+				// UV：U 沿经度(0->1)， V 沿纬度(1->0) 兼容底层原点设定
+				float u = (float)j / sectorCount;
+				float v = 1.0f - (float)i / stackCount;
+				glm::vec2 uv = { u, v };
+
+				// 切线方程：向 U 递增的方向求导 (即沿着经线球体表面的切线)
+				glm::vec3 tangentDir = { std::cos(sectorAngle), 0.0f, -std::sin(sectorAngle) };
+				glm::vec4 tangent = { tangentDir.x, tangentDir.y, tangentDir.z, 1.0f };
+
+				vertices.push_back({ position, normal, uv, tangent });
+			}
 		}
-		uint32_t indexCount = 0;	// 读索引
-		if (!ReadBytes(&indexCount, sizeof(uint32_t))) { return false; }
-		if (indexCount > 0)
+
+		// 构建满足逆时针(CCW)规范的顶点索引
+		for (uint32_t i = 0; i < stackCount; ++i)
 		{
-			result.Indices.resize(indexCount);
-			if (!ReadBytes(result.Indices.data(), indexCount * sizeof(uint32_t))) { return false; }
+			for (uint32_t j = 0; j < sectorCount; ++j)
+			{
+				uint32_t first = (i * (sectorCount + 1)) + j;
+				uint32_t second = first + sectorCount + 1;
+
+				// 顶部极点 此时第一圈退化成了三角形，不需要渲染完整的四边形
+				if (i != 0)
+				{
+					// 逆时针环绕 (Top-Left -> Bottom-Left -> Top-Right)
+					result.Indices.push_back(first);
+					result.Indices.push_back(second);
+					result.Indices.push_back(first + 1);
+				}
+
+				// 底部极点 
+				if (i != (stackCount - 1))
+				{
+					// 逆时针环绕 (Top-Right -> Bottom-Left -> Bottom-Right)
+					result.Indices.push_back(first + 1);
+					result.Indices.push_back(second);
+					result.Indices.push_back(second + 1);
+				}
+			}
 		}
-		uint32_t subMeshCount = 0;	// 读 SubMesh 描述数组
-		if (!ReadBytes(&subMeshCount, sizeof(uint32_t))) { return false; }
-		if (subMeshCount > 0)
-		{
-			result.SubMeshs.resize(subMeshCount);
-			if (!ReadBytes(result.SubMeshs.data(), subMeshCount * sizeof(Pitaya::Asset::Mesh::SubMesh))) { return false; }
-		}
-		uint32_t matCount = 0;	// 读所需材质的 GUID
-		if (!ReadBytes(&matCount, sizeof(uint32_t))) { return false; }
-		if (matCount > 0)
-		{
-			result.MaterialGUIDs.resize(matCount);
-			if (!ReadBytes(result.MaterialGUIDs.data(), matCount * sizeof(Pitaya::Core::GUID))) { return false; }
-		}
-		result.VertexLayout = {	// 硬编码恢复静态网格的 VertexLayout 
-			{ Pitaya::GPU::ShaderVariableType::Float3, 0 },
-			{ Pitaya::GPU::ShaderVariableType::Float3, 1 },
-			{ Pitaya::GPU::ShaderVariableType::Float2, 2 },
-			{ Pitaya::GPU::ShaderVariableType::Float4, 3 } };
+		// 像之前生成立方体一样，将顶点写入 Result 缓冲池
+		result.Vertices.resize(vertices.size() * 12); // 注意这里用的是 12 floats! (3个位置 + 3个法线 + 2个UV + 4个切线)
+		std::memcpy(result.Vertices.data(), vertices.data(), vertices.size() * sizeof(Pitaya::Import::StaticMeshVertex));
+
+		// 强制定义包围盒大小
+		result.BoundingBox.Min = glm::vec3(-radius);
+		result.BoundingBox.Max = glm::vec3(radius);
+
+		// 设置 SubMesh 参数
+		Pitaya::Asset::Mesh::SubMesh sub;
+		sub.BaseIndex = 0;
+		sub.BaseVertex = 0;
+		sub.IndexCount = static_cast<uint32_t>(result.Indices.size());
+		sub.MaterialIndex = 0;
+		sub.BoundingBox = result.BoundingBox;
+		result.SubMeshs.push_back(sub);
+		result.VertexLayout = {
+			{ Pitaya::GPU::ShaderVariableType::Float3, 0 },    // Pos
+			{ Pitaya::GPU::ShaderVariableType::Float3, 1 },    // Normal
+			{ Pitaya::GPU::ShaderVariableType::Float2, 2 },    // UV
+			{ Pitaya::GPU::ShaderVariableType::Float4, 3 } };     // Tangent
+		result.MaterialGUIDs.push_back(Pitaya::Asset::Material::Default);
+
+		// 提交到引擎系统
 		buildIn.Sphere.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
 		meshes.Emplace(Pitaya::Asset::Mesh::Sphere, &buildIn.Sphere);
 		cacheAssetOperateQueue.push({ result });
 	}
-	
+
 	return true;
 }
 void Pitaya::Asset::AssetHub::Release()
@@ -538,11 +583,11 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 		return;
 	}
 
-	Pitaya::GPU::Identifier gpuIdentifier = Pitaya::GPU::CreateTexture2D(passkey, cpuOpResult_Inner.Data.data(), cpuOpResult_Inner.Width, cpuOpResult_Inner.Height, cpuOpResult_Inner.Channels, cpuOpResult_Inner.IsGenerateMipmap, cpuOpResult_Inner.IsSRGB, cpuOpResult_Inner.isNearest);
+	auto texture2DHandle = Pitaya::GPU::CreateTexture2D(passkey, cpuOpResult_Inner.Data.data(), cpuOpResult_Inner.Width, cpuOpResult_Inner.Height, cpuOpResult_Inner.Channels, cpuOpResult_Inner.IsGenerateMipmap, cpuOpResult_Inner.IsSRGB, cpuOpResult_Inner.isNearest);
 	if (entry->State.HasBits(Pitaya::Core::AssetState::Unload))
 	{
 		Pitaya::Log::Error("Texture asset marked as Unload, abort GPU load" + cpuOpResult_Inner.GUID.ToString());
-		if (!Pitaya::GPU::DestroyTexture2D(passkey, gpuIdentifier))
+		if (!Pitaya::GPU::DestroyTexture2D(passkey, texture2DHandle))
 		{
 			Pitaya::Log::Error("destroy texture2D asset gail,GUID: " + cpuOpResult_Inner.GUID.ToString());
 		}
@@ -550,7 +595,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 		return;
 	}
 
-	texture2D->Id = static_cast<uint64_t>(gpuIdentifier);
+	texture2D->Texture2DHandle = texture2DHandle;
 	texture2D->Type = Pitaya::GPU::TextureType::Texture2D;
 	entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
@@ -596,11 +641,11 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	{
 		datas[i] = cpuOpResult_Inner.Data[i].data();
 	}
-	Pitaya::GPU::Identifier gpuIdentifier = Pitaya::GPU::CreateTextureCubemap(passkey, datas, cpuOpResult_Inner.Width, cpuOpResult_Inner.Height, cpuOpResult_Inner.Channels, cpuOpResult_Inner.IsGenerateMipmap, cpuOpResult_Inner.IsSRGB, cpuOpResult_Inner.isNearest);
+	auto textureCubemapHandle = Pitaya::GPU::CreateTextureCubemap(passkey, datas, cpuOpResult_Inner.Width, cpuOpResult_Inner.Height, cpuOpResult_Inner.Channels, cpuOpResult_Inner.IsGenerateMipmap, cpuOpResult_Inner.IsSRGB, cpuOpResult_Inner.isNearest);
 	if (entry->State.HasBits(Pitaya::Core::AssetState::Unload))
 	{
 		Pitaya::Log::Error("texture cubemap asset marked as Unload, abort GPU load" + cpuOpResult_Inner.GUID.ToString());
-		if (!Pitaya::GPU::DestroyTextureCubemap(passkey, gpuIdentifier))
+		if (!Pitaya::GPU::DestroyTextureCubemap(passkey, textureCubemapHandle))
 		{
 			Pitaya::Log::Error("destroy texture cubemap asset fail, GUID:" + cpuOpResult_Inner.GUID.ToString());
 		}
@@ -608,7 +653,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 		return;
 	}
 
-	textureCubemap->Id = static_cast<uint64_t>(gpuIdentifier);
+	textureCubemap->TextureCubemapHandle = textureCubemapHandle;
 	textureCubemap->Type = Pitaya::GPU::TextureType::TextureCubemap;
 	entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
@@ -649,12 +694,12 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 		return;
 	}
 
-	Pitaya::GPU::Identifier gpuIdentifier = Pitaya::GPU::Identifier<Pitaya::GPU::Shader>::Invalid;
+	Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle shaderHandle = Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle::Invalid;
 	if (cpuOpResult_Inner.Type == Pitaya::GPU::Shader::VF)
 	{
 		if (!cpuOpResult_Inner.VertexSource.empty() && !cpuOpResult_Inner.FragmentSource.empty())
 		{
-			gpuIdentifier = Pitaya::GPU::CreateShader(passkey, cpuOpResult_Inner.VertexSource.c_str(), cpuOpResult_Inner.FragmentSource.c_str());
+			shaderHandle = Pitaya::GPU::CreateShader(passkey, cpuOpResult_Inner.VertexSource.c_str(), cpuOpResult_Inner.FragmentSource.c_str());
 		}
 		else
 		{
@@ -665,7 +710,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	{
 		if (!cpuOpResult_Inner.VertexSource.empty() && !cpuOpResult_Inner.FragmentSource.empty() && !cpuOpResult_Inner.GeometrySource.empty())
 		{
-			gpuIdentifier = Pitaya::GPU::CreateShader(passkey, cpuOpResult_Inner.VertexSource.c_str(), cpuOpResult_Inner.FragmentSource.c_str(), cpuOpResult_Inner.GeometrySource.c_str());
+			shaderHandle = Pitaya::GPU::CreateShader(passkey, cpuOpResult_Inner.VertexSource.c_str(), cpuOpResult_Inner.FragmentSource.c_str(), cpuOpResult_Inner.GeometrySource.c_str());
 		}
 		else
 		{
@@ -678,7 +723,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	}
 
 	//无效句柄未加载GPU数据
-	if (!gpuIdentifier)
+	if (!shaderHandle)
 	{
 		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
 		Pitaya::Log::Error("cpu load shader result is empty guid:" + cpuOpResult_Inner.GUID.ToString());
@@ -689,7 +734,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	{
 		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
 		Pitaya::Log::Error("Shader asset marked as Unload, abort GPU load" + cpuOpResult_Inner.GUID.ToString());
-		if (!Pitaya::GPU::DestroyShader(passkey, gpuIdentifier))
+		if (!Pitaya::GPU::DestroyShader(passkey, shaderHandle))
 		{
 			Pitaya::Log::Error("Shader asset destroy fali GUID:" + cpuOpResult_Inner.GUID.ToString());
 		}
@@ -697,7 +742,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	}
 
 	Pitaya::Log::Info("shader gpu load success, GUID:" + cpuOpResult_Inner.GUID.ToString());
-	entry->Data.load(std::memory_order_acquire)->ID = gpuIdentifier;
+	entry->Data.load(std::memory_order_acquire)->ShaderHandle = shaderHandle;
 	entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Import::StaticMeshImportResult& cpuOpResult_Inner)
@@ -752,80 +797,30 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 		return;
 	}
 
-	Pitaya::GPU::Identifier vaoId = Pitaya::GPU::CreateVertexArray(passkey);
-	if (!vaoId)
+	auto vaoHandle = Pitaya::GPU::CreateVertexArray(passkey);
+	auto vboHandle = Pitaya::GPU::CreateVertexBuffer(passkey, cpuOpResult_Inner.Vertices.data(), static_cast<uint32_t>(cpuOpResult_Inner.Vertices.size() * sizeof(float)), cpuOpResult_Inner.VertexLayout);
+	auto iboHandle = Pitaya::GPU::CreateIndexBuffer(passkey, cpuOpResult_Inner.Indices.data(), static_cast<uint32_t>(cpuOpResult_Inner.Indices.size()));
+	if (!Pitaya::GPU::LinkVertexArray(passkey, vaoHandle, vboHandle, iboHandle))
 	{
-		Pitaya::Log::Error("failed to create VAO for GUID: " + cpuOpResult_Inner.GUID.ToString());
+		Pitaya::Log::Error("failed to link VAO GUID: " + cpuOpResult_Inner.GUID.ToString());
+		Pitaya::GPU::DestroyVertexArray(passkey, vaoHandle);
+		Pitaya::GPU::DestroyVertexBuffer(passkey, vboHandle);
+		Pitaya::GPU::DestroyIndexBuffer(passkey, iboHandle);
 		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
 		return;
 	}
-	Pitaya::GPU::VertexArray* vao = Pitaya::GPU::GetVertexArray(passkey, vaoId);
-	if (!vao)
-	{
-		Pitaya::Log::Error("failed to get VAO instance for GUID: " + cpuOpResult_Inner.GUID.ToString());
-		Pitaya::GPU::DestroyVertexArray(passkey, vaoId);
-		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
-		return;
-	}
-	vao->Bind();
-
-	uint32_t vboSize = static_cast<uint32_t>(cpuOpResult_Inner.Vertices.size() * sizeof(float));
-	Pitaya::GPU::Identifier vboId = Pitaya::GPU::CreateVertexBuffer(passkey, cpuOpResult_Inner.Vertices.data(), vboSize);
-	if (!vboId)
-	{
-		Pitaya::Log::Error("failed to create VBO for GUID: " + cpuOpResult_Inner.GUID.ToString());
-		vao->Unbind();
-		Pitaya::GPU::DestroyVertexArray(passkey, vaoId);
-		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
-		return;
-	}
-	Pitaya::GPU::VertexBuffer* vbo = Pitaya::GPU::GetVertexBuffer(passkey, vboId);
-	if (!vbo)
-	{
-		Pitaya::Log::Error("Failed to get VBO instance for GUID: " + cpuOpResult_Inner.GUID.ToString());
-		vao->Unbind();
-		Pitaya::GPU::DestroyVertexBuffer(passkey, vboId);
-		Pitaya::GPU::DestroyVertexArray(passkey, vaoId);
-		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
-		return;
-	}
-	vbo->SetLayout(cpuOpResult_Inner.VertexLayout);
-	vao->AddVertexBuffer(vbo);
-
-	uint32_t indexCount = static_cast<uint32_t>(cpuOpResult_Inner.Indices.size());
-	Pitaya::GPU::Identifier iboId = Pitaya::GPU::CreateIndexBuffer(passkey, cpuOpResult_Inner.Indices.data(), indexCount);
-	if (!iboId)
-	{
-		Pitaya::Log::Error("failed to create IBO for GUID: " + cpuOpResult_Inner.GUID.ToString());
-		vao->Unbind();
-		Pitaya::GPU::DestroyVertexArray(passkey, vaoId);
-		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
-		return;
-	}
-	Pitaya::GPU::IndexBuffer* ibo = Pitaya::GPU::GetIndexBuffer(passkey, iboId);
-	if (!ibo)
-	{
-		Pitaya::Log::Error("Failed to get IBO instance for GUID: " + cpuOpResult_Inner.GUID.ToString());
-		vao->Unbind();
-		Pitaya::GPU::DestroyIndexBuffer(passkey, iboId);
-		Pitaya::GPU::DestroyVertexArray(passkey, vaoId);
-		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
-		return;
-	}
-	vao->SetIndexBuffer(ibo);
 
 	if (entry->State.HasBits(Pitaya::Core::AssetState::Unload))
 	{
 		Pitaya::Log::Error("StaticMesh marked as Unload during upload, cleaning up GPU resources: " + cpuOpResult_Inner.GUID.ToString());
-		if (!Pitaya::GPU::DestroyVertexArray(passkey, vaoId))
-		{
-			Pitaya::Log::Error("StaticMesh VAO destry fail GUID" + cpuOpResult_Inner.GUID.ToString());
-		}
+		Pitaya::GPU::DestroyVertexArray(passkey, vaoHandle);
+		Pitaya::GPU::DestroyVertexBuffer(passkey, vboHandle);
+		Pitaya::GPU::DestroyIndexBuffer(passkey, iboHandle);
 		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
 		return;
 	}
 
-	mesh->VertexArray = vaoId;
+	mesh->VertexArrayHandle = vaoHandle;
 	mesh->BoundingBox = cpuOpResult_Inner.BoundingBox;
 	mesh->SubMeshs = std::move(cpuOpResult_Inner.SubMeshs);
 	mesh->Type = Pitaya::GPU::MeshType::Static;
@@ -833,7 +828,6 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	{
 		mesh->Materials.emplace_back(Pitaya::Asset::LoadAsset<Pitaya::Asset::Material>(materialGUID));
 	}
-	vao->Unbind();
 
 	Pitaya::Log::Info("Successfully created GPU resources for static mesh GUID: " + cpuOpResult_Inner.GUID.ToString());
 	entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
@@ -890,80 +884,30 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 		return;
 	}
 
-	Pitaya::GPU::Identifier vaoId = Pitaya::GPU::CreateVertexArray(passkey);
-	if (!vaoId)
+	auto vaoHandle = Pitaya::GPU::CreateVertexArray(passkey);
+	auto vboHandle = Pitaya::GPU::CreateVertexBuffer(passkey, cpuOpResult_Inner.Vertices.data(), static_cast<uint32_t>(cpuOpResult_Inner.Vertices.size() * sizeof(float)), cpuOpResult_Inner.VertexLayout);
+	auto iboHandle = Pitaya::GPU::CreateIndexBuffer(passkey, cpuOpResult_Inner.Indices.data(), static_cast<uint32_t>(cpuOpResult_Inner.Indices.size()));
+	if (!Pitaya::GPU::LinkVertexArray(passkey, vaoHandle, vboHandle, iboHandle))
 	{
-		Pitaya::Log::Error("failed to create VAO for skinned mesh GUID: " + cpuOpResult_Inner.GUID.ToString());
+		Pitaya::Log::Error("failed to link VAO GUID: " + cpuOpResult_Inner.GUID.ToString());
+		Pitaya::GPU::DestroyVertexArray(passkey, vaoHandle);
+		Pitaya::GPU::DestroyVertexBuffer(passkey, vboHandle);
+		Pitaya::GPU::DestroyIndexBuffer(passkey, iboHandle);
 		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
 		return;
 	}
-	Pitaya::GPU::VertexArray* vao = Pitaya::GPU::GetVertexArray(passkey, vaoId);
-	if (!vao)
-	{
-		Pitaya::Log::Error("failed to get VAO instance for skinned mesh GUID: " + cpuOpResult_Inner.GUID.ToString());
-		Pitaya::GPU::DestroyVertexArray(passkey, vaoId);
-		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
-		return;
-	}
-	vao->Bind();
 
-	uint32_t vboSize = static_cast<uint32_t>(cpuOpResult_Inner.Vertices.size() * sizeof(float));
-	Pitaya::GPU::Identifier vboId = Pitaya::GPU::CreateVertexBuffer(passkey, cpuOpResult_Inner.Vertices.data(), vboSize);
-	if (!vboId)
-	{
-		Pitaya::Log::Error("failed to create VBO for skinned mesh GUID: " + cpuOpResult_Inner.GUID.ToString());
-		vao->Unbind();
-		Pitaya::GPU::DestroyVertexArray(passkey, vaoId);
-		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
-		return;
-	}
-	Pitaya::GPU::VertexBuffer* vbo = Pitaya::GPU::GetVertexBuffer(passkey, vboId);
-	if (!vbo)
-	{
-		Pitaya::Log::Error("Failed to get VBO instance for skinned mesh GUID: " + cpuOpResult_Inner.GUID.ToString());
-		vao->Unbind();
-		Pitaya::GPU::DestroyVertexBuffer(passkey, vboId);
-		Pitaya::GPU::DestroyVertexArray(passkey, vaoId);
-		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
-		return;
-	}
-	vbo->SetLayout(cpuOpResult_Inner.VertexLayout);
-	vao->AddVertexBuffer(vbo);
-
-	uint32_t indexCount = static_cast<uint32_t>(cpuOpResult_Inner.Indices.size());
-	Pitaya::GPU::Identifier iboId = Pitaya::GPU::CreateIndexBuffer(passkey, cpuOpResult_Inner.Indices.data(), indexCount);
-	if (!iboId)
-	{
-		Pitaya::Log::Error("failed to create IBO for skinned mesh GUID: " + cpuOpResult_Inner.GUID.ToString());
-		vao->Unbind();
-		Pitaya::GPU::DestroyVertexArray(passkey, vaoId);
-		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
-		return;
-	}
-	Pitaya::GPU::IndexBuffer* ibo = Pitaya::GPU::GetIndexBuffer(passkey, iboId);
-	if (!ibo)
-	{
-		Pitaya::Log::Error("Failed to get IBO instance for skinned mesh GUID: " + cpuOpResult_Inner.GUID.ToString());
-		vao->Unbind();
-		Pitaya::GPU::DestroyIndexBuffer(passkey, iboId);
-		Pitaya::GPU::DestroyVertexArray(passkey, vaoId);
-		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
-		return;
-	}
-	vao->SetIndexBuffer(ibo);
-	
 	if (entry->State.HasBits(Pitaya::Core::AssetState::Unload))
 	{
 		Pitaya::Log::Error("SkinnedMesh marked as Unload during upload, cleaning up GPU resources: " + cpuOpResult_Inner.GUID.ToString());
-		if (!Pitaya::GPU::DestroyVertexArray(passkey, vaoId))
-		{
-			Pitaya::Log::Error("SkinnedMesh VAO destry fail GUID" + cpuOpResult_Inner.GUID.ToString());
-		}
+		Pitaya::GPU::DestroyVertexArray(passkey, vaoHandle);
+		Pitaya::GPU::DestroyVertexBuffer(passkey, vboHandle);
+		Pitaya::GPU::DestroyIndexBuffer(passkey, iboHandle);
 		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
 		return;
 	}
 
-	mesh->VertexArray = vaoId;
+	mesh->VertexArrayHandle = vaoHandle;
 	mesh->SubMeshs = std::move(cpuOpResult_Inner.SubMeshs);
 
 	mesh->BoneInverseMatrices = std::move(cpuOpResult_Inner.BoneInverseMatrices);
@@ -975,7 +919,6 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	}
 	mesh->Type = Pitaya::GPU::MeshType::SkinnedMesh;
 
-	vao->Unbind();
 	Pitaya::Log::Info("successfully created GPU resources for skinned mesh GUID: " + cpuOpResult_Inner.GUID.ToString());
 	entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
@@ -1018,75 +961,30 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	}
 
 	//Scene
-	Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> sceneGPUIdentifier = Pitaya::GPU::CreateFrameBuffer(passkey, cpuOpResult_Inner.SceneFrameBufferSpecification);
+	rendertarget->SceneFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(passkey, rendertarget->SceneFrameBufferSpecification);
 	//PingPong
-	Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> pingPongGPUIdentifier[2] = { Pitaya::GPU::CreateFrameBuffer(passkey, cpuOpResult_Inner.PingPongFrameBufferSpecification), Pitaya::GPU::CreateFrameBuffer(passkey, cpuOpResult_Inner.PingPongFrameBufferSpecification) };
+	rendertarget->PingPongFrameBufferHandles[0] = Pitaya::GPU::CreateFrameBuffer(passkey, rendertarget->PingPongFrameBufferSpecification);
+	rendertarget->PingPongFrameBufferHandles[1] = Pitaya::GPU::CreateFrameBuffer(passkey, rendertarget->PingPongFrameBufferSpecification);
 	//Final
-	Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> finalGPUIdentifier = Pitaya::GPU::CreateFrameBuffer(passkey, cpuOpResult_Inner.FinalFrameBufferSpecification);
+	rendertarget->FinalFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(passkey, rendertarget->FinalFrameBufferSpecification);
+
 	if (entry->State.HasBits(Pitaya::Core::AssetState::Unload))
 	{
 		Pitaya::Log::Error("rendertarget asset marked as Unload, abort GPU load" + cpuOpResult_Inner.GUID.ToString());
-		if (!Pitaya::GPU::DestroyFrameBuffer(passkey, sceneGPUIdentifier))
-		{
-			Pitaya::Log::Error("destroy scene frambuffer asset gail,GUID: " + cpuOpResult_Inner.GUID.ToString());
-		}
-		if (!Pitaya::GPU::DestroyFrameBuffer(passkey, pingPongGPUIdentifier[0]))
-		{
-			Pitaya::Log::Error("destroy pingPong A frambuffer asset gail,GUID: " + cpuOpResult_Inner.GUID.ToString());
-		}
-		if (!Pitaya::GPU::DestroyFrameBuffer(passkey, pingPongGPUIdentifier[1]))
-		{
-			Pitaya::Log::Error("destroy pingPong B frambuffer asset gail,GUID: " + cpuOpResult_Inner.GUID.ToString());
-		}
-		if (!Pitaya::GPU::DestroyFrameBuffer(passkey, finalGPUIdentifier))
-		{
-			Pitaya::Log::Error("destroy final frambuffer asset gail,GUID: " + cpuOpResult_Inner.GUID.ToString());
-		}
-		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
-		return;
-	}
-
-	Pitaya::GPU::FrameBuffer* sceneFrambuffer = Pitaya::GPU::GetFrameBuffer(passkey, sceneGPUIdentifier);
-	Pitaya::GPU::FrameBuffer* pingPongFrambuffer[2] = { Pitaya::GPU::GetFrameBuffer(passkey, pingPongGPUIdentifier[0]), Pitaya::GPU::GetFrameBuffer(passkey, pingPongGPUIdentifier[1]) };
-	Pitaya::GPU::FrameBuffer* finalFrambuffer = Pitaya::GPU::GetFrameBuffer(passkey, finalGPUIdentifier);
-	if (!sceneFrambuffer || !pingPongFrambuffer[0] || !pingPongFrambuffer[1] || !finalFrambuffer)
-	{
-		Pitaya::Log::Error("framebuffer is empty GUID:" + cpuOpResult_Inner.GUID.ToString());
-		if (!Pitaya::GPU::DestroyFrameBuffer(passkey, sceneGPUIdentifier))
-		{
-			Pitaya::Log::Error("destroy scene frambuffer asset gail,GUID: " + cpuOpResult_Inner.GUID.ToString());
-		}
-		if (!Pitaya::GPU::DestroyFrameBuffer(passkey, pingPongGPUIdentifier[0]))
-		{
-			Pitaya::Log::Error("destroy pingPong A frambuffer asset gail,GUID: " + cpuOpResult_Inner.GUID.ToString());
-		}
-		if (!Pitaya::GPU::DestroyFrameBuffer(passkey, pingPongGPUIdentifier[1]))
-		{
-			Pitaya::Log::Error("destroy pingPong B frambuffer asset gail,GUID: " + cpuOpResult_Inner.GUID.ToString());
-		}
-		if (!Pitaya::GPU::DestroyFrameBuffer(passkey, finalGPUIdentifier))
-		{
-			Pitaya::Log::Error("destroy final frambuffer asset gail,GUID: " + cpuOpResult_Inner.GUID.ToString());
-		}
+		Pitaya::GPU::DestroyFrameBuffer(passkey, rendertarget->SceneFrameBufferHandle);
+		Pitaya::GPU::DestroyFrameBuffer(passkey, rendertarget->PingPongFrameBufferHandles[0]);
+		Pitaya::GPU::DestroyFrameBuffer(passkey, rendertarget->PingPongFrameBufferHandles[1]);
+		Pitaya::GPU::DestroyFrameBuffer(passkey, rendertarget->FinalFrameBufferHandle);
 		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
 		return;
 	}
 
 	Pitaya::Log::Info("successfully created GPU resources for framebuffer GUID: " + cpuOpResult_Inner.GUID.ToString());
-	rendertarget->SceneFrameBuffer = sceneGPUIdentifier;
-	rendertarget->SceneInternalFrameBuffer = sceneFrambuffer->GetInternalGPUIdentifier();
-	rendertarget->SceneColorAttachment = sceneFrambuffer->GetColorAttachmentGPUIdentifier();
-	rendertarget->PingPongFrameBuffers[0] = pingPongGPUIdentifier[0];
-	rendertarget->PingPongColorAttachments[0] = pingPongFrambuffer[0]->GetColorAttachmentGPUIdentifier();
-	rendertarget->PingPongFrameBuffers[1] = pingPongGPUIdentifier[1];
-	rendertarget->PingPongColorAttachments[1] = pingPongFrambuffer[1]->GetColorAttachmentGPUIdentifier();
-	rendertarget->FinalFrameBuffer = finalGPUIdentifier;
-	rendertarget->FinalColorAttachment = finalFrambuffer->GetColorAttachmentGPUIdentifier();
 	entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Asset::Texture2DUnloadRequire& cpuOpResult_Inner)
 {
-	Pitaya::GPU::DestroyTexture2D(passkey, cpuOpResult_Inner.ID);
+	Pitaya::GPU::DestroyTexture2D(passkey, cpuOpResult_Inner.Texture2DHandle);
 }
 
 bool Pitaya::Asset::AssetHub::CheckIsVirtualPath(const std::filesystem::path& path) const
@@ -1780,9 +1678,6 @@ void Pitaya::Asset::AssetHub::LoadRenderTarget(Pitaya::Core::GUID guid, const st
 	Pitaya::Log::Info("rendertarget CPU laod success, GUID:" + guid.ToString());
 	Pitaya::Import::RenderTargetImportResult cpuOpResult_Inner;
 	cpuOpResult_Inner.GUID = guid;
-	cpuOpResult_Inner.SceneFrameBufferSpecification = rendertarget->SceneFrameBufferSpecification;
-	cpuOpResult_Inner.PingPongFrameBufferSpecification = rendertarget->PingPongFrameBufferSpecification;
-	cpuOpResult_Inner.FinalFrameBufferSpecification = rendertarget->FinalFrameBufferSpecification;
 	Pitaya::Asset::AssetOperate cpuOpResult_Out;
 	cpuOpResult_Out.Data = cpuOpResult_Inner;
 	assetOperateQueue.Push(cpuOpResult_Out);

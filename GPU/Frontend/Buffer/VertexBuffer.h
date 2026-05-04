@@ -7,32 +7,17 @@
 namespace Pitaya::GPU
 {
 	class RHIDevice;
-	class VertexBuffer : public Pitaya::Core::RefCount
+	struct VertexBuffer
 	{
-		friend class Pitaya::GPU::RHIDevice;
-	public:
-		VertexBuffer(float* vertices, uint32_t size) {}
-		virtual ~VertexBuffer() = default;
-
-	public:
-		virtual void Bind() const = 0;
-		virtual void Unbind() const = 0;
-		virtual Identifier<VertexBuffer> GetGPUIdentifier() const = 0;
-
-	public:
-		inline void SetLayout(const BufferLayout& layout)
+		struct Factory
 		{
-			this->layout = layout;
-		}
-		inline const BufferLayout& GetLayout() const
-		{
-			return layout;
-		}
+			friend class RHIDevice;
+		private:
+			static VertexBuffer Create(float* vertices, uint32_t size, BufferLayout layout);
+			static void Destroy(VertexBuffer);
+		};
 
-	private:
-		static VertexBuffer* Create(float* vertices, uint32_t size);
-
-	protected:
-		Pitaya::GPU::BufferLayout layout;
+		Identifier<VertexBuffer> Id = 0;
+		BufferLayout layout;
 	};
 }

@@ -10,7 +10,7 @@ namespace Pitaya::GPU
     {
         BufferElement() = default;
         BufferElement(Pitaya::GPU::ShaderVariableType type, uint32_t Location, bool normalized = false, bool instanced = false)
-            : Type(type), Location(Location), Size(Pitaya::GPU::Shader::GetShaderVariableTypeSize(type)), Offset(0), Normalized(normalized), Instanced(instanced){ }
+            : Type(type), Location(Location), Size(Pitaya::GPU::GetShaderVariableTypeSize(type)), Offset(0), Normalized(normalized), Instanced(instanced){ }
 
         //获取向量维度
         inline uint32_t GetComponentCount() const noexcept

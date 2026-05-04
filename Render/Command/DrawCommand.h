@@ -1,6 +1,7 @@
 #pragma once
 
-#include<GPU/Common/Identifier.h>
+#include<Core/Container/SlotMap.h>
+#include<GPU/Common/GPUObjectType.h>
 #include<GPU/Common/TextureUsage.h>
 
 #include<glm.hpp>
@@ -49,9 +50,9 @@ namespace Pitaya::Render
 
 	struct DrawCommand
 	{
-		Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> VertexArray = 0;
-		Pitaya::GPU::Identifier<Pitaya::GPU::Shader> Shader = 0;
-		Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> Textures[static_cast<size_t>(Pitaya::GPU::TextureUsage::Unknown)] = {};
+        Pitaya::Core::SlotMap<Pitaya::GPU::VertexArray>::Handle VertexArrayHandle;
+        Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle ShaderHandle;
+        Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle TextureHandles[static_cast<size_t>(Pitaya::GPU::TextureUsage::Unknown)] = {};
 
 		uint64_t SortKey = 0;
 
@@ -65,5 +66,6 @@ namespace Pitaya::Render
 
         bool DepthTest = true;
         bool Blend = false;
+        bool CullFace = true;
 	};
 }

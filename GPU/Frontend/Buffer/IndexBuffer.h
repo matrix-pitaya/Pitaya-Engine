@@ -8,29 +8,17 @@
 namespace Pitaya::GPU
 {
 	class RHIDevice;
-	class IndexBuffer : public Pitaya::Core::RefCount
+	struct IndexBuffer
 	{
-		friend class Pitaya::GPU::RHIDevice;
-	public:
-		IndexBuffer(uint32_t* indices, uint32_t count)
-			:count(count) { }
-		virtual ~IndexBuffer() = default;
-
-	public:
-		virtual void Bind() const = 0;
-		virtual void Unbind() const = 0;
-		virtual Pitaya::GPU::Identifier<IndexBuffer> GetGPUIdentifier() const = 0;
-
-	public:
-		inline uint32_t GetCount() const noexcept
+		struct Factory
 		{
-			return count;
-		}
+			friend class RHIDevice;
+		private:
+			static IndexBuffer Create(uint32_t* indices, uint32_t count);
+			static void Destroy(IndexBuffer);
+		};
 
-	private:
-		static Pitaya::GPU::IndexBuffer* Create(uint32_t* indices, uint32_t count);
-
-	protected:
+		Pitaya::GPU::Identifier<IndexBuffer> Id = 0;
 		uint32_t count = 0;
 	};
 }

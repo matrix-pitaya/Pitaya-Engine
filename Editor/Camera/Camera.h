@@ -105,7 +105,7 @@ namespace Pitaya::Editor
 		std::atomic<bool> falg = false;	
 
 		//Transform
-		glm::vec3 position = glm::vec3(0.0f, 0.0f, 10.0f);
+		glm::vec3 position = glm::vec3(0.0f, 0.0f, 5.0f);
 		glm::vec3 forward = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 		float yaw = -90.0f;
@@ -113,7 +113,7 @@ namespace Pitaya::Editor
 
 		//Orbit
 		glm::vec3 pivot = glm::vec3(0.0f);	//轨道中心点
-		float distance = 10.0f;				//轨道距离
+		float distance = 5.0f;				//轨道距离
 
 		//Transition Animation
 		glm::vec3 startPos = glm::vec3(0.0f);

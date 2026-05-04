@@ -69,7 +69,6 @@ IDR_GAMMA_CORRECTION_FRAGMENT_SHADER    RCDATA          "../resource/PostProcess
 // BuildIn Asset
 IDR_BUILDIN_DEFAULT_VERTEX_SHADER       RCDATA          "../resource/BuildIn/Shader/default/Shader.vert"
 IDR_BUILDIN_DEFAULT_FRAGMENT_SHADER     RCDATA          "../resource/BuildIn/Shader/default/Shader.frag"
-IDR_BUILDIN_SPHERE_MESH                 RCDATA          "../resource/BuildIn/Mesh/Sphere.war"
 
 #endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////

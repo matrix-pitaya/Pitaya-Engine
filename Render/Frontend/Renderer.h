@@ -90,91 +90,82 @@ namespace Pitaya::Render
 		struct GlobalRHI
 		{
 			//Specific
-			Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> EmptyVAO;
+			Pitaya::Core::SlotMap<Pitaya::GPU::VertexArray>::Handle EmptyVAOHandle;
 
 			//Fallback
-			Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> FallbackVAO;
-			Pitaya::GPU::Identifier<Pitaya::GPU::Shader> FallbackShader;
-			Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> FallbackTexture;
+			Pitaya::Core::SlotMap<Pitaya::GPU::VertexArray>::Handle FallbackVAOHandle;
+			Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle FallbackShaderHandle;
+			Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle FallbackTextureHandle;
 
 			//PostProcess Shader
-			Pitaya::GPU::Identifier<Pitaya::GPU::Shader> BlitShader;
-			Pitaya::GPU::Identifier<Pitaya::GPU::Shader> GammaCorrectionShader;
+			Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle BlitShaderHandle;
+			Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle GammaCorrectionShaderHandle;
 
 			//Uniform Buffer
-			Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> CameraSnapshotUBO;
-			Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> PostProcessUBO;
+			Pitaya::Core::SlotMap<Pitaya::GPU::UniformBuffer>::Handle CameraSnapshotUBOHandle;
+			Pitaya::Core::SlotMap<Pitaya::GPU::UniformBuffer>::Handle PostProcessUBOHandle;
 
 			//ShaderStorageBuffer
-			Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> InstanceModelTransformSSBO;
-			Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> BoneInverseMatriceSSBO;
-			Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> SceneLightsSSBO;
+			Pitaya::Core::SlotMap<Pitaya::GPU::ShaderStorageBuffer>::Handle InstanceModelTransformSSBOHandle;
+			Pitaya::Core::SlotMap<Pitaya::GPU::ShaderStorageBuffer>::Handle BoneInverseMatriceSSBOHandle;
+			Pitaya::Core::SlotMap<Pitaya::GPU::ShaderStorageBuffer>::Handle SceneLightsSSBOHandle;
 			size_t TransformSSBOCapacity = 0;	//记录当前显存缓冲区的大小
 			size_t BoneSSBOCapacity = 0;
 			size_t LightSSBOCapacity = 0;
 
 			//MainDisplayRT
-			Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> MainSceneFrameBuffer = 0;
-			Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> MainSceneInternalFrameBuffer = 0; //用于多采用解析
-			Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> MainSceneColorAttachment = 0;
-			Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> MainPingPongFrameBuffers[2] = { 0, 0 };
-			Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> MainPingPongColorAttachments[2] = { 0, 0 };
-			Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> MainFinalFrameBuffer = 0;
-			Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> MainFinalColorAttachment = 0;
+			Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle MainSceneFrameBufferHandle;
+			Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle MainPingPongFrameBufferHandles[2] = { };
+			Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle MainFinalFrameBufferHandle;
 
 			inline void Create()
 			{
-				EmptyVAO = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
-				CameraSnapshotUBO = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+				EmptyVAOHandle = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+				CameraSnapshotUBOHandle = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					sizeof(Pitaya::Core::CameraSnapshot), static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::CameraSnapshot));
-				PostProcessUBO = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+				PostProcessUBOHandle = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					Pitaya::Render::PostProcessStep::UniformBufferBytes, static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
 				
 				// 初始分配1024个位置
 				TransformSSBOCapacity = 1024 * sizeof(InstanceTransformInfo);
-				InstanceModelTransformSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+				InstanceModelTransformSSBOHandle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					TransformSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform));
 				
 				// 初始分配一段骨骼容量
 				BoneSSBOCapacity = 4096 * sizeof(glm::mat4);	
-				BoneInverseMatriceSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+				BoneInverseMatriceSSBOHandle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					BoneSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::BoneInverseMatrice));
 				
 				// 初始分配10个光源位置
 				LightSSBOCapacity = 10 * sizeof(Pitaya::Render::LightInfo);
-				SceneLightsSSBO = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+				SceneLightsSSBOHandle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					LightSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::SceneLights));
 
-				BlitShader = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+				BlitShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					Pitaya::Core::LoadBuildInRC(IDR_BLIT_VERTEX_SHADER).c_str(),
 					Pitaya::Core::LoadBuildInRC(IDR_BLIT_FRAGMENT_SHADER).c_str());
-				GammaCorrectionShader = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+				GammaCorrectionShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					Pitaya::Core::LoadBuildInRC(IDR_GAMMA_CORRECTION_VERTEX_SHADER).c_str(),
 					Pitaya::Core::LoadBuildInRC(IDR_GAMMA_CORRECTION_FRAGMENT_SHADER).c_str());
 
-				FallbackVAO = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+				FallbackVAOHandle = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
 				std::string fallbackVboData = Pitaya::Core::LoadBuildInRC(IDR_ERROR_VERTICES);
-				Pitaya::GPU::Identifier fallbackVBO = Pitaya::GPU::CreateVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-					reinterpret_cast<float*>(fallbackVboData.data()), fallbackVboData.size());
 				std::string fallbackIboData = Pitaya::Core::LoadBuildInRC(IDR_ERROR_INDICES);
-				Pitaya::GPU::Identifier fallbackIBO = Pitaya::GPU::CreateIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+				auto fallbackVBOHandle = Pitaya::GPU::CreateVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					reinterpret_cast<float*>(fallbackVboData.data()), fallbackVboData.size(), { { Pitaya::GPU::ShaderVariableType::Float3, 0 } });
+				auto fallbackIBOHandle = Pitaya::GPU::CreateIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					reinterpret_cast<uint32_t*>(fallbackIboData.data()), 36);
-				Pitaya::GPU::VertexArray* fallbackVaoPtr = Pitaya::GPU::GetVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), FallbackVAO);
-				Pitaya::GPU::VertexBuffer* fallbackVboPtr = Pitaya::GPU::GetVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), fallbackVBO);
-				Pitaya::GPU::IndexBuffer* fallbackIboPtr = Pitaya::GPU::GetIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), fallbackIBO);
-				if (!fallbackVaoPtr || !fallbackVboPtr || !fallbackIboPtr)
+				if (!Pitaya::GPU::LinkVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), 
+					FallbackVAOHandle, fallbackVBOHandle, fallbackIBOHandle))
 				{
 					MessageBoxA(NULL, "Create Global RHI Failed! Check Log for Details.", "Error", MB_OK);
 					exit(-1);
 				}
-				fallbackVboPtr->SetLayout({ { Pitaya::GPU::ShaderVariableType::Float3, 0 } });
-				fallbackVaoPtr->AddVertexBuffer(fallbackVboPtr);
-				fallbackVaoPtr->SetIndexBuffer(fallbackIboPtr);
-
-				FallbackTexture = Pitaya::GPU::CreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+				
+				FallbackTextureHandle = Pitaya::GPU::CreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					reinterpret_cast<unsigned char*>(Pitaya::Core::LoadBuildInRC(IDR_ERROR_TEXTURE).data()),
 					32, 32, 4, false, false, true);
-				FallbackShader = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+				FallbackShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					Pitaya::Core::LoadBuildInRC(IDR_ERROR_VERTEX_SHADER).c_str(),
 					Pitaya::Core::LoadBuildInRC(IDR_ERROR_FRAGMENT_SHADER).c_str());
 
@@ -182,28 +173,10 @@ namespace Pitaya::Render
 				Pitaya::GPU::FrameBufferSpecification mainSceneSpec = Pitaya::Config::GetMainSceneSpec();
 				Pitaya::GPU::FrameBufferSpecification mainPingPongSpec = Pitaya::Config::GetMainPingPongSpec();
 				Pitaya::GPU::FrameBufferSpecification mainFinalSpec = Pitaya::Config::GetMainFinalSpec();
-				Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> mainSceneGPUIdentifier = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainSceneSpec);
-				Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> mainPingPongGPUIdentifier[2] = { 
-					Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainPingPongSpec),
-					Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainPingPongSpec) };
-				Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> mainFinalGPUIdentifier = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainFinalSpec);
-				Pitaya::GPU::FrameBuffer* sceneFrambuffer = Pitaya::GPU::GetFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainSceneGPUIdentifier);
-				Pitaya::GPU::FrameBuffer* pingPongFrambuffer[2] = { Pitaya::GPU::GetFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainPingPongGPUIdentifier[0]), Pitaya::GPU::GetFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainPingPongGPUIdentifier[1]) };
-				Pitaya::GPU::FrameBuffer* finalFrambuffer = Pitaya::GPU::GetFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainFinalGPUIdentifier);
-				if (!sceneFrambuffer || !pingPongFrambuffer[0] || !pingPongFrambuffer[1] || !finalFrambuffer)
-				{
-					MessageBoxA(NULL, "Create Global RHI Failed! Check Log for Details.", "Error", MB_OK);
-					exit(-1);
-				}
-				MainSceneFrameBuffer = mainSceneGPUIdentifier;
-				MainSceneInternalFrameBuffer = sceneFrambuffer->GetInternalGPUIdentifier();
-				MainSceneColorAttachment = sceneFrambuffer->GetColorAttachmentGPUIdentifier();
-				MainPingPongFrameBuffers[0] = mainPingPongGPUIdentifier[0];
-				MainPingPongColorAttachments[0] = pingPongFrambuffer[0]->GetColorAttachmentGPUIdentifier();
-				MainPingPongFrameBuffers[1] = mainPingPongGPUIdentifier[1];
-				MainPingPongColorAttachments[1] = pingPongFrambuffer[1]->GetColorAttachmentGPUIdentifier();
-				MainFinalFrameBuffer = mainFinalGPUIdentifier;
-				MainFinalColorAttachment = finalFrambuffer->GetColorAttachmentGPUIdentifier();
+				MainSceneFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainSceneSpec);
+				MainPingPongFrameBufferHandles[0] = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainPingPongSpec);
+				MainPingPongFrameBufferHandles[1] = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainPingPongSpec);
+				MainFinalFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainFinalSpec);
 			}
 		};
 		class RenderPacket
@@ -381,13 +354,14 @@ namespace Pitaya::Render
 						{
 							const auto& cmd = currentPass[idx];
 							bool canBatch = isBatching &&
-								cmd.VertexArray == currentBatch.VertexArray &&
+								cmd.VertexArrayHandle == currentBatch.VertexArrayHandle &&
 								cmd.BaseIndex == currentBatch.BaseIndex &&
 								cmd.BaseVertex == currentBatch.BaseVertex &&
 								cmd.IndexCount == currentBatch.IndexCount &&
 								cmd.MaterialId == currentBatch.MaterialId &&
 								cmd.DepthTest == currentBatch.DepthTest &&
-								cmd.Blend == currentBatch.Blend;
+								cmd.Blend == currentBatch.Blend && 
+								cmd.CullFace == currentBatch.CullFace;
 
 							if (!canBatch)
 							{
@@ -395,17 +369,18 @@ namespace Pitaya::Render
 								isBatching = true;
 
 								// 复制状态
-								currentBatch.VertexArray = cmd.VertexArray;
+								currentBatch.VertexArrayHandle = cmd.VertexArrayHandle;
 								currentBatch.MaterialId = cmd.MaterialId;
 								currentBatch.IndexCount = cmd.IndexCount;
 								currentBatch.BaseIndex = cmd.BaseIndex;
 								currentBatch.BaseVertex = cmd.BaseVertex;
 								currentBatch.DepthTest = cmd.DepthTest;
 								currentBatch.Blend = cmd.Blend;
-								currentBatch.Shader = cmd.Shader;
+								currentBatch.CullFace = cmd.CullFace;
+								currentBatch.ShaderHandle = cmd.ShaderHandle;
 								for (uint32_t i = 0; i < static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Unknown); i++)
 								{
-									currentBatch.Textures[i] = cmd.Textures[i];
+									currentBatch.TextureHandles[i] = cmd.TextureHandles[i];
 								}
 
 								currentBatch.InstanceCount = 0;
@@ -499,9 +474,7 @@ namespace Pitaya::Render
 		{
 			InitializeRenderContext(nativeWindow);
 			globalRHI.Create();
-			INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(
-				Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), 
-				globalRHI.MainFinalColorAttachment)
+			INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), globalRHI.MainFinalFrameBufferHandle)
 
 			while (true)
 			{
@@ -546,7 +519,7 @@ namespace Pitaya::Render
 			beginPassCommand.CameraSnapshot = pass.CameraSnapshot;
 			if (pass.RenderTarget)
 			{
-				beginPassCommand.SceneFrameBuffer = pass.RenderTarget->SceneFrameBuffer;
+				beginPassCommand.SceneFrameBufferHandle = pass.RenderTarget->SceneFrameBufferHandle;
 				beginPassCommand.ClearColor = pass.RenderTarget->ClearColor;
 				beginPassCommand.Rect = { {0.0f, 0.0f}, { pass.RenderTarget->SceneFrameBufferSpecification.Width, pass.RenderTarget->SceneFrameBufferSpecification.Height } };
 				beginPassCommand.ClearDepth = pass.RenderTarget->ClearDepth;
@@ -555,7 +528,7 @@ namespace Pitaya::Render
 			else
 			{
 				Pitaya::GPU::FrameBufferSpecification mainSceneSpec = Pitaya::Config::GetMainSceneSpec();
-				beginPassCommand.SceneFrameBuffer = globalRHI.MainSceneFrameBuffer;
+				beginPassCommand.SceneFrameBufferHandle = globalRHI.MainSceneFrameBufferHandle;
 				beginPassCommand.ClearColor = Pitaya::Core::Color::SkyBlue;
 				beginPassCommand.Rect = { {0.0f, 0.0f}, { mainSceneSpec.Width, mainSceneSpec.Height } };
 				beginPassCommand.ClearDepth = true;
@@ -571,10 +544,10 @@ namespace Pitaya::Render
 
 			Pitaya::Render::DrawCommand cmd;
 			cmd.ModelMatrix = item.Model;
-			if (mesh && mesh->VertexArray != Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray>::Invalid && 
+			if (mesh && mesh->VertexArrayHandle != Pitaya::Core::SlotMap<Pitaya::GPU::VertexArray>::Handle::Invalid &&
 				submeshIndex < mesh->SubMeshs.size())
 			{
-				cmd.VertexArray = mesh->VertexArray;
+				cmd.VertexArrayHandle = mesh->VertexArrayHandle;
 				cmd.IndexCount = mesh->SubMeshs[submeshIndex].IndexCount;
 				cmd.BaseIndex = mesh->SubMeshs[submeshIndex].BaseIndex;
 				cmd.BaseVertex = mesh->SubMeshs[submeshIndex].BaseVertex;
@@ -583,7 +556,7 @@ namespace Pitaya::Render
 			else
 			{
 				//Mesh 异常 → fallback 立方体
-				cmd.VertexArray = globalRHI.FallbackVAO;
+				cmd.VertexArrayHandle = globalRHI.FallbackVAOHandle;
 				cmd.IndexCount = 36;
 				cmd.BaseIndex = 0;
 				cmd.BaseVertex = 0;
@@ -591,16 +564,19 @@ namespace Pitaya::Render
 			}
 
 			if (material && material->Shader.IsReady() && 
-				material->Shader->ID != Pitaya::GPU::Identifier<Pitaya::GPU::Shader>::Invalid)
+				material->Shader->ShaderHandle != Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle::Invalid)
 			{
-				cmd.Shader = material->Shader->ID;
+				cmd.ShaderHandle = material->Shader->ShaderHandle;
 				cmd.MaterialId = material->SortId;
-				cmd.SortKey = Pitaya::Render::GenerateSortKey(
+				cmd.DepthTest = material->DepthTest;
+				cmd.Blend = material->Blend;
+				cmd.CullFace = material->CullFace;
+				cmd.SortKey = Pitaya::Render::GenerateSortKey(	//TODO 生成SortKey的逻辑要变一下了，因为Handle不能在主线程直接访问Index
 					material->RenderQueue,
 					material->DrawOrder,
-					cmd.Shader,
+					cmd.ShaderHandle.AsUint64(),
 					cmd.MaterialId,
-					(cmd.VertexArray << 8) + submeshIndex,
+					(cmd.VertexArrayHandle.AsUint64() << 8) + submeshIndex,
 					0);
 
 				//纹理绑定
@@ -612,32 +588,35 @@ namespace Pitaya::Render
 					//纹理就绪
 					if (material->Textures[j].IsReady() && 
 						material->Textures[j]->Type == Pitaya::GPU::TextureType::Texture2D && 
-						material->Textures[j]->Id.template As<Pitaya::GPU::Texture2D>() != Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D>::Invalid)
+						material->Textures[j]->Texture2DHandle != Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle::Invalid)
 					{
-						cmd.Textures[j] = material->Textures[j]->Id.template As<Pitaya::GPU::Texture2D>();
+						cmd.TextureHandles[j] = material->Textures[j]->Texture2DHandle;
 					}
 					else
 					{
 						//纹理未就绪
-						cmd.Textures[j] = globalRHI.FallbackTexture;
+						cmd.TextureHandles[j] = globalRHI.FallbackTextureHandle;
 					}
 				}
 			}
 			else
 			{
 				//Material/Shader 异常 → fallback shader + texture
-				cmd.Shader = globalRHI.FallbackShader;
+				cmd.ShaderHandle = globalRHI.FallbackShaderHandle;
 				cmd.MaterialId = 0;
+				cmd.DepthTest = true;
+				cmd.Blend = false;
+				cmd.CullFace = true;
 				cmd.SortKey = Pitaya::Render::GenerateSortKey(
 					Pitaya::Render::RenderQueue::Geometry,
 					0,
-					cmd.Shader,
+					cmd.ShaderHandle.AsUint64(),
 					0,
-					(cmd.VertexArray << 8) + submeshIndex,
+					(cmd.VertexArrayHandle.AsUint64() << 8) + submeshIndex,
 					0);
 
 				//异常Shader只会使用这一个纹理
-				cmd.Textures[static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Albedo)] = globalRHI.FallbackTexture;
+				cmd.TextureHandles[static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Albedo)] = globalRHI.FallbackTextureHandle;
 			}
 
 			renderPacket.PushDrawCommandToPass(cmd);
@@ -650,75 +629,76 @@ namespace Pitaya::Render
 		{
 			bool firstPass = true;
 			uint32_t pingpongIndex = 0;
-			uint32_t currentReadTexture = pass.RenderTarget ? pass.RenderTarget->SceneColorAttachment : globalRHI.MainSceneColorAttachment; //如果是多采样 这里得到的实际是内部的颜色纹理
 
 			auto mainSceneSpec = Pitaya::Config::GetMainSceneSpec();
+			auto sceneFboHandle = pass.RenderTarget ? pass.RenderTarget->SceneFrameBufferHandle : globalRHI.MainSceneFrameBufferHandle;
+			auto finalFboHandle = pass.RenderTarget ? pass.RenderTarget->FinalFrameBufferHandle : globalRHI.MainFinalFrameBufferHandle;
 			auto isMultisample = pass.RenderTarget ? pass.RenderTarget->SceneFrameBufferSpecification.Samples > 1 : mainSceneSpec.Samples > 1;
-			auto sceneFrameBuffer = pass.RenderTarget ? pass.RenderTarget->SceneFrameBuffer : globalRHI.MainSceneFrameBuffer;
-			auto sceneInternalFrameBuffer = pass.RenderTarget ? pass.RenderTarget->SceneInternalFrameBuffer : globalRHI.MainSceneInternalFrameBuffer;
-			auto sceneColorAttachment = pass.RenderTarget ? pass.RenderTarget->SceneColorAttachment : globalRHI.MainSceneColorAttachment;
-			auto finalFrameBuffer = pass.RenderTarget ? pass.RenderTarget->FinalFrameBuffer : globalRHI.MainFinalFrameBuffer;
-			auto size = pass.RenderTarget ? glm::ivec2(pass.RenderTarget->SceneFrameBufferSpecification.Width, pass.RenderTarget->SceneFrameBufferSpecification.Height) :
-				glm::ivec2(mainSceneSpec.Width, mainSceneSpec.Height);
+			auto size = pass.RenderTarget ? glm::uvec2(pass.RenderTarget->SceneFrameBufferSpecification.Width, pass.RenderTarget->SceneFrameBufferSpecification.Height) :
+				glm::uvec2(mainSceneSpec.Width, mainSceneSpec.Height);
+			auto currentReadFBOHandle = sceneFboHandle;
 
+			// 迭代处理后处理步骤 Ping-Pong 
 			for (uint32_t i = 0; i < pass.PostProcessSetting.StepCount; i++)
 			{
 				auto& currentStep = pass.PostProcessSetting.Steps[i];
-				auto pingPongFrameBuffers = pass.RenderTarget ? pass.RenderTarget->PingPongFrameBuffers[pingpongIndex] : globalRHI.MainPingPongFrameBuffers[pingpongIndex];
-				auto pingPongColorAttachments = pass.RenderTarget ? pass.RenderTarget->PingPongColorAttachments[pingpongIndex] : globalRHI.MainPingPongColorAttachments[pingpongIndex];
-				
+				auto targetPingPongFboHandle = pass.RenderTarget ? pass.RenderTarget->PingPongFrameBufferHandles[pingpongIndex] : globalRHI.MainPingPongFrameBufferHandles[pingpongIndex];
+
 				PostProcessCommand cmd;
 				cmd.PostProcessStep = currentStep;
 				switch (currentStep.Type)
 				{
 					case Pitaya::Render::PostProcessType::Bilt:
-						cmd.ProcessShader = globalRHI.BlitShader;
+						cmd.ProcessShaderHandle = globalRHI.BlitShaderHandle;
 						break;
 
 					case Pitaya::Render::PostProcessType::GammaCorrection:
-						cmd.ProcessShader = globalRHI.GammaCorrectionShader;
+						cmd.ProcessShaderHandle = globalRHI.GammaCorrectionShaderHandle;
 						break;
 
 					case Pitaya::Render::PostProcessType::Unknown:
 					default:
-						cmd.ProcessShader = globalRHI.BlitShader;	// 防止Ping-Pong链截断
+						cmd.ProcessShaderHandle = globalRHI.BlitShaderHandle;
 						break;
 				}
+
+				// 处理 MSAA 解析逻辑
 				if (firstPass && isMultisample)
 				{
 					cmd.ResolveMSAA = true;
-					cmd.ResolveReadFrameBuffer = sceneFrameBuffer;
-					cmd.ResolveWriteFrameBuffer = sceneInternalFrameBuffer;
 					cmd.ResolveSize = size;
+					cmd.ResolveFrameBufferHandle = currentReadFBOHandle;
 				}
 
-				cmd.ReadTexture = currentReadTexture;
-				cmd.WriteFrameBuffer = (i == pass.PostProcessSetting.StepCount - 1) ? finalFrameBuffer : pingPongFrameBuffers;
-				currentReadTexture = pingPongColorAttachments;
+				cmd.ReadFrameBufferHandle = currentReadFBOHandle;
+				cmd.WriteFrameBufferHandle = (i == pass.PostProcessSetting.StepCount - 1) ? finalFboHandle : targetPingPongFboHandle;
+				renderPacket.PushCommand(cmd);
+
+				// 更新状态流
+				currentReadFBOHandle = cmd.WriteFrameBufferHandle;
 				pingpongIndex = 1 - pingpongIndex;
 				firstPass = false;
 
-				renderPacket.PushCommand(cmd);
-				Pitaya::Core::Print(Pitaya::Core::Color::Purple, "Post Process: %s", Pitaya::Render::ToString(currentStep.Type).data());
+				Pitaya::Core::Print(Pitaya::Core::Color::Purple, "Post Process Submitted: %s", Pitaya::Render::ToString(currentStep.Type).data());
 			}
 
-			//没有后处理则直接Scene帧缓冲区 Blit到 Final帧缓冲区
+			// Bypass 若无后处理 则直接将源 FBO Blit 到最终 FBO
 			if (firstPass)
 			{
 				PostProcessCommand cmd;
-				cmd.ProcessShader = globalRHI.BlitShader;
-				cmd.ReadTexture = sceneColorAttachment;
-				cmd.WriteFrameBuffer = finalFrameBuffer;
+				cmd.ProcessShaderHandle = globalRHI.BlitShaderHandle;
+				cmd.ReadFrameBufferHandle = currentReadFBOHandle;
+				cmd.WriteFrameBufferHandle = finalFboHandle;
+
 				if (isMultisample)
 				{
 					cmd.ResolveMSAA = true;
-					cmd.ResolveReadFrameBuffer = sceneFrameBuffer;
-					cmd.ResolveWriteFrameBuffer = sceneInternalFrameBuffer;
 					cmd.ResolveSize = size;
+					cmd.ResolveFrameBufferHandle = currentReadFBOHandle;
 				}
 
 				renderPacket.PushCommand(cmd);
-				Pitaya::Core::Print(Pitaya::Core::Color::Purple, "Post Process Resolve To Final (Bypass)");
+				Pitaya::Core::Print(Pitaya::Core::Color::Purple, "Post Process: Bypass - Direct Blit to Final (Resolve: %s)", isMultisample ? "True" : "False");
 			}
 		}
 		inline void SubmitLight(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>, LightInfo& light)

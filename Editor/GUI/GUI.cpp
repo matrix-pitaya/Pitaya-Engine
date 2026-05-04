@@ -5,6 +5,7 @@
 #include<Editor/GUI/IconFontCppHeaders/IconsFontAwesome6.h>
 #include<Editor/StateMachine/StateMachine.h>
 #include<Editor/Editor.h>
+#include<GPU/Common/FuncTable.h>
 #include<Log/Common/FuncTable.h>
 #include<Core/Color/Color.h>
 #include<Core/Utils/Memory.h>
@@ -165,7 +166,7 @@ bool Pitaya::Editor::GUI::Initialize_Main(void* nativeWindow)
 	while (!isRenderReady.load(std::memory_order_acquire)){ std::this_thread::yield(); }
 	return drawer.Initialize(nativeWindow);
 }
-bool Pitaya::Editor::GUI::Initialize_Render(uint64_t gameRT, uint64_t editorRT)
+bool Pitaya::Editor::GUI::Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle gameRtHandle, Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle editorRtHandle)
 {
 	ImGuiContext* context = nullptr;
 	while (!(context = imGuiContext.load(std::memory_order_acquire))) { std::this_thread::yield(); }
@@ -174,8 +175,13 @@ bool Pitaya::Editor::GUI::Initialize_Render(uint64_t gameRT, uint64_t editorRT)
 	ImGui_ImplOpenGL3_Init("#version 130");
 	ImGui_ImplOpenGL3_CreateDeviceObjects();
 #endif
-	panels.gameViewportPanel.textureId = reinterpret_cast<void*>(gameRT);
-	panels.sceneViewportPanel.textureId = reinterpret_cast<void*>(editorRT);
+	Pitaya::GPU::FrameBuffer gameRtFrambuffer;
+	Pitaya::GPU::FrameBuffer editorRtFrambuffer;
+	if (!Pitaya::GPU::GetFrameBuffer(passkey, gameRtHandle, gameRtFrambuffer) || 
+		!Pitaya::GPU::GetFrameBuffer(passkey, editorRtHandle, editorRtFrambuffer))
+	{ return false; }
+	panels.gameViewportPanel.textureId = reinterpret_cast<void*>(static_cast<uint64_t>(gameRtFrambuffer.ColorAttachmentId));
+	panels.sceneViewportPanel.textureId = reinterpret_cast<void*>(static_cast<uint64_t>(editorRtFrambuffer.ColorAttachmentId));
 	isRenderReady.store(true, std::memory_order_release);
 	return true;
 }
@@ -627,26 +633,6 @@ void Pitaya::Editor::GUI::EndFrame()
 void Pitaya::Editor::GUI::Drawer::Draw(Pitaya::Core::PassKey<Editor>)
 {
 #if defined(PITAYA_USE_OPENGL)
-#if PITAYA_VERSION >= 100
-	//[VERSION >= 100] 通过预处理实现Hanlde映射Texture
-	//[VERSION  < 100] 通过修改ImGui_ImplOpenGL3_RenderDrawData源码实现Hanlde映射Texture
-	//for (uint32_t i = 0; i < buffer[backBufferIndex].CmdListsCount; i++)
-	//{
-	//	ImDrawList* cmdList = buffer[backBufferIndex].CmdLists[i];
-	//	for (uint32_t j = 0; j < cmdList->CmdBuffer.Size; j++)
-	//	{
-	//		ImDrawCmd* pcmd = &cmdList->CmdBuffer[j];
-	//		if ((pcmd->UserCallback != nullptr) || (pcmd->TexRef._TexData != nullptr) ||
-	//			(pcmd->TexRef._TexID == 0)) {
-	//			continue;
-	//		}
-
-	//		uint32_t handleId = (uint32_t)(intptr_t)pcmd->TexRef._TexID;
-	//		GLuint realGLTextureID = handleId; // TODO Hanle映射真实textureid
-	//		pcmd->TexRef._TexID = (ImTextureID)(intptr_t)realGLTextureID;
-	//	}
-	//}
-#endif
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, size[backBufferIndex].x, size[backBufferIndex].y);
 	glClearColor(Pitaya::Core::Color::Dark.r, Pitaya::Core::Color::Dark.g, Pitaya::Core::Color::Dark.b, Pitaya::Core::Color::Dark.a);

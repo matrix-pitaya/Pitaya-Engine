@@ -2,6 +2,7 @@
 
 #include<Core/Math/AABB.h>
 #include<Core/Identifier/GUID.h>
+#include<Core/Container/SlotMap.h>
 #include<GPU/Common/Identifier.h>
 #include<GPU/Common/MeshType.h>
 #include<Asset/Common/Material.h>
@@ -22,7 +23,7 @@ namespace Pitaya::Asset
 			Pitaya::Core::AABB BoundingBox;
 		};
 
-		Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> VertexArray = 0;
+		Pitaya::Core::SlotMap<Pitaya::GPU::VertexArray>::Handle VertexArrayHandle;
 		std::vector<SubMesh> SubMeshs;
 		Pitaya::Core::AABB BoundingBox;
 
