@@ -3,6 +3,7 @@
 #include<Core/Camera/CameraType.h>
 #include<Core/Camera/CameraSnapshot.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include<gtx/euler_angles.hpp>
 
 namespace Pitaya::Core

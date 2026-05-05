@@ -4,7 +4,7 @@
 #include<Core/Allocate/Allocate.h>
 #include<Hook/def.h>
 
-#if defined(PITAYA_USE_BULLET)
+#if defined(PITAYA_PHYSICS_BULLET)
 #include<btBulletDynamicsCommon.h>
 #include<BulletCollision/CollisionDispatch/btCollisionDispatcherMt.h>
 #include<BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolverMt.h>

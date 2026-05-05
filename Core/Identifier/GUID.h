@@ -4,8 +4,10 @@
 #include<cstdint>
 #include<stdexcept>
 
+#if defined(PITAYA_PLATFORM_WINDOWS)
 #define NOMINMAX
 #include<objbase.h>
+#endif
 
 namespace Pitaya::Core
 {
@@ -16,9 +18,9 @@ namespace Pitaya::Core
 		{
 			constexpr auto HexToByte = [](char c) constexpr -> std::byte
 				{
-					if (c >= '0' && c <= '9') return static_cast<std::byte>(c - '0');
-					if (c >= 'a' && c <= 'f') return static_cast<std::byte>(c - 'a' + 10);
-					if (c >= 'A' && c <= 'F') return static_cast<std::byte>(c - 'A' + 10);
+					if (c >= '0' && c <= '9') { return static_cast<std::byte>(c - '0'); }
+					if (c >= 'a' && c <= 'f') { return static_cast<std::byte>(c - 'a' + 10); }
+					if (c >= 'A' && c <= 'F') { return static_cast<std::byte>(c - 'A' + 10); }
 					return static_cast<std::byte>(0);
 				};
 
@@ -101,12 +103,14 @@ namespace Pitaya::Core
 	public:
 		inline static GUID New()
 		{
-			::GUID winGuid;
 			Pitaya::Core::GUID result;
+#if defined(PITAYA_PLATFORM_WINDOWS)
+			::GUID winGuid;
 			if (::CoCreateGuid(&winGuid) == S_OK)
 			{
 				std::memcpy(&result, &winGuid, sizeof(GUID));
 			}
+#endif
 			return result;
 		}
 

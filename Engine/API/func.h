@@ -4,6 +4,6 @@
 
 namespace Pitaya::Engine
 {
-	extern "C" ENGINE_API int ENGINE_CALL Execute();
+	extern "C" ENGINE_API int ENGINE_CALL Execute(int argc, char** argv);
 	extern "C" ENGINE_API void ENGINE_CALL Terminate();
 }

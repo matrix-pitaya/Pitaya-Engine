@@ -3,8 +3,10 @@
 #include<thread>
 #include<chrono>
 
+#if defined(PITAYA_PLATFORM_WINDOWS)
 #define NOMINMAX
 #include<windows.h>
+#endif
 
 namespace Pitaya::Core
 {
@@ -85,7 +87,7 @@ namespace Pitaya::Core
         inline bool JoinWaitForMilliseconds(std::chrono::milliseconds timeout) noexcept
         {
             if (!thread.joinable()) { return true; }
-
+#if defined(PITAYA_PLATFORM_WINDOWS)
             const auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count();
             const DWORD dw_ms = static_cast<DWORD>(ms < 0 ? 0 : ms);
             const HANDLE hThread = static_cast<HANDLE>(thread.native_handle());
@@ -100,6 +102,7 @@ namespace Pitaya::Core
             ::TerminateThread(hThread, 0xFFFFFFFF);
             thread.join();
             return false;
+#endif
         }
         inline void Detach() noexcept
         {
@@ -112,17 +115,21 @@ namespace Pitaya::Core
         inline bool IsRunning() noexcept
         {
             if (!thread.joinable()) { return false; }
+#if defined(PITAYA_PLATFORM_WINDOWS)
             const HANDLE hThread = static_cast<HANDLE>(thread.native_handle());
             DWORD exitCode = 0;
             return GetExitCodeThread(hThread, &exitCode) && (exitCode == STILL_ACTIVE);
+#endif
         }
         inline Identifier GetThreadId() noexcept
         {
             return thread.joinable() ?
-                static_cast<uint64_t>(::GetThreadId(static_cast<HANDLE>(thread.native_handle()))) :
-                0;
+#if defined(PITAYA_PLATFORM_WINDOWS)
+                static_cast<uint64_t>(::GetThreadId(static_cast<HANDLE>(thread.native_handle()))) 
+#endif
+                : 0;
         }
-        inline std::thread::native_handle_type GetNativeHandle() noexcept
+        inline auto GetNativeHandle() noexcept
         {
             return thread.native_handle();
         }
@@ -130,7 +137,9 @@ namespace Pitaya::Core
     public:
         inline static Identifier GetCurrentThreadId() noexcept
         {
+#if defined(PITAYA_PLATFORM_WINDOWS)
             return static_cast<uint64_t>(::GetCurrentThreadId());
+#endif
         }
 
     private:

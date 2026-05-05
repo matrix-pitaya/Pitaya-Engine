@@ -52,7 +52,7 @@ namespace Pitaya::Config
 		{
 			//Engine
 			std::string Name = "Pitaya";
-			std::string Version = "1.0.0";
+			std::string Version = PITAYA_VERSION;
 
 			//Physics
 			Pitaya::Physics::API PhysicsAPI = Pitaya::Physics::API::Bullet;

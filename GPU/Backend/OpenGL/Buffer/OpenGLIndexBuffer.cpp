@@ -1,8 +1,7 @@
 #include<GPU/Frontend/Buffer/IndexBuffer.h>
 
-#if defined(PITAYA_USE_OPENGL)
+#if defined(PITAYA_GRAPHICS_OPENGL)
 #include<GL/glew.h>
-#include<GLFW/glfw3.h>
 
 Pitaya::GPU::IndexBuffer Pitaya::GPU::IndexBuffer::Factory::Create(uint32_t* indices, uint32_t count)
 {

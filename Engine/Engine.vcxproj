@@ -111,7 +111,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_OPENGL;PITAYA_USE_GLFW;PITAYA_USE_BULLET;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_DLL_BUILD;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\mimalloc\include\;$(SolutionDir)thirdparty\eastl\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\Mono\include\mono-2.0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -119,6 +119,8 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>$(SolutionDir)Engine\stdafx.h;$(SolutionDir)Engine\Build-Options.h;$(SolutionDir)Engine\API\def.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -158,14 +160,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_OPENGL;PITAYA_USE_GLFW;PITAYA_USE_BULLET;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_PROJECT_ENGINE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\mimalloc\include\;$(SolutionDir)thirdparty\eastl\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\Mono\include\mono-2.0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\entt\;$(SolutionDir)thirdparty\mimalloc\include\;$(SolutionDir)thirdparty\eastl\include\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\bullet\include\;$(SolutionDir)thirdparty\Mono\include\mono-2.0\;$(ProjectDir)PCH;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename).obj</ObjectFileName>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>$(SolutionDir)Engine\Build-Options.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -184,6 +188,8 @@
     <ClInclude Include="API\func.h" />
     <ClInclude Include="API\def.h" />
     <ClInclude Include="Common\Lifecycle.h" />
+    <ClInclude Include="Config\def.h" />
+    <ClInclude Include="Build-Options.h" />
     <ClInclude Include="Runtime\Context\APIdef.h" />
     <ClInclude Include="Config\Config.h" />
     <ClInclude Include="Engine.h" />

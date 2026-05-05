@@ -125,7 +125,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_PLATFORM_WINDOWS;PITAYA_GRAPHICS_OPENGL;PITAYA_WINDOW_GLFW;PITAYA_PHYSICS_BULLET;PITAYA_DLL_BUILD</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)thirdparty\mimalloc\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -176,7 +176,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_PROJECT_APPLICATION</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)thirdparty\mimalloc\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -184,6 +184,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>$(SolutionDir)Engine\Build-Options.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -201,6 +202,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Built-in.h" />
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

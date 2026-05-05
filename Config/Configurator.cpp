@@ -19,13 +19,13 @@ void Pitaya::Config::Configurator::Release()
 }
 bool Pitaya::Config::Configurator::Import()
 {
-	const std::filesystem::path path = std::filesystem::path(Pitaya::Core::GetWorkspace()) / fileName;
+	const std::filesystem::path path = Pitaya::Core::GetWorkspace() / fileName;
 	if (!std::filesystem::exists(path)) { return false; }
 	return info.DeserializeFromFile(path, Pitaya::Serialize::API::YAML);
 }
 bool Pitaya::Config::Configurator::Export()
 {
-	const std::filesystem::path path = std::filesystem::path(Pitaya::Core::GetWorkspace()) / fileName;
+	const std::filesystem::path path = Pitaya::Core::GetWorkspace() / fileName;
 	return info.SerializeToFile(path, Pitaya::Serialize::API::YAML);
 }
 void Pitaya::Config::Configurator::OnWindowFramebufferResetSize(const Pitaya::Event::Event& event)

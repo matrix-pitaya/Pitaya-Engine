@@ -1,8 +1,7 @@
 #include<GPU/Frontend/Texture/Texture2D.h>
 
-#if defined(PITAYA_USE_OPENGL)
+#if defined(PITAYA_GRAPHICS_OPENGL)
 #include<GL/glew.h>
-#include<GLFW/glfw3.h>
 
 Pitaya::GPU::Texture2D Pitaya::GPU::Texture2D::Factory::Create(unsigned char* data, int width, int height, int channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
 {

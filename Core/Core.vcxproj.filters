@@ -120,13 +120,16 @@
     <ClInclude Include="Utils\Math.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\BuildInRC.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Storage\Storage.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Layout\def.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\System.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PCH\stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

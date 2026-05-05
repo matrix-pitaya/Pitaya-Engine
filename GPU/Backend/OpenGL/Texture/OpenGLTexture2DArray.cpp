@@ -1,6 +1,6 @@
 #include<GPU/Frontend/Texture/Texture2DArray.h>
 
-#if defined(PITAYA_USE_OPENGL)
+#if defined(PITAYA_GRAPHICS_OPENGL)
 #include<GL/glew.h>
 
 Pitaya::GPU::Texture2DArray Pitaya::GPU::Texture2DArray::Factory::Create(int width, int height, int layers, bool isDepth)

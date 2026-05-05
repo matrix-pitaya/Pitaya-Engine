@@ -94,7 +94,7 @@ void Pitaya::Editor::ProfilerPanel::OnImGuiRender()
     if (ImGui::CollapsingHeader("System", ImGuiTreeNodeFlags_DefaultOpen))
     {
         ImGui::Text("Hardware: Pitaya Engine Core");
-        ImGui::Text("Pitaya Version: %d.%d.%d", PITAYA_VERSION / 100, (PITAYA_VERSION / 10) % 10, PITAYA_VERSION % 10);
+        ImGui::Text("Pitaya Version: %s", PITAYA_VERSION);
         ImGui::Text("ImGui Version: %s", IMGUI_VERSION);
     }
 }

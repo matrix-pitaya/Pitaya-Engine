@@ -1,9 +1,9 @@
 #include<GPU/Frontend/Buffer/VertexBuffer.h>
 #include<cstdint>
 
-#if defined(PITAYA_USE_OPENGL)
+#if defined(PITAYA_GRAPHICS_OPENGL)
 #include<GL/glew.h>
-#include<GLFW/glfw3.h>
+
 
 Pitaya::GPU::VertexBuffer Pitaya::GPU::VertexBuffer::Factory::Create(float* vertices, uint32_t size, BufferLayout layout)
 {

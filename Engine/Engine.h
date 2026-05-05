@@ -65,7 +65,7 @@ namespace Pitaya::Engine
 		Engine& operator=(Engine&&) = delete;
 
 	public:
-		int Execute();
+		int Execute(int argc, char** argv);
 		void Terminate();
 
 	private:

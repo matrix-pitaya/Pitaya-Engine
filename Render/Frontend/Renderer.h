@@ -5,7 +5,7 @@
 #include<Core/Camera/CameraSnapshot.h>
 #include<Core/Asset/Asset.h>
 #include<Core/Utils/Console.h>
-#include<Core/Utils/BuildInRC.h>
+#include<Core/Utils/System.h>
 #include<Hook/def.h>
 #include<Thread/Common/FuncTable.h>
 #include<Log/Common/FuncTable.h>
@@ -38,7 +38,7 @@
 #include<Asset/Common/Material.h>
 #include<Asset/Common/RenderTarget.h>
 
-#include<Application/resource.h>
+#include<Application/Built-in.h>
 
 #include<algorithm>
 #include<atomic>
@@ -142,15 +142,15 @@ namespace Pitaya::Render
 					LightSSBOCapacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::SceneLights));
 
 				BlitShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-					Pitaya::Core::LoadBuildInRC(IDR_BLIT_VERTEX_SHADER).c_str(),
-					Pitaya::Core::LoadBuildInRC(IDR_BLIT_FRAGMENT_SHADER).c_str());
+					Pitaya::Core::LoadBuiltInRC(IDR_BLIT_VERTEX_SHADER).c_str(),
+					Pitaya::Core::LoadBuiltInRC(IDR_BLIT_FRAGMENT_SHADER).c_str());
 				GammaCorrectionShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-					Pitaya::Core::LoadBuildInRC(IDR_GAMMA_CORRECTION_VERTEX_SHADER).c_str(),
-					Pitaya::Core::LoadBuildInRC(IDR_GAMMA_CORRECTION_FRAGMENT_SHADER).c_str());
+					Pitaya::Core::LoadBuiltInRC(IDR_GAMMA_CORRECTION_VERTEX_SHADER).c_str(),
+					Pitaya::Core::LoadBuiltInRC(IDR_GAMMA_CORRECTION_FRAGMENT_SHADER).c_str());
 
 				FallbackVAOHandle = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
-				std::string fallbackVboData = Pitaya::Core::LoadBuildInRC(IDR_ERROR_VERTICES);
-				std::string fallbackIboData = Pitaya::Core::LoadBuildInRC(IDR_ERROR_INDICES);
+				std::string fallbackVboData = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_VERTICES);
+				std::string fallbackIboData = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_INDICES);
 				auto fallbackVBOHandle = Pitaya::GPU::CreateVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					reinterpret_cast<float*>(fallbackVboData.data()), fallbackVboData.size(), { { Pitaya::GPU::ShaderVariableType::Float3, 0 } });
 				auto fallbackIBOHandle = Pitaya::GPU::CreateIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
@@ -158,16 +158,16 @@ namespace Pitaya::Render
 				if (!Pitaya::GPU::LinkVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), 
 					FallbackVAOHandle, fallbackVBOHandle, fallbackIBOHandle))
 				{
-					MessageBoxA(NULL, "Create Global RHI Failed! Check Log for Details.", "Error", MB_OK);
-					exit(-1);
+					Pitaya::Core::PopMessageBox("Error", "Create Global RHI Failed! Check Log for Details.");
+					Pitaya::Core::Terminate(-1);
 				}
 				
 				FallbackTextureHandle = Pitaya::GPU::CreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-					reinterpret_cast<unsigned char*>(Pitaya::Core::LoadBuildInRC(IDR_ERROR_TEXTURE).data()),
+					reinterpret_cast<unsigned char*>(Pitaya::Core::LoadBuiltInRC(IDR_ERROR_TEXTURE).data()),
 					32, 32, 4, false, false, true);
 				FallbackShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-					Pitaya::Core::LoadBuildInRC(IDR_ERROR_VERTEX_SHADER).c_str(),
-					Pitaya::Core::LoadBuildInRC(IDR_ERROR_FRAGMENT_SHADER).c_str());
+					Pitaya::Core::LoadBuiltInRC(IDR_ERROR_VERTEX_SHADER).c_str(),
+					Pitaya::Core::LoadBuiltInRC(IDR_ERROR_FRAGMENT_SHADER).c_str());
 
 				//MainRT
 				Pitaya::GPU::FrameBufferSpecification mainSceneSpec = Pitaya::Config::GetMainSceneSpec();
@@ -315,7 +315,7 @@ namespace Pitaya::Render
 			{
 				return !back.CommandBuffer.empty();
 			}
-			inline void PushDrawCommandToPass(Pitaya::Render::DrawCommand& cmd)
+			inline void PushDrawCommandToPass(DrawCommand&& cmd)
 			{
 				if (cmd.BoneInverseMatrices.empty())
 				{
@@ -328,13 +328,14 @@ namespace Pitaya::Render
 			}
 			inline void CompilePass()
 			{
-				uint32_t beforeSize = skinnedPass.size() + staticPass.size();
-				if (beforeSize == 0) { return; }
-				uint32_t debug_drawtimes = 0;
+				uint32_t beforeBatch = skinnedPass.size() + staticPass.size();
+				if (beforeBatch == 0) { return; }
+
 				// 处理命令队列
-				auto ProcessQueue = [&](std::vector<Pitaya::Render::DrawCommand>& currentPass, bool isSkinnedBatch)
+				auto ProcessQueue = 
+					[this](std::vector<DrawCommand>& currentPass, bool isSkinnedBatch) -> uint32_t
 					{
-						if (currentPass.empty()) { return; }
+						if (currentPass.empty()) { return 0; }
 
 						// 通过索引间接排序DrawcallCommand
 						static std::vector<uint32_t> sortedIndices;
@@ -348,8 +349,8 @@ namespace Pitaya::Render
 
 						// 合批处理
 						bool isBatching = false;
-						Pitaya::Render::InstancedDrawCommand currentBatch;
-
+						uint32_t drawtimes = 0;
+						InstancedDrawCommand currentBatch;
 						for (uint32_t idx : sortedIndices)
 						{
 							const auto& cmd = currentPass[idx];
@@ -365,7 +366,7 @@ namespace Pitaya::Render
 
 							if (!canBatch)
 							{
-								if (isBatching) { PushCommand(currentBatch); debug_drawtimes++; }
+								if (isBatching) { PushCommand(currentBatch); drawtimes++; }
 								isBatching = true;
 
 								// 复制状态
@@ -415,15 +416,17 @@ namespace Pitaya::Render
 						}
 
 						// 提交当前队列最后一个批次
-						if (isBatching) { PushCommand(currentBatch); debug_drawtimes++; }
+						if (isBatching) { PushCommand(currentBatch); drawtimes++; }
 						currentPass.clear();
+						return drawtimes;
 					};
 
 				// 严格控制调用顺序 先骨骼网格 后静态网格
-				ProcessQueue(skinnedPass, true);   // 先处理骨骼队列
-				ProcessQueue(staticPass, false);   // 后处理无骨骼的静态物体队列
+				uint32_t afterBath = 0;
+				afterBath += ProcessQueue(skinnedPass, true);   // 先处理骨骼队列
+				afterBath += ProcessQueue(staticPass, false);   // 后处理无骨骼的静态物体队列
 
-				Core::Print(Core::Color::Red, "[Batch] Before:%d to After:%d", beforeSize, debug_drawtimes);
+				Core::Print(Core::Color::Red, "[Batch] Before:%d to After:%d", beforeBatch, afterBath);
 			}
 			inline void SwapBuffer()
 			{
@@ -432,10 +435,10 @@ namespace Pitaya::Render
 			}
 
 		private:
-			Buffer front;												//主线程写入渲染命令、实例化Models、骨骼动画
-			Buffer back;												//渲染线程执行渲染命令
-			std::vector<Pitaya::Render::DrawCommand> skinnedPass;		//用于对DrawCommand进行排序
-			std::vector<Pitaya::Render::DrawCommand> staticPass;
+			Buffer front;								// 主线程写入渲染命令、实例化Models、骨骼动画
+			Buffer back;								// 渲染线程执行渲染命令
+			std::vector<DrawCommand> skinnedPass;		// 用于对DrawCommand进行排序
+			std::vector<DrawCommand> staticPass;		// 用于对DrawCommand进行排序
 		};
 
 	private:
@@ -508,12 +511,12 @@ namespace Pitaya::Render
 		void ExecuteCommand(const Pitaya::Render::BlitToScreenCommand* command) const;
 
 	public:
-		inline void BeginRenderFrame(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>)
+		inline void BeginRenderFrame(Pitaya::Core::PassKey<RenderPipeline>)
 		{
 			renderPacket.front.Clear(); 
 			INVOKE_POSTRENDERERBEGINRENDERFRAME_HOOK
 		}
-		inline void BeginPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>, RenderPass& pass)
+		inline void BeginPass(Pitaya::Core::PassKey<RenderPipeline>, RenderPass& pass)
 		{
 			Pitaya::Render::BeginPassCommand beginPassCommand;
 			beginPassCommand.CameraSnapshot = pass.CameraSnapshot;
@@ -536,7 +539,7 @@ namespace Pitaya::Render
 			}
 			renderPacket.PushCommand(beginPassCommand);
 		}
-		inline void Submit(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>, RenderItem& item)
+		inline void Submit(Pitaya::Core::PassKey<RenderPipeline>, RenderItem& item)
 		{
 			auto* mesh = item.Mesh;
 			auto* material = item.Material;
@@ -563,6 +566,49 @@ namespace Pitaya::Render
 				//异常情况无需骨骼数据
 			}
 
+			auto GenerateSortKey =	//[Queue][Order][Shader][Material][Mesh][Depth]
+				[](RenderQueue renderQueue, int32_t drawOrder, uint32_t shaderID, uint32_t materialID, uint32_t meshID, float depth) ->uint64_t
+				{
+					constexpr const uint64_t MaxSortKey = 0xFFFFFFFFFFFFFFFF;
+					constexpr const uint64_t MinSortKey = 0;
+
+					constexpr const uint64_t RENDER_QUEUE_SHIFT = 60;
+					constexpr const uint64_t DRAW_ORDER_SHIFT = 52;
+					constexpr const uint64_t SHADER_ID_SHIFT = 42;
+					constexpr const uint64_t MATERIAL_ID_SHIFT = 30;
+					constexpr const uint64_t MESH_ID_SHIFT = 16;
+					constexpr const uint64_t DEPTH_SHIFT = 0;
+
+					uint64_t key = 0;
+
+					// Queue (Mask 0xF, 4 bits) 
+					key |= (static_cast<uint64_t>(renderQueue) & 0xF) << RENDER_QUEUE_SHIFT;
+
+					// DrawOrder (Mask 0xFF, 8 bits) 
+					uint32_t orderVal = static_cast<uint32_t>(drawOrder + 128);
+					key |= (static_cast<uint64_t>(orderVal) & 0xFF) << DRAW_ORDER_SHIFT;
+
+					// Shader (Mask 0x3FF -> 1023) 
+					key |= (static_cast<uint64_t>(shaderID) & 0x3FF) << SHADER_ID_SHIFT;     // 限制：同屏使用的不同 Shader 类型不能超过 1024 个
+
+					// Material (Mask 0xFFF -> 4095) 
+					key |= (static_cast<uint64_t>(materialID) & 0xFFF) << MATERIAL_ID_SHIFT;     // 限制：同屏使用的不同材质数量不能超过 4096 个
+
+					// Mesh (Mask 0x3FFF -> 16383) 
+					key |= (static_cast<uint64_t>(meshID) & 0x3FFF) << MESH_ID_SHIFT;   // 限制：同屏使用的不同网格数量不能超过 16384 个
+
+					// Depth (Mask 0xFFFF, 16 bits) 
+					float normalizedDepth = std::clamp((depth + 1.0f) * 0.5f, 0.0f, 1.0f);
+
+					uint32_t depthInt = (renderQueue <= RenderQueue::Geometry) ?
+						static_cast<uint32_t>(normalizedDepth * 0xFFFF) :           // 不透明物体：从前往后画 (Front-to-Back)，利用 Early-Z 剔除
+						static_cast<uint32_t>((1.0f - normalizedDepth) * 0xFFFF);   // 半透明物体：从后往前画 (Back-to-Front)，保证混合正确
+
+					key |= (static_cast<uint64_t>(depthInt) & 0xFFFF) << DEPTH_SHIFT;
+
+					return key;
+				};
+
 			if (material && material->Shader.IsReady() && 
 				material->Shader->ShaderHandle != Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle::Invalid)
 			{
@@ -571,12 +617,12 @@ namespace Pitaya::Render
 				cmd.DepthTest = material->DepthTest;
 				cmd.Blend = material->Blend;
 				cmd.CullFace = material->CullFace;
-				cmd.SortKey = Pitaya::Render::GenerateSortKey(	//TODO 生成SortKey的逻辑要变一下了，因为Handle不能在主线程直接访问Index
+				cmd.SortKey = GenerateSortKey(
 					material->RenderQueue,
 					material->DrawOrder,
-					cmd.ShaderHandle.AsUint64(),
+					cmd.ShaderHandle.Index(),
 					cmd.MaterialId,
-					(cmd.VertexArrayHandle.AsUint64() << 8) + submeshIndex,
+					(cmd.VertexArrayHandle.Index() << 8) + submeshIndex,
 					0);
 
 				//纹理绑定
@@ -607,25 +653,25 @@ namespace Pitaya::Render
 				cmd.DepthTest = true;
 				cmd.Blend = false;
 				cmd.CullFace = true;
-				cmd.SortKey = Pitaya::Render::GenerateSortKey(
+				cmd.SortKey = GenerateSortKey(
 					Pitaya::Render::RenderQueue::Geometry,
 					0,
-					cmd.ShaderHandle.AsUint64(),
+					cmd.ShaderHandle.Index(),
 					0,
-					(cmd.VertexArrayHandle.AsUint64() << 8) + submeshIndex,
+					(cmd.VertexArrayHandle.Index() << 8) + submeshIndex,
 					0);
 
 				//异常Shader只会使用这一个纹理
 				cmd.TextureHandles[static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Albedo)] = globalRHI.FallbackTextureHandle;
 			}
 
-			renderPacket.PushDrawCommandToPass(cmd);
+			renderPacket.PushDrawCommandToPass(std::move(cmd));
 		}
-		inline void EndPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>)
+		inline void EndPass(Pitaya::Core::PassKey<RenderPipeline>)
 		{
 			renderPacket.CompilePass();
 		}
-		inline void SubmitPostProcess(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>, RenderPass& pass)
+		inline void SubmitPostProcess(Pitaya::Core::PassKey<RenderPipeline>, RenderPass& pass)
 		{
 			bool firstPass = true;
 			uint32_t pingpongIndex = 0;
@@ -701,16 +747,16 @@ namespace Pitaya::Render
 				Pitaya::Core::Print(Pitaya::Core::Color::Purple, "Post Process: Bypass - Direct Blit to Final (Resolve: %s)", isMultisample ? "True" : "False");
 			}
 		}
-		inline void SubmitLight(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>, LightInfo& light)
+		inline void SubmitLight(Pitaya::Core::PassKey<RenderPipeline>, LightInfo& light)
 		{
 			renderPacket.front.Lights.emplace_back(light);
 		}
-		inline void SubmitBlitToScreen(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>)
+		inline void SubmitBlitToScreen(Pitaya::Core::PassKey<RenderPipeline>)
 		{
 			Pitaya::Render::BlitToScreenCommand blitToScreenCommand { Pitaya::Window::GetWindowSize() };
 			renderPacket.PushCommand(blitToScreenCommand);
 		}
-		inline void EndRenderFrame(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>)
+		inline void EndRenderFrame(Pitaya::Core::PassKey<RenderPipeline>)
 		{
 			INVOKE_PRERENDERERENDRENDERFRAME_HOOK
 

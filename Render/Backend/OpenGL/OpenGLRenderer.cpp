@@ -8,8 +8,8 @@
 #include<gtc/type_ptr.hpp>
 #include<stdexcept>
 #include<string>
-#include<Core/Utils/Console.h>
-#if defined(PITAYA_USE_OPENGL)
+
+#if defined(PITAYA_GRAPHICS_OPENGL) && defined(PITAYA_WINDOW_GLFW)
 #include<GL/glew.h>
 #include<GLFW/glfw3.h>
 
@@ -26,9 +26,8 @@ bool Pitaya::Render::Renderer::InitializeRenderContext(void* nativeWindow)
 	auto glfwWindow = reinterpret_cast<GLFWwindow*>(nativeWindow);
 	if (!glfwWindow)
 	{
-		MessageBoxA(NULL, "Initialize OpenGL Context Failed! Reinterpret Cast NativeWindow Fail!", "Error", MB_OK);
-		exit(-1);
-		return false;
+		Pitaya::Core::PopMessageBox("Error", "Initialize OpenGL Context Failed! Reinterpret Cast NativeWindow Fail!");
+		Pitaya::Core::Terminate(-1);
 	}
 
 	//创建OpenGL上下文
@@ -38,9 +37,8 @@ bool Pitaya::Render::Renderer::InitializeRenderContext(void* nativeWindow)
 	//初始化GLEW
 	if (glewInit() != GLEW_OK) 
 	{ 
-		MessageBoxA(NULL, "Initialize OpenGL Context Failed! GLEW InitFail!", "Error", MB_OK);
-		exit(-1);
-		return false; 
+		Pitaya::Core::PopMessageBox("Error", "Initialize OpenGL Context Failed! GLEW InitFail!");
+		Pitaya::Core::Terminate(-1);
 	}
 
 	glEnable(GL_DEPTH_TEST);					//开启深度测试

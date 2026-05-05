@@ -1,9 +1,8 @@
 #include<GPU/Frontend/Texture/TextureCubemap.h>
 #include<vector>
 
-#if defined(PITAYA_USE_OPENGL)
+#if defined(PITAYA_GRAPHICS_OPENGL)
 #include<GL/glew.h>
-#include<GLFW/glfw3.h>
 
 Pitaya::GPU::TextureCubemap Pitaya::GPU::TextureCubemap::Factory::Create(unsigned char** datas, int* widths, int* heights, int* channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
 {

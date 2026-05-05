@@ -63,6 +63,12 @@
     <ClInclude Include="API\def.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Config\def.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Build-Options.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">

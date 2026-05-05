@@ -176,8 +176,8 @@
     <ClInclude Include="Container\SlotMap.h" />
     <ClInclude Include="Identifier\GUID.h" />
     <ClInclude Include="Identifier\UID.h" />
+    <ClInclude Include="PCH\stdafx.h" />
     <ClInclude Include="Storage\Storage.h" />
-    <ClInclude Include="Utils\BuildInRC.h" />
     <ClInclude Include="Utils\Console.h" />
     <ClInclude Include="Container\ObjectPool.h" />
     <ClInclude Include="Math\AABB.h" />
@@ -198,6 +198,7 @@
     <ClInclude Include="Utils\File.h" />
     <ClInclude Include="Utils\Math.h" />
     <ClInclude Include="Utils\Memory.h" />
+    <ClInclude Include="Utils\System.h" />
     <ClInclude Include="Utils\StateFlags.h" />
     <ClInclude Include="Utils\String.h" />
     <ClInclude Include="Utils\Time.h" />

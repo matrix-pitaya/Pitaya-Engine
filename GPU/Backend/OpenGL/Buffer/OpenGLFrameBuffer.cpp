@@ -3,9 +3,8 @@
 #include<exception>
 #include<stdexcept>
 
-#if defined(PITAYA_USE_OPENGL)
+#if defined(PITAYA_GRAPHICS_OPENGL)
 #include<GL/glew.h>
-#include<GLFW/glfw3.h>
 
 Pitaya::GPU::FrameBuffer Pitaya::GPU::FrameBuffer::Factory::Create(Pitaya::GPU::FrameBufferSpecification specification)
 {

@@ -3,41 +3,46 @@
 #include<string>
 #include<fstream>
 #include<filesystem>
+#include<stdlib.h>
+#include<chrono>
 
+#if defined(PITAYA_PLATFORM_WINDOWS)
 #define NOMINMAX
 #include<windows.h>
-#include<stdlib.h>
+#endif
 
 namespace Pitaya::Core
 {
 	inline std::filesystem::path GetExecutableDirectory()
 	{
+#if defined(PITAYA_PLATFORM_WINDOWS)
 		char path[MAX_PATH] = { 0 };
 		GetModuleFileNameA(NULL, path, MAX_PATH);
 		std::filesystem::path exePath(path);
 		return exePath.parent_path();
+#endif
 	}
 	inline std::filesystem::path GetWorkspace()
 	{
+#if defined(PITAYA_PLATFORM_WINDOWS)
 		return __argc <= 1 ? 
 			std::filesystem::absolute(__argv[0]).parent_path() / "workspace" : 
 			std::filesystem::absolute(__argv[1]).parent_path();
+#endif
 	}
 	inline bool GenerateFile(const std::filesystem::path& directory, const char* filename, const char* title,const char* info)
 	{
 		const std::filesystem::path path = directory / filename;
 		std::ofstream ofs(path, std::ios::out | std::ios::trunc);
-		if (!ofs.is_open())
-		{
-			MessageBoxA(NULL, ("Generate File Fail! Path: " + path.string()).c_str(), "Error", MB_OK);
-			return false;
-		}
-		SYSTEMTIME st;
-		GetLocalTime(&st);
+		if (!ofs.is_open()) { return false; }
 		ofs << "========================================\n";
 		ofs << title << "\n";
-		ofs << "Generated: " << st.wYear << "-" << st.wMonth << "-" << st.wDay << " "
-			<< st.wHour << ":" << st.wMinute << ":" << st.wSecond << "\n";
+		auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+		struct tm buf;
+		localtime_s(&buf, &t);
+		char temp[32] = {};
+		std::strftime(temp, sizeof(temp), "%Y-%m-%d %H:%M:%S", &buf);
+		ofs << "Generated: " << temp << "\n";
 		ofs << "========================================\n\n";
 		ofs << info;
 		ofs.flush();

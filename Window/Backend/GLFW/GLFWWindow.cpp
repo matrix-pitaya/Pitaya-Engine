@@ -5,7 +5,10 @@
 #include<Application/resource.h>	//获取exe图标Id宏
 #include<algorithm>
 
-#if defined(PITAYA_USE_GLFW)
+#if defined(PITAYA_WINDOW_GLFW)
+#define GLM_ENABLE_EXPERIMENTAL
+#define GLFW_EXPOSE_NATIVE_WIN32
+
 #include<GLFW/glfw3.h>
 #include<GLFW/glfw3native.h>  
 
@@ -74,6 +77,7 @@ namespace
 
 	inline void SetGLFWWindowStyle(GLFWwindow* glfwWindow)
 	{
+#if defined(PITAYA_PLATFORM_WINDOWS)
 		// Title
 		HWND hwnd = glfwGetWin32Window(glfwWindow);
 		BOOL darkTheme = TRUE;
@@ -103,6 +107,7 @@ namespace
 			LR_DEFAULTCOLOR);
 		if (hIconBig) { SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIconBig); }
 		if (hIconSmall) { SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIconSmall); }
+#endif
 	}
 	template <size_t N>
 	inline void FillGLFWWindowKeyMap(Pitaya::Input::KeyCode(&map)[N]) noexcept

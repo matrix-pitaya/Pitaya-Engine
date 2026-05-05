@@ -12,7 +12,7 @@
 #include<Core/Utils/File.h>
 #include<Hook/def.h>
 
-#if defined(PITAYA_USE_GLFW) && defined(PITAYA_USE_OPENGL)
+#if defined(PITAYA_WINDOW_GLFW) && defined(PITAYA_GRAPHICS_OPENGL)
 #include<Editor/GUI/ImGui/Backends/imgui_impl_glfw.h>
 #include<Editor/GUI/ImGui/Backends/imgui_impl_opengl3.h>
 
@@ -29,15 +29,13 @@
 #include<cstdio>
 #include<filesystem>
 
-#define NOMINMAX
-#include<windows.h>
-
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
 #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #endif
 
 namespace
 {
+#if defined(PITAYA_PLATFORM_WINDOWS)
 	FILE* ConsoleOutStream = nullptr;
 	FILE* ConsoleInStream = nullptr;
 	FILE* ConsoleErrStream = nullptr;
@@ -123,34 +121,7 @@ namespace
 		ShowWindow(consoleWindow, SW_HIDE);
 		return true;
 	}
-
-	//生成文件夹的 CheckList.req 文件 记录文件夹内的所有文件路径（相对于该文件夹的路径） 供引擎加载时读取
-	void GenerateCheckList(const std::filesystem::path& folder)
-	{
-		if (!std::filesystem::exists(folder) || !std::filesystem::is_directory(folder)) { return; }
-
-		const std::filesystem::path checklistfile = folder / "CheckList.req";
-		std::ofstream outFile(checklistfile, std::ios::out | std::ios::trunc);
-		if (!outFile.is_open()) { return; }
-		
-		//递归遍历
-		for (const auto& entry : std::filesystem::recursive_directory_iterator(folder))
-		{
-			//排除 CheckList.req 自身以及文件夹条目，只记录文件
-			if (std::filesystem::is_regular_file(entry.status())) 
-			{
-				if (entry.path() == checklistfile) { continue; }
-
-				//获取相对于 RootPath 的路径
-				std::filesystem::path relPath = std::filesystem::relative(entry.path(), folder);
-
-				//使用 generic_string 以确保路径分隔符在 Windows 下为 '/'
-				outFile << relPath.generic_string() << "\n";
-			}
-		}
-
-		outFile.close();
-	}
+#endif
 }
 
 bool Pitaya::Editor::GUI::Initialize_Main(void* nativeWindow)
@@ -159,7 +130,7 @@ bool Pitaya::Editor::GUI::Initialize_Main(void* nativeWindow)
 	auto* context = ImGui::CreateContext();
 	SetStyle();
 	ImGui::SetCurrentContext(context);
-#if defined(PITAYA_USE_GLFW) && defined(PITAYA_USE_OPENGL)
+#if defined(PITAYA_WINDOW_GLFW) && defined(PITAYA_GRAPHICS_OPENGL)
 	ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(nativeWindow), true);
 #endif
 	imGuiContext.store(context, std::memory_order_release);
@@ -171,7 +142,7 @@ bool Pitaya::Editor::GUI::Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render
 	ImGuiContext* context = nullptr;
 	while (!(context = imGuiContext.load(std::memory_order_acquire))) { std::this_thread::yield(); }
 	ImGui::SetCurrentContext(context);
-#if defined(PITAYA_USE_OPENGL)
+#if defined(PITAYA_GRAPHICS_OPENGL)
 	ImGui_ImplOpenGL3_Init("#version 130");
 	ImGui_ImplOpenGL3_CreateDeviceObjects();
 #endif
@@ -205,7 +176,7 @@ void Pitaya::Editor::GUI::Release_Main()
 	if (context)
 	{
 		ImGui::SetCurrentContext(context);
-#if defined(PITAYA_USE_GLFW)
+#if defined(PITAYA_WINDOW_GLFW)
 		ImGui_ImplGlfw_Shutdown();
 #endif
 		ImGui::DestroyContext(context);
@@ -214,7 +185,7 @@ void Pitaya::Editor::GUI::Release_Main()
 }
 void Pitaya::Editor::GUI::Release_Render()
 {
-#if defined(PITAYA_USE_OPENGL)
+#if defined(PITAYA_GRAPHICS_OPENGL)
 	ImGui_ImplOpenGL3_Shutdown();
 #endif
 	ImGui::SetCurrentContext(nullptr);
@@ -352,7 +323,7 @@ void Pitaya::Editor::GUI::NewFrame()
 }
 void Pitaya::Editor::GUI::BeginFrame()
 {
-#if defined(PITAYA_USE_GLFW)
+#if defined(PITAYA_WINDOW_GLFW)
 	ImGui_ImplGlfw_NewFrame();
 #endif
 	ImGui::NewFrame(); 
@@ -441,6 +412,7 @@ void Pitaya::Editor::GUI::DrawMenuBar()
 		}
 		if (ImGui::BeginMenu("System"))
 		{
+#if defined(PITAYA_PLATFORM_WINDOWS)
 			static bool isConsoleOpen = (GetConsoleWindow() != nullptr);
 			if (ImGui::MenuItem("Console", nullptr, &isConsoleOpen))
 			{
@@ -453,6 +425,7 @@ void Pitaya::Editor::GUI::DrawMenuBar()
 					CloseConsole();
 				}
 			}
+#endif
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Utils"))
@@ -632,7 +605,7 @@ void Pitaya::Editor::GUI::EndFrame()
 
 void Pitaya::Editor::GUI::Drawer::Draw(Pitaya::Core::PassKey<Editor>)
 {
-#if defined(PITAYA_USE_OPENGL)
+#if defined(PITAYA_GRAPHICS_OPENGL)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, size[backBufferIndex].x, size[backBufferIndex].y);
 	glClearColor(Pitaya::Core::Color::Dark.r, Pitaya::Core::Color::Dark.g, Pitaya::Core::Color::Dark.b, Pitaya::Core::Color::Dark.a);

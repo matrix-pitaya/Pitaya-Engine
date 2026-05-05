@@ -1,12 +1,13 @@
 #include<Editor/Editor.h>
 #include<Event/Common/FuncTable.h>
 #include<Render/RenderPipeline.h>
-#include<Hook/def.h>
 #include<Time/Common/FuncTable.h> 
+#include<Core/Utils/System.h>
+#include<Hook/def.h>
 
-extern "C" EDITOR_API void EDITOR_CALL AttachRuntimeEnv()
+extern "C" EDITOR_API void EDITOR_CALL AttachRuntimeEnv(int argc, char** argv)
 {
-	Pitaya::Editor::Editor::AttachRuntimeEnv();
+	Pitaya::Editor::Editor::AttachRuntimeEnv(argc,argv);
 }
 
 void Pitaya::Editor::Editor::HookFunc::PreBeginFrame()
@@ -44,9 +45,8 @@ void Pitaya::Editor::Editor::HookFunc::PostRenderContextInitialized(Pitaya::Core
 {
 	if (!Pitaya::Editor::Editor::Instance().Initialize_Render(passkey, rtHandle))
 	{
-		// TODO 考虑一下渲染线程如何通知主线程失败
-		MessageBoxA(NULL, "Editor Render Initialize Fail!", "Error", MB_OK);
-		exit(-1);
+		Pitaya::Core::PopMessageBox("Error", "Editor Render Initialize Fail!");
+		Pitaya::Core::Terminate(-1);
 	}
 }
 void Pitaya::Editor::Editor::HookFunc::PreRenderContextReleased()
@@ -183,7 +183,7 @@ void Pitaya::Editor::Editor::OnMouseCurrsorMove(const Pitaya::Event::Event& even
 	if (gui.panels.sceneViewportPanel.GetIsFocused()) { camera.OnMouseCurrsorMove(args); }
 }
 
-void Pitaya::Editor::Editor::AttachRuntimeEnv()
+void Pitaya::Editor::Editor::AttachRuntimeEnv(int argc, char** argv)
 {
 	//TODO 检测运行时环境
 

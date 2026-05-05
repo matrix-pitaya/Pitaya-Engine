@@ -9,8 +9,8 @@
 #include<Import/Import.h>
 #include<Import/Common/MeshVertex.h>
 #include<Core/Utils/File.h>
-#include<Core/Utils/BuildInRC.h>
-#include<Application/resource.h>
+#include<Core/Utils/System.h>
+#include<Application/Built-in.h>
 
 namespace
 {
@@ -63,8 +63,8 @@ bool Pitaya::Asset::AssetHub::Initialize()
 		buildIn.DefaultShader.GUID = Pitaya::Asset::Shader::Default;
 		buildIn.DefaultShader.State.SetBits(Pitaya::Core::AssetState::CPULoading);
 		Pitaya::Import::ShaderImportResult result;
-		result.VertexSource = Pitaya::Core::LoadBuildInRC(IDR_BUILDIN_DEFAULT_VERTEX_SHADER);
-		result.FragmentSource = Pitaya::Core::LoadBuildInRC(IDR_BUILDIN_DEFAULT_FRAGMENT_SHADER);
+		result.VertexSource = Pitaya::Core::LoadBuiltInRC(IDR_BUILDIN_DEFAULT_VERTEX_SHADER);
+		result.FragmentSource = Pitaya::Core::LoadBuiltInRC(IDR_BUILDIN_DEFAULT_FRAGMENT_SHADER);
 		result.Type = Pitaya::GPU::Shader::VF;
 		result.GUID = Pitaya::Asset::Shader::Default;
 		buildIn.DefaultShader.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
@@ -584,9 +584,15 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	}
 
 	auto texture2DHandle = Pitaya::GPU::CreateTexture2D(passkey, cpuOpResult_Inner.Data.data(), cpuOpResult_Inner.Width, cpuOpResult_Inner.Height, cpuOpResult_Inner.Channels, cpuOpResult_Inner.IsGenerateMipmap, cpuOpResult_Inner.IsSRGB, cpuOpResult_Inner.isNearest);
+	if (!texture2DHandle)
+	{
+		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
+		return;
+	}
+
 	if (entry->State.HasBits(Pitaya::Core::AssetState::Unload))
 	{
-		Pitaya::Log::Error("Texture asset marked as Unload, abort GPU load" + cpuOpResult_Inner.GUID.ToString());
+		Pitaya::Log::Error("Texture2D asset marked as Unload, abort GPU load" + cpuOpResult_Inner.GUID.ToString());
 		if (!Pitaya::GPU::DestroyTexture2D(passkey, texture2DHandle))
 		{
 			Pitaya::Log::Error("destroy texture2D asset gail,GUID: " + cpuOpResult_Inner.GUID.ToString());
@@ -642,6 +648,12 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 		datas[i] = cpuOpResult_Inner.Data[i].data();
 	}
 	auto textureCubemapHandle = Pitaya::GPU::CreateTextureCubemap(passkey, datas, cpuOpResult_Inner.Width, cpuOpResult_Inner.Height, cpuOpResult_Inner.Channels, cpuOpResult_Inner.IsGenerateMipmap, cpuOpResult_Inner.IsSRGB, cpuOpResult_Inner.isNearest);
+	if (!textureCubemapHandle)
+	{
+		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
+		return;
+	}
+	
 	if (entry->State.HasBits(Pitaya::Core::AssetState::Unload))
 	{
 		Pitaya::Log::Error("texture cubemap asset marked as Unload, abort GPU load" + cpuOpResult_Inner.GUID.ToString());
@@ -694,7 +706,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 		return;
 	}
 
-	Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle shaderHandle = Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle::Invalid;
+	auto shaderHandle = Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle::Invalid;
 	if (cpuOpResult_Inner.Type == Pitaya::GPU::Shader::VF)
 	{
 		if (!cpuOpResult_Inner.VertexSource.empty() && !cpuOpResult_Inner.FragmentSource.empty())
@@ -967,6 +979,17 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	rendertarget->PingPongFrameBufferHandles[1] = Pitaya::GPU::CreateFrameBuffer(passkey, rendertarget->PingPongFrameBufferSpecification);
 	//Final
 	rendertarget->FinalFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(passkey, rendertarget->FinalFrameBufferSpecification);
+
+	if (!rendertarget->SceneFrameBufferHandle || !rendertarget->PingPongFrameBufferHandles[0] || 
+		!rendertarget->PingPongFrameBufferHandles[1] || !rendertarget->FinalFrameBufferHandle)
+	{
+		Pitaya::GPU::DestroyFrameBuffer(passkey, rendertarget->SceneFrameBufferHandle);
+		Pitaya::GPU::DestroyFrameBuffer(passkey, rendertarget->PingPongFrameBufferHandles[0]);
+		Pitaya::GPU::DestroyFrameBuffer(passkey, rendertarget->PingPongFrameBufferHandles[1]);
+		Pitaya::GPU::DestroyFrameBuffer(passkey, rendertarget->FinalFrameBufferHandle);
+		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
+		return;
+	}
 
 	if (entry->State.HasBits(Pitaya::Core::AssetState::Unload))
 	{

@@ -2,5 +2,5 @@
 
 int main(int argc, char** argv)
 {
-	return Pitaya::Application::Execute();
+	return Pitaya::Application::Execute(argc, argv);
 }

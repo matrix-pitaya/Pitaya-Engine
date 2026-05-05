@@ -95,7 +95,7 @@ namespace Pitaya::Editor
 		}
 
 	public:
-		static void AttachRuntimeEnv();
+		static void AttachRuntimeEnv(int argc, char** argv);
 
 	private:
 		Pitaya::Editor::GUI gui;

@@ -109,7 +109,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_GLFW;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL;GLFW_EXPOSE_NATIVE_WIN32</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_PLATFORM_WINDOWS;PITAYA_GRAPHICS_OPENGL;PITAYA_WINDOW_GLFW;PITAYA_PHYSICS_BULLET;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL;GLFW_EXPOSE_NATIVE_WIN32</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -145,13 +145,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PITAYA_VERSION=100;PITAYA_CONSOLE;PITAYA_DLL_BUILD;PITAYA_USE_GLFW;ENGINE_EXPORT;GLM_ENABLE_EXPERIMENTAL;GLFW_EXPOSE_NATIVE_WIN32</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PITAYA_PROJECT_ENGINE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\GLEW\include\;$(SolutionDir)thirdparty\GLFW\include\;$(SolutionDir)thirdparty\mimalloc\include\</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename).obj</ObjectFileName>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <ForcedIncludeFiles>$(SolutionDir)Engine\Build-Options.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

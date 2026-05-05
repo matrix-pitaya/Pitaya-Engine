@@ -23,9 +23,6 @@
 #include<Game/Component/Light.h>
 #include<Hook/def.h>
 
-#define NOMINMAX
-#include<windows.h>
-
 namespace
 {
 #pragma region Time
@@ -361,7 +358,7 @@ namespace
 #pragma endregion
 }
 
-int Pitaya::Engine::Engine::Execute()
+int Pitaya::Engine::Engine::Execute(int argc, char** argv)
 {
 	if (!Initialize()) { return -1; }
 
@@ -806,136 +803,3 @@ Pitaya::Engine::Engine& ENGINE_CALL Pitaya::Core::Singleton<Pitaya::Engine::Engi
 	static Pitaya::Engine::Engine instance;
 	return instance;
 }
-
-
-/*void ENGINE_CALL OnDestroyAllGPUResource(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
-{
-	Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyAllGPUResource(passkey);
-}
-
-Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> ENGINE_CALL OnCreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateVertexArray(passkey);
-}
-Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> ENGINE_CALL OnCreateVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, float* vertices, uint32_t size)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateVertexBuffer(passkey, vertices, size);
-}
-Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> ENGINE_CALL OnCreateIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint32_t* indices, uint32_t count)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateIndexBuffer(passkey, indices, count);
-}
-Pitaya::GPU::Identifier<Pitaya::GPU::Shader> ENGINE_CALL OnCreateShaderVF(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const char* vertexSource, const char* fragmentSource)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateShader(passkey, vertexSource, fragmentSource);
-}
-Pitaya::GPU::Identifier<Pitaya::GPU::Shader> ENGINE_CALL OnCreateShaderVFG(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const char* vertexSource, const char* fragmentSource, const char* geometrySource)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateShader(passkey, vertexSource, fragmentSource, geometrySource);
-}
-Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> ENGINE_CALL OnCreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, unsigned char* data, int width, int height, int channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateTexture2D(passkey, data, width, height, channels, isGenerateMipmap, isSRGB, isNearest);
-}
-Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> ENGINE_CALL OnCreateTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, unsigned char** datas, int* widths, int* heights, int* channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateTextureCubemap(passkey, datas, widths, heights, channels, isGenerateMipmap, isSRGB, isNearest);
-}
-Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> ENGINE_CALL OnCreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, int width, int height, int layers, bool isDepth)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateTexture2DArray(passkey, width, height, layers, isDepth);
-}
-Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> ENGINE_CALL OnCreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint32_t size, uint32_t bindingPoint)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateUniformBuffer(passkey, size, bindingPoint);
-}
-Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> ENGINE_CALL OnCreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const Pitaya::GPU::FrameBufferSpecification& spec)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateFrameBuffer(passkey, spec);
-}
-Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> ENGINE_CALL OnCreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint32_t size, uint32_t bindingPoint)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->CreateShaderStorageBuffer(passkey, size, bindingPoint);
-}
-
-bool ENGINE_CALL OnDestroyVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyVertexArray(passkey, id);
-}
-bool ENGINE_CALL OnDestroyVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyVertexBuffer(passkey, id);
-}
-bool ENGINE_CALL OnDestroyIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyIndexBuffer(passkey, id);
-}
-bool ENGINE_CALL OnDestroyShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::Shader> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyShader(passkey, id);
-}
-bool ENGINE_CALL OnDestroyTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyTexture2D(passkey, id);
-}
-bool ENGINE_CALL OnDestroyTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyTextureCubemap(passkey, id);
-}
-bool ENGINE_CALL OnDestroyTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyTexture2DArray(passkey, id);
-}
-bool ENGINE_CALL OnDestroyUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyUniformBuffer(passkey, id);
-}
-bool ENGINE_CALL OnDestroyFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyFrameBuffer(passkey, id);
-}
-bool ENGINE_CALL OnDestroyShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->DestroyShaderStorageBuffer(passkey, id);
-}
-
-Pitaya::GPU::VertexArray* ENGINE_CALL OnGetVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::VertexArray> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetVertexArray(passkey, id);
-}
-Pitaya::GPU::VertexBuffer* ENGINE_CALL OnGetVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::VertexBuffer> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetVertexBuffer(passkey, id);
-}
-Pitaya::GPU::IndexBuffer* ENGINE_CALL OnGetIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::IndexBuffer> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetIndexBuffer(passkey, id);
-}
-Pitaya::GPU::Shader* ENGINE_CALL OnGetShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::Shader> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetShader(passkey, id);
-}
-Pitaya::GPU::Texture2D* ENGINE_CALL OnGetTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2D> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetTexture2D(passkey, id);
-}
-Pitaya::GPU::TextureCubemap* ENGINE_CALL OnGetTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::TextureCubemap> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetTextureCubemap(passkey, id);
-}
-Pitaya::GPU::Texture2DArray* ENGINE_CALL OnGetTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::Texture2DArray> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetTexture2DArray(passkey, id);
-}
-Pitaya::GPU::UniformBuffer* ENGINE_CALL OnGetUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::UniformBuffer> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetUniformBuffer(passkey, id);
-}
-Pitaya::GPU::FrameBuffer* ENGINE_CALL OnGetFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::FrameBuffer> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetFrameBuffer(passkey, id);
-}
-Pitaya::GPU::ShaderStorageBuffer* ENGINE_CALL OnGetShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::GPU::Identifier<Pitaya::GPU::ShaderStorageBuffer> id)
-{
-	return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->GetShaderStorageBuffer(passkey, id);
-}*/
