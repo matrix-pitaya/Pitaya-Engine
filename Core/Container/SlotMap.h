@@ -20,11 +20,11 @@ namespace Pitaya::Core
         public:
             explicit operator bool() const noexcept
             {
-                return index != std::numeric_limits<uint32_t>::max() && generation != 0;
+                return index != std::numeric_limits<uint32_t>::max();
             }
             bool operator==(const Handle& other) const noexcept
             {
-                return index == other.index && generation == other.generation;
+                return (!(*this) && !other) || (index == other.index && generation == other.generation);
             }
             bool operator!=(const Handle& other) const noexcept
             {
@@ -77,7 +77,7 @@ namespace Pitaya::Core
             {
                 uint32_t sparseIndex = map->denseToSparse[denseIndex];
                 uint32_t gen = map->sparse[sparseIndex].generation;
-                return std::pair<Handle, Item&>(Handle(sparseIndex, gen), map->dense[denseIndex]);
+                return { { sparseIndex, gen }, map->dense[denseIndex] };
             }
             inline Iterator& operator++()
             {
@@ -164,13 +164,13 @@ namespace Pitaya::Core
             out = dense[sparse[handle.index].denseIndex];
             return true;
         }
-        inline Item* Get(Handle handle)
+        inline Item* Get(Handle handle) noexcept
         {
             return CheckHandleValid(handle) ?
                 &dense[sparse[handle.index].denseIndex] :
                 nullptr;
         }
-        inline const Item* Get(Handle handle) const
+        inline const Item* Get(Handle handle) const noexcept
         {
             return CheckHandleValid(handle) ?
                 &dense[sparse[handle.index].denseIndex] :
@@ -196,7 +196,7 @@ namespace Pitaya::Core
 
             SparseSlot& slot = sparse[handle.index];
             slot.isActive = false;
-            slot.generation++;
+            slot.generation = slot.generation == std::numeric_limits<uint32_t>::max() ? 1 : slot.generation + 1;
             freeList.push_back(handle.index);
             return true;
         }
@@ -211,7 +211,7 @@ namespace Pitaya::Core
                 if (sparse[i].isActive)
                 {
                     sparse[i].isActive = false;
-                    sparse[i].generation++;
+                    sparse[i].generation = sparse[i].generation == std::numeric_limits<uint32_t>::max() ? 1 : sparse[i].generation + 1;
                 }
             }
             for (uint32_t i = static_cast<uint32_t>(sparse.size()); i > 0; --i)
@@ -225,11 +225,10 @@ namespace Pitaya::Core
         }
 
     private:
-        inline bool CheckHandleValid(Handle handle) const
+        inline bool CheckHandleValid(Handle handle) const noexcept
         {
-            if (!handle || handle.index >= sparse.size()) { return false; }
-            const SparseSlot& slot = sparse[handle.index];
-            return slot.isActive && slot.generation == handle.generation;
+            return handle && handle.index < sparse.size() &&
+                sparse[handle.index].isActive && sparse[handle.index].generation == handle.generation;
         }
 
     private:

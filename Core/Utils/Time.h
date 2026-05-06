@@ -5,7 +5,7 @@
 
 namespace Pitaya::Core
 {
-	inline std::string Data()
+	inline std::string Date()
 	{
 		auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 		struct tm buf;
@@ -14,7 +14,7 @@ namespace Pitaya::Core
 		std::strftime(temp, sizeof(temp), "%Y-%m-%d %H:%M:%S", &buf);
 		return temp;
 	}
-	inline std::string Data(std::chrono::system_clock::time_point tp)
+	inline std::string Date(std::chrono::system_clock::time_point tp)
 	{
 		auto t = std::chrono::system_clock::to_time_t(tp);
 		struct tm buf;
@@ -23,7 +23,7 @@ namespace Pitaya::Core
 		std::strftime(temp, sizeof(temp), "%Y-%m-%d %H:%M:%S", &buf);
 		return temp;
 	}
-	inline std::string Data(time_t tp)
+	inline std::string Date(time_t tp)
 	{
 		struct tm buf;
 		localtime_s(&buf, &tp);

@@ -17,7 +17,7 @@ namespace Pitaya::GPU
 			static void Destroy(VertexBuffer);
 		};
 
-		Identifier<VertexBuffer> Id = 0;
-		BufferLayout layout;
+		Pitaya::GPU::Identifier<VertexBuffer> Id = 0;
+		Pitaya::GPU::BufferLayout layout;
 	};
 }

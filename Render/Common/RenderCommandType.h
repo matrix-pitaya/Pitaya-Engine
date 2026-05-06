@@ -4,7 +4,7 @@
 
 namespace Pitaya::Render
 {
-	enum class RenderCommandType : uint8_t
+	enum class RenderCommandType : uint32_t
 	{
 		BeginPass = 0,
 		InstanceDraw,

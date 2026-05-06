@@ -1,5 +1,6 @@
 #pragma once
 
+#include<Core/Container/SlotMap.h>
 #include<Event/Common/EventType.h>
 
 #include<cstdint>
@@ -7,37 +8,28 @@
 
 namespace Pitaya::Event
 {
+	struct EventCallBack;
 	struct EventToken
 	{
-		EventToken(EventType type = EventType::Invalid)
-			: type(type) {}
+		EventToken(EventType type = EventType::Invalid, Pitaya::Core::SlotMap<EventCallBack>::Handle handle = Pitaya::Core::SlotMap<EventCallBack>::Handle::Invalid)
+			: type(type), handle(handle) { }
 
 		bool operator==(const EventToken& other) const noexcept
 		{
-			return id == other.id && type == other.type;
+			return handle == other.handle && type == other.type;
 		}
 
-	public:
-		uint32_t id = Next();
-		EventType type = EventType::Invalid;
+		inline auto Handle() const noexcept
+		{
+			return handle;
+		}
+		inline auto Type() const noexcept
+		{
+			return type;
+		}
 
 	private:
-		inline static uint32_t Next() noexcept
-		{
-			static std::atomic<uint32_t> id = 1;
-			return id.fetch_add(1, std::memory_order_relaxed);
-		}
-	};
-}
-
-namespace std
-{
-	template <>
-	struct hash<Pitaya::Event::EventToken>
-	{
-		std::size_t operator()(const Pitaya::Event::EventToken& eventToken) const noexcept
-		{
-			return std::hash<uint64_t>()(eventToken.id);
-		}
+		Pitaya::Core::SlotMap<EventCallBack>::Handle handle;
+		Pitaya::Event::EventType type;
 	};
 }

@@ -3,23 +3,18 @@
 #include<Core/Allocate/Allocate.h>
 #include<Core/Container/SlotMap.h>
 #include<Core/PassKey/PassKey.h>
-#include<Core/Camera/CameraSnapshot.h>
 #include<GPU/Common/GPUObjectType.h>
-#include<GPU/Common/FuncTable.h>
-#include<GPU/Common/BindPoint.h>
 #include<GPU/Frontend/Texture/Texture2D.h>
 #include<GPU/Frontend/Texture/TextureCubemap.h>
 #include<GPU/Frontend/Texture/Texture2DArray.h>
 #include<GPU/Frontend/Shader/Shader.h>
 #include<GPU/Frontend/Buffer/FrameBuffer.h>
-#include<GPU/Frontend/Buffer/IndexBuffer.h>
 #include<GPU/Frontend/Buffer/ShaderStorageBuffer.h>
 #include<GPU/Frontend/Buffer/UniformBuffer.h>
-#include<GPU/Frontend/Buffer/VertexArray.h>
 #include<GPU/Frontend/Buffer/VertexBuffer.h>
+#include<GPU/Frontend/Buffer/IndexBuffer.h>
+#include<GPU/Frontend/Buffer/VertexArray.h>
 #include<Log/Common/FuncTable.h>
-#include<Config/Common/FunctionTable.h>
-#include<Render/Common/PostProcessStep.h>
 
 #include<tuple>
 #include<type_traits>
@@ -78,7 +73,7 @@ namespace Pitaya::GPU
 				}
 				catch (...)
 				{
-					Pitaya::Log::Error(std::string("RHI: Create [") + typeid(T).name() + "] failed! unkneown error!");
+					Pitaya::Log::Error(std::string("RHI: Create [") + typeid(T).name() + "] failed! unknown error!");
 					return Pitaya::Core::SlotMap<T>::Handle::Invalid;
 				}
 			}
@@ -164,8 +159,8 @@ namespace Pitaya::GPU
 		{
 			registry.DestroyAll();
 		}
-		inline bool LinkVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Core::SlotMap<Pitaya::GPU::VertexArray>::Handle vaoHandle,
-			Pitaya::Core::SlotMap<Pitaya::GPU::VertexBuffer>::Handle vboHandle, Pitaya::Core::SlotMap<Pitaya::GPU::IndexBuffer>::Handle eboHandle)
+		inline bool LinkVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Core::SlotMap<VertexArray>::Handle vaoHandle,
+			Pitaya::Core::SlotMap<VertexBuffer>::Handle vboHandle, Pitaya::Core::SlotMap<IndexBuffer>::Handle eboHandle)
 		{
 			Pitaya::GPU::VertexArray vao;
 			Pitaya::GPU::VertexBuffer vbo;

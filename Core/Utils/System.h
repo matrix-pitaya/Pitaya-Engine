@@ -19,10 +19,10 @@ namespace Pitaya::Core
 	{
 		exit(exitcode);
 	}
-    inline std::string LoadBuiltInRC(const char* resourceName)
+    inline std::string LoadBuiltInRC(const char* resourceName, const char* moduleName = nullptr)
     {
 #if defined(PITAYA_PLATFORM_WINDOWS)
-        HMODULE hModule = GetModuleHandle(nullptr);
+        HMODULE hModule = GetModuleHandleA(moduleName);
         if (!hModule) { return ""; }
 
         HRSRC hRes = FindResourceA(hModule, resourceName, RT_RCDATA);

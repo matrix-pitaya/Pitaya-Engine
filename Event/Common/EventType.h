@@ -4,7 +4,7 @@
 
 namespace Pitaya::Event
 {
-	enum class EventType : uint8_t
+	enum class EventType : uint32_t
 	{
 		System = 0,
 

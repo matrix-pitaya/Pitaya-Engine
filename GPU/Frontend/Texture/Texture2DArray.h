@@ -15,6 +15,6 @@ namespace Pitaya::GPU
             static void Destroy(Texture2DArray);
         };
 
-        Identifier<Texture2DArray> Id = 0;
+        Pitaya::GPU::Identifier<Texture2DArray> Id = 0;
     };
 }

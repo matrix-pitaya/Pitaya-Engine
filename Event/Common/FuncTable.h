@@ -41,7 +41,7 @@ namespace Pitaya::Engine
 		{
 			return OnSubscribe(type, OnCallBack, listener);
 		}
-		inline bool InvokeOnUnSubscribe(const Pitaya::Event::EventToken& eventToken) noexcept
+		inline bool InvokeOnUnSubscribe(Pitaya::Event::EventToken eventToken) noexcept
 		{
 			return OnUnSubscribe(eventToken);
 		}
@@ -52,7 +52,7 @@ namespace Pitaya::Engine
 
 	private:
 		Pitaya::Event::EventToken (ENGINE_CALL *OnSubscribe)(Pitaya::Event::EventType, void (*)(void*, const ::Pitaya::Event::Event&), void*) noexcept = nullptr;
-		bool (ENGINE_CALL *OnUnSubscribe)(const Pitaya::Event::EventToken&) noexcept = nullptr;
+		bool (ENGINE_CALL *OnUnSubscribe)(Pitaya::Event::EventToken) noexcept = nullptr;
 		void (ENGINE_CALL *OnEmit)(const Pitaya::Event::Event&) noexcept = nullptr;
 	};
 }
@@ -63,7 +63,7 @@ namespace Pitaya::Event
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Event::EventDispatcher>().InvokeOnSubscribe(type, OnCallBack, listener);
 	}
-	inline bool UnSubscribe(const Pitaya::Event::EventToken& eventToken) noexcept
+	inline bool UnSubscribe(Pitaya::Event::EventToken eventToken) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Event::EventDispatcher>().InvokeOnUnSubscribe(eventToken);
 	}

@@ -14,32 +14,32 @@ Pitaya::Event::EventToken Pitaya::Event::EventDispatcher::Subscribe(Pitaya::Even
 	if (!OnCallBack || !listener || type == Pitaya::Event::EventType::Invalid)
 	{
 		Pitaya::Log::Warning("try to subscibe a invalid event");
-		return Pitaya::Event::EventToken(Pitaya::Event::EventType::Invalid);
+		return { Pitaya::Event::EventType::Invalid , Pitaya::Core::SlotMap<EventCallBack>::Handle::Invalid };
 	}
 
-	Pitaya::Event::EventToken eventToken { type };
-	if (!registry.Emplace(type, eventToken, { OnCallBack ,listener }))
+	auto handle = registry.Emplace(type, { OnCallBack ,listener });
+	if (!handle)
 	{
 		Pitaya::Log::Error("Event Registry Emplace Fail");
-		return Pitaya::Event::EventToken(Pitaya::Event::EventType::Invalid);
+		return { Pitaya::Event::EventType::Invalid , Pitaya::Core::SlotMap<EventCallBack>::Handle::Invalid };
 	}
-	return eventToken;
+	return { type, handle };
 }
-bool Pitaya::Event::EventDispatcher::UnSubscribe(const Pitaya::Event::EventToken& eventToken) noexcept
+bool Pitaya::Event::EventDispatcher::UnSubscribe(Pitaya::Event::EventToken eventToken) noexcept
 {
-	if (eventToken.type == Pitaya::Event::EventType::Invalid)
+	if (eventToken.Type() == Pitaya::Event::EventType::Invalid || !eventToken.Handle())
 	{
 		Pitaya::Log::Warning("try to unsubscibe event from a incalid token");
 		return false;
 	}
-	
-	if (!registry.Contains(eventToken))
+
+	if (!registry.Contains(eventToken.Type(), eventToken.Handle()))
 	{
 		Pitaya::Log::Warning("event token not in event map");
 		return false;
 	}
 
-	if (!registry.Erase(eventToken))
+	if (!registry.Erase(eventToken.Type(), eventToken.Handle()))
 	{
 		Pitaya::Log::Error("event registry erase fail");
 		return false;
@@ -55,6 +55,8 @@ void Pitaya::Event::EventDispatcher::Emit(const Pitaya::Event::Event& event) noe
 		return;
 	}
 
-	registry.ForEach(event.type, 
-		[&event](EventToken, CallBack callback) { callback.OnCallBack(callback.listener, event); });
+	for (auto [handle, callback] : registry.Each(event.type))
+	{
+		callback.OnCallBack(callback.listener, event);
+	}
 }

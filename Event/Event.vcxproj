@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="Common\Event.h" />
     <ClInclude Include="Common\EventArgs.h" />
+    <ClInclude Include="Common\EventCallBack.h" />
     <ClInclude Include="Common\EventToken.h" />
     <ClInclude Include="Common\EventType.h" />
     <ClInclude Include="Common\FuncTable.h" />

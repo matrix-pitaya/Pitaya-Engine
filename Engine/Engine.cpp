@@ -90,7 +90,7 @@ namespace
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Event::EventDispatcher>()->Subscribe(type, OnCallBack, listener);
 	}
-	bool ENGINE_CALL OnUnSubscribe(const Pitaya::Event::EventToken& eventToken) noexcept
+	bool ENGINE_CALL OnUnSubscribe(Pitaya::Event::EventToken eventToken) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Event::EventDispatcher>()->UnSubscribe(eventToken);
 	}

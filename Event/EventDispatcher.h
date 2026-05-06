@@ -3,10 +3,11 @@
 #include<Core/Allocate/Allocate.h>
 #include<Context/Common/Module.h>
 #include<Event/Common/Event.h>
+#include<Event/Common/EventToken.h>
+#include<Event/Common/EventCallBack.h>
 #include<Event/Common/FuncTable.h>
 
 #include<functional>
-#include<unordered_map>
 
 namespace Pitaya::Event
 {
@@ -41,11 +42,6 @@ namespace Pitaya::Event
 		};
 
 	private:
-		struct CallBack
-		{
-			void (*OnCallBack)(void*, const ::Pitaya::Event::Event&) = nullptr;
-			void* listener = nullptr;
-		};
 		struct EventRegistry
 		{
 		public:
@@ -53,32 +49,28 @@ namespace Pitaya::Event
 			{
 				for (auto& map : maps)
 				{
-					map.clear();
+					map.Clear();
 				}
 			}
-			inline bool Emplace(EventType type, EventToken token, CallBack callback) noexcept
+			inline auto Emplace(EventType type, EventCallBack callback) noexcept
 			{
-				return maps[static_cast<uint8_t>(type)].emplace(token, callback).second;
+				return maps[static_cast<uint32_t>(type)].Emplace(std::move(callback));
 			}
-			inline bool Contains(EventToken token)
+			inline bool Contains(EventType type, Pitaya::Core::SlotMap<EventCallBack>::Handle handle) const noexcept
 			{
-				return maps[static_cast<uint8_t>(token.type)].contains(token);
+				return maps[static_cast<uint32_t>(type)].Get(handle) != nullptr;
 			}
-			inline bool Erase(EventToken token)
+			inline bool Erase(EventType type, Pitaya::Core::SlotMap<EventCallBack>::Handle handle) noexcept
 			{
-				return maps[static_cast<uint8_t>(token.type)].erase(token) > 0;
+				return maps[static_cast<uint32_t>(type)].Remove(handle);
 			}
-			template<typename Func>
-			inline void ForEach(EventType type, Func func)
+			inline auto Each(EventType type) noexcept
 			{
-				for (const auto& pair : maps[static_cast<uint8_t>(type)])
-				{
-					func(pair.first, pair.second);
-				}
+				return maps[static_cast<uint32_t>(type)].Each();
 			}
 
 		private:
-			std::unordered_map<EventToken, CallBack> maps[static_cast<uint8_t>(EventType::Invalid)] = {};
+			Pitaya::Core::SlotMap<EventCallBack> maps[static_cast<uint32_t>(EventType::Invalid)] = {};
 		};
 
 	private:
@@ -96,9 +88,9 @@ namespace Pitaya::Event
 		void Release();
 
 	public:
-		Pitaya::Event::EventToken Subscribe(Pitaya::Event::EventType type, void (*OnCallBack)(void*, const ::Pitaya::Event::Event&), void* listener) noexcept;
-		bool UnSubscribe(const Pitaya::Event::EventToken& eventToken) noexcept;
-		void Emit(const Pitaya::Event::Event& event) noexcept;
+		EventToken Subscribe(EventType type, void (*OnCallBack)(void*, const Event&), void* listener) noexcept;
+		bool UnSubscribe(EventToken eventToken) noexcept;
+		void Emit(const Event& event) noexcept;
 
 	private:
 		EventRegistry registry;

@@ -16,11 +16,11 @@ namespace Pitaya::GPU
             static void Destroy(FrameBuffer);
         };
 
-        Identifier<FrameBuffer> Id = 0;
-        Identifier<FrameBuffer> InternalId = 0;
-        Identifier<Texture2D> ColorAttachmentId = 0;
-        Identifier<Texture2D> InternalColorAttachmentId = 0;
-        Identifier<Texture2D> DepthAttachmentId = 0;
-        FrameBufferSpecification Specification;
+        Pitaya::GPU::Identifier<FrameBuffer> Id = 0;
+        Pitaya::GPU::Identifier<FrameBuffer> InternalId = 0;
+        Pitaya::GPU::Identifier<Texture2D> ColorAttachmentId = 0;
+        Pitaya::GPU::Identifier<Texture2D> InternalColorAttachmentId = 0;
+        Pitaya::GPU::Identifier<Texture2D> DepthAttachmentId = 0;
+        Pitaya::GPU::FrameBufferSpecification Specification;
     };
 }

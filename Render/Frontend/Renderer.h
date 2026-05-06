@@ -209,7 +209,7 @@ namespace Pitaya::Render
 		private:
 			struct CommandHeader
 			{
-				Pitaya::Render::RenderCommandType type = Pitaya::Render::RenderCommandType::Unknown;
+				RenderCommandType type = RenderCommandType::Unknown;
 				uint32_t size = 0;
 			};
 

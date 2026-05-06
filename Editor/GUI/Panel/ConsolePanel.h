@@ -40,7 +40,7 @@ namespace Pitaya::Editor
             ConsoleMessage msg;
             msg.message = message;
             msg.thread = "[" + Pitaya::Thread::GetThreadName(Pitaya::Core::Thread::GetCurrentThreadId()) + "]";
-            msg.time = "[" + Pitaya::Core::Data() + "]";
+            msg.time = "[" + Pitaya::Core::Date() + "]";
             switch (level)
             {
                 case Pitaya::Log::LogLevel::Info:   
