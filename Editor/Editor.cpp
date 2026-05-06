@@ -170,17 +170,19 @@ void Pitaya::Editor::Editor::EndFrame()
 {
 	profiler.EndFrame();
 }
-void Pitaya::Editor::Editor::OnMouseScroll(const Pitaya::Event::Event& event)
+void Pitaya::Editor::Editor::OnMouseScroll(Pitaya::Event::Event event)
 {
-	if (event.type != Pitaya::Event::EventType::MouseScroll) { return; }
-	const Pitaya::Event::MouseScrollEventArgs& args = static_cast<const Pitaya::Event::MouseScrollEventArgs&>(event.args);
-	if (gui.panels.sceneViewportPanel.GetIsFocused()) { camera.OnMouseScroll(args); }
+	if (gui.panels.sceneViewportPanel.GetIsFocused())
+	{
+		camera.OnMouseScroll(event.args.mouseScroll);
+	}
 }
-void Pitaya::Editor::Editor::OnMouseCurrsorMove(const Pitaya::Event::Event& event)
+void Pitaya::Editor::Editor::OnMouseCurrsorMove(Pitaya::Event::Event event)
 {
-	if (event.type != Pitaya::Event::EventType::MouseCurrsorMove) { return; }
-	const Pitaya::Event::MouseCurrsorMoveEventArgs& args = static_cast<const Pitaya::Event::MouseCurrsorMoveEventArgs&>(event.args);
-	if (gui.panels.sceneViewportPanel.GetIsFocused()) { camera.OnMouseCurrsorMove(args); }
+	if (gui.panels.sceneViewportPanel.GetIsFocused())
+	{
+		camera.OnMouseCurrsorMove(event.args.mouseCurrsor);
+	}
 }
 
 void Pitaya::Editor::Editor::AttachRuntimeEnv(int argc, char** argv)

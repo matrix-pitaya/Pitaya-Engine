@@ -37,7 +37,7 @@ namespace Pitaya::Engine
 		}
 
 	public:
-		inline Pitaya::Event::EventToken InvokeOnSubscribe(Pitaya::Event::EventType type, void (*OnCallBack)(void*, const ::Pitaya::Event::Event&), void* listener) noexcept
+		inline Pitaya::Event::EventToken InvokeOnSubscribe(Pitaya::Event::EventType type, void (*OnCallBack)(void*, Pitaya::Event::Event), void* listener) noexcept
 		{
 			return OnSubscribe(type, OnCallBack, listener);
 		}
@@ -45,21 +45,21 @@ namespace Pitaya::Engine
 		{
 			return OnUnSubscribe(eventToken);
 		}
-		inline void InvokeOnEmit(const Pitaya::Event::Event& event) noexcept
+		inline void InvokeOnEmit(Pitaya::Event::Event event) noexcept
 		{
 			OnEmit(event);
 		}
 
 	private:
-		Pitaya::Event::EventToken (ENGINE_CALL *OnSubscribe)(Pitaya::Event::EventType, void (*)(void*, const ::Pitaya::Event::Event&), void*) noexcept = nullptr;
+		Pitaya::Event::EventToken (ENGINE_CALL *OnSubscribe)(Pitaya::Event::EventType, void (*)(void*, Pitaya::Event::Event), void*) noexcept = nullptr;
 		bool (ENGINE_CALL *OnUnSubscribe)(Pitaya::Event::EventToken) noexcept = nullptr;
-		void (ENGINE_CALL *OnEmit)(const Pitaya::Event::Event&) noexcept = nullptr;
+		void (ENGINE_CALL *OnEmit)(Pitaya::Event::Event) noexcept = nullptr;
 	};
 }
 
 namespace Pitaya::Event
 {
-	inline Pitaya::Event::EventToken Subscribe(Pitaya::Event::EventType type, void (*OnCallBack)(void*, const ::Pitaya::Event::Event&), void* listener) noexcept
+	inline Pitaya::Event::EventToken Subscribe(Pitaya::Event::EventType type, void (*OnCallBack)(void*, Pitaya::Event::Event), void* listener) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Event::EventDispatcher>().InvokeOnSubscribe(type, OnCallBack, listener);
 	}
@@ -67,7 +67,7 @@ namespace Pitaya::Event
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Event::EventDispatcher>().InvokeOnUnSubscribe(eventToken);
 	}
-	inline void Emit(const Pitaya::Event::Event& event) noexcept
+	inline void Emit(Pitaya::Event::Event event) noexcept
 	{
 		Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Event::EventDispatcher>().InvokeOnEmit(event);
 	}

@@ -81,41 +81,37 @@ namespace Pitaya::Input
 		}
 
 	private:
-		inline void OnKey(const Pitaya::Event::Event& event)
+		inline void OnKey(Pitaya::Event::Event event)
 		{
-			if (event.type != Pitaya::Event::EventType::Key) { return; }
-			const Pitaya::Event::KeyEventArgs& args = static_cast<const Pitaya::Event::KeyEventArgs&>(event.args);
-			if (args.keycode != Pitaya::Input::KeyCode::Unknown)
+			if (event.args.key.code != Pitaya::Input::KeyCode::Unknown)
 			{
-				hardwareState[static_cast<size_t>(args.keycode)] = (args.action != 0);
+				hardwareState[static_cast<size_t>(event.args.key.code)] = (event.args.key.action != 0);
 			}
 		}
-		inline void OnMouseButton(const Pitaya::Event::Event& event)
+		inline void OnMouseButton(Pitaya::Event::Event event)
 		{
-			if (event.type != Pitaya::Event::EventType::MouseButton) { return; }
-			const Pitaya::Event::MouseButtonEventArgs& args = static_cast<const Pitaya::Event::MouseButtonEventArgs&>(event.args);
-			if (args.button != Pitaya::Input::KeyCode::Unknown)
+			if (event.args.mouseButton.button != Pitaya::Input::KeyCode::Unknown)
 			{
-				hardwareState[static_cast<size_t>(args.button)] = (args.action != 0);
+				hardwareState[static_cast<size_t>(event.args.mouseButton.button)] = (event.args.mouseButton.action != 0);
 			}
 		}
 
 	private:
-		inline static void OnKey(void* listener, const Pitaya::Event::Event& event)
+		inline static void OnKey(void* listener, Pitaya::Event::Event event)
 		{
 			static_cast<Pitaya::Input::InputMonitor*>(listener)->OnKey(event);
 		}
-		inline static void OnMouseButton(void* listener, const Pitaya::Event::Event& event)
+		inline static void OnMouseButton(void* listener, Pitaya::Event::Event event)
 		{
 			static_cast<Pitaya::Input::InputMonitor*>(listener)->OnMouseButton(event);
 		}
 
 	private:
-		Pitaya::Event::EventToken keyToken;
-		Pitaya::Event::EventToken mouseButtonToken;
-
 		bool currentFrameState[static_cast<size_t>(Pitaya::Input::KeyCode::Unknown)] = {};
 		bool previousFrameState[static_cast<size_t>(Pitaya::Input::KeyCode::Unknown)] = {};
 		bool hardwareState[static_cast<size_t>(Pitaya::Input::KeyCode::Unknown)] = {};
+
+		Pitaya::Event::EventToken keyToken;
+		Pitaya::Event::EventToken mouseButtonToken;
 	};
 }

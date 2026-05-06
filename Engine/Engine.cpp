@@ -86,7 +86,7 @@ namespace
 
 
 #pragma region Event
-	Pitaya::Event::EventToken ENGINE_CALL OnSubscribe(Pitaya::Event::EventType type, void (*OnCallBack)(void*, const ::Pitaya::Event::Event&), void* listener) noexcept
+	Pitaya::Event::EventToken ENGINE_CALL OnSubscribe(Pitaya::Event::EventType type, void (*OnCallBack)(void*, Pitaya::Event::Event), void* listener) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Event::EventDispatcher>()->Subscribe(type, OnCallBack, listener);
 	}
@@ -94,7 +94,7 @@ namespace
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Event::EventDispatcher>()->UnSubscribe(eventToken);
 	}
-	void ENGINE_CALL OnEmit(const Pitaya::Event::Event& event) noexcept
+	void ENGINE_CALL OnEmit(Pitaya::Event::Event event) noexcept
 	{
 		Pitaya::Engine::Context::Instance().GetModule<Pitaya::Event::EventDispatcher>()->Emit(event);
 	}

@@ -1,11 +1,12 @@
 #pragma once
 
+#include<Event/Common/Event.h>
+
 namespace Pitaya::Event
 {
-	struct Event;
 	struct EventCallBack
 	{
-		void (*OnCallBack)(void*, const Event&) = nullptr;
+		void (*OnCallBack)(void*, Event) = nullptr;
 		void* listener = nullptr;
 	};
 }

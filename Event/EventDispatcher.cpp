@@ -9,7 +9,7 @@ void Pitaya::Event::EventDispatcher::Release()
 {
 	registry.Clear();
 }
-Pitaya::Event::EventToken Pitaya::Event::EventDispatcher::Subscribe(Pitaya::Event::EventType type, void (*OnCallBack)(void*, const ::Pitaya::Event::Event&), void* listener) noexcept
+Pitaya::Event::EventToken Pitaya::Event::EventDispatcher::Subscribe(Pitaya::Event::EventType type, void (*OnCallBack)(void*, Pitaya::Event::Event), void* listener) noexcept
 {
 	if (!OnCallBack || !listener || type == Pitaya::Event::EventType::Invalid)
 	{
@@ -47,7 +47,7 @@ bool Pitaya::Event::EventDispatcher::UnSubscribe(Pitaya::Event::EventToken event
 
 	return true;
 }
-void Pitaya::Event::EventDispatcher::Emit(const Pitaya::Event::Event& event) noexcept
+void Pitaya::Event::EventDispatcher::Emit(Pitaya::Event::Event event) noexcept
 {
 	if (event.type == Pitaya::Event::EventType::Invalid)
 	{

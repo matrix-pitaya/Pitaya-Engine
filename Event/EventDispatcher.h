@@ -88,9 +88,9 @@ namespace Pitaya::Event
 		void Release();
 
 	public:
-		EventToken Subscribe(EventType type, void (*OnCallBack)(void*, const Event&), void* listener) noexcept;
+		EventToken Subscribe(EventType type, void (*OnCallBack)(void*, Event), void* listener) noexcept;
 		bool UnSubscribe(EventToken eventToken) noexcept;
-		void Emit(const Event& event) noexcept;
+		void Emit(Event event) noexcept;
 
 	private:
 		EventRegistry registry;

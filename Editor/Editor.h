@@ -81,15 +81,15 @@ namespace Pitaya::Editor
 		}
 
 	private:
-		void OnMouseScroll(const Pitaya::Event::Event&);
-		void OnMouseCurrsorMove(const Pitaya::Event::Event&);
+		void OnMouseScroll(Pitaya::Event::Event);
+		void OnMouseCurrsorMove(Pitaya::Event::Event);
 
 	private:
-		inline static void OnMouseScroll(void* listener, const Pitaya::Event::Event& event)
+		inline static void OnMouseScroll(void* listener, Pitaya::Event::Event event)
 		{
 			static_cast<Pitaya::Editor::Editor*>(listener)->OnMouseScroll(event);
 		}
-		inline static void OnMouseCurrsorMove(void* listener, const Pitaya::Event::Event& event)
+		inline static void OnMouseCurrsorMove(void* listener, Pitaya::Event::Event event)
 		{
 			static_cast<Pitaya::Editor::Editor*>(listener)->OnMouseCurrsorMove(event);
 		}

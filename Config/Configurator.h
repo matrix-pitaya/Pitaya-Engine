@@ -135,10 +135,10 @@ namespace Pitaya::Config
 		}
 
 	private:
-		void OnWindowFramebufferResetSize(const Pitaya::Event::Event& event);
+		void OnWindowFramebufferResetSize(Pitaya::Event::Event event);
 
 	private:
-		inline static void OnWindowFramebufferResetSize(void* listener, const Pitaya::Event::Event& event)
+		inline static void OnWindowFramebufferResetSize(void* listener, Pitaya::Event::Event event)
 		{
 			static_cast<Configurator*>(listener)->OnWindowFramebufferResetSize(event);
 		}

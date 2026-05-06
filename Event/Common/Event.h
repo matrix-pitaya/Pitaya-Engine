@@ -7,10 +7,7 @@ namespace Pitaya::Event
 {
 	struct Event
 	{
-		Event(Pitaya::Event::EventType type, const Pitaya::Event::EventArgs& args)
-			:type(type), args(args) {}
-
-		const Pitaya::Event::EventType type;
-		const Pitaya::Event::EventArgs& args;
+		EventType type = EventType::Invalid;
+		EventArgs args;
 	};
 }

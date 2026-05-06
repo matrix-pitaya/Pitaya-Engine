@@ -5,64 +5,52 @@
 
 namespace Pitaya::Event
 {
-	struct EventArgs
-	{
-		EventArgs() = default;
-		virtual ~EventArgs() = default;
-	};
-	struct CloseEventArgs final : public EventArgs
+	struct CloseEventArgs
 	{
 
 	};
-	struct FramebufferResetSizeEventArgs final : public EventArgs
+	struct FramebufferResetSizeEventArgs 
 	{
-		FramebufferResetSizeEventArgs(int width, int height)
-			:width(width), height(height) { }
-
 		int width = 0;
 		int height = 0;
 	};
-	struct DropFileEventArgs final : public EventArgs
+	struct DropFileEventArgs 
 	{
-		DropFileEventArgs(int count, const char** paths)
-			:count(count), paths(paths) { }
-
 		int count = 0;
 		const char** paths = nullptr;
 	};
-	struct MouseCurrsorMoveEventArgs final : public EventArgs
+	struct MouseCurrsorMoveEventArgs 
 	{
-		MouseCurrsorMoveEventArgs(double xPosition, double yPosition)
-			:xPosition(xPosition), yPosition(yPosition) { }
-
 		double xPosition = 0;
 		double yPosition = 0;
 	};
-	struct MouseScrollEventArgs final : public EventArgs
+	struct MouseScrollEventArgs
 	{
-		MouseScrollEventArgs(double xOffset, double yOffset)
-			:xOffset(xOffset), yOffset(yOffset) { }
-
 		double xOffset = 0;
 		double yOffset = 0;
 	};
-	struct KeyEventArgs final : public EventArgs
+	struct KeyEventArgs
 	{
-		KeyEventArgs(Pitaya::Input::KeyCode keycode, int scancode, int action, int mods)
-			:keycode(keycode), scancode(scancode), action(action), mods(mods) { }
-
-		Pitaya::Input::KeyCode keycode = Pitaya::Input::KeyCode::Unknown;
+		Pitaya::Input::KeyCode code = Pitaya::Input::KeyCode::Unknown;
 		int scancode = 0;
 		int action = 0;
 		int mods = 0;
 	};
-	struct MouseButtonEventArgs final : public EventArgs
+	struct MouseButtonEventArgs
 	{
-		MouseButtonEventArgs(Pitaya::Input::KeyCode button, int action, int mods)
-			:button(button), action(action), mods(mods) { }
-
 		Pitaya::Input::KeyCode button = Pitaya::Input::KeyCode::Unknown;
 		int action = 0;
 		int mods = 0;
+	};
+
+	union EventArgs
+	{
+		CloseEventArgs close = {};
+		FramebufferResetSizeEventArgs framebufferSize;
+		DropFileEventArgs dropFile;
+		MouseCurrsorMoveEventArgs mouseCurrsor;
+		MouseScrollEventArgs mouseScroll;
+		KeyEventArgs key;
+		MouseButtonEventArgs mouseButton;
 	};
 }

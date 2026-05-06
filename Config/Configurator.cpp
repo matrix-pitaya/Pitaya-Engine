@@ -28,12 +28,10 @@ bool Pitaya::Config::Configurator::Export()
 	const std::filesystem::path path = Pitaya::Core::GetWorkspace() / fileName;
 	return info.SerializeToFile(path, Pitaya::Serialize::API::YAML);
 }
-void Pitaya::Config::Configurator::OnWindowFramebufferResetSize(const Pitaya::Event::Event& event)
+void Pitaya::Config::Configurator::OnWindowFramebufferResetSize(Pitaya::Event::Event event)
 {
-	if (event.type != Pitaya::Event::EventType::WindowFramebufferResetSize) { return; }
-	const Pitaya::Event::FramebufferResetSizeEventArgs& args = static_cast<const Pitaya::Event::FramebufferResetSizeEventArgs&>(event.args);
-	info.WindowWidth = args.width;
-	info.WindowHeight = args.height;
+	info.WindowWidth = event.args.framebufferSize.width;
+	info.WindowHeight = event.args.framebufferSize.height;
 }
 
 void Pitaya::Config::Configurator::ConfigInfo::Serialize(Pitaya::Serialize::SerializeContext& context) const
