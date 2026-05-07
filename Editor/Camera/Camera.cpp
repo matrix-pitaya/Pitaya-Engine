@@ -103,14 +103,14 @@ void Pitaya::Editor::Camera::Move(Pitaya::Core::Direction dir)
 	}
 	if (mode == CameraMode::Fly) { pivot = position + forward * distance; }
 }
-void Pitaya::Editor::Camera::OnMouseScroll(const Pitaya::Event::MouseScrollEventArgs& args)
+void Pitaya::Editor::Camera::OnMouseScroll(Pitaya::Event::MouseScrollEventArgs args)
 {
 	mode = CameraMode::Orbit;
 	distance -= args.yOffset;
 	distance = glm::max(0.1f, distance);
 	UpdateCameraVectors();
 }
-void Pitaya::Editor::Camera::OnMouseCurrsorMove(const Pitaya::Event::MouseCurrsorMoveEventArgs& args)
+void Pitaya::Editor::Camera::OnMouseCurrsorMove(Pitaya::Event::MouseCurrsorMoveEventArgs args)
 {
 	glm::vec2 mousePosition = glm::vec2(args.xPosition, args.yPosition);
 	if (firstMove) { lastMousePosition = mousePosition; firstMove = false; return; }

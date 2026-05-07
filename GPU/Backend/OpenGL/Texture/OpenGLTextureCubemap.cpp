@@ -36,9 +36,6 @@ Pitaya::GPU::TextureCubemap Pitaya::GPU::TextureCubemap::Factory::Create(unsigne
 void  Pitaya::GPU::TextureCubemap::Factory::Destroy(Pitaya::GPU::TextureCubemap textureCubemap)
 {
     GLuint target = textureCubemap.Id;
-    if (target > 0)
-    {
-        glDeleteTextures(1, &target);
-    }
+    if (target > 0) { glDeleteTextures(1, &target); }
 }
 #endif

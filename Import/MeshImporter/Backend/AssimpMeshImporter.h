@@ -1,7 +1,7 @@
 #pragma once
 
 #include<Import/MeshImporter/Frontend/MeshImporter.h>
-#include<GPU/Common/TextureUsage.h>
+#include<GPU/Common/TextureSlot.h>
 
 #include<assimp/scene.h>
 
@@ -37,54 +37,54 @@ namespace Pitaya::Import
 		bool ParseMaterial(const aiMaterial* aimaterial, const std::filesystem::path& matFilePath, const std::filesystem::path& modelFilePath);
 
 	private:
-		inline Pitaya::GPU::TextureUsage AiTextureTypeToTextureUsage(aiTextureType aiType) const noexcept
+		inline Pitaya::GPU::TextureSlot AiTextureTypeToTextureUsage(aiTextureType aiType) const noexcept
 		{
             switch (aiType)
             {
                 // 基础色
                 case aiTextureType_BASE_COLOR:
                 case aiTextureType_DIFFUSE:
-                    return Pitaya::GPU::TextureUsage::Albedo;
+                    return Pitaya::GPU::TextureSlot::Albedo;
 
                 // 高光
                 case aiTextureType_SPECULAR:
-                    return Pitaya::GPU::TextureUsage::Specular;
+                    return Pitaya::GPU::TextureSlot::Specular;
 
                 // 法线
                 case aiTextureType_NORMALS:
                 case aiTextureType_NORMAL_CAMERA:
-                    return Pitaya::GPU::TextureUsage::Normal;
+                    return Pitaya::GPU::TextureSlot::Normal;
 
                 // 金属度
                 case aiTextureType_METALNESS:
-                    return Pitaya::GPU::TextureUsage::Metallic;
+                    return Pitaya::GPU::TextureSlot::Metallic;
 
                 // 粗糙度
                 case aiTextureType_DIFFUSE_ROUGHNESS:
-                    return Pitaya::GPU::TextureUsage::Roughness;
+                    return Pitaya::GPU::TextureSlot::Roughness;
 
                 // 环境光遮蔽
                 case aiTextureType_AMBIENT_OCCLUSION:
                 case aiTextureType_LIGHTMAP:
-                    return Pitaya::GPU::TextureUsage::AmbientOcclusion;
+                    return Pitaya::GPU::TextureSlot::AmbientOcclusion;
 
                 // 自发光 (注意：你的枚举是 Emission)
                 case aiTextureType_EMISSIVE:
                 case aiTextureType_EMISSION_COLOR:
-                    return Pitaya::GPU::TextureUsage::Emission;
+                    return Pitaya::GPU::TextureSlot::Emission;
 
                 // 高度/位移
                 case aiTextureType_HEIGHT:
                 case aiTextureType_DISPLACEMENT:
-                    return Pitaya::GPU::TextureUsage::Height;
+                    return Pitaya::GPU::TextureSlot::Height;
 
                 // 遮罩 (通常用 Opacity 或 Shininess 贴图充当)
                 case aiTextureType_OPACITY:
                 case aiTextureType_SHININESS:
-                    return Pitaya::GPU::TextureUsage::Mask;
+                    return Pitaya::GPU::TextureSlot::Mask;
 
                 default:
-                    return Pitaya::GPU::TextureUsage::Unknown;
+                    return static_cast<Pitaya::GPU::TextureSlot>(Pitaya::GPU::MaterialTextureSlotCount);
             }
 		}
         inline std::filesystem::path GetTextureAbsolutePath(const std::filesystem::path& modelFilePath, const aiString& aiPath)

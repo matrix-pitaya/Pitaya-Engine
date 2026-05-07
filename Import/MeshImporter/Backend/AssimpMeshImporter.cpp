@@ -618,14 +618,14 @@ bool Pitaya::Import::AssimpMeshImporter::ParseMaterial(const aiMaterial* aimater
         aiTextureType_AMBIENT_OCCLUSION };
 
     //dunmmyentry 用于material临时序列化
-    Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry dummyAssetEntry_TEXTURES[static_cast<uint8_t>(Pitaya::GPU::TextureUsage::Unknown)] = {};
+    Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry dummyAssetEntry_TEXTURES[Pitaya::GPU::MaterialTextureSlotCount] = {};
     for (auto aiType : texTypes)
     {
         aiString path;
         if (aimaterial->GetTexture(aiType, 0, &path) == AI_SUCCESS)
         {
-            Pitaya::GPU::TextureUsage usage = AiTextureTypeToTextureUsage(aiType);
-            if (usage == Pitaya::GPU::TextureUsage::Unknown) { continue; }
+            Pitaya::GPU::TextureSlot usage = AiTextureTypeToTextureUsage(aiType);
+            if (static_cast<uint8_t>(usage) >= Pitaya::GPU::MaterialTextureSlotCount) { continue; }
 
             Pitaya::Core::GUID texGuid;
             std::filesystem::path virtualpath;

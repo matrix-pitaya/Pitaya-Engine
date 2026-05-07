@@ -4,25 +4,7 @@
 #include<Core/Container/SlotMap.h>
 #include<Render/Common/RenderCommandType.h>
 #include<Render/Common/PostProcessStep.h>
-
-namespace Pitaya::GPU
-{
-    class Texture;
-    class Texture2D;
-    class Texture2DArray;
-    class TextureCubemap;
-
-    class Shader;
-
-    class VertexArray;
-    class VertexBuffer;
-    class IndexBuffer;
-
-    class UniformBuffer;
-    class ShaderStorageBuffer;
-
-    class FrameBuffer;
-}
+#include<GPU/Common/GPUObjectType.h>
 
 namespace Pitaya::Render
 {

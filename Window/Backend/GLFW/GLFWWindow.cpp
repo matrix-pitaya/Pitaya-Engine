@@ -119,7 +119,7 @@ namespace
 	template <size_t N>
 	inline void FillGLFWWindowKeyMap(Pitaya::Input::KeyCode(&map)[N]) noexcept
 	{
-		std::fill(std::begin(map), std::end(map), Pitaya::Input::KeyCode::Unknown);
+		std::fill(std::begin(map), std::end(map), Pitaya::Input::KeyCode::Invalid);
 
 		//鼠标
 		map[GLFW_MOUSE_BUTTON_1] = Pitaya::Input::KeyCode::Mouse0;

@@ -193,16 +193,9 @@ namespace Pitaya::Render
 				inline void Clear() noexcept
 				{
 					CommandBuffer.clear();
-					CommandBuffer.reserve(64 * 1024);
-
 					InstanceModelTransforms.clear();
-					InstanceModelTransforms.reserve(1024);
-
 					BoneMatrices.clear();
-					BoneMatrices.reserve(1024);
-
 					Lights.clear();
-					Lights.reserve(10);
 				}
 			};
 
@@ -317,7 +310,7 @@ namespace Pitaya::Render
 			}
 			inline void PushDrawCommandToPass(DrawCommand&& cmd)
 			{
-				if (cmd.BoneInverseMatrices.empty())
+				if (!cmd.BoneInverseMatrices || cmd.BoneInverseMatrices->empty())
 				{
 					staticPass.emplace_back(std::move(cmd));
 				}
@@ -333,7 +326,7 @@ namespace Pitaya::Render
 
 				// 处理命令队列
 				auto ProcessQueue = 
-					[this](std::vector<DrawCommand>& currentPass, bool isSkinnedBatch) -> uint32_t
+					[this](std::vector<DrawCommand>& currentPass) -> uint32_t
 					{
 						if (currentPass.empty()) { return 0; }
 
@@ -379,7 +372,7 @@ namespace Pitaya::Render
 								currentBatch.Blend = cmd.Blend;
 								currentBatch.CullFace = cmd.CullFace;
 								currentBatch.ShaderHandle = cmd.ShaderHandle;
-								for (uint32_t i = 0; i < static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Unknown); i++)
+								for (uint32_t i = 0; i < Pitaya::GPU::MaterialTextureSlotCount; i++)
 								{
 									currentBatch.TextureHandles[i] = cmd.TextureHandles[i];
 								}
@@ -392,17 +385,17 @@ namespace Pitaya::Render
 							front.InstanceModelTransforms.push_back({ cmd.ModelMatrix ,glm::transpose(glm::inverse(cmd.ModelMatrix)) });
 
 							// 只有蒙皮渲染队列才去处理骨骼
-							if (isSkinnedBatch)
+							if (cmd.BoneInverseMatrices && !cmd.BoneInverseMatrices->empty())
 							{
 								constexpr const size_t MaxBonesPerInstance = 100;
-								size_t bonesToCopy = std::min(cmd.BoneInverseMatrices.size(), MaxBonesPerInstance);
+								size_t bonesToCopy = std::min(cmd.BoneInverseMatrices->size(), MaxBonesPerInstance);
 								size_t paddingBones = MaxBonesPerInstance - bonesToCopy;
 								if (bonesToCopy > 0)
 								{
 									front.BoneMatrices.insert(
 										front.BoneMatrices.end(),
-										cmd.BoneInverseMatrices.begin(),
-										cmd.BoneInverseMatrices.begin() + bonesToCopy);
+										cmd.BoneInverseMatrices->begin(),
+										cmd.BoneInverseMatrices->begin() + bonesToCopy);
 								}
 								if (paddingBones > 0)	// 不足补1单元矩阵
 								{
@@ -423,8 +416,8 @@ namespace Pitaya::Render
 
 				// 严格控制调用顺序 先骨骼网格 后静态网格
 				uint32_t afterBath = 0;
-				afterBath += ProcessQueue(skinnedPass, true);   // 先处理骨骼队列
-				afterBath += ProcessQueue(staticPass, false);   // 后处理无骨骼的静态物体队列
+				afterBath += ProcessQueue(skinnedPass);   // 先处理骨骼队列
+				afterBath += ProcessQueue(staticPass);    // 后处理无骨骼的静态物体队列
 
 				Core::Print(Core::Color::Red, "[Batch] Before:%d to After:%d", beforeBatch, afterBath);
 			}
@@ -454,17 +447,47 @@ namespace Pitaya::Render
 	private:
 		inline bool Initialize(void* nativeWindow)
 		{
+			// front buffer reserve
+			renderPacket.front.CommandBuffer.reserve(64 * 1024);
+			renderPacket.front.InstanceModelTransforms.reserve(1024);
+			renderPacket.front.BoneMatrices.reserve(1024);
+			renderPacket.front.Lights.reserve(10);
+
+			// front buffer reserve
+			renderPacket.back.CommandBuffer.reserve(64 * 1024);
+			renderPacket.back.InstanceModelTransforms.reserve(1024);
+			renderPacket.back.BoneMatrices.reserve(1024);
+			renderPacket.back.Lights.reserve(10);
+
+			// skinned comand reserve
+			renderPacket.skinnedPass.reserve(1024);
+
+			// static comand reserve
+			renderPacket.staticPass.reserve(1024);
+
+			// start render thread
 			isRunning.store(true, std::memory_order_release);
 			renderThread = Pitaya::Thread::RegisterThread("Render", &Pitaya::Render::Renderer::BootstrapRenderThread, this, nativeWindow);
 			if (renderThread == Pitaya::Core::Thread::Identifier::Invalid) { throw std::runtime_error("Render Thread Register Fail!"); }
+			
+			// invoke hook func
 			INVOKE_POSTRENDERERINTIALIZE_HOOK(nativeWindow)
 			return true;
 		}
 		inline void Release()
 		{
+			// terminate render thread
 			isRunning.store(false, std::memory_order_release);
 			cond.notify_one();
 			Pitaya::Thread::UnregisterThread(renderThread);
+
+			// clear render packet
+			renderPacket.front.Clear();
+			renderPacket.back.Clear();
+			renderPacket.skinnedPass.clear();
+			renderPacket.staticPass.clear();
+
+			//invoke hook func
 			INVOKE_POSTRENDERERRELEASE_HOOK
 		}
 
@@ -554,7 +577,7 @@ namespace Pitaya::Render
 				cmd.IndexCount = mesh->SubMeshs[submeshIndex].IndexCount;
 				cmd.BaseIndex = mesh->SubMeshs[submeshIndex].BaseIndex;
 				cmd.BaseVertex = mesh->SubMeshs[submeshIndex].BaseVertex;
-				cmd.BoneInverseMatrices = mesh->BoneInverseMatrices;
+				cmd.BoneInverseMatrices = &mesh->BoneInverseMatrices;
 			}
 			else
 			{
@@ -626,7 +649,7 @@ namespace Pitaya::Render
 					0);
 
 				//纹理绑定
-				for (uint32_t j = 0; j < static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Unknown); j++)
+				for (uint32_t j = 0; j < Pitaya::GPU::MaterialTextureSlotCount; j++)
 				{
 					//无纹理
 					if (!material->Textures[j]) { continue; }
@@ -662,7 +685,7 @@ namespace Pitaya::Render
 					0);
 
 				//异常Shader只会使用这一个纹理
-				cmd.TextureHandles[static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Albedo)] = globalRHI.FallbackTextureHandle;
+				cmd.TextureHandles[static_cast<uint32_t>(Pitaya::GPU::TextureSlot::Albedo)] = globalRHI.FallbackTextureHandle;
 			}
 
 			renderPacket.PushDrawCommandToPass(std::move(cmd));
@@ -775,7 +798,7 @@ namespace Pitaya::Render
 		{
 			static_cast<Pitaya::Render::Renderer*>(renderer)->RenderThread(nativeWindow);
 		}
-	
+
 	private:
 		GlobalRHI globalRHI;
 		RenderPacket renderPacket;

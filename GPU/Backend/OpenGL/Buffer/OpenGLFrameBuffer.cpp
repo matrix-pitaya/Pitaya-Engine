@@ -111,12 +111,12 @@ void Pitaya::GPU::FrameBuffer::Factory::Destroy(Pitaya::GPU::FrameBuffer frameBu
     GLuint intermediateFBO = frameBuffer.InternalId;
     GLuint intermediateColorAttachment = frameBuffer.InternalColorAttachmentId;
 
-    if (FBO) { glDeleteFramebuffers(1, &FBO); FBO = 0; }
-    if (colorAttachment) { glDeleteTextures(1, &colorAttachment); colorAttachment = 0; }
-    if (depthAttachment) { glDeleteTextures(1, &depthAttachment); depthAttachment = 0; }
+    if (FBO) { glDeleteFramebuffers(1, &FBO); }
+    if (colorAttachment) { glDeleteTextures(1, &colorAttachment); }
+    if (depthAttachment) { glDeleteTextures(1, &depthAttachment); }
 
     // 清理中间 FBO 资源
-    if (intermediateFBO) { glDeleteFramebuffers(1, &intermediateFBO); intermediateFBO = 0; }
-    if (intermediateColorAttachment) { glDeleteTextures(1, &intermediateColorAttachment); intermediateColorAttachment = 0; }
+    if (intermediateFBO) { glDeleteFramebuffers(1, &intermediateFBO); }
+    if (intermediateColorAttachment) { glDeleteTextures(1, &intermediateColorAttachment); }
 }
 #endif

@@ -1,23 +1,11 @@
 #include<Render/RenderPipeline.h>
 #include<Render/Frontend/Renderer.h>
-#include<Asset/Common/FuncTable.h>
+
 #include<Core/Utils/Console.h>
 #include<Core/Asset/Asset.h>
+
 #include<Hook/def.h>
 
-bool Pitaya::Render::RenderPipeline::Initialize()
-{
-	graph.Passes.reserve(10);
-	graph.Items.reserve(5000);
-	graph.Lights.reserve(10);
-	return true;
-}
-void Pitaya::Render::RenderPipeline::Release()
-{
-	graph.Passes.clear();
-	graph.Items.clear();
-	graph.Lights.clear();
-}
 void Pitaya::Render::RenderPipeline::Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine> passkey, Pitaya::Render::Renderer* renderer)
 {
 	INVOKE_PRERENDERPIPELINEEXECUTE_HOOK(passkey, this)
@@ -41,9 +29,9 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 		uint32_t submitCount = 0;
 		for (auto& item : graph.Items)	//处理所有渲染对象
 		{
-			if (pass.CullingMask.HasBits(item.LayerMask.GetEnum()) && 
+			if (pass.CullingMask.HasBits(item.LayerMask.GetEnum()) &&
 				frustum.IsVisible(item.Mesh ? item.Mesh->BoundingBox.ToWorld(item.Model) :
-				Pitaya::Core::AABB({ glm::vec3(-0.5f), glm::vec3(0.5f) }).ToWorld(item.Model)))
+					Pitaya::Core::AABB({ glm::vec3(-0.5f), glm::vec3(0.5f) }).ToWorld(item.Model)))
 			{
 				renderer->Submit(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), item);
 				++submitCount;

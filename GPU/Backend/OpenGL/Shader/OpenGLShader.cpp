@@ -97,9 +97,6 @@ Pitaya::GPU::Shader Pitaya::GPU::Shader::Factory::Create(const char* vertexSourc
 void Pitaya::GPU::Shader::Factory::Destroy(Pitaya::GPU::Shader shader)
 {
     GLuint programId = shader.Id;
-    if (programId)
-    {
-        glDeleteProgram(programId);
-    }
+    if (programId){ glDeleteProgram(programId); }
 }
 #endif

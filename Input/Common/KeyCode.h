@@ -4,7 +4,7 @@
 
 namespace Pitaya::Input
 {
-	enum class KeyCode : uint8_t
+	enum class KeyCode : uint32_t
 	{
 		Mouse0,		//鼠标左键
 		Mouse1,		//鼠标右键
@@ -68,6 +68,8 @@ namespace Pitaya::Input
 		RightAlt,
 		RightSuper,
 
-		Unknown
+		Invalid
 	};
+
+	inline constexpr const size_t KeyCodeCount = static_cast<size_t>(KeyCode::Invalid);
 }

@@ -426,10 +426,6 @@ void Pitaya::Editor::GUI::DrawMenuBar()
 				}
 			}
 #endif
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Utils"))
-		{
 			if (ImGui::MenuItem("MemoryAnalysis"))
 			{
 				panels.consolePanel.Console(Pitaya::Log::LogLevel::Debug, Pitaya::Core::GetMemoryState());

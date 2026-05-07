@@ -99,6 +99,12 @@
     <ClInclude Include="StateMachine\StateMachine.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\Panel\UtilsPanel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\FileDialog\Tinyfiledialogs\tinyfiledialogs.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp">
@@ -147,6 +153,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="StateMachine\StateMachine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Panel\UtilsPanel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\FileDialog\Tinyfiledialogs\tinyfiledialogs.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

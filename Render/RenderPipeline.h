@@ -3,9 +3,10 @@
 #include<Core/Allocate/Allocate.h>
 #include<Core/Asset/Asset.h>
 #include<Core/PassKey/PassKey.h>
+
 #include<Context/Common/Module.h>
 #include<Context/Context.h>
-#include<Asset/Common/Shader.h>
+
 #include<Render/Common/PostProcessType.h>
 #include<Render/Common/LightInfo.h>
 #include<Render/Specific/RenderPass.h>
@@ -64,8 +65,21 @@ namespace Pitaya::Render
 		RenderPipeline& operator=(RenderPipeline&&) = delete;
 
 	private:
-		bool Initialize();
-		void Release();
+		inline bool Initialize()
+		{
+			// reserve render graph
+			graph.Passes.reserve(10);
+			graph.Items.reserve(5000);
+			graph.Lights.reserve(10);
+			return true;
+		}
+		inline void Release()
+		{
+			// clear render graph
+			graph.Passes.clear();
+			graph.Items.clear();
+			graph.Lights.clear();
+		}
 
 	public:
 		inline void NewPipeline(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) noexcept
@@ -87,7 +101,7 @@ namespace Pitaya::Render
 		{
 			graph.Lights.emplace_back(light);
 		}
-
+		
 	public:
 		void Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Render::Renderer*);
 

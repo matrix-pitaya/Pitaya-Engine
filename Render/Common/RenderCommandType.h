@@ -8,6 +8,7 @@ namespace Pitaya::Render
 	{
 		BeginPass = 0,
 		InstanceDraw,
+		DrawSkybox,
 		PostProcess,
 		BlitToScreen,
 

@@ -176,6 +176,7 @@
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Common\EngineState.h" />
     <ClInclude Include="Common\TransformTool.h" />
+    <ClInclude Include="GUI\FileDialog\Tinyfiledialogs\tinyfiledialogs.h" />
     <ClInclude Include="GUI\IconFontCppHeaders\IconsFontAwesome6.h" />
     <ClInclude Include="GUI\ImGui\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="GUI\ImGui\Backends\imgui_impl_glfw.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="GUI\Panel\Panel.h" />
     <ClInclude Include="GUI\Panel\ProjectPanel.h" />
     <ClInclude Include="GUI\Panel\SceneViewportPanel.h" />
+    <ClInclude Include="GUI\Panel\UtilsPanel.h" />
     <ClInclude Include="GUI\Panel\ViewportPanel.h" />
     <ClInclude Include="Profiler\Profiler.h" />
     <ClInclude Include="Profiler\FrameState.h" />
@@ -203,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="GUI\FileDialog\Tinyfiledialogs\tinyfiledialogs.c" />
     <ClCompile Include="GUI\ImGui\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="GUI\ImGui\Backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="GUI\ImGui\Backends\imgui_impl_opengl3.cpp" />
@@ -216,6 +219,7 @@
     <ClCompile Include="GUI\Panel\InspectorPanel.cpp" />
     <ClCompile Include="GUI\Panel\ProfilerPanel.cpp" />
     <ClCompile Include="GUI\Panel\SceneViewportPanel.cpp" />
+    <ClCompile Include="GUI\Panel\UtilsPanel.cpp" />
     <ClCompile Include="Profiler\Profiler.cpp" />
     <ClCompile Include="StateMachine\StateMachine.cpp" />
   </ItemGroup>

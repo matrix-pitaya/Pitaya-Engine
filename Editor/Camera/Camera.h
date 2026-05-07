@@ -52,8 +52,8 @@ namespace Pitaya::Editor
 		void Focus(const glm::vec3& targetPoint, float targetDist = 5.0f);
 
 	private:
-		void OnMouseScroll(const Pitaya::Event::MouseScrollEventArgs&);
-		void OnMouseCurrsorMove(const Pitaya::Event::MouseCurrsorMoveEventArgs&);
+		void OnMouseScroll(Pitaya::Event::MouseScrollEventArgs);
+		void OnMouseCurrsorMove(Pitaya::Event::MouseCurrsorMoveEventArgs);
 
 	public:
 		inline const Pitaya::Core::CameraState& GetCameraState() const noexcept

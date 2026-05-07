@@ -17,9 +17,9 @@ namespace Pitaya::Core
                 farPoint.x = (plane.Normal.x > 0) ? aabb.Max.x : aabb.Min.x;
                 farPoint.y = (plane.Normal.y > 0) ? aabb.Max.y : aabb.Min.y;
                 farPoint.z = (plane.Normal.z > 0) ? aabb.Max.z : aabb.Min.z;
-
-                if (plane.Distance(farPoint) < 0)
-                {
+                
+                if (plane.Distance(farPoint) < 0) 
+                { 
                     return false;
                 }
             }

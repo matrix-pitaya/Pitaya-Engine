@@ -4,7 +4,7 @@
 
 namespace Pitaya::GPU
 {
-	enum class TextureUsage : uint8_t
+	enum class TextureSlot : uint8_t
 	{
 		Albedo = 0,       //基础色
 		Specular,         //高光反射纹理
@@ -16,6 +16,11 @@ namespace Pitaya::GPU
 		Height,           //高度/位移
 		Mask,             //遮罩
 
-		Unknown
+		CSM,
+		SPOT,
+		POINT
 	};
+
+	inline constexpr const size_t MaterialTextureSlotCount = static_cast<size_t>(TextureSlot::CSM);
+	inline constexpr const size_t ShadowTextureSlotCount = static_cast<size_t>(TextureSlot::POINT) - static_cast<size_t>(TextureSlot::CSM) + 1;
 }

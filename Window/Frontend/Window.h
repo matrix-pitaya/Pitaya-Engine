@@ -68,7 +68,7 @@ namespace Pitaya::Window
 	public:
 		inline Pitaya::Input::KeyCode ToKeyCode(int key) const noexcept
 		{
-			return (key < 0 || key >= 512) ? Pitaya::Input::KeyCode::Unknown : map[key];
+			return (key < 0 || key >= 512) ? static_cast<Pitaya::Input::KeyCode>(Pitaya::Input::KeyCodeCount) : map[key];
 		}
 
 	private:

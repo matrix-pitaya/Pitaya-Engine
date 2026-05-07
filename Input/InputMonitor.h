@@ -66,31 +66,31 @@ namespace Pitaya::Input
 	public:
 		inline bool GetKeyDown(Pitaya::Input::KeyCode keyCode) const noexcept
 		{ 
-			return (keyCode != Pitaya::Input::KeyCode::Unknown) ?
+			return (static_cast<size_t>(keyCode) < Pitaya::Input::KeyCodeCount) ?
 				currentFrameState[static_cast<size_t>(keyCode)] : false;
 		}
 		inline bool GetKeyPressed(Pitaya::Input::KeyCode keyCode) const noexcept
 		{
-			return (keyCode != Pitaya::Input::KeyCode::Unknown) ?
+			return (static_cast<size_t>(keyCode) < Pitaya::Input::KeyCodeCount) ?
 				(currentFrameState[static_cast<size_t>(keyCode)] && !previousFrameState[static_cast<size_t>(keyCode)]) : false;
 		}
 		inline bool GetKeyReleased(Pitaya::Input::KeyCode keyCode) const noexcept
 		{
-			return (keyCode != Pitaya::Input::KeyCode::Unknown) ?
-				(!currentFrameState[(size_t)keyCode] && previousFrameState[(size_t)keyCode]) : false;
+			return (static_cast<size_t>(keyCode) < Pitaya::Input::KeyCodeCount) ?
+				(!currentFrameState[static_cast<size_t>(keyCode)] && previousFrameState[static_cast<size_t>(keyCode)]) : false;
 		}
 
 	private:
 		inline void OnKey(Pitaya::Event::Event event)
 		{
-			if (event.args.key.code != Pitaya::Input::KeyCode::Unknown)
+			if (static_cast<size_t>(event.args.key.code) < Pitaya::Input::KeyCodeCount)
 			{
 				hardwareState[static_cast<size_t>(event.args.key.code)] = (event.args.key.action != 0);
 			}
 		}
 		inline void OnMouseButton(Pitaya::Event::Event event)
 		{
-			if (event.args.mouseButton.button != Pitaya::Input::KeyCode::Unknown)
+			if (static_cast<size_t>(event.args.key.code) < Pitaya::Input::KeyCodeCount)
 			{
 				hardwareState[static_cast<size_t>(event.args.mouseButton.button)] = (event.args.mouseButton.action != 0);
 			}
@@ -107,9 +107,9 @@ namespace Pitaya::Input
 		}
 
 	private:
-		bool currentFrameState[static_cast<size_t>(Pitaya::Input::KeyCode::Unknown)] = {};
-		bool previousFrameState[static_cast<size_t>(Pitaya::Input::KeyCode::Unknown)] = {};
-		bool hardwareState[static_cast<size_t>(Pitaya::Input::KeyCode::Unknown)] = {};
+		bool currentFrameState[Pitaya::Input::KeyCodeCount] = {};
+		bool previousFrameState[Pitaya::Input::KeyCodeCount] = {};
+		bool hardwareState[Pitaya::Input::KeyCodeCount] = {};
 
 		Pitaya::Event::EventToken keyToken;
 		Pitaya::Event::EventToken mouseButtonToken;

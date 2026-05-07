@@ -10,6 +10,7 @@
 #include<Editor/GUI/Panel/ProfilerPanel.h>
 #include<Editor/GUI//Panel/PreferencesPanel.h>
 #include<Editor/GUI/Panel/ProjectPanel.h>
+#include<Editor/GUI/Panel/UtilsPanel.h>
 #include<Editor/Common/TransformTool.h>
 
 #include<string>
@@ -129,7 +130,7 @@ namespace Pitaya::Editor
 			inline constexpr auto Each() noexcept
 			{
 				return std::to_array<Panel*>({ &hierarchyPanel, &inspectorPanel, &profilerPanel, &preferencesPanel,
-									&projectPanel, &sceneViewportPanel, &gameViewportPanel, &consolePanel });
+									&projectPanel, &sceneViewportPanel, &gameViewportPanel, &consolePanel, &utilsPanel });
 			}
 
 		private:
@@ -141,6 +142,7 @@ namespace Pitaya::Editor
 			ProjectPanel projectPanel;
 			SceneViewportPanel sceneViewportPanel;
 			GameViewportPanel gameViewportPanel;
+			UtilsPanel utilsPanel;
 		};
 
 	public:

@@ -63,7 +63,7 @@
     <ClInclude Include="Common\TextureType.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\TextureUsage.h">
+    <ClInclude Include="Common\TextureSlot.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Common\TextureCubemapFace.h">

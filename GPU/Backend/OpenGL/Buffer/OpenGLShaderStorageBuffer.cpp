@@ -16,7 +16,6 @@ Pitaya::GPU::ShaderStorageBuffer Pitaya::GPU::ShaderStorageBuffer::Factory::Crea
 void Pitaya::GPU::ShaderStorageBuffer::Factory::Destroy(Pitaya::GPU::ShaderStorageBuffer shaderStorageBuffer)
 {
     GLuint SSBO = shaderStorageBuffer.Id;
-    glDeleteBuffers(1, &SSBO);
+    if(SSBO > 0) { glDeleteBuffers(1, &SSBO); }
 }
-
 #endif

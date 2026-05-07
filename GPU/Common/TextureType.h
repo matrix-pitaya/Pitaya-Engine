@@ -1,11 +1,11 @@
 #pragma once
 
-#include<cstdint>
 #include<Core/Utils/String.h>
+#include<cstdint>
 
 namespace Pitaya::GPU
 {
-	enum class TextureType : uint8_t
+	enum class TextureType : uint32_t
 	{
 		Texture2D = 0,
 		Texture3D,
@@ -15,7 +15,7 @@ namespace Pitaya::GPU
 		Unknown
 	};
 
-	inline std::string ToString(Pitaya::GPU::TextureType type)
+	inline std::string_view ToString(Pitaya::GPU::TextureType type)
 	{
 		switch (type)
 		{

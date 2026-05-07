@@ -169,7 +169,7 @@
     <ClInclude Include="Common\ShaderVariableType.h" />
     <ClInclude Include="Common\TextureCubemapFace.h" />
     <ClInclude Include="Common\TextureType.h" />
-    <ClInclude Include="Common\TextureUsage.h" />
+    <ClInclude Include="Common\TextureSlot.h" />
     <ClInclude Include="Frontend\Buffer\FrameBuffer.h" />
     <ClInclude Include="Frontend\Buffer\IndexBuffer.h" />
     <ClInclude Include="Frontend\Buffer\ShaderStorageBuffer.h" />

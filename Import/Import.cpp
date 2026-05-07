@@ -15,7 +15,7 @@ namespace
 			case Pitaya::Import::TextureAPI::StbImage:
 				return std::make_unique<Pitaya::Import::StbImageTextureImporter>();
 
-			case Pitaya::Import::TextureAPI::Unknown:
+			case Pitaya::Import::TextureAPI::Invalid:
 				Pitaya::Log::Warning("unknown texture import API, create StbImageTexture2D importer");
 				return std::make_unique<Pitaya::Import::StbImageTextureImporter>();
 
@@ -31,7 +31,7 @@ namespace
 			case Pitaya::Import::MeshAPI::Assimp:
 				return std::make_unique<Pitaya::Import::AssimpMeshImporter>();
 		
-			case Pitaya::Import::MeshAPI::Unknwon:
+			case Pitaya::Import::MeshAPI::Invalid:
 				Pitaya::Log::Warning("unknwon mesh api, create assimp mesh importer");
 				return std::make_unique<Pitaya::Import::AssimpMeshImporter>();
 

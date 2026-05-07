@@ -12,44 +12,6 @@
 #include<Core/Utils/System.h>
 #include<Application/Built-in.h>
 
-namespace
-{
-	//离线预烘培用于将复杂模型的.obj格式 转化为二进制.war进行存储
-	bool OfflinePreBakingStaticMesh(const Pitaya::Import::StaticMeshImportResult& result, const std::filesystem::path& warPath)
-	{
-		std::ofstream out(warPath, std::ios::binary);
-		if (!out.is_open()) { return false; }
-
-		// 写基础信息
-		out.write(reinterpret_cast<const char*>(&result.GUID), sizeof(Pitaya::Core::GUID));
-		out.write(reinterpret_cast<const char*>(&result.IsValid), sizeof(bool));
-		out.write(reinterpret_cast<const char*>(&result.BoundingBox), sizeof(Pitaya::Core::AABB));
-
-		// 写入浮点顶点数组
-		uint32_t vertexCount = static_cast<uint32_t>(result.Vertices.size());
-		out.write(reinterpret_cast<const char*>(&vertexCount), sizeof(uint32_t));
-		if (vertexCount > 0) { out.write(reinterpret_cast<const char*>(result.Vertices.data()), vertexCount * sizeof(float)); }
-
-		// 写入索引数组
-		uint32_t indexCount = static_cast<uint32_t>(result.Indices.size());
-		out.write(reinterpret_cast<const char*>(&indexCount), sizeof(uint32_t));
-		if (indexCount > 0) { out.write(reinterpret_cast<const char*>(result.Indices.data()), indexCount * sizeof(uint32_t)); }
-
-		// 写入 SubMesh 数组 因为其内部只有基础数据所以直接写整块内存
-		uint32_t subMeshCount = static_cast<uint32_t>(result.SubMeshs.size());
-		out.write(reinterpret_cast<const char*>(&subMeshCount), sizeof(uint32_t));
-		if (subMeshCount > 0) { out.write(reinterpret_cast<const char*>(result.SubMeshs.data()), subMeshCount * sizeof(Pitaya::Asset::Mesh::SubMesh)); }
-
-		// 写入材质 GUID 数组
-		uint32_t matCount = static_cast<uint32_t>(result.MaterialGUIDs.size());
-		out.write(reinterpret_cast<const char*>(&matCount), sizeof(uint32_t));
-		if (matCount > 0) { out.write(reinterpret_cast<const char*>(result.MaterialGUIDs.data()), matCount * sizeof(Pitaya::Core::GUID)); }
-
-		out.close();
-		return true;
-	}
-}
-
 bool Pitaya::Asset::AssetHub::Initialize()
 {
 	engineRoot = Pitaya::Core::GetExecutableDirectory() / "resource";
@@ -79,7 +41,7 @@ bool Pitaya::Asset::AssetHub::Initialize()
 		buildIn.DefaultMaterial.State.SetBits(Pitaya::Core::AssetState::CPULoading);
 		auto* materialNativeData = buildIn.DefaultMaterial.Data.load(std::memory_order_acquire);
 		materialNativeData->Shader = LoadAsset<Pitaya::Asset::Shader>(Pitaya::Asset::Shader::Default);
-		materialNativeData->Textures[static_cast<uint8_t>(Pitaya::GPU::TextureUsage::Albedo)] = LoadAsset<Pitaya::Asset::Texture>(Pitaya::Asset::Texture::White);
+		materialNativeData->Textures[static_cast<uint8_t>(Pitaya::GPU::TextureSlot::Albedo)] = LoadAsset<Pitaya::Asset::Texture>(Pitaya::Asset::Texture::White);
 		buildIn.DefaultMaterial.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
 		buildIn.DefaultMaterial.State.SetBits(Pitaya::Core::AssetState::GPULoaded);
 		materials.Emplace(Pitaya::Asset::Material::Default, &buildIn.DefaultMaterial);

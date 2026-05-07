@@ -8,7 +8,7 @@ namespace Pitaya::Editor
     {
         friend class Pitaya::Editor::GUI;
     private:
-        enum class SettingsTab : uint8_t
+        enum class SettingsTab : uint32_t
         {
             General,
             ExternalTools,

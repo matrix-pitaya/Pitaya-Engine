@@ -10,7 +10,7 @@
 #include<Asset/Common/Texture.h>
 #include<Asset/Common/Shader.h>
 #include<GPU/Common/ShaderVariableType.h>
-#include<GPU/Common/TextureUsage.h>
+#include<GPU/Common/TextureSlot.h>
 #include<Render/Common/RenderQueue.h>
 
 #include<glm.hpp>
@@ -103,7 +103,7 @@ namespace Pitaya::Asset
 		};
 
 		Pitaya::Core::Asset<Pitaya::Asset::Shader> Shader = nullptr;
-		Pitaya::Core::Asset<Pitaya::Asset::Texture> Textures[static_cast<size_t>(Pitaya::GPU::TextureUsage::Unknown)] = {};
+		Pitaya::Core::Asset<Pitaya::Asset::Texture> Textures[Pitaya::GPU::MaterialTextureSlotCount] = {};
 		Material::Property Property;
 		Pitaya::Render::RenderQueue RenderQueue = Pitaya::Render::RenderQueue::Geometry;
 		uint32_t SortId = Next();		//用于生成DrawCommand的SortKey
@@ -132,8 +132,7 @@ namespace Pitaya::Asset
 
 			//textures
 			auto& textures = context.GetSubContext("Textures");
-			uint32_t count = static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Unknown);
-			for (uint32_t i = 0; i < count; i++)
+			for (uint32_t i = 0; i < Pitaya::GPU::MaterialTextureSlotCount; i++)
 			{
 				auto& texture = textures.GetSubContext("Type_" + std::to_string(i));
 				texture.Write("GUID", Textures[i].GetGUID().ToString());
@@ -192,8 +191,7 @@ namespace Pitaya::Asset
 			if (context.HasSubContext("Textures"))
 			{
 				auto& textures = context.GetSubContext("Textures");
-				uint32_t count = static_cast<uint32_t>(Pitaya::GPU::TextureUsage::Unknown);
-				for (uint32_t i = 0; i < count; i++)
+				for (uint32_t i = 0; i < Pitaya::GPU::MaterialTextureSlotCount; i++)
 				{
 					str = "Type_" + std::to_string(i);
 					if (textures.HasSubContext(str))

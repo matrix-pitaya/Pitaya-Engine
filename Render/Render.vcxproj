@@ -163,6 +163,7 @@
     <ClInclude Include="Command\BeginPassCommand.h" />
     <ClInclude Include="Command\BlitToScreenCommand.h" />
     <ClInclude Include="Command\DrawCommand.h" />
+    <ClInclude Include="Command\DrawSkyboxCommand.h" />
     <ClInclude Include="Command\InstancedDrawCommand.h" />
     <ClInclude Include="Command\PostProcessCommand.h" />
     <ClInclude Include="Common\API.h" />

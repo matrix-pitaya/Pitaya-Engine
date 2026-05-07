@@ -31,14 +31,14 @@ namespace Pitaya::Event
 	};
 	struct KeyEventArgs
 	{
-		Pitaya::Input::KeyCode code = Pitaya::Input::KeyCode::Unknown;
+		Pitaya::Input::KeyCode code = Pitaya::Input::KeyCode::Invalid;
 		int scancode = 0;
 		int action = 0;
 		int mods = 0;
 	};
 	struct MouseButtonEventArgs
 	{
-		Pitaya::Input::KeyCode button = Pitaya::Input::KeyCode::Unknown;
+		Pitaya::Input::KeyCode button = Pitaya::Input::KeyCode::Invalid;
 		int action = 0;
 		int mods = 0;
 	};
