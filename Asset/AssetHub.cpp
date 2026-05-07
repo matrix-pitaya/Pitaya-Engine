@@ -21,16 +21,16 @@ bool Pitaya::Asset::AssetHub::Initialize()
 	//加载内置资源
 	//Default Shader
 	{
-		buildIn.DefaultShader.Data.store(Pitaya::Core::New<Pitaya::Asset::Shader>(), std::memory_order_release);
-		buildIn.DefaultShader.GUID = Pitaya::Asset::Shader::Default;
-		buildIn.DefaultShader.State.SetBits(Pitaya::Core::AssetState::CPULoading);
+		buildIn.DefaultStaticShader.Data.store(Pitaya::Core::New<Pitaya::Asset::Shader>(), std::memory_order_release);
+		buildIn.DefaultStaticShader.GUID = Pitaya::Asset::Shader::Static;
+		buildIn.DefaultStaticShader.State.SetBits(Pitaya::Core::AssetState::CPULoading);
 		Pitaya::Import::ShaderImportResult result;
-		result.VertexSource = Pitaya::Core::LoadBuiltInRC(IDR_BUILDIN_DEFAULT_VERTEX_SHADER);
-		result.FragmentSource = Pitaya::Core::LoadBuiltInRC(IDR_BUILDIN_DEFAULT_FRAGMENT_SHADER);
+		result.VertexSource = Pitaya::Core::LoadBuiltInRC(IDR_DEFAULT_STATIC_VERTEX_SHADER);
+		result.FragmentSource = Pitaya::Core::LoadBuiltInRC(IDR_DEFAULT_STATIC_FRAGMENT_SHADER);
 		result.Type = Pitaya::GPU::Shader::VF;
-		result.GUID = Pitaya::Asset::Shader::Default;
-		buildIn.DefaultShader.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
-		shaders.Emplace(Pitaya::Asset::Shader::Default, &buildIn.DefaultShader);
+		result.GUID = Pitaya::Asset::Shader::Static;
+		buildIn.DefaultStaticShader.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
+		shaders.Emplace(Pitaya::Asset::Shader::Static, &buildIn.DefaultStaticShader);
 		cacheAssetOperateQueue.push({ result });
 	}
 
@@ -40,7 +40,7 @@ bool Pitaya::Asset::AssetHub::Initialize()
 		buildIn.DefaultMaterial.GUID = Pitaya::Asset::Material::Default;
 		buildIn.DefaultMaterial.State.SetBits(Pitaya::Core::AssetState::CPULoading);
 		auto* materialNativeData = buildIn.DefaultMaterial.Data.load(std::memory_order_acquire);
-		materialNativeData->Shader = LoadAsset<Pitaya::Asset::Shader>(Pitaya::Asset::Shader::Default);
+		materialNativeData->Shader = LoadAsset<Pitaya::Asset::Shader>(Pitaya::Asset::Shader::Static);
 		materialNativeData->Textures[static_cast<uint8_t>(Pitaya::GPU::TextureSlot::Albedo)] = LoadAsset<Pitaya::Asset::Texture>(Pitaya::Asset::Texture::White);
 		buildIn.DefaultMaterial.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
 		buildIn.DefaultMaterial.State.SetBits(Pitaya::Core::AssetState::GPULoaded);
@@ -293,7 +293,7 @@ bool Pitaya::Asset::AssetHub::Initialize()
 void Pitaya::Asset::AssetHub::Release()
 {
 	//从资源池移除内置资源
-	shaders.Erase(Pitaya::Asset::Shader::Default);
+	shaders.Erase(Pitaya::Asset::Shader::Static);
 	textures.Erase(Pitaya::Asset::Texture::White);
 	materials.Erase(Pitaya::Asset::Material::Default);
 	meshes.Erase(Pitaya::Asset::Mesh::Cube);
@@ -378,7 +378,7 @@ void Pitaya::Asset::AssetHub::Release()
 		});
 
 	//清除内置资源
-	Pitaya::Core::Delete(buildIn.DefaultShader.Data.load(std::memory_order_acquire)); buildIn.DefaultShader.Data.store(nullptr, std::memory_order_release);
+	Pitaya::Core::Delete(buildIn.DefaultStaticShader.Data.load(std::memory_order_acquire)); buildIn.DefaultStaticShader.Data.store(nullptr, std::memory_order_release);
 	Pitaya::Core::Delete(buildIn.White.Data.load(std::memory_order_acquire)); buildIn.White.Data.store(nullptr, std::memory_order_release);
 	Pitaya::Core::Delete(buildIn.DefaultMaterial.Data.load(std::memory_order_acquire)); buildIn.DefaultMaterial.Data.store(nullptr, std::memory_order_release);
 	Pitaya::Core::Delete(buildIn.Cube.Data.load(std::memory_order_acquire)); buildIn.Cube.Data.store(nullptr, std::memory_order_release);

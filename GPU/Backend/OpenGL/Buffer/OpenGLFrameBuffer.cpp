@@ -6,6 +6,12 @@
 #if defined(PITAYA_GRAPHICS_OPENGL)
 #include<GL/glew.h>
 
+Pitaya::GPU::FrameBuffer Pitaya::GPU::FrameBuffer::Factory::Create()
+{
+    GLuint fboId = 0;
+    glGenFramebuffers(1, &fboId);
+    return { fboId, 0, 0, 0, 0, { } };
+}
 Pitaya::GPU::FrameBuffer Pitaya::GPU::FrameBuffer::Factory::Create(Pitaya::GPU::FrameBufferSpecification specification)
 {
     // MSAA 模式下：这是多重采样 FBO

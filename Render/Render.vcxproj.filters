@@ -75,13 +75,13 @@
     <ClInclude Include="Common\InstanceTransformInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\CSMShadowInfo.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\CSMShadowGeneratePass.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Command\DrawSkyboxCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\ShadowInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\BeginShadowPassCommand.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -86,7 +86,8 @@ void Pitaya::Editor::Editor::HookFunc::PreRenderPipelineExecute(Pitaya::Core::Pa
 		
 		renderPipeline->AddRenderPass(passkey,
 			Pitaya::Editor::Editor::Instance().camera.GetCameraSnapshot(), Pitaya::Editor::Editor::Instance().camera.GetPostProcessSettings(), 
-			Pitaya::Editor::Editor::Instance().camera.GetCullingMask(), Pitaya::Editor::Editor::Instance().camera.GetNativeRenderTarget());
+			Pitaya::Editor::Editor::Instance().camera.GetCullingMask(), Pitaya::Editor::Editor::Instance().camera.GetNativeRenderTarget(),
+			Pitaya::Editor::Editor::Instance().camera.GetCameraState().NearClip, Pitaya::Editor::Editor::Instance().camera.GetCameraState().FarClip);
 	}
 
 	//提交UI

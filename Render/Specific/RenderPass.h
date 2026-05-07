@@ -16,8 +16,7 @@ namespace Pitaya::Render
 		Pitaya::Render::PostProcessSetting PostProcessSetting;
 		Pitaya::Core::StateFlags<Pitaya::Render::RenderLayer> CullingMask;
 		Pitaya::Asset::RenderTarget* RenderTarget = nullptr;
-
-		RenderPass(const Pitaya::Core::CameraSnapshot& cameraSnapshot,  const Pitaya::Render::PostProcessSetting& setting, Pitaya::Core::StateFlags<Pitaya::Render::RenderLayer> cullingMask, Pitaya::Asset::RenderTarget* renderTarget)
-			:CameraSnapshot(cameraSnapshot), PostProcessSetting(setting), CullingMask(cullingMask), RenderTarget(renderTarget){ }
+		float NearClip = 0.1f;
+		float FarClip = 100.0f;
 	};
 }

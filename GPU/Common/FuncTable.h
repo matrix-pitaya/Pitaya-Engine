@@ -40,6 +40,7 @@ namespace Pitaya::Engine
 			if (!OnCreateTextureCubemap) { throw std::runtime_error("FuncTable miss [GPU::CreateTextureCubemap] Function!"); }
 			if (!OnCreateUniformBuffer) { throw std::runtime_error("FuncTable miss [GPU::CreateUniformBuffer] Function!"); }
 			if (!OnCreateFrameBuffer) { throw std::runtime_error("FuncTable miss [GPU::CreateFrameBuffer] Function!"); }
+			if (!OnCreateEmptyFrameBuffer) { throw std::runtime_error("FuncTable miss [GPU::CreateEmptyFrameBuffer] Function!"); }
 			if (!OnCreateShaderStorageBuffer) { throw std::runtime_error("FuncTable miss [GPU::CreateShaderStorageBuffer] Function!"); }
 
 			if (!OnDestroyVertexArray) { throw std::runtime_error("FuncTable miss [GPU::DestroyVertexArray] Function!"); }
@@ -81,6 +82,7 @@ namespace Pitaya::Engine
 			OnCreateTexture2DArray = nullptr;
 			OnCreateUniformBuffer = nullptr;
 			OnCreateFrameBuffer = nullptr;
+			OnCreateEmptyFrameBuffer = nullptr;
 			OnCreateShaderStorageBuffer = nullptr;
 
 			OnDestroyVertexArray = nullptr;
@@ -157,6 +159,10 @@ namespace Pitaya::Engine
 		inline auto InvokeOnCreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const Pitaya::GPU::FrameBufferSpecification& spec) const
 		{
 			return OnCreateFrameBuffer(passkey, spec);
+		}
+		inline auto InvokeOnCreateEmptyFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey) const
+		{
+			return OnCreateEmptyFrameBuffer(passkey);
 		}
 		inline auto InvokeOnCreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint32_t size, uint32_t bindingPoint) const
 		{
@@ -260,6 +266,7 @@ namespace Pitaya::Engine
 		Pitaya::Core::SlotMap<Pitaya::GPU::Texture2DArray>::Handle (ENGINE_CALL *OnCreateTexture2DArray)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, int, int, int, bool) = nullptr;
 		Pitaya::Core::SlotMap<Pitaya::GPU::UniformBuffer>::Handle (ENGINE_CALL *OnCreateUniformBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, uint32_t, uint32_t) = nullptr;
 		Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle (ENGINE_CALL *OnCreateFrameBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, const Pitaya::GPU::FrameBufferSpecification&) = nullptr;
+		Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle(ENGINE_CALL* OnCreateEmptyFrameBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>) = nullptr;
 		Pitaya::Core::SlotMap<Pitaya::GPU::ShaderStorageBuffer>::Handle (ENGINE_CALL *OnCreateShaderStorageBuffer)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, uint32_t, uint32_t) = nullptr;
 
 		bool (ENGINE_CALL *OnDestroyVertexArray)(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Core::SlotMap<Pitaya::GPU::VertexArray>::Handle) = nullptr;
@@ -337,6 +344,10 @@ namespace Pitaya::GPU
 	inline auto CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const Pitaya::GPU::FrameBufferSpecification& spec)
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnCreateFrameBuffer(passkey, spec);
+	}
+	inline auto CreateEmptyFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
+	{
+		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnCreateEmptyFrameBuffer(passkey);
 	}
 	inline auto CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint32_t size, uint32_t bindingPoint)
 	{

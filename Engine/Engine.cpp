@@ -261,6 +261,10 @@ namespace
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::FrameBuffer>(passkey, spec);
 	}
+	Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle ENGINE_CALL OnCreateEmptyFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
+	{
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::FrameBuffer>(passkey);
+	}
 	Pitaya::Core::SlotMap<Pitaya::GPU::ShaderStorageBuffer>::Handle ENGINE_CALL OnCreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint32_t size, uint32_t bindingPoint)
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::ShaderStorageBuffer>(passkey, size, bindingPoint);
@@ -515,6 +519,7 @@ bool Pitaya::Engine::Engine::Initialize()
 		FUNCTABLE(RHIDevice).OnCreateTexture2DArray = OnCreateTexture2DArray;
 		FUNCTABLE(RHIDevice).OnCreateUniformBuffer = OnCreateUniformBuffer;
 		FUNCTABLE(RHIDevice).OnCreateFrameBuffer = OnCreateFrameBuffer;
+		FUNCTABLE(RHIDevice).OnCreateEmptyFrameBuffer = OnCreateEmptyFrameBuffer;
 		FUNCTABLE(RHIDevice).OnCreateShaderStorageBuffer = OnCreateShaderStorageBuffer;
 
 		FUNCTABLE(RHIDevice).OnDestroyVertexArray = OnDestroyVertexArray;
@@ -708,13 +713,15 @@ void Pitaya::Engine::Engine::Render()
 				{
 					MODULE(RenderPipeline)->AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
 						camera.GetCameraState().BuildSnapshot(transform.GetWorldPosition(), transform.GetWorldForward(), transform.GetWorldUp()),
-						camera.GetPostProcessSetting(), camera.GetCullingMask(), nullptr);	//提交nullptr渲染到MainDisplayRT
+						camera.GetPostProcessSetting(), camera.GetCullingMask(), nullptr, //提交nullptr渲染到MainDisplayRT
+						camera.GetCameraState().NearClip, camera.GetCameraState().FarClip);
 				}
 				else if(camera.GetRenderTargetIsReady())
 				{
 					MODULE(RenderPipeline)->AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
 						camera.GetCameraState().BuildSnapshot(transform.GetWorldPosition(), transform.GetWorldForward(), transform.GetWorldUp()),
-						camera.GetPostProcessSetting(), camera.GetCullingMask(), camera.GetNativeRenderTarget());	//提交资产RT
+						camera.GetPostProcessSetting(), camera.GetCullingMask(), camera.GetNativeRenderTarget(), //提交资产RT
+						camera.GetCameraState().NearClip, camera.GetCameraState().FarClip);
 				}
 			}
 		}

@@ -9,6 +9,7 @@
 
 #include<Render/Common/PostProcessType.h>
 #include<Render/Common/LightInfo.h>
+#include<Render/Common/ShadowInfo.h>
 #include<Render/Specific/RenderPass.h>
 #include<Render/Specific/RenderItem.h>
 
@@ -52,6 +53,13 @@ namespace Pitaya::Render
 			std::vector<RenderPass> Passes;
 			std::vector<RenderItem> Items;
 			std::vector<LightInfo> Lights;
+			std::vector<ShadowCasterSlice> ShadowSlices;
+			std::vector<glm::mat4> ShadowMatrices;
+			std::vector<CascadeSplitInfo> CascadeSplits;
+			glm::vec3 FrustumCorners[8] = {};
+			uint32_t DirLightShadowCount = 0;
+			uint32_t SpotLightShadowCount = 0;
+			uint32_t PointLightShadowCount = 0;
 		};
 
 	private:
@@ -71,6 +79,9 @@ namespace Pitaya::Render
 			graph.Passes.reserve(10);
 			graph.Items.reserve(5000);
 			graph.Lights.reserve(10);
+			graph.ShadowSlices.reserve(64);
+			graph.ShadowMatrices.reserve(256);
+			graph.CascadeSplits.reserve(16);
 			return true;
 		}
 		inline void Release()
@@ -79,6 +90,9 @@ namespace Pitaya::Render
 			graph.Passes.clear();
 			graph.Items.clear();
 			graph.Lights.clear();
+			graph.ShadowSlices.clear();
+			graph.ShadowMatrices.clear();
+			graph.CascadeSplits.clear();
 		}
 
 	public:
@@ -88,10 +102,16 @@ namespace Pitaya::Render
 			graph.Passes.clear();
 			graph.Items.clear();
 			graph.Lights.clear();
+			graph.ShadowSlices.clear();
+			graph.ShadowMatrices.clear();
+			graph.CascadeSplits.clear();
+			graph.DirLightShadowCount = 0;
+			graph.SpotLightShadowCount = 0;
+			graph.PointLightShadowCount = 0;
 		}
-		inline void AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, const Pitaya::Core::CameraSnapshot& cameraSnapshot,  const Pitaya::Render::PostProcessSetting& setting, Pitaya::Render::RenderLayer cullingMask, Pitaya::Asset::RenderTarget* rt)
+		inline void AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, const Pitaya::Core::CameraSnapshot& cameraSnapshot,  const Pitaya::Render::PostProcessSetting& setting, Pitaya::Render::RenderLayer cullingMask, Pitaya::Asset::RenderTarget* rt, float nearClip, float farClip)
 		{
-			graph.Passes.emplace_back(cameraSnapshot, setting, cullingMask, rt);
+			graph.Passes.emplace_back(cameraSnapshot, setting, cullingMask, rt, nearClip, farClip);
 		}
 		inline void AddRenderItem(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Asset::Mesh* mesh, Pitaya::Asset::Material* material, Pitaya::Render::RenderLayer layerMask, const glm::mat4& model, uint32_t subMeshIndex)
 		{
@@ -107,6 +127,13 @@ namespace Pitaya::Render
 
 	private:
 		void SubmitRenderGraph(Pitaya::Render::Renderer*);
+		void BuildShadowData(Pitaya::Render::Renderer*);
+
+	private:
+		void ComputeCSMCascades(const Pitaya::Core::CameraSnapshot& cameraSnap, float nearClip, float farClip, glm::vec3 lightDir, uint32_t matrixOffset);
+		void ComputeSpotShadowMatrix(glm::vec3 lightPos, glm::vec3 lightDir, float outerAngleCos, float radius, uint32_t matrixOffset);
+		void ComputePointShadowMatrices(glm::vec3 lightPos, float radius, uint32_t matrixOffset);
+		void ExtractFrustumCorners(glm::mat4 invViewProj);
 
 	private:
 		RenderGraph graph;

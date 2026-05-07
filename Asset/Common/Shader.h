@@ -11,6 +11,6 @@ namespace Pitaya::Asset
 		Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle ShaderHandle;
 	
 		//Shader 13-16
-		inline static constexpr const Pitaya::Core::GUID Default = Pitaya::Core::GUID("00000000-0000-0000-0001-000000000000");
+		inline static constexpr const Pitaya::Core::GUID Static = Pitaya::Core::GUID("00000000-0000-0000-0001-000000000000");
 	};
 }

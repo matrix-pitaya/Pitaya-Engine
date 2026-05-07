@@ -17,8 +17,5 @@ namespace Pitaya::Render
 		Pitaya::Core::StateFlags<Pitaya::Render::RenderLayer> LayerMask;
 		glm::mat4 Model;
 		uint32_t SubMeshIndex = 0;
-
-		RenderItem(Pitaya::Asset::Mesh* mesh, Pitaya::Asset::Material* material, Pitaya::Render::RenderLayer layerMask, const glm::mat4& model, uint32_t subMeshIndex)
-			:Mesh(mesh), Material(material), LayerMask(layerMask), Model(model), SubMeshIndex(subMeshIndex){}
 	};
 }

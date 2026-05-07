@@ -21,6 +21,6 @@ namespace Pitaya::GPU
 		POINT
 	};
 
-	inline constexpr const size_t MaterialTextureSlotCount = static_cast<size_t>(TextureSlot::CSM);
+	inline constexpr const size_t MaterialTextureSlotCount = static_cast<size_t>(TextureSlot::Mask) + 1;
 	inline constexpr const size_t ShadowTextureSlotCount = static_cast<size_t>(TextureSlot::POINT) - static_cast<size_t>(TextureSlot::CSM) + 1;
 }

@@ -11,7 +11,10 @@ namespace Pitaya::Render
 		DrawSkybox,
 		PostProcess,
 		BlitToScreen,
+		BeginShadowPass,
 
-		Unknown
+		Invalid
 	};
+
+	inline constexpr const size_t RenderCommandTypeCount = static_cast<size_t>(RenderCommandType::Invalid);
 }

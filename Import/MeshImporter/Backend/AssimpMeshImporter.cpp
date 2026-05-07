@@ -571,7 +571,7 @@ bool Pitaya::Import::AssimpMeshImporter::ParseMaterial(const aiMaterial* aimater
 
     //设置材质Shader为默认Shader
     Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry dummyAssetEntry_SHADER;  //dunmmyentry 用于material临时序列化
-    dummyAssetEntry_SHADER.GUID = Pitaya::Asset::Shader::Default;
+    dummyAssetEntry_SHADER.GUID = Pitaya::Asset::Shader::Static;    //TOOD到时候穿个参数进来，看看是用Static还是Skinned
     material.Shader = &dummyAssetEntry_SHADER;
 
     //设置材质属性

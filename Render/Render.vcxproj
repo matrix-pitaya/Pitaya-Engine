@@ -161,14 +161,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Command\BeginPassCommand.h" />
+    <ClInclude Include="Command\BeginShadowPassCommand.h" />
     <ClInclude Include="Command\BlitToScreenCommand.h" />
     <ClInclude Include="Command\DrawCommand.h" />
     <ClInclude Include="Command\DrawSkyboxCommand.h" />
     <ClInclude Include="Command\InstancedDrawCommand.h" />
     <ClInclude Include="Command\PostProcessCommand.h" />
     <ClInclude Include="Common\API.h" />
-    <ClInclude Include="Common\CSMShadowInfo.h" />
-    <ClInclude Include="Common\CSMShadowGeneratePass.h" />
     <ClInclude Include="Common\InstanceTransformInfo.h" />
     <ClInclude Include="Common\LightInfo.h" />
     <ClInclude Include="Common\PostProcessSetting.h" />
@@ -178,6 +177,7 @@
     <ClInclude Include="Common\RenderCommandType.h" />
     <ClInclude Include="Common\RenderLayer.h" />
     <ClInclude Include="Common\RenderQueue.h" />
+    <ClInclude Include="Common\ShadowInfo.h" />
     <ClInclude Include="Specific\RenderItem.h" />
     <ClInclude Include="Specific\RenderTargetSnapshot.h" />
     <ClInclude Include="Frontend\Renderer.h" />

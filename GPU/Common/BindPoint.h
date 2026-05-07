@@ -14,6 +14,7 @@ namespace Pitaya::GPU
 	{
 		InstanceModelTransform = 0,
 		BoneInverseMatrice = 1,
-		SceneLights = 2
+		SceneLights = 2,
+		Shadow = 3
 	};
 }

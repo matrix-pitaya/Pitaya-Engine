@@ -67,7 +67,7 @@ namespace Pitaya::Asset
 		struct BuildInAsset
 		{
 			Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry White;
-			Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry DefaultShader;
+			Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry DefaultStaticShader;
 			Pitaya::Core::Asset<Pitaya::Asset::Material>::AssetEntry DefaultMaterial;
 			Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry Cube;
 			Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry Panel;
@@ -99,7 +99,7 @@ namespace Pitaya::Asset
 				std::is_same_v<T, Pitaya::Asset::Material>,
 				"Unknow Asset!");
 
-			if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { if (guid == Pitaya::Asset::Shader::Default) { return Pitaya::Core::Asset<Pitaya::Asset::Shader>(&buildIn.DefaultShader); } }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { if (guid == Pitaya::Asset::Shader::Static) { return Pitaya::Core::Asset<Pitaya::Asset::Shader>(&buildIn.DefaultStaticShader); } }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Material>) { if (guid == Pitaya::Asset::Material::Default) { return Pitaya::Core::Asset<Pitaya::Asset::Material>(&buildIn.DefaultMaterial); } }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Texture>) { if (guid == Pitaya::Asset::Texture::White) { return Pitaya::Core::Asset<Pitaya::Asset::Texture>(&buildIn.White); } }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Mesh>) { if (guid == Pitaya::Asset::Mesh::Sphere) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Sphere); } else if (guid == Pitaya::Asset::Mesh::Cube) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Cube); } else if (guid == Pitaya::Asset::Mesh::Panel) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Panel); } }
@@ -340,7 +340,7 @@ namespace Pitaya::Asset
 				"Unknow Asset!");
 
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Texture>) { return guid == Pitaya::Asset::Texture::White; }
-			if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { return guid == Pitaya::Asset::Shader::Default; }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { return guid == Pitaya::Asset::Shader::Static; }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Mesh>) { return guid == Pitaya::Asset::Mesh::Cube || guid == Pitaya::Asset::Mesh::Panel || guid == Pitaya::Asset::Mesh::Sphere; }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Material>) { return guid == Pitaya::Asset::Material::Default; }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::RenderTarget>) { return false; }

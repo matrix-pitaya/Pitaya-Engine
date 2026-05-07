@@ -12,6 +12,7 @@ namespace Pitaya::GPU
         {
             friend class RHIDevice;
         private:
+            static FrameBuffer Create();
             static FrameBuffer Create(Pitaya::GPU::FrameBufferSpecification spec);
             static void Destroy(FrameBuffer);
         };
