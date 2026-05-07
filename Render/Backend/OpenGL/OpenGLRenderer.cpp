@@ -36,8 +36,8 @@ bool Pitaya::Render::Renderer::InitializeRenderContext(void* nativeWindow)
 	glfwSwapInterval(1);
 
 	//初始化GLEW
-	if (glewInit() != GLEW_OK) 
-	{ 
+	if (glewInit() != GLEW_OK)
+	{
 		Pitaya::Core::PopMessageBox("Error", "Initialize OpenGL Context Failed! GLEW InitFail!");
 		Pitaya::Core::Terminate(-1);
 	}
@@ -116,29 +116,20 @@ void Pitaya::Render::Renderer::NewRenderFrame()
 		}
 	}
 
-	// 动态扩容/上传 Light SSBO
+	// 动态扩容 Light SSBO（仅扩容，不在此处上传数据，由 ExecuteCommand(BeginPassCommand) 每 Pass 上传）
+	size_t totalLightCount = renderPacket.back.Lights.size();
+	size_t headerSize = 4 * sizeof(uint32_t);
+	size_t maxRequiredSize = headerSize + totalLightCount * sizeof(Pitaya::Render::LightInfo);
 	if (Pitaya::GPU::GetShaderStorageBuffer(Pitaya::Core::PassKey<Renderer>(), globalRHI.SceneLightsSSBO.Handle, shaderStorageBuffer))
 	{
-		size_t uploadLightCount = renderPacket.back.Lights.size();
-		size_t headerSize = 4 * sizeof(uint32_t);	// Header固定16字节对齐 (1个有效uint + 3个padding)
-		size_t dataSize = uploadLightCount * sizeof(Pitaya::Render::LightInfo);
-		size_t requiredLightSize = headerSize + dataSize;
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER,
 			static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::SceneLights),
 			shaderStorageBuffer.Id);
-		if (requiredLightSize > globalRHI.SceneLightsSSBO.Capacity)	// 判断是否需要扩容
+
+		if (maxRequiredSize > globalRHI.SceneLightsSSBO.Capacity)
 		{
-			// 1.5 倍扩容
-			globalRHI.SceneLightsSSBO.Capacity = requiredLightSize + (requiredLightSize / 2);
+			globalRHI.SceneLightsSSBO.Capacity = maxRequiredSize + (maxRequiredSize / 2);
 			glNamedBufferData(shaderStorageBuffer.Id, globalRHI.SceneLightsSSBO.Capacity, nullptr, GL_DYNAMIC_DRAW);
-		}
-		// 始终上传 16 字节头部信息 告诉 GPU 真实有效光源数
-		uint32_t lightHeader[4] = { static_cast<uint32_t>(uploadLightCount), 0, 0, 0 };
-		glNamedBufferSubData(shaderStorageBuffer.Id, 0, headerSize, lightHeader);
-		// 数据头上传之后 上传真实的结构体数组数据
-		if (uploadLightCount > 0)
-		{
-			glNamedBufferSubData(shaderStorageBuffer.Id, headerSize, dataSize, renderPacket.back.Lights.data());
 		}
 	}
 
@@ -215,29 +206,29 @@ void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::BeginShadowP
 	uint32_t LayerCapacity = 0;
 	switch (command->LightType)
 	{
-		case 0: 
-			atlasTextureHandle = globalRHI.CSMAtlas.TextureHandle;
-			LayerCapacity = globalRHI.CSMAtlas.LayerCapacity;
-			break;
+	case 0:
+		atlasTextureHandle = globalRHI.CSMAtlas.TextureHandle;
+		LayerCapacity = globalRHI.CSMAtlas.LayerCapacity;
+		break;
 
-		case 1: 
-			atlasTextureHandle = globalRHI.PointShadowAtlas.TextureHandle;
-			LayerCapacity = globalRHI.PointShadowAtlas.LayerCapacity;
-			break;
+	case 1:
+		atlasTextureHandle = globalRHI.PointShadowAtlas.TextureHandle;
+		LayerCapacity = globalRHI.PointShadowAtlas.LayerCapacity;
+		break;
 
-		case 2: 
-			atlasTextureHandle = globalRHI.SpotShadowAtlas.TextureHandle;
-			LayerCapacity = globalRHI.SpotShadowAtlas.LayerCapacity;
-			break;
+	case 2:
+		atlasTextureHandle = globalRHI.SpotShadowAtlas.TextureHandle;
+		LayerCapacity = globalRHI.SpotShadowAtlas.LayerCapacity;
+		break;
 
-		default: return;
+	default: return;
 	}
 	if (LayerCapacity == 0) { return; }
 
 	// 通过 Handle 获取 Texture2DArray 和 Shadow FBO
 	Pitaya::GPU::Texture2DArray texArray;
 	Pitaya::GPU::FrameBuffer shadowFbo;
-	if (Pitaya::GPU::GetTexture2DArray( Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), atlasTextureHandle, texArray) &&
+	if (Pitaya::GPU::GetTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), atlasTextureHandle, texArray) &&
 		Pitaya::GPU::GetFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), globalRHI.Specific.ShadowFBO, shadowFbo))
 	{
 		// 绑定 Shadow FBO + 挂指定 layer 为 depth attachment
@@ -296,12 +287,36 @@ void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::BeginPassCom
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	glStencilMask(0xFF);
 
+	// 更新 Camera UBO
 	Pitaya::GPU::UniformBuffer cameraUbo;
 	if (Pitaya::GPU::GetUniformBuffer(Pitaya::Core::PassKey<Renderer>(), globalRHI.CameraSnapshotUBO.Handle, cameraUbo))
 	{
 		glNamedBufferSubData(cameraUbo.Id, 0, sizeof(Pitaya::Core::CameraSnapshot), &command->CameraSnapshot);
 	}
 
+	// 每 Pass 刷新光源 SSBO
+	Pitaya::GPU::ShaderStorageBuffer lightsSSBO;
+	if (Pitaya::GPU::GetShaderStorageBuffer(Pitaya::Core::PassKey<Renderer>(), globalRHI.SceneLightsSSBO.Handle, lightsSSBO))
+	{
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER,
+			static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::SceneLights),
+			lightsSSBO.Id);
+
+		// 写入 Header (16 字节对齐：1个有效uint + 3个padding)
+		uint32_t lightHeader[4] = { command->LightCount, 0, 0, 0 };
+		glNamedBufferSubData(lightsSSBO.Id, 0, sizeof(lightHeader), lightHeader);
+
+		// 写入该 Pass 对应的光源数据段
+		if (command->LightCount > 0)
+		{
+			size_t headerSize = 4 * sizeof(uint32_t);
+			size_t dataSize = command->LightCount * sizeof(Pitaya::Render::LightInfo);
+			const Pitaya::Render::LightInfo* passLights = &renderPacket.back.Lights[command->LightDataOffset];
+			glNamedBufferSubData(lightsSSBO.Id, headerSize, dataSize, passLights);
+		}
+	}
+
+	// FBO 切换与 Clear
 	Pitaya::GPU::FrameBuffer fbo;
 	if (Pitaya::GPU::GetFrameBuffer(Pitaya::Core::PassKey<Renderer>(), command->SceneFrameBufferHandle, fbo))
 	{
@@ -403,9 +418,9 @@ void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::PostProcessC
 		if (Pitaya::GPU::GetFrameBuffer(Pitaya::Core::PassKey<Renderer>(), command->ResolveFrameBufferHandle, resolveFbo))
 		{
 			//读：MSAA FBO
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, resolveFbo.Id);				
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, resolveFbo.Id);
 			//写：普通 FBO (Intermediate)
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resolveFbo.InternalId); 
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resolveFbo.InternalId);
 
 			// 执行 Blit (拷贝并合并像素)
 			glBlitFramebuffer(

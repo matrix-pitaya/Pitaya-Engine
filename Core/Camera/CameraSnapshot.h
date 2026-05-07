@@ -13,7 +13,7 @@ namespace Pitaya::Core
 		glm::mat4 View;
 		glm::mat4 Projection;
 		glm::mat4 ViewProjection;
-		glm::vec4 Position;	//保证std140内存布局
+		glm::vec4 Position;	//保证std140内存布局 w 表示 camera 索引
 
 		inline Pitaya::Core::Frustum CreateFrustum() const noexcept
 		{

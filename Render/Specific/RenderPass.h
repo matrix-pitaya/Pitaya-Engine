@@ -18,5 +18,6 @@ namespace Pitaya::Render
 		Pitaya::Asset::RenderTarget* RenderTarget = nullptr;
 		float NearClip = 0.1f;
 		float FarClip = 100.0f;
+		uint32_t LightCount = 0;
 	};
 }

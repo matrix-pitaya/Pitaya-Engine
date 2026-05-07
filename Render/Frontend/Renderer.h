@@ -148,17 +148,17 @@ namespace Pitaya::Render
 					sizeof(Pitaya::Core::CameraSnapshot), static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::CameraSnapshot));
 				PostProcessParamsUBO.Handle = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					Pitaya::Render::PostProcessStep::UniformBufferBytes, static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
-				
+
 				// 初始分配1024个位置
 				InstanceModelTransformSSBO.Capacity = 1024 * sizeof(InstanceTransformInfo);
 				InstanceModelTransformSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					InstanceModelTransformSSBO.Capacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform));
-				
+
 				// 初始分配一段骨骼容量
 				BoneInverseMatriceSSBO.Capacity = 4096 * sizeof(glm::mat4);
 				BoneInverseMatriceSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					BoneInverseMatriceSSBO.Capacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::BoneInverseMatrice));
-				
+
 				// 初始分配10个光源位置
 				SceneLightsSSBO.Capacity = 10 * sizeof(Pitaya::Render::LightInfo);
 				SceneLightsSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
@@ -178,13 +178,13 @@ namespace Pitaya::Render
 					reinterpret_cast<float*>(fallbackVboData.data()), fallbackVboData.size(), { { Pitaya::GPU::ShaderVariableType::Float3, 0 } });
 				auto fallbackIBOHandle = Pitaya::GPU::CreateIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					reinterpret_cast<uint32_t*>(fallbackIboData.data()), 36);
-				if (!Pitaya::GPU::LinkVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), 
+				if (!Pitaya::GPU::LinkVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					Fallback.VAOHandle, fallbackVBOHandle, fallbackIBOHandle))
 				{
 					Pitaya::Core::PopMessageBox("Error", "Create Global RHI Failed! Check Log for Details.");
 					Pitaya::Core::Terminate(-1);
 				}
-				
+
 				Fallback.TextureHandle = Pitaya::GPU::CreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					reinterpret_cast<unsigned char*>(Pitaya::Core::LoadBuiltInRC(IDR_ERROR_TEXTURE).data()),
 					32, 32, 4, false, false, true);
@@ -200,7 +200,7 @@ namespace Pitaya::Render
 				MainDisplayRenderTarget.PingPongFrameBufferHandles[0] = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainPingPongSpec);
 				MainDisplayRenderTarget.PingPongFrameBufferHandles[1] = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainPingPongSpec);
 				MainDisplayRenderTarget.FinalFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainFinalSpec);
-			
+
 				// Shadow
 				Specific.ShadowFBO = Pitaya::GPU::CreateEmptyFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
 				Specific.DepthOnlyStaticShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
@@ -372,7 +372,7 @@ namespace Pitaya::Render
 				if (beforeBatch == 0) { return; }
 
 				// 处理命令队列
-				auto ProcessQueue = 
+				auto ProcessQueue =
 					[this](std::vector<DrawCommand>& currentPass) -> uint32_t
 					{
 						if (currentPass.empty()) { return 0; }
@@ -401,7 +401,7 @@ namespace Pitaya::Render
 								cmd.IndexCount == currentBatch.IndexCount &&
 								cmd.MaterialId == currentBatch.MaterialId &&
 								cmd.DepthTest == currentBatch.DepthTest &&
-								cmd.Blend == currentBatch.Blend && 
+								cmd.Blend == currentBatch.Blend &&
 								cmd.CullFace == currentBatch.CullFace;
 
 							if (!canBatch)
@@ -499,12 +499,14 @@ namespace Pitaya::Render
 			renderPacket.front.InstanceModelTransforms.reserve(1024);
 			renderPacket.front.BoneMatrices.reserve(1024);
 			renderPacket.front.Lights.reserve(10);
+			renderPacket.front.ShadowSSBOData.reserve(64 * 1024);
 
 			// front buffer reserve
 			renderPacket.back.CommandBuffer.reserve(64 * 1024);
 			renderPacket.back.InstanceModelTransforms.reserve(1024);
 			renderPacket.back.BoneMatrices.reserve(1024);
 			renderPacket.back.Lights.reserve(10);
+			renderPacket.back.ShadowSSBOData.reserve(64 * 1024);
 
 			// skinned comand reserve
 			renderPacket.skinnedPass.reserve(1024);
@@ -516,10 +518,10 @@ namespace Pitaya::Render
 			isRunning.store(true, std::memory_order_release);
 			renderThread = Pitaya::Thread::RegisterThread("Render", &Pitaya::Render::Renderer::BootstrapRenderThread, this, nativeWindow);
 			if (renderThread == Pitaya::Core::Thread::Identifier::Invalid) { throw std::runtime_error("Render Thread Register Fail!"); }
-			
+
 			// invoke hook func
 			INVOKE_POSTRENDERERINTIALIZE_HOOK(nativeWindow)
-			return true;
+				return true;
 		}
 		inline void Release()
 		{
@@ -584,7 +586,7 @@ namespace Pitaya::Render
 	public:
 		inline void BeginRenderFrame(Pitaya::Core::PassKey<RenderPipeline>)
 		{
-			renderPacket.front.Clear(); 
+			renderPacket.front.Clear();
 			INVOKE_POSTRENDERERBEGINRENDERFRAME_HOOK
 		}
 		inline void SubmitLightShadow(Pitaya::Core::PassKey<RenderPipeline>, const std::vector<Pitaya::Render::ShadowCasterSlice>& slices, const std::vector<glm::mat4>& matrices, const std::vector<Pitaya::Render::CascadeSplitInfo>& cascadeSplits, uint32_t dirCount, uint32_t spotCount, uint32_t pointCount)
@@ -596,9 +598,9 @@ namespace Pitaya::Render
 				uint32_t endLayer = s.LayerOffset + s.MatrixCount;
 				switch (s.LightType)
 				{
-				case 0: maxCSMLayer = std::max(maxCSMLayer, endLayer);   break;
-				case 2: maxSpotLayer = std::max(maxSpotLayer, endLayer);  break;
-				case 1: maxPointLayer = std::max(maxPointLayer, endLayer); break;
+					case 0: maxCSMLayer = std::max(maxCSMLayer, endLayer);   break;
+					case 2: maxSpotLayer = std::max(maxSpotLayer, endLayer);  break;
+					case 1: maxPointLayer = std::max(maxPointLayer, endLayer); break;
 				}
 			}
 			renderPacket.front.RequiredCSMLayers = maxCSMLayer;
@@ -643,9 +645,9 @@ namespace Pitaya::Render
 
 			switch (lightType)
 			{
-			case 0: cmd.Resolution = GlobalRHI::ShadowAtlas::CSMResolution;   break;
-			case 2: cmd.Resolution = GlobalRHI::ShadowAtlas::SpotResolution;  break;
-			case 1: cmd.Resolution = GlobalRHI::ShadowAtlas::PointResolution; break;
+				case 0: cmd.Resolution = GlobalRHI::ShadowAtlas::CSMResolution;   break;
+				case 2: cmd.Resolution = GlobalRHI::ShadowAtlas::SpotResolution;  break;
+				case 1: cmd.Resolution = GlobalRHI::ShadowAtlas::PointResolution; break;
 			}
 
 			renderPacket.PushCommand(cmd);
@@ -703,6 +705,10 @@ namespace Pitaya::Render
 				beginPassCommand.ClearDepth = true;
 				beginPassCommand.ClearStencil = true;
 			}
+			size_t currentTotal = renderPacket.front.Lights.size();
+			beginPassCommand.LightCount = pass.LightCount;
+			beginPassCommand.LightDataOffset = (currentTotal >= pass.LightCount)
+				? static_cast<uint32_t>(currentTotal - pass.LightCount) : 0;
 			renderPacket.PushCommand(beginPassCommand);
 		}
 		inline void Submit(Pitaya::Core::PassKey<RenderPipeline>, const RenderItem& item)
@@ -775,7 +781,7 @@ namespace Pitaya::Render
 					return key;
 				};
 
-			if (material && material->Shader.IsReady() && 
+			if (material && material->Shader.IsReady() &&
 				material->Shader->ShaderHandle != Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle::Invalid)
 			{
 				cmd.ShaderHandle = material->Shader->ShaderHandle;
@@ -798,8 +804,8 @@ namespace Pitaya::Render
 					if (!material->Textures[j]) { continue; }
 
 					//纹理就绪
-					if (material->Textures[j].IsReady() && 
-						material->Textures[j]->Type == Pitaya::GPU::TextureType::Texture2D && 
+					if (material->Textures[j].IsReady() &&
+						material->Textures[j]->Type == Pitaya::GPU::TextureType::Texture2D &&
 						material->Textures[j]->Texture2DHandle != Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle::Invalid)
 					{
 						cmd.TextureHandles[j] = material->Textures[j]->Texture2DHandle;
@@ -860,18 +866,18 @@ namespace Pitaya::Render
 				cmd.PostProcessStep = currentStep;
 				switch (currentStep.Type)
 				{
-					case Pitaya::Render::PostProcessType::Bilt:
-						cmd.ProcessShaderHandle = globalRHI.PostProcessShader.BlitShaderHandle;
-						break;
+				case Pitaya::Render::PostProcessType::Bilt:
+					cmd.ProcessShaderHandle = globalRHI.PostProcessShader.BlitShaderHandle;
+					break;
 
-					case Pitaya::Render::PostProcessType::GammaCorrection:
-						cmd.ProcessShaderHandle = globalRHI.PostProcessShader.GammaCorrectionShaderHandle;
-						break;
+				case Pitaya::Render::PostProcessType::GammaCorrection:
+					cmd.ProcessShaderHandle = globalRHI.PostProcessShader.GammaCorrectionShaderHandle;
+					break;
 
-					case Pitaya::Render::PostProcessType::Unknown:
-					default:
-						cmd.ProcessShaderHandle = globalRHI.PostProcessShader.BlitShaderHandle;
-						break;
+				case Pitaya::Render::PostProcessType::Unknown:
+				default:
+					cmd.ProcessShaderHandle = globalRHI.PostProcessShader.BlitShaderHandle;
+					break;
 				}
 
 				// 处理 MSAA 解析逻辑
@@ -926,13 +932,13 @@ namespace Pitaya::Render
 		{
 			INVOKE_PRERENDERERENDRENDERFRAME_HOOK
 
-			//交换渲染缓冲区
+				//交换渲染缓冲区
 			{
 				std::lock_guard<std::mutex> lock(mutex);
 				renderPacket.SwapBuffer();
 			}
 
-			//唤醒渲染线程工作
+				//唤醒渲染线程工作
 			cond.notify_one();
 		}
 

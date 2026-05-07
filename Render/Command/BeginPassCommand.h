@@ -19,6 +19,8 @@ namespace Pitaya::Render
 		Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle SceneFrameBufferHandle;
 		Pitaya::Core::Color ClearColor = Pitaya::Core::Color::SkyBlue;
 		Pitaya::Core::Rect Rect;
+		uint32_t LightDataOffset = 0;
+		uint32_t LightCount = 0;
 		bool ClearDepth = true;
 		bool ClearStencil = true;
 	};

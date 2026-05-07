@@ -21,7 +21,11 @@ namespace Pitaya::Game
 		{ 
 			this->intensity = intensity;
 		}
-		
+		inline void SetEnableCastShadow(bool enable) noexcept
+		{
+			this->enableCastShadow = enable;
+		}
+
 		// 点光/聚光属性
 		inline void SetRadius(float r) noexcept
 		{
@@ -52,6 +56,10 @@ namespace Pitaya::Game
 		{
 			return intensity; 
 		}
+		inline bool GetEnableCastShadow() const noexcept
+		{
+			return enableCastShadow;
+		}
 
 		// 点光/聚光属性
 		inline float GetRadius() const noexcept
@@ -76,5 +84,6 @@ namespace Pitaya::Game
 		float radius = 10.0f;          // 最大衰减范围
 		float innerAngle = 12.5f;      // 聚光灯内角(度数)
 		float outerAngle = 17.5f;      // 聚光灯外角(度数)
+		bool enableCastShadow = true;
 	};
 }

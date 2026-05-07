@@ -62,9 +62,9 @@ void Pitaya::Render::RenderPipeline::BuildShadowData(Pitaya::Render::Renderer* r
 		slice.FarPlane = light.Params.x;
 
 		graph.ShadowMatrices.emplace_back(1.0f);
-		ComputeSpotShadowMatrix(glm::vec3(light.Position_Type), glm::normalize(glm::vec3(light.Direction)), 
+		ComputeSpotShadowMatrix(glm::vec3(light.Position_Type), glm::normalize(glm::vec3(light.Direction)),
 			light.Params.z, light.Params.x, slice.MatrixOffset);
-			
+
 		light.Params.w = static_cast<float>(spotSoFar);
 		graph.ShadowSlices.emplace_back(slice);
 		++spotSoFar;
@@ -125,12 +125,6 @@ void Pitaya::Render::RenderPipeline::BuildShadowData(Pitaya::Render::Renderer* r
 			}
 
 			ComputeCSMCascades(pass.CameraSnapshot, pass.NearClip, pass.FarClip, glm::normalize(glm::vec3(light.Direction)), slice.MatrixOffset);
-				
-			// 只在第一个 Pass 时写入 Params.w 主渲染用
-			if (passIdx == 0)
-			{
-				light.Params.w = static_cast<float>(dirSoFar);
-			}
 
 			graph.ShadowSlices.emplace_back(slice);
 			++dirSoFar;
@@ -160,10 +154,49 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 		}
 	}
 
+	// 索引基准计算
+	uint32_t spotCount = graph.SpotLightShadowCount;
+	uint32_t pointCount = graph.PointLightShadowCount;
+	uint32_t dirCount = graph.DirLightShadowCount;
+	uint32_t csmGlobalBase = spotCount + (pointCount * POINT_SHADOW_FACE_COUNT);
+
 	//处理所有渲染通道
-	for (auto& pass : graph.Passes)	
+	for (uint32_t passIdx = 0; passIdx < static_cast<uint32_t>(graph.Passes.size()); ++passIdx)
 	{
+		auto& pass = graph.Passes[passIdx];
 		Pitaya::Core::Print(Pitaya::Core::Color::Yellow, "Begin Pass");
+
+		// 记录该 Pass 的光源数量
+		pass.LightCount = static_cast<uint32_t>(graph.Lights.size());
+
+		// 为每个 Pass 生成带有正确 Params.w 索引的光源快照
+		uint32_t dirSoFar = 0, spotSoFar = 0, pointSoFar = 0;
+		for (const auto& sceneLight : graph.Lights)
+		{
+			LightInfo localLight = sceneLight; // 栈上拷贝
+			uint32_t type = static_cast<uint32_t>(localLight.Position_Type.w);
+
+			switch (type)
+			{
+				case 0:	// 平行光：CSM 索引随 Pass 变化
+					localLight.Params.w = static_cast<float>(csmGlobalBase + (passIdx * dirCount * CSM_CASCADE_COUNT) + (dirSoFar * CSM_CASCADE_COUNT));
+					++dirSoFar;
+					break;
+
+				case 1:	// 点光源：全 Pass 共用索引
+					localLight.Params.w = static_cast<float>(spotCount + (pointSoFar * POINT_SHADOW_FACE_COUNT));
+					++pointSoFar;
+					break;
+
+				case 2:	// 聚光灯：全 Pass 共用索引
+					localLight.Params.w = static_cast<float>(spotSoFar);
+					++spotSoFar;
+					break;
+			}
+
+			renderer->SubmitLight(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), localLight);
+		}
+
 		renderer->BeginPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), pass);	//提交BeginPass命令 并在命令中更新CameraSnapshotUBO数据（一个Camera对应一个Pass）
 		Pitaya::Core::Frustum frustum = pass.CameraSnapshot.CreateFrustum();
 		uint32_t submitCount = 0;
@@ -183,12 +216,6 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 		Pitaya::Core::Print(Pitaya::Core::Color::Yellow, "End Pass");
 	}
 
-	//处理所有光源信息
-	for (auto& light : graph.Lights) 
-	{
-		renderer->SubmitLight(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), light);
-	}
-
 	INVOKE_TERMINATERENDERPIPELINESUBMITFINALBLIT_HOOK
 	renderer->SubmitBlitToScreen(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>());
 	Pitaya::Core::Print(Pitaya::Core::Color::Red, "Blit Main To Screnn Back Buffer");
@@ -197,7 +224,7 @@ void Pitaya::Render::RenderPipeline::ComputeCSMCascades(const Pitaya::Core::Came
 {
 	// 级联分割（对数 + 线性混合）
 	constexpr const float lambda = 0.75f;
-	float splits[CSM_CASCADE_COUNT + 1];
+	float splits[CSM_CASCADE_COUNT + 1] = {};
 	splits[0] = nearClip;
 	for (uint32_t i = 1; i <= CSM_CASCADE_COUNT; ++i)
 	{
@@ -286,7 +313,7 @@ void Pitaya::Render::RenderPipeline::ComputeSpotShadowMatrix(glm::vec3 lightPos,
 void Pitaya::Render::RenderPipeline::ComputePointShadowMatrices(glm::vec3 lightPos, float radius, uint32_t matrixOffset)
 {
 	glm::mat4 proj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, radius);
-	
+
 	// 6 面方向 + up（对应 cubemap face 顺序）
 	static constexpr const glm::vec3 dirs[6] = { { 1,0,0}, {-1,0,0}, {0, 1,0}, {0,-1,0}, {0,0, 1}, {0,0,-1} };
 	static constexpr const glm::vec3 ups[6] = { {0,-1,0}, { 0,-1,0}, {0,0,1}, { 0,0,-1}, {0,-1,0}, {0,-1,0} };
@@ -299,7 +326,7 @@ void Pitaya::Render::RenderPipeline::ComputePointShadowMatrices(glm::vec3 lightP
 }
 void Pitaya::Render::RenderPipeline::ExtractFrustumCorners(glm::mat4 invViewProj)
 {
-	static constexpr const glm::vec4 ndcCorners[8] = 
+	static constexpr const glm::vec4 ndcCorners[8] =
 	{
 		{ -1, -1, -1, 1 }, {  1, -1, -1, 1 },
 		{  1,  1, -1, 1 }, { -1,  1, -1, 1 },
