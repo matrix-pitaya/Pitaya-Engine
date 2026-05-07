@@ -144,16 +144,22 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 		{
 			uint32_t layer = slice.LayerOffset + m;
 			const glm::mat4& shadowVP = graph.ShadowMatrices[slice.MatrixOffset + m];
+			Pitaya::Core::Frustum lightFrustum { shadowVP };
+			Pitaya::Core::Print(Pitaya::Core::Color::Yellow, "Begin Shadow Pass");
 			renderer->BeginShadowPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), slice.LightType, layer, shadowVP);
+			uint32_t submitCount = 0;
 			for (const auto& item : graph.Items)
 			{
-				//TODO 可以拓展一个EnableShadowCast开关控制阴影投射
-				if (item.EnableShadowCast)
+				if (item.EnableShadowCast && lightFrustum.IsVisible(item.Mesh ? item.Mesh->BoundingBox.ToWorld(item.Model)
+					: Pitaya::Core::AABB({ glm::vec3(-0.5f), glm::vec3(0.5f) }).ToWorld(item.Model)))
 				{
 					renderer->SubmitCastShadowItem(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), item);
+					++submitCount;
 				}
 			}
+			Pitaya::Core::Print(Pitaya::Core::Color::Blue, "Shadow Cast Commit Count:%d", submitCount);
 			renderer->EndShadowPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>());
+			Pitaya::Core::Print(Pitaya::Core::Color::Yellow, "End Shadow Pass");
 		}
 	}
 

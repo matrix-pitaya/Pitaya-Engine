@@ -19,8 +19,8 @@ namespace Pitaya::Render
 		uint32_t MatrixOffset;   // 在 ShadowMatrices[] 中的起始下标
 		uint32_t MatrixCount;    // 4 / 6 / 1
 		uint32_t LayerOffset;    // 在对应 Texture2DArray 中的起始 layer
-		float    NearPlane;
-		float    FarPlane;
+		float NearPlane;
+		float FarPlane;
 	};
 
 	// GPU侧 上传到 SSBO 的数据
