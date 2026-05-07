@@ -29,6 +29,22 @@ namespace Pitaya::Game
 		{
 			return layerMask.GetEnum();
 		}
+		inline bool GetEnableShadowCast() const noexcept
+		{
+			return enableShadowCast;
+		}
+		inline void SetEnableShadowCast(bool flag) noexcept
+		{
+			enableShadowCast = flag;
+		}
+		inline bool GetReceiveShadow() const noexcept
+		{
+			return receiveShadow;
+		}
+		inline void SetReceiveShadow(bool flag) noexcept
+		{
+			receiveShadow = flag;
+		}
 		inline void SetLayerMask(Pitaya::Render::RenderLayer layer) noexcept
 		{
 			layerMask = layer;
@@ -37,5 +53,7 @@ namespace Pitaya::Game
 	private:
 		Pitaya::Core::Asset<Pitaya::Asset::Mesh> mesh = nullptr;
 		Pitaya::Core::StateFlags<Pitaya::Render::RenderLayer> layerMask = Pitaya::Render::RenderLayer::Default;
+		bool enableShadowCast = true;
+		bool receiveShadow = true;
 	};
 }

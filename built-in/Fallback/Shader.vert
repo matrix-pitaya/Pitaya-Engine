@@ -10,19 +10,20 @@ layout(std140, binding = 0) uniform CameraSnapshot
     vec4 Position;
 };
 
-struct InstanceTransformInfo
+struct InstanceInfo
 {
     mat4 Model;
     mat4 Normal;
+	uvec4 Params;
 };
 
-layout(std430, binding = 0) readonly buffer InstanceTransform
+layout(std430, binding = 0) readonly buffer InstanceInfoSSBO
 {
-    InstanceTransformInfo InstanceTransformInfos[];
+    InstanceInfo InstanceInfos[];
 };
 
 void main()
 {
     uint index = gl_BaseInstance + gl_InstanceID;
-    gl_Position = ViewProjection * InstanceTransformInfos[index].Model * vec4(aPos,1.0f);
+    gl_Position = ViewProjection * InstanceInfos[index].Model * vec4(aPos,1.0f);
 }

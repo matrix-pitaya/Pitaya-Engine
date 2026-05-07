@@ -111,11 +111,11 @@ namespace Pitaya::Render
 		}
 		inline void AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, const Pitaya::Core::CameraSnapshot& cameraSnapshot,  const Pitaya::Render::PostProcessSetting& setting, Pitaya::Render::RenderLayer cullingMask, Pitaya::Asset::RenderTarget* rt, float nearClip, float farClip)
 		{
-			graph.Passes.emplace_back(cameraSnapshot, setting, cullingMask, rt, nearClip, farClip);
+			graph.Passes.emplace_back(cameraSnapshot, setting, cullingMask, rt, nearClip, farClip, 0);
 		}
-		inline void AddRenderItem(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Asset::Mesh* mesh, Pitaya::Asset::Material* material, Pitaya::Render::RenderLayer layerMask, const glm::mat4& model, uint32_t subMeshIndex)
+		inline void AddRenderItem(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Asset::Mesh* mesh, Pitaya::Asset::Material* material, Pitaya::Render::RenderLayer layerMask, const glm::mat4& model, uint32_t subMeshIndex, bool enableShadowCast, bool receiveShadow)
 		{
-			graph.Items.emplace_back(mesh, material, layerMask, model, subMeshIndex);
+			graph.Items.emplace_back(mesh, material, layerMask, model, subMeshIndex, enableShadowCast, receiveShadow);
 		}
 		inline void AddSceneLight(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, const Pitaya::Render::LightInfo& light)
 		{

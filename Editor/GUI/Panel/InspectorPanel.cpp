@@ -504,6 +504,35 @@ namespace
                     }
                     ImGui::PopItemWidth();
                 }
+
+                {
+                    // Shadow
+                    ImGui::Spacing();
+
+                    // Cast Shadows 勾选框
+                    ImGui::AlignTextToFramePadding();
+                    ImGui::TextUnformatted("Cast Shadows");
+                    ImGui::SameLine(LABEL_WIDTH);
+
+                    bool castShadow = meshRenderer->GetEnableShadowCast();
+                    if (ImGui::Checkbox("##CastShadow", &castShadow))
+                    {
+                        meshRenderer->SetEnableShadowCast(castShadow);
+                    }
+
+                    // Receive Shadows 勾选框
+                    ImGui::AlignTextToFramePadding();
+                    ImGui::TextUnformatted("Receive Shadows");
+                    ImGui::SameLine(LABEL_WIDTH);
+
+                    bool receiveShadow = meshRenderer->GetReceiveShadow();
+                    if (ImGui::Checkbox("##ReceiveShadow", &receiveShadow))
+                    {
+                        meshRenderer->SetReceiveShadow(receiveShadow);
+                    }
+
+                    ImGui::Spacing();
+                }
             });
     }
     inline void DrawMaterialOverrideUI(entt::entity e)

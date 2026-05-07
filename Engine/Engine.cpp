@@ -690,17 +690,16 @@ void Pitaya::Engine::Engine::Render()
 
 					MODULE(RenderPipeline)->AddRenderItem(
 						Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
-						mesh.GetNativeAssetData(), nativeMaterial,
-						meshrenderer.GetLayerMask(), transform.GetWorldMatrix(), i);
+						mesh.GetNativeAssetData(), nativeMaterial, meshrenderer.GetLayerMask(), transform.GetWorldMatrix(), 
+						i, meshrenderer.GetEnableShadowCast(), meshrenderer.GetReceiveShadow());
 				}
 			}
 			else
 			{
 				//mesh 还没加载 → 传 nullptr, Submit 会 fallback 到异常立方体
 				MODULE(RenderPipeline)->AddRenderItem(
-					Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
-					nullptr, nullptr,
-					meshrenderer.GetLayerMask(), transform.GetWorldMatrix(), 0);
+					Pitaya::Core::PassKey<Pitaya::Engine::Engine>(), nullptr, nullptr, 
+					meshrenderer.GetLayerMask(), transform.GetWorldMatrix(), 0, true, false);
 			}
 		}
 		

@@ -28,5 +28,6 @@ namespace Pitaya::Render
         bool DepthTest = true;
         bool Blend = false;
         bool CullFace = true;
+		bool ReceiveShadow = true;
 	};
 }

@@ -12,15 +12,16 @@ layout(std140, binding = 0) uniform CameraSnapshot
     vec4 Position;
 };
 
-struct InstanceTransformInfo 
-{ 
-    mat4 Model; 
-    mat4 Normal; 
+struct InstanceInfo
+{
+    mat4 Model;
+    mat4 Normal;
+	uvec4 Params;
 };
 
-layout(std430, binding = 0) readonly buffer InstanceTransform
+layout(std430, binding = 0) readonly buffer InstanceInfoSSBO
 {
-    InstanceTransformInfo InstanceTransformInfos[];
+    InstanceInfo InstanceInfos[];
 };
 
 layout(std430, binding = 1) readonly buffer BoneMatrices
@@ -40,5 +41,5 @@ void main()
         }
     }
     vec4 skinnedPos = boneTransform * vec4(aPos, 1.0);
-    gl_Position = ViewProjection * InstanceTransformInfos[index].Model * skinnedPos;
+    gl_Position = ViewProjection * InstanceInfos[index].Model * skinnedPos;
 }

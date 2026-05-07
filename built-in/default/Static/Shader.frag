@@ -46,6 +46,7 @@ in V2F
 	vec2 texCoord;
 	vec3 fragPos;
 	vec3 normal;
+	flat uint receiveShadow;
 } v2f;
 
 vec4 GetCascadeSplits(uint idx) 
@@ -142,7 +143,7 @@ void main()
 		vec3 lightColor = light.Color_Intensity.rgb * light.Color_Intensity.w;
 		uint lightType = uint(light.Position_Type.w);
 		
-		vec3 lightDir;
+		vec3 lightDir = vec3(0.0, 1.0, 0.0);
 		float attenuation = 1.0;
 
 		if(lightType == 0u) 
@@ -179,13 +180,17 @@ void main()
 		vec3 specular = specMapColor * spec; 
 
 		float shadow = 1.0;
-		float sliceIdx = light.Params.w;
-		if (sliceIdx >= 0.0)
+		bool receiveShadow = bool(v2f.receiveShadow & 1u);
+		if(receiveShadow)
 		{
-			uint si = uint(sliceIdx);
-			if (lightType == 0u) { shadow = CalcCSMShadow(v2f.fragPos, si); }
-			else if (lightType == 2u) { shadow = CalcSpotShadow(v2f.fragPos, si); }
-			else if (lightType == 1u) { shadow = CalcPointShadow(v2f.fragPos, light.Position_Type.xyz, si); }
+			float sliceIdx = light.Params.w;
+			if (sliceIdx >= 0.0)
+			{
+				uint si = uint(sliceIdx);
+				if (lightType == 0u) { shadow = CalcCSMShadow(v2f.fragPos, si); }
+				else if (lightType == 2u) { shadow = CalcSpotShadow(v2f.fragPos, si); }
+				else if (lightType == 1u) { shadow = CalcPointShadow(v2f.fragPos, light.Position_Type.xyz, si); }
+			}
 		}
 		finalColor += (diffuse + specular) * lightColor * attenuation * shadow;
 	}

@@ -15,7 +15,7 @@
 #include<Render/Common/API.h>
 #include<Render/Common/RenderCommandType.h>
 #include<Render/Common/RenderQueue.h>
-#include<Render/Common/InstanceTransformInfo.h>
+#include<Render/Common/InstanceInfo.h>
 #include<Render/Common/LightInfo.h>
 #include<Render/Common/ShadowInfo.h>
 #include<Render/Command/BeginPassCommand.h>
@@ -150,7 +150,7 @@ namespace Pitaya::Render
 					Pitaya::Render::PostProcessStep::UniformBufferBytes, static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
 
 				// 初始分配1024个位置
-				InstanceModelTransformSSBO.Capacity = 1024 * sizeof(InstanceTransformInfo);
+				InstanceModelTransformSSBO.Capacity = 1024 * sizeof(InstanceInfo);
 				InstanceModelTransformSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					InstanceModelTransformSSBO.Capacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform));
 
@@ -221,7 +221,7 @@ namespace Pitaya::Render
 			struct Buffer
 			{
 				std::vector<std::byte> CommandBuffer;
-				std::vector<InstanceTransformInfo> InstanceModelTransforms;
+				std::vector<InstanceInfo> InstanceInfo;
 				std::vector<glm::mat4> BoneMatrices;
 				std::vector<LightInfo> Lights;
 				std::vector<std::byte> ShadowSSBOData;
@@ -232,7 +232,7 @@ namespace Pitaya::Render
 				inline void Clear() noexcept
 				{
 					CommandBuffer.clear();
-					InstanceModelTransforms.clear();
+					InstanceInfo.clear();
 					BoneMatrices.clear();
 					Lights.clear();
 					ShadowSSBOData.clear();
@@ -425,11 +425,11 @@ namespace Pitaya::Render
 								}
 
 								currentBatch.InstanceCount = 0;
-								currentBatch.BaseInstance = static_cast<uint32_t>(front.InstanceModelTransforms.size()); // 不论是哪个队列 BaseInstance 永远递增
+								currentBatch.BaseInstance = static_cast<uint32_t>(front.InstanceInfo.size()); // 不论是哪个队列 BaseInstance 永远递增
 							}
 
 							// Transform SSBO
-							front.InstanceModelTransforms.push_back({ cmd.ModelMatrix ,glm::transpose(glm::inverse(cmd.ModelMatrix)) });
+							front.InstanceInfo.push_back({ cmd.ModelMatrix, glm::transpose(glm::inverse(cmd.ModelMatrix)), {cmd.ReceiveShadow, 0, 0, 0} });
 
 							// 只有蒙皮渲染队列才去处理骨骼
 							if (cmd.BoneInverseMatrices && !cmd.BoneInverseMatrices->empty())
@@ -496,14 +496,14 @@ namespace Pitaya::Render
 		{
 			// front buffer reserve
 			renderPacket.front.CommandBuffer.reserve(64 * 1024);
-			renderPacket.front.InstanceModelTransforms.reserve(1024);
+			renderPacket.front.InstanceInfo.reserve(1024);
 			renderPacket.front.BoneMatrices.reserve(1024);
 			renderPacket.front.Lights.reserve(10);
 			renderPacket.front.ShadowSSBOData.reserve(64 * 1024);
 
 			// front buffer reserve
 			renderPacket.back.CommandBuffer.reserve(64 * 1024);
-			renderPacket.back.InstanceModelTransforms.reserve(1024);
+			renderPacket.back.InstanceInfo.reserve(1024);
 			renderPacket.back.BoneMatrices.reserve(1024);
 			renderPacket.back.Lights.reserve(10);
 			renderPacket.back.ShadowSSBOData.reserve(64 * 1024);
@@ -718,6 +718,7 @@ namespace Pitaya::Render
 			uint32_t submeshIndex = item.SubMeshIndex;
 
 			Pitaya::Render::DrawCommand cmd;
+			cmd.ReceiveShadow = item.ReceiveShadow;
 			cmd.ModelMatrix = item.Model;
 			if (mesh && mesh->VertexArrayHandle != Pitaya::Core::SlotMap<Pitaya::GPU::VertexArray>::Handle::Invalid &&
 				submeshIndex < mesh->SubMeshs.size())

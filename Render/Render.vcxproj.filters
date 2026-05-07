@@ -72,7 +72,7 @@
     <ClInclude Include="Common\LightInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\InstanceTransformInfo.h">
+    <ClInclude Include="Common\InstanceInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Command\DrawSkyboxCommand.h">

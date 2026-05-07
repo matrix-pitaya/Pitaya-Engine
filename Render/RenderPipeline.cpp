@@ -145,10 +145,13 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 			uint32_t layer = slice.LayerOffset + m;
 			const glm::mat4& shadowVP = graph.ShadowMatrices[slice.MatrixOffset + m];
 			renderer->BeginShadowPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), slice.LightType, layer, shadowVP);
-			for (auto& item : graph.Items)
+			for (const auto& item : graph.Items)
 			{
 				//TODO 可以拓展一个EnableShadowCast开关控制阴影投射
-				renderer->SubmitCastShadowItem(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), item);
+				if (item.EnableShadowCast)
+				{
+					renderer->SubmitCastShadowItem(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), item);
+				}
 			}
 			renderer->EndShadowPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>());
 		}
@@ -163,19 +166,14 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 	//处理所有渲染通道
 	for (uint32_t passIdx = 0; passIdx < static_cast<uint32_t>(graph.Passes.size()); ++passIdx)
 	{
-		auto& pass = graph.Passes[passIdx];
 		Pitaya::Core::Print(Pitaya::Core::Color::Yellow, "Begin Pass");
-
-		// 记录该 Pass 的光源数量
-		pass.LightCount = static_cast<uint32_t>(graph.Lights.size());
-
-		// 为每个 Pass 生成带有正确 Params.w 索引的光源快照
-		uint32_t dirSoFar = 0, spotSoFar = 0, pointSoFar = 0;
+		auto& pass = graph.Passes[passIdx];
+		pass.LightCount = static_cast<uint32_t>(graph.Lights.size());	// 记录该 Pass 的光源数量
+		uint32_t dirSoFar = 0, spotSoFar = 0, pointSoFar = 0;			// 为每个 Pass 生成带有正确 Params.w 索引的光源快照
 		for (const auto& sceneLight : graph.Lights)
 		{
 			LightInfo localLight = sceneLight; // 栈上拷贝
 			uint32_t type = static_cast<uint32_t>(localLight.Position_Type.w);
-
 			switch (type)
 			{
 				case 0:	// 平行光：CSM 索引随 Pass 变化
@@ -193,18 +191,16 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 					++spotSoFar;
 					break;
 			}
-
 			renderer->SubmitLight(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), localLight);
 		}
-
 		renderer->BeginPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), pass);	//提交BeginPass命令 并在命令中更新CameraSnapshotUBO数据（一个Camera对应一个Pass）
 		Pitaya::Core::Frustum frustum = pass.CameraSnapshot.CreateFrustum();
 		uint32_t submitCount = 0;
 		for (auto& item : graph.Items)	//处理所有渲染对象
 		{
-			if (pass.CullingMask.HasBits(item.LayerMask.GetEnum()) &&
+			if (pass.CullingMask.HasBits(item.LayerMask.GetEnum()) && 
 				frustum.IsVisible(item.Mesh ? item.Mesh->BoundingBox.ToWorld(item.Model) :
-					Pitaya::Core::AABB({ glm::vec3(-0.5f), glm::vec3(0.5f) }).ToWorld(item.Model)))
+				Pitaya::Core::AABB({ glm::vec3(-0.5f), glm::vec3(0.5f) }).ToWorld(item.Model)))
 			{
 				renderer->Submit(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), item);
 				++submitCount;

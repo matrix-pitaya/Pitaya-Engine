@@ -71,12 +71,12 @@ void Pitaya::Render::Renderer::NewRenderFrame()
 	Pitaya::GPU::ShaderStorageBuffer shaderStorageBuffer;
 
 	// 动态扩容/上传 Transform SSBO
-	size_t uploadTransformCount = renderPacket.back.InstanceModelTransforms.size();
+	size_t uploadTransformCount = renderPacket.back.InstanceInfo.size();
 	if (uploadTransformCount > 0)
 	{
 		if (Pitaya::GPU::GetShaderStorageBuffer(Pitaya::Core::PassKey<Renderer>(), globalRHI.InstanceModelTransformSSBO.Handle, shaderStorageBuffer))
 		{
-			size_t requiredSize = uploadTransformCount * sizeof(InstanceTransformInfo);
+			size_t requiredSize = uploadTransformCount * sizeof(InstanceInfo);
 			glBindBufferBase(GL_SHADER_STORAGE_BUFFER,
 				static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform),
 				shaderStorageBuffer.Id);
@@ -90,7 +90,7 @@ void Pitaya::Render::Renderer::NewRenderFrame()
 			}
 
 			// 将最新推算好的数据安全更新到 SSBO 中
-			glNamedBufferSubData(shaderStorageBuffer.Id, 0, requiredSize, renderPacket.back.InstanceModelTransforms.data());
+			glNamedBufferSubData(shaderStorageBuffer.Id, 0, requiredSize, renderPacket.back.InstanceInfo.data());
 		}
 	}
 

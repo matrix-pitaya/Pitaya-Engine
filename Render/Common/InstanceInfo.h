@@ -5,9 +5,10 @@
 
 namespace Pitaya::Render
 {
-	struct STD140_LAYOUT InstanceTransformInfo
+	struct STD140_LAYOUT InstanceInfo
 	{
 		glm::mat4 Model;
 		glm::mat4 Normal;
+		glm::uvec4 Params;	// x:是否接受阴影
 	};
 }

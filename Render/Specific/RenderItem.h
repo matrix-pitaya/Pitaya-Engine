@@ -17,5 +17,7 @@ namespace Pitaya::Render
 		Pitaya::Core::StateFlags<Pitaya::Render::RenderLayer> LayerMask;
 		glm::mat4 Model;
 		uint32_t SubMeshIndex = 0;
+		bool EnableShadowCast = true;
+		bool ReceiveShadow = true;
 	};
 }
