@@ -202,15 +202,16 @@ void Pitaya::Editor::GUI::SetStyle()
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	// io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;	//TODO 涉及到同步点 暂时不做拖拽出窗口
 	auto fontRC = Pitaya::Core::LoadBuiltInRC(IDR_FONT_SEGOEUI_TTF);
-	std::string fontData(static_cast<const char*>(fontRC.data), fontRC.size);
-	io.Fonts->AddFontFromMemoryTTF(fontData.data(), fontData.size(), 16, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+	ImFontConfig fontConfig;
+	fontConfig.FontDataOwnedByAtlas = false;
+	io.Fonts->AddFontFromMemoryTTF(const_cast<void*>(fontRC.data), fontRC.size, 16, &fontConfig, io.Fonts->GetGlyphRangesChineseFull());
 	ImFontConfig iconsConfig;
+	iconsConfig.FontDataOwnedByAtlas = false;
 	iconsConfig.MergeMode = true;
 	iconsConfig.PixelSnapH = true;
 	static const constexpr ImWchar iconsRanges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
 	auto iconsRC = Pitaya::Core::LoadBuiltInRC(IDR_FONT_FA_SOLID_900_TTF);
-	std::string iconsData(static_cast<const char*>(iconsRC.data), iconsRC.size);
-	io.Fonts->AddFontFromMemoryTTF(iconsData.data(), iconsData.size(), 16.0f, &iconsConfig, iconsRanges);
+	io.Fonts->AddFontFromMemoryTTF(const_cast<void*>(iconsRC.data), iconsRC.size, 16.0f, &iconsConfig, iconsRanges);
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	ImGui::StyleColorsDark();
