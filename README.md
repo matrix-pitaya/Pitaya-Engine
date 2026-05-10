@@ -80,7 +80,7 @@ Pitaya 采用严格的分层架构，确保核心逻辑与底层实现解耦：
     确保构建配置设为`Release` (x64)。
     
 4.  **运行项目:**
-    右键重新生成解决方案并将 `mono` 和 `editor` 文件夹 以及 以下 `dll` 拷贝到 `exe` 目录下，返回 `VS` 将 `Application` 设为启动项目并按 `F5` 运行。
+    右键重新生成解决方案并将 `mono` 文件夹 和 以下 `dll` 拷贝到 `exe` 目录下，返回 `VS` 将 `Application` 设为启动项目并按 `F5` 运行。
     
     ```
     thirdparty/mimalloc/dll  中的  mimalloc.dll 和 mimalloc-redirect.dll
@@ -102,7 +102,7 @@ Pitaya/
 ├── exe/             			# 可执行程序输出目录
 ├── intermediate/    			# 中间产物，如编译文件、临时文件等
 ├── library/         			# 项目库文件
-├── resource/        			# 资源文件
+├── built-in/        			# 内置资源文件
 ├── thirdparty/      			# 第三方依赖与库文件
 ├── README.md        			# 项目说明文档
 └── pitaya.sln   	 			# VS Solution 解决方案文件
