@@ -11,6 +11,7 @@ namespace
     {
         GLenum type;
         const char* source = nullptr;
+        GLint length = 0;
     };
     void CleanupOpenGLShaders(const std::vector<GLuint>& shaderIds)
     {
@@ -35,7 +36,7 @@ namespace
             }
 
             GLuint shaderId = glCreateShader(info.type);
-            glShaderSource(shaderId, 1, &info.source, NULL);
+            glShaderSource(shaderId, 1, &info.source, &info.length);
             glCompileShader(shaderId);
 
             int success = 0;
@@ -83,16 +84,16 @@ namespace
     }
 }
 
-Pitaya::GPU::Shader Pitaya::GPU::Shader::Factory::Create(const char* vertexSource, const char* fragmentSource)
+Pitaya::GPU::Shader Pitaya::GPU::Shader::Factory::Create(const char* vertexSource, size_t vertexSize, const char* fragmentSource, size_t fragmentSize)
 {
-    return { CreateOpenGLShaders({{ GL_VERTEX_SHADER, vertexSource },
-                { GL_FRAGMENT_SHADER, fragmentSource } }) };
+    return { CreateOpenGLShaders({{ GL_VERTEX_SHADER, vertexSource, static_cast<GLint>(vertexSize) },
+                { GL_FRAGMENT_SHADER, fragmentSource, static_cast<GLint>(fragmentSize) } }) };
 }
-Pitaya::GPU::Shader Pitaya::GPU::Shader::Factory::Create(const char* vertexSource, const char* fragmentSource, const char* geometrySource)
+Pitaya::GPU::Shader Pitaya::GPU::Shader::Factory::Create(const char* vertexSource, size_t vertexSize, const char* fragmentSource, size_t fragmentSize, const char* geometrySource, size_t geometrySize)
 {
-    return { CreateOpenGLShaders({ { GL_VERTEX_SHADER, vertexSource },
-                { GL_FRAGMENT_SHADER, fragmentSource },
-                { GL_GEOMETRY_SHADER, geometrySource } }) };
+    return { CreateOpenGLShaders({ { GL_VERTEX_SHADER, vertexSource, static_cast<GLint>(vertexSize) },
+                { GL_FRAGMENT_SHADER, fragmentSource, static_cast<GLint>(fragmentSize) },
+                { GL_GEOMETRY_SHADER, geometrySource, static_cast<GLint>(geometrySize) } }) };
 }
 void Pitaya::GPU::Shader::Factory::Destroy(Pitaya::GPU::Shader shader)
 {

@@ -233,13 +233,13 @@ namespace
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::IndexBuffer>(passkey, indices, count);
 	}
-	Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle ENGINE_CALL OnCreateShaderVF(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const char* vertexSource, const char* fragmentSource)
+	Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle ENGINE_CALL OnCreateShaderVF(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const char* vertexSource, size_t vertexSize, const char* fragmentSource, size_t fragmentSize)
 	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::Shader>(passkey, vertexSource, fragmentSource);
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::Shader>(passkey, vertexSource, vertexSize, fragmentSource, fragmentSize);
 	}
-	Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle ENGINE_CALL OnCreateShaderVFG(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const char* vertexSource, const char* fragmentSource, const char* geometrySource)
+	Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle ENGINE_CALL OnCreateShaderVFG(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const char* vertexSource, size_t vertexSize, const char* fragmentSource, size_t fragmentSize, const char* geometrySource, size_t geometrySize)
 	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::Shader>(passkey, vertexSource, fragmentSource, geometrySource);
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::Shader>(passkey, vertexSource, vertexSize, fragmentSource, fragmentSize, geometrySource, geometrySize);
 	}
 	Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle ENGINE_CALL OnCreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, unsigned char* data, int width, int height, int channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
 	{

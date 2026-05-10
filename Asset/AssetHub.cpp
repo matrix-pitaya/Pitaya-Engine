@@ -25,8 +25,12 @@ bool Pitaya::Asset::AssetHub::Initialize()
 		buildIn.DefaultStaticShader.GUID = Pitaya::Asset::Shader::Static;
 		buildIn.DefaultStaticShader.State.SetBits(Pitaya::Core::AssetState::CPULoading);
 		Pitaya::Import::ShaderImportResult result;
-		result.VertexSource = Pitaya::Core::LoadBuiltInRC(IDR_DEFAULT_STATIC_VERTEX_SHADER);
-		result.FragmentSource = Pitaya::Core::LoadBuiltInRC(IDR_DEFAULT_STATIC_FRAGMENT_SHADER);
+		{
+			auto vsRc = Pitaya::Core::LoadBuiltInRC(IDR_DEFAULT_STATIC_VERTEX_SHADER);
+			auto fsRc = Pitaya::Core::LoadBuiltInRC(IDR_DEFAULT_STATIC_FRAGMENT_SHADER);
+			result.VertexSource = std::string(static_cast<const char*>(vsRc.data), vsRc.size);
+			result.FragmentSource = std::string(static_cast<const char*>(fsRc.data), fsRc.size);
+		}
 		result.Type = Pitaya::GPU::Shader::VF;
 		result.GUID = Pitaya::Asset::Shader::Static;
 		buildIn.DefaultStaticShader.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
@@ -673,7 +677,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	{
 		if (!cpuOpResult_Inner.VertexSource.empty() && !cpuOpResult_Inner.FragmentSource.empty())
 		{
-			shaderHandle = Pitaya::GPU::CreateShader(passkey, cpuOpResult_Inner.VertexSource.c_str(), cpuOpResult_Inner.FragmentSource.c_str());
+			shaderHandle = Pitaya::GPU::CreateShader(passkey, cpuOpResult_Inner.VertexSource.c_str(), cpuOpResult_Inner.VertexSource.size(), cpuOpResult_Inner.FragmentSource.c_str(), cpuOpResult_Inner.FragmentSource.size());
 		}
 		else
 		{
@@ -684,7 +688,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	{
 		if (!cpuOpResult_Inner.VertexSource.empty() && !cpuOpResult_Inner.FragmentSource.empty() && !cpuOpResult_Inner.GeometrySource.empty())
 		{
-			shaderHandle = Pitaya::GPU::CreateShader(passkey, cpuOpResult_Inner.VertexSource.c_str(), cpuOpResult_Inner.FragmentSource.c_str(), cpuOpResult_Inner.GeometrySource.c_str());
+			shaderHandle = Pitaya::GPU::CreateShader(passkey, cpuOpResult_Inner.VertexSource.c_str(), cpuOpResult_Inner.VertexSource.size(), cpuOpResult_Inner.FragmentSource.c_str(), cpuOpResult_Inner.FragmentSource.size(), cpuOpResult_Inner.GeometrySource.c_str(), cpuOpResult_Inner.GeometrySource.size());
 		}
 		else
 		{

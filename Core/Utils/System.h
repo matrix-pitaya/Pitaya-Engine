@@ -19,23 +19,29 @@ namespace Pitaya::Core
 	{
 		exit(exitcode);
 	}
-    inline std::string LoadBuiltInRC(const char* resourceName, const char* moduleName = nullptr)
+    
+    struct BuiltRC
+    {
+        const void* data = nullptr;
+        size_t size = 0;
+    };
+    inline BuiltRC LoadBuiltInRC(const char* resourceName, const char* moduleName = nullptr)
     {
 #if defined(PITAYA_PLATFORM_WINDOWS)
         HMODULE hModule = GetModuleHandleA(moduleName);
-        if (!hModule) { return ""; }
+        if (!hModule) { return {}; }
 
         HRSRC hRes = FindResourceA(hModule, resourceName, RT_RCDATA);
-        if (!hRes) { return ""; }
+        if (!hRes) { return {}; }
 
         HGLOBAL hData = LoadResource(hModule, hRes);
-        if (!hData) { return ""; }
+        if (!hData) { return {}; }
 
         DWORD dataSize = SizeofResource(hModule, hRes);
-        const char* dataPtr = static_cast<const char*>(LockResource(hData));
-        if (!dataPtr || dataSize == 0) { return ""; }
+        const void* dataPtr = LockResource(hData);
+        if (!dataPtr || dataSize == 0) { return {}; }
 
-        return std::string(dataPtr, dataSize);
+        return { dataPtr, static_cast<size_t>(dataSize) };
 #endif
     }
 }

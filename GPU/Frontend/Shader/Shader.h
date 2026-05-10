@@ -4,6 +4,7 @@
 #include<GPU/Common/ShaderType.h>
 #include<GPU/Common/ShaderVariableType.h>
 #include<GPU/Common/Identifier.h>
+#include<cstddef>
 
 namespace Pitaya::GPU
 {
@@ -14,8 +15,8 @@ namespace Pitaya::GPU
 		{
 			friend class RHIDevice;
 		private:
-			static Shader Create(const char* vertexSource, const char* fragmentSource);
-			static Shader Create(const char* vertexSource, const char* fragmentSource, const char* geometrySource);
+			static Shader Create(const char* vertexSource, size_t vertexSize, const char* fragmentSource, size_t fragmentSize);
+			static Shader Create(const char* vertexSource, size_t vertexSize, const char* fragmentSource, size_t fragmentSize, const char* geometrySource, size_t geometrySize);
 			static void Destroy(Shader);
 		};
 	
