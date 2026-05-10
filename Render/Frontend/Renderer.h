@@ -280,30 +280,30 @@ namespace Pitaya::Render
 
 					switch (header.type)
 					{
-						case Pitaya::Render::RenderCommandType::BeginPass:
-							renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BeginPassCommand>(offset));
-							break;
+					case Pitaya::Render::RenderCommandType::BeginPass:
+						renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BeginPassCommand>(offset));
+						break;
 
-						case Pitaya::Render::RenderCommandType::InstanceDraw:
-							renderer->ExecuteCommand(FetchCommand<Pitaya::Render::InstancedDrawCommand>(offset));
-							break;
+					case Pitaya::Render::RenderCommandType::InstanceDraw:
+						renderer->ExecuteCommand(FetchCommand<Pitaya::Render::InstancedDrawCommand>(offset));
+						break;
 
-						case Pitaya::Render::RenderCommandType::PostProcess:
-							renderer->ExecuteCommand(FetchCommand<Pitaya::Render::PostProcessCommand>(offset));
-							break;
+					case Pitaya::Render::RenderCommandType::PostProcess:
+						renderer->ExecuteCommand(FetchCommand<Pitaya::Render::PostProcessCommand>(offset));
+						break;
 
-						case Pitaya::Render::RenderCommandType::BlitToScreen:
-							renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BlitToScreenCommand>(offset));
-							break;
+					case Pitaya::Render::RenderCommandType::BlitToScreen:
+						renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BlitToScreenCommand>(offset));
+						break;
 
-						case Pitaya::Render::RenderCommandType::BeginShadowPass:
-							renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BeginShadowPassCommand>(offset));
-							break;
+					case Pitaya::Render::RenderCommandType::BeginShadowPass:
+						renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BeginShadowPassCommand>(offset));
+						break;
 
-						case Pitaya::Render::RenderCommandType::Invalid:
-						default:
-							offset += header.size;
-							break;
+					case Pitaya::Render::RenderCommandType::Invalid:
+					default:
+						offset += header.size;
+						break;
 					}
 				}
 				back.Clear();	//清空缓冲区
@@ -551,24 +551,24 @@ namespace Pitaya::Render
 			globalRHI.Create(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
 			INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), globalRHI.MainDisplayRenderTarget.FinalFrameBufferHandle)
 
-			while (true)
-			{
-				std::unique_lock<std::mutex> lock(mutex);
-				cond.wait(lock, [this] { return renderPacket.IsRemain() || INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK ||
-					Pitaya::Asset::IsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>()) || !isRunning.load(std::memory_order_acquire); });
-				if (!isRunning.load(std::memory_order_acquire)) { break; }
-
-				Pitaya::Asset::SyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
-				if (renderPacket.IsRemain() || INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK)
+				while (true)
 				{
-					NewRenderFrame();
-					renderPacket.ParseCommand(this);
-					SwapBuffer();
+					std::unique_lock<std::mutex> lock(mutex);
+					cond.wait(lock, [this] { return renderPacket.IsRemain() || INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK ||
+						Pitaya::Asset::IsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>()) || !isRunning.load(std::memory_order_acquire); });
+					if (!isRunning.load(std::memory_order_acquire)) { break; }
+
+					Pitaya::Asset::SyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+					if (renderPacket.IsRemain() || INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK)
+					{
+						NewRenderFrame();
+						renderPacket.ParseCommand(this);
+						SwapBuffer();
+					}
 				}
-			}
 
 			INVOKE_PRERENDERCONTEXTINRELEASED_HOOK
-			Pitaya::GPU::DestroyAllGPUResource(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+				Pitaya::GPU::DestroyAllGPUResource(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
 			ReleaseRenderContext();
 		}
 
@@ -598,9 +598,9 @@ namespace Pitaya::Render
 				uint32_t endLayer = s.LayerOffset + s.MatrixCount;
 				switch (s.LightType)
 				{
-					case 0: maxCSMLayer = std::max(maxCSMLayer, endLayer);   break;
-					case 2: maxSpotLayer = std::max(maxSpotLayer, endLayer);  break;
-					case 1: maxPointLayer = std::max(maxPointLayer, endLayer); break;
+				case 0: maxCSMLayer = std::max(maxCSMLayer, endLayer);   break;
+				case 2: maxSpotLayer = std::max(maxSpotLayer, endLayer);  break;
+				case 1: maxPointLayer = std::max(maxPointLayer, endLayer); break;
 				}
 			}
 			renderPacket.front.RequiredCSMLayers = maxCSMLayer;
@@ -608,10 +608,12 @@ namespace Pitaya::Render
 			renderPacket.front.RequiredPointLayers = maxPointLayer;
 
 			// 序列化 SSBO 数据
+			// 布局: Header | CascadeSplit[] | SliceGPU[] | mat4[]
 			size_t headerSize = sizeof(Pitaya::Render::ShadowSSBOHeader);
 			size_t splitsSize = cascadeSplits.size() * sizeof(Pitaya::Render::CascadeSplitInfo);
+			size_t slicesSize = slices.size() * sizeof(Pitaya::Render::ShadowSliceGPU);
 			size_t matricesSize = matrices.size() * sizeof(glm::mat4);
-			size_t totalSize = headerSize + splitsSize + matricesSize;
+			size_t totalSize = headerSize + splitsSize + slicesSize + matricesSize;
 
 			if (totalSize > 0)
 			{
@@ -623,6 +625,8 @@ namespace Pitaya::Render
 				header.SpotLightCount = spotCount;
 				header.PointLightCount = pointCount;
 				header.TotalMatrixCount = static_cast<uint32_t>(matrices.size());
+				header.CascadeSplitCount = static_cast<uint32_t>(cascadeSplits.size());
+				header.ShadowSliceCount = static_cast<uint32_t>(slices.size());
 				std::memcpy(shadowData.data(), &header, headerSize);
 
 				if (splitsSize > 0)
@@ -630,9 +634,22 @@ namespace Pitaya::Render
 					std::memcpy(shadowData.data() + headerSize, cascadeSplits.data(), splitsSize);
 				}
 
+				if (slicesSize > 0)
+				{
+					std::vector<Pitaya::Render::ShadowSliceGPU> gpuSlices(slices.size());
+					for (size_t i = 0; i < slices.size(); ++i)
+					{
+						gpuSlices[i].MatrixOffset = slices[i].MatrixOffset;
+						gpuSlices[i].LayerOffset = slices[i].LayerOffset;
+						gpuSlices[i].LightType = slices[i].LightType;
+						gpuSlices[i]._pad0 = 0;
+					}
+					std::memcpy(shadowData.data() + headerSize + splitsSize, gpuSlices.data(), slicesSize);
+				}
+
 				if (matricesSize > 0)
 				{
-					std::memcpy(shadowData.data() + headerSize + splitsSize, matrices.data(), matricesSize);
+					std::memcpy(shadowData.data() + headerSize + splitsSize + slicesSize, matrices.data(), matricesSize);
 				}
 			}
 		}
@@ -645,9 +662,9 @@ namespace Pitaya::Render
 
 			switch (lightType)
 			{
-				case 0: cmd.Resolution = GlobalRHI::ShadowAtlas::CSMResolution;   break;
-				case 2: cmd.Resolution = GlobalRHI::ShadowAtlas::SpotResolution;  break;
-				case 1: cmd.Resolution = GlobalRHI::ShadowAtlas::PointResolution; break;
+			case 0: cmd.Resolution = GlobalRHI::ShadowAtlas::CSMResolution;   break;
+			case 2: cmd.Resolution = GlobalRHI::ShadowAtlas::SpotResolution;  break;
+			case 1: cmd.Resolution = GlobalRHI::ShadowAtlas::PointResolution; break;
 			}
 
 			renderPacket.PushCommand(cmd);
@@ -926,7 +943,7 @@ namespace Pitaya::Render
 		}
 		inline void SubmitBlitToScreen(Pitaya::Core::PassKey<RenderPipeline>)
 		{
-			Pitaya::Render::BlitToScreenCommand blitToScreenCommand { Pitaya::Window::GetWindowSize() };
+			Pitaya::Render::BlitToScreenCommand blitToScreenCommand{ Pitaya::Window::GetWindowSize() };
 			renderPacket.PushCommand(blitToScreenCommand);
 		}
 		inline void EndRenderFrame(Pitaya::Core::PassKey<RenderPipeline>)

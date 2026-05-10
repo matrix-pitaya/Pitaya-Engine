@@ -25,9 +25,18 @@ namespace Pitaya::Render
 
 	// GPU侧 上传到 SSBO 的数据
 	// [SSBO layout]
-	// ShadowSSBOHeader                                    (16 bytes, 4 × uint)
+	// ShadowSSBOHeader                                    (4 × uint + 4 × uint padding → 32 bytes)
 	// CascadeSplitInfo[dirLightCount × passCount]         (16 bytes each)
+	// ShadowSliceGPU[totalSliceCount]                     (16 bytes each)
 	// mat4 ShadowMatrices[totalMatrixCount]               (64 bytes each)
+
+	struct STD140_LAYOUT ShadowSliceGPU
+	{
+		uint32_t MatrixOffset;		// 在 ShadowMatrices 数组中的起始下标
+		uint32_t LayerOffset;		// 在对应 Texture2DArray 中的起始 layer
+		uint32_t LightType;			// 0=Dir, 1=Point, 2=Spot
+		uint32_t _pad0;
+	};
 
 	struct STD140_LAYOUT ShadowSSBOHeader
 	{
@@ -35,6 +44,10 @@ namespace Pitaya::Render
 		uint32_t SpotLightCount;
 		uint32_t PointLightCount;
 		uint32_t TotalMatrixCount;
+		uint32_t CascadeSplitCount;
+		uint32_t ShadowSliceCount;
+		uint32_t _pad0;
+		uint32_t _pad1;
 	};
 
 	struct CascadeSplitInfo

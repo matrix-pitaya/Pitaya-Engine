@@ -9,12 +9,23 @@ layout(binding = 9)  uniform sampler2DArrayShadow ShadowMap_CSM;
 layout(binding = 10) uniform sampler2DArrayShadow ShadowMap_Spot;
 layout(binding = 11) uniform sampler2DArrayShadow ShadowMap_Point;
 
+struct ShadowSliceInfo
+{
+    uint MatrixOffset;
+    uint LayerOffset;
+    uint LightType;
+    uint _pad0;
+};
+
 layout(std430, binding = 3) readonly buffer ShadowInfoBuffer
 {
     uint DirLightCount;
     uint SpotLightCount;
     uint PointLightCount;
     uint TotalMatrixCount;
+    uint CascadeSplitCount;
+    uint ShadowSliceCount;
+    uint _pad0, _pad1;
     vec4 ShadowPayload[];
 };
 
@@ -37,7 +48,7 @@ struct LightInfo
 layout(std430, binding = 2) readonly buffer LightBuffer 
 {
     uint ActiveLightCount;
-    uint pad0, pad1, pad2;
+    uint _pad0_, _pad1_, _pad2_;
     LightInfo SceneLights[]; 
 };
 
@@ -49,16 +60,27 @@ in V2F
 	flat uint receiveShadow;
 } v2f;
 
-vec4 GetCascadeSplits(uint idx) 
-{ 
+vec4 GetCascadeSplits(uint idx)
+{
 	return ShadowPayload[idx];
 }
 
 mat4 GetShadowMatrix(uint idx)
 {
-    uint base = DirLightCount + idx * 4u;
+    uint base = CascadeSplitCount + ShadowSliceCount + idx * 4u;
     return mat4(ShadowPayload[base], ShadowPayload[base+1u],
                 ShadowPayload[base+2u], ShadowPayload[base+3u]);
+}
+
+ShadowSliceInfo GetShadowSlice(uint si)
+{
+    vec4 raw = ShadowPayload[CascadeSplitCount + si];
+    ShadowSliceInfo s;
+    s.MatrixOffset = floatBitsToUint(raw.x);
+    s.LayerOffset = floatBitsToUint(raw.y);
+    s.LightType = floatBitsToUint(raw.z);
+    s._pad0 = floatBitsToUint(raw.w);
+    return s;
 }
 
 float SampleShadowPCF(sampler2DArrayShadow sm, vec3 proj, float layer, float bias)
@@ -82,10 +104,11 @@ float SampleShadowPCF(sampler2DArrayShadow sm, vec3 proj, float layer, float bia
 
 float CalcSpotShadow(vec3 wp, uint si)
 {
-    mat4 svp = GetShadowMatrix(si);
+    ShadowSliceInfo slice = GetShadowSlice(si);
+    mat4 svp = GetShadowMatrix(slice.MatrixOffset);
     vec4 sc = svp * vec4(wp, 1.0);
     vec3 pc = sc.xyz / sc.w * 0.5 + 0.5;
-    return SampleShadowPCF(ShadowMap_Spot, pc, float(si), 0.002);
+    return SampleShadowPCF(ShadowMap_Spot, pc, float(slice.LayerOffset), 0.002);
 }
 
 float CalcPointShadow(vec3 wp, vec3 lp, uint si)
@@ -96,11 +119,12 @@ float CalcPointShadow(vec3 wp, vec3 lp, uint si)
     if (m == a.x) { f = d.x > 0.0 ? 0u : 1u; }
     else if (m == a.y) { f = d.y > 0.0 ? 2u : 3u; }
     else { f = d.z > 0.0 ? 4u : 5u; }
-    
-    mat4 svp = GetShadowMatrix(SpotLightCount + si * 6u + f);
+
+    ShadowSliceInfo slice = GetShadowSlice(si);
+    mat4 svp = GetShadowMatrix(slice.MatrixOffset + f);
     vec4 sc = svp * vec4(wp, 1.0);
     vec3 pc = sc.xyz / sc.w * 0.5 + 0.5;
-    return SampleShadowPCF(ShadowMap_Point, pc, float(si * 6u + f), 0.005);
+    return SampleShadowPCF(ShadowMap_Point, pc, float(slice.LayerOffset + f), 0.005);
 }
 
 float CalcCSMShadow(vec3 wp, uint si)
@@ -111,11 +135,12 @@ float CalcCSMShadow(vec3 wp, uint si)
     if (vd < sp.x) { ci = 0u; }
     else if (vd < sp.y) { ci = 1u; }
     else if (vd < sp.z) { ci = 2u; }
-    
-    mat4 svp = GetShadowMatrix(SpotLightCount + PointLightCount * 6u + si * 4u + ci);
+
+    ShadowSliceInfo slice = GetShadowSlice(si);
+    mat4 svp = GetShadowMatrix(slice.MatrixOffset + ci);
     vec4 sc = svp * vec4(wp, 1.0);
     vec3 pc = sc.xyz / sc.w * 0.5 + 0.5;
-    return SampleShadowPCF(ShadowMap_CSM, pc, float(si * 4u + ci), 0.001 * float(ci + 1u));
+    return SampleShadowPCF(ShadowMap_CSM, pc, float(slice.LayerOffset + ci), 0.001 * float(ci + 1u));
 }
 
 void main()
