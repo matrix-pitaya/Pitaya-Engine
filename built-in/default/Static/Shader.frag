@@ -130,7 +130,8 @@ float CalcPointShadow(vec3 wp, vec3 lp, uint si)
 float CalcCSMShadow(vec3 wp, uint si)
 {
     float vd = -(View * vec4(wp, 1.0)).z;
-    vec4 sp = GetCascadeSplits(0u);
+    uint csmIdx = si - SpotLightCount - PointLightCount;
+    vec4 sp = GetCascadeSplits(csmIdx);
     uint ci = 3u;
     if (vd < sp.x) { ci = 0u; }
     else if (vd < sp.y) { ci = 1u; }

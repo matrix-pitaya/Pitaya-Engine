@@ -668,7 +668,7 @@ void Pitaya::Engine::Engine::Render()
 		{
 			MODULE(RenderPipeline)->AddSceneLight(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(), 
 				{ glm::vec4(transform.GetWorldPosition(), static_cast<float>(light.GetType())) ,
-				  glm::vec4(transform.GetWorldForward(), 0.0f) ,
+				  glm::vec4(transform.GetWorldForward(), light.GetEnableCastShadow() ? 1.0f : 0.0f) ,
 				  glm::vec4(light.GetColor(), light.GetIntensity()),
 				  glm::vec4(light.GetRadius(), glm::cos(glm::radians(light.GetInnerAngle())), glm::cos(glm::radians(light.GetOuterAngle())), 0.0f) });
 		}

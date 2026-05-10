@@ -408,6 +408,12 @@ namespace
                     if (ImGui::DragFloat("##LightIntensity", &intensity, 0.05f, 0.0f, 1000.0f)) { light->SetIntensity(intensity); }
                 }
 
+                {   // Cast Shadow
+                    DrawLabel("Cast Shadow");
+                    bool castShadow = light->GetEnableCastShadow();
+                    if (ImGui::Checkbox("##LightCastShadow", &castShadow)) { light->SetEnableCastShadow(castShadow); }
+                }
+
                 auto typeCheck = light->GetType();
 
                 {   // Radius

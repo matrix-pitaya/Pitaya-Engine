@@ -9,7 +9,7 @@
 void Pitaya::Render::RenderPipeline::Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine> passkey, Pitaya::Render::Renderer* renderer)
 {
 	INVOKE_PRERENDERPIPELINEEXECUTE_HOOK(passkey, this)
-		Pitaya::Core::Print(Pitaya::Core::Color::Green, "Begin Render Frame");
+	Pitaya::Core::Print(Pitaya::Core::Color::Green, "Begin Render Frame");
 	renderer->BeginRenderFrame(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>()); //清空fornt缓冲区残余数据
 
 	//构建阴影数据
@@ -24,16 +24,17 @@ void Pitaya::Render::RenderPipeline::Execute(Pitaya::Core::PassKey<Pitaya::Engin
 }
 void Pitaya::Render::RenderPipeline::BuildShadowData(Pitaya::Render::Renderer* renderer)
 {
-	// 初始化所有光源 Params.w = -1（无阴影）并统计数量
+	// 统计投射阴影的光源数量，重置 Params.w = -1（无阴影）
 	uint32_t dirCount = 0, spotCount = 0, pointCount = 0;
 	for (auto& light : graph.Lights)
 	{
 		light.Params.w = -1.0f;
+		if (light.Direction.w <= 0.0f) { continue; }
 		switch (static_cast<uint32_t>(light.Position_Type.w))
 		{
-		case 0: ++dirCount;   break;  // 平行光
-		case 1: ++pointCount; break;  // 点光源
-		case 2: ++spotCount;  break;  // 聚光灯
+			case 0: ++dirCount;   break;
+			case 1: ++pointCount; break;
+			case 2: ++spotCount;  break;
 		}
 	}
 
@@ -49,7 +50,8 @@ void Pitaya::Render::RenderPipeline::BuildShadowData(Pitaya::Render::Renderer* r
 	for (uint32_t i = 0; i < graph.Lights.size(); ++i)
 	{
 		auto& light = graph.Lights[i];
-		if (static_cast<uint32_t>(light.Position_Type.w) != 2) { continue; }
+		if (static_cast<uint32_t>(light.Position_Type.w) != 2 ||
+			light.Direction.w <= 0.0f) { continue; }
 
 		ShadowCasterSlice slice;
 		slice.LightType = 2;
@@ -75,7 +77,8 @@ void Pitaya::Render::RenderPipeline::BuildShadowData(Pitaya::Render::Renderer* r
 	for (uint32_t i = 0; i < static_cast<uint32_t>(graph.Lights.size()); ++i)
 	{
 		auto& light = graph.Lights[i];
-		if (static_cast<uint32_t>(light.Position_Type.w) != 1) { continue; }
+		if (static_cast<uint32_t>(light.Position_Type.w) != 1 ||
+			light.Direction.w <= 0.0f) { continue; }
 
 		ShadowCasterSlice slice;
 		slice.LightType = 1;
@@ -107,7 +110,8 @@ void Pitaya::Render::RenderPipeline::BuildShadowData(Pitaya::Render::Renderer* r
 		for (uint32_t i = 0; i < static_cast<uint32_t>(graph.Lights.size()); ++i)
 		{
 			auto& light = graph.Lights[i];
-			if (static_cast<uint32_t>(light.Position_Type.w) != 0) { continue; }
+			if (static_cast<uint32_t>(light.Position_Type.w) != 0 ||
+				light.Direction.w <= 0.0f) { continue; }
 
 			ShadowCasterSlice slice;
 			slice.LightType = 0;
@@ -178,23 +182,26 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 		for (const auto& sceneLight : graph.Lights)
 		{
 			LightInfo localLight = sceneLight; // 栈上拷贝
-			uint32_t type = static_cast<uint32_t>(localLight.Position_Type.w);
-			switch (type)
+			if (sceneLight.Direction.w > 0.0f)	//开启阴影投射
 			{
-			case 0:	// 平行光：CSM — Params.w 存储 ShadowSlices 索引
-				localLight.Params.w = static_cast<float>(spotCount + pointCount + passIdx * dirCount + dirSoFar);
-				++dirSoFar;
-				break;
+				uint32_t type = static_cast<uint32_t>(localLight.Position_Type.w);
+				switch (type)
+				{
+					case 0:	// 平行光：CSM — Params.w 存储 ShadowSlices 索引
+						localLight.Params.w = static_cast<float>(spotCount + pointCount + passIdx * dirCount + dirSoFar);
+						++dirSoFar;
+						break;
 
-			case 1:	// 点光源：全 Pass 共用 — Params.w 存储 ShadowSlices 索引
-				localLight.Params.w = static_cast<float>(spotCount + pointSoFar);
-				++pointSoFar;
-				break;
+					case 1:	// 点光源：全 Pass 共用 — Params.w 存储 ShadowSlices 索引
+						localLight.Params.w = static_cast<float>(spotCount + pointSoFar);
+						++pointSoFar;
+						break;
 
-			case 2:	// 聚光灯：全 Pass 共用索引
-				localLight.Params.w = static_cast<float>(spotSoFar);
-				++spotSoFar;
-				break;
+					case 2:	// 聚光灯：全 Pass 共用索引
+						localLight.Params.w = static_cast<float>(spotSoFar);
+						++spotSoFar;
+						break;
+				}
 			}
 			renderer->SubmitLight(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), localLight);
 		}
@@ -218,7 +225,7 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 	}
 
 	INVOKE_TERMINATERENDERPIPELINESUBMITFINALBLIT_HOOK
-		renderer->SubmitBlitToScreen(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>());
+	renderer->SubmitBlitToScreen(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>());
 	Pitaya::Core::Print(Pitaya::Core::Color::Red, "Blit Main To Screnn Back Buffer");
 }
 void Pitaya::Render::RenderPipeline::ComputeCSMCascades(const Pitaya::Core::CameraSnapshot& cameraSnap, float nearClip, float farClip, glm::vec3 lightDir, uint32_t matrixOffset)
