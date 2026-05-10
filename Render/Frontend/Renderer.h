@@ -534,7 +534,7 @@ namespace Pitaya::Render
 
 			// invoke hook func
 			INVOKE_POSTRENDERERINTIALIZE_HOOK(nativeWindow)
-				return true;
+			return true;
 		}
 		inline void Release()
 		{
@@ -564,24 +564,24 @@ namespace Pitaya::Render
 			globalRHI.Create(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
 			INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), globalRHI.MainDisplayRenderTarget.FinalFrameBufferHandle)
 
-				while (true)
-				{
-					std::unique_lock<std::mutex> lock(mutex);
-					cond.wait(lock, [this] { return renderPacket.IsRemain() || INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK ||
-						Pitaya::Asset::IsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>()) || !isRunning.load(std::memory_order_acquire); });
-					if (!isRunning.load(std::memory_order_acquire)) { break; }
+			while (true)
+			{
+				std::unique_lock<std::mutex> lock(mutex);
+				cond.wait(lock, [this] { return renderPacket.IsRemain() || INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK ||
+					Pitaya::Asset::IsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>()) || !isRunning.load(std::memory_order_acquire); });
+				if (!isRunning.load(std::memory_order_acquire)) { break; }
 
-					Pitaya::Asset::SyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
-					if (renderPacket.IsRemain() || INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK)
-					{
-						NewRenderFrame();
-						renderPacket.ParseCommand(this);
-						SwapBuffer();
-					}
+				Pitaya::Asset::SyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+				if (renderPacket.IsRemain() || INVOKE_SHOULDWAKEUPRENDERTHREAD_HOOK)
+				{
+					NewRenderFrame();
+					renderPacket.ParseCommand(this);
+					SwapBuffer();
 				}
+			}
 
 			INVOKE_PRERENDERCONTEXTINRELEASED_HOOK
-				Pitaya::GPU::DestroyAllGPUResource(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+			Pitaya::GPU::DestroyAllGPUResource(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
 			ReleaseRenderContext();
 		}
 
@@ -611,9 +611,9 @@ namespace Pitaya::Render
 				uint32_t endLayer = s.LayerOffset + s.MatrixCount;
 				switch (s.LightType)
 				{
-				case 0: maxCSMLayer = std::max(maxCSMLayer, endLayer);   break;
-				case 2: maxSpotLayer = std::max(maxSpotLayer, endLayer);  break;
-				case 1: maxPointLayer = std::max(maxPointLayer, endLayer); break;
+					case 0: maxCSMLayer = std::max(maxCSMLayer, endLayer);   break;
+					case 2: maxSpotLayer = std::max(maxSpotLayer, endLayer);  break;
+					case 1: maxPointLayer = std::max(maxPointLayer, endLayer); break;
 				}
 			}
 			renderPacket.front.RequiredCSMLayers = maxCSMLayer;
@@ -675,17 +675,16 @@ namespace Pitaya::Render
 
 			switch (lightType)
 			{
-			case 0: cmd.Resolution = GlobalRHI::ShadowAtlas::CSMResolution;   break;
-			case 2: cmd.Resolution = GlobalRHI::ShadowAtlas::SpotResolution;  break;
-			case 1: cmd.Resolution = GlobalRHI::ShadowAtlas::PointResolution; break;
+				case 0: cmd.Resolution = GlobalRHI::ShadowAtlas::CSMResolution;   break;
+				case 2: cmd.Resolution = GlobalRHI::ShadowAtlas::SpotResolution;  break;
+				case 1: cmd.Resolution = GlobalRHI::ShadowAtlas::PointResolution; break;
 			}
 
 			renderPacket.PushCommand(cmd);
 		}
 		inline void SubmitCastShadowItem(Pitaya::Core::PassKey<RenderPipeline>, const RenderItem& item)
 		{
-			if (!item.Mesh) return;
-			if (item.SubMeshIndex >= item.Mesh->SubMeshs.size()) return;
+			if (!item.Mesh || item.SubMeshIndex >= item.Mesh->SubMeshs.size()) { return; }
 
 			auto& subMesh = item.Mesh->SubMeshs[item.SubMeshIndex];
 
