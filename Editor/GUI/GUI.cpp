@@ -10,6 +10,8 @@
 #include<Core/Color/Color.h>
 #include<Core/Utils/Memory.h>
 #include<Core/Utils/File.h>
+#include<Core/Utils/System.h>
+#include<Application/Built-in.h>
 #include<Hook/def.h>
 
 #if defined(PITAYA_WINDOW_GLFW) && defined(PITAYA_GRAPHICS_OPENGL)
@@ -199,12 +201,14 @@ void Pitaya::Editor::GUI::SetStyle()
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	// io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;	//TODO 涉及到同步点 暂时不做拖拽出窗口
-	io.Fonts->AddFontFromFileTTF((Pitaya::Core::GetExecutableDirectory() / "editor/fonts/segoeui.ttf").string().c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+	std::string fontData = Pitaya::Core::LoadBuiltInRC(IDR_FONT_SEGOEUI_TTF);
+	io.Fonts->AddFontFromMemoryTTF(fontData.data(), fontData.size(), 16, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 	ImFontConfig iconsConfig;
 	iconsConfig.MergeMode = true;
 	iconsConfig.PixelSnapH = true;
 	static const constexpr ImWchar iconsRanges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
-	io.Fonts->AddFontFromFileTTF((Pitaya::Core::GetExecutableDirectory() / "editor/fonts/fa-solid-900.ttf").string().c_str(), 16.0f, &iconsConfig, iconsRanges);
+	fontData = Pitaya::Core::LoadBuiltInRC(IDR_FONT_FA_SOLID_900_TTF);
+	io.Fonts->AddFontFromMemoryTTF(fontData.data(), fontData.size(), 16.0f, &iconsConfig, iconsRanges);
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	ImGui::StyleColorsDark();

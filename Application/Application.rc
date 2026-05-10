@@ -76,6 +76,10 @@ IDR_SHADOW_STATIC_FRAGMENT_SHADER       RCDATA          "../built-in/Shadow/Stat
 IDR_SHADOW_SKINNED_VERTEX_SHADER        RCDATA          "../built-in/Shadow/Skinned/Shader.vert"
 IDR_SHADOW_SKINNED_FRAGMENT_SHADER      RCDATA          "../built-in/Shadow/Skinned/Shader.frag"
 
+// Font
+IDR_FONT_FA_SOLID_900_TTF               RCDATA          "../built-in/fonts/fa-solid-900.ttf"
+IDR_FONT_SEGOEUI_TTF                    RCDATA          "../built-in/fonts/segoeui.ttf"
+
 #endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////
 

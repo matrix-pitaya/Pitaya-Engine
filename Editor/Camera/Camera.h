@@ -77,6 +77,12 @@ namespace Pitaya::Editor
 		{
 			return cullingMask.GetEnum();
 		}
+		inline Pitaya::Asset::RenderTarget* GetNativeRenderTarget()
+		{
+			return &renderTarget;
+		}
+
+	public:
 		inline void ApplyViewMatrix(const glm::mat4& newViewMatrix)
 		{
 			glm::mat4 invView = glm::inverse(newViewMatrix);
@@ -87,10 +93,6 @@ namespace Pitaya::Editor
 			yaw = glm::degrees(atan2(forward.z, forward.x));
 			if (mode == CameraMode::Orbit) { pivot = position + forward * distance; }
 			dirty = true;
-		}
-		inline Pitaya::Asset::RenderTarget* GetNativeRenderTarget()
-		{
-			return &renderTarget;
 		}
 
 	private:

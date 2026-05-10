@@ -8,7 +8,7 @@
 
 bool Pitaya::Editor::Camera::Initialize_Main()
 {
-	renderTarget.DeserializeFromFile(Pitaya::Core::GetExecutableDirectory() / "editor/rt/EditorViewPort.rt");
+	//renderTarget.DeserializeFromFile(Pitaya::Core::GetExecutableDirectory() / "appdata/editor/rt/EditorViewPort.rt");
 	falg.store(true, std::memory_order_release);
 	Pitaya::Render::PostProcessStep step;
 	Pitaya::Render::GammaCorrectionParams gama;
@@ -19,7 +19,7 @@ bool Pitaya::Editor::Camera::Initialize_Main()
 }
 void Pitaya::Editor::Camera::Release_Main()
 {
-	renderTarget.SerializeToFile(Pitaya::Core::GetExecutableDirectory() / "editor/rt/EditorViewPort.rt");
+	//renderTarget.SerializeToFile(Pitaya::Core::GetExecutableDirectory() / "appdata/editor/rt/EditorViewPort.rt");
 }
 bool Pitaya::Editor::Camera::Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
 {

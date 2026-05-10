@@ -75,36 +75,39 @@ bool Pitaya::Editor::Editor::HookFunc::ShouldSubmitSceneCameraPass()
 }
 void Pitaya::Editor::Editor::HookFunc::PreRenderPipelineExecute(Pitaya::Core::PassKey<Pitaya::Engine::Engine> passkey, Pitaya::Render::RenderPipeline* renderPipeline)
 {
+	auto& editor = Pitaya::Editor::Editor::Instance();
+
 	//提交EditorCamera
-	if (Pitaya::Editor::Editor::Instance().gui.panels.sceneViewportPanel.GetIsVisable())
+	if (editor.gui.panels.sceneViewportPanel.GetIsVisable())
 	{
 		//TODO 增加特殊网格对象
-		if (Pitaya::Editor::Editor::Instance().gui.context.GizmoState.ShowGrid)
+		if (editor.gui.context.GizmoState.ShowGrid)
 		{
 			//renderPipeline->AddRenderObject();
 		}
 		
 		renderPipeline->AddRenderPass(passkey,
-			Pitaya::Editor::Editor::Instance().camera.GetCameraSnapshot(), Pitaya::Editor::Editor::Instance().camera.GetPostProcessSettings(), 
-			Pitaya::Editor::Editor::Instance().camera.GetCullingMask(), Pitaya::Editor::Editor::Instance().camera.GetNativeRenderTarget(),
-			Pitaya::Editor::Editor::Instance().camera.GetCameraState().NearClip, Pitaya::Editor::Editor::Instance().camera.GetCameraState().FarClip);
+			editor.camera.GetCameraSnapshot(), editor.camera.GetPostProcessSettings(),
+			editor.camera.GetCullingMask(), editor.camera.GetNativeRenderTarget(),
+			editor.camera.GetCameraState().NearClip, editor.camera.GetCameraState().FarClip);
 	}
 
 	//提交UI
-	Pitaya::Editor::Editor::Instance().gui.NewFrame();
+	editor.gui.NewFrame();
 }
 void Pitaya::Editor::Editor::HookFunc::PostRendererParseCommand()
 {
-	Pitaya::Editor::Editor::Instance().gui.drawer.Draw(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
-	Pitaya::Editor::Editor::Instance().gui.drawer.ReleaseBackDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
+	auto& editor = Pitaya::Editor::Editor::Instance();
+	editor.gui.drawer.Draw(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
+	editor.gui.drawer.ReleaseBackDrawData(Pitaya::Core::PassKey<Pitaya::Editor::Editor>());
 }
 void Pitaya::Editor::Editor::HookFunc::PostChronometerTick()
 {
-	if (Pitaya::Editor::Editor::Instance().gui.panels.profilerPanel.GetIsVisable())
+	auto& editor = Pitaya::Editor::Editor::Instance();
+	if (editor.gui.panels.profilerPanel.GetIsVisable())
 	{
-		Pitaya::Editor::Editor::Instance().profiler.SetTimeState({ Pitaya::Time::delta() ,Pitaya::Time::Fixdelta() ,
-			Pitaya::Time::UnscaledDelta() , Pitaya::Time::TimeScale(), Pitaya::Time::Framerate() ,
-			Pitaya::Time::Seconds() , Pitaya::Time::Milliseconds() });
+		editor.profiler.SetTimeState({ Pitaya::Time::delta(), Pitaya::Time::Fixdelta(), Pitaya::Time::UnscaledDelta(),
+			Pitaya::Time::TimeScale(), Pitaya::Time::Framerate(), Pitaya::Time::Seconds(), Pitaya::Time::Milliseconds() });
 	}
 }
 void Pitaya::Editor::Editor::HookFunc::PostLog(Pitaya::Log::LogLevel level, std::string_view message)
@@ -188,8 +191,6 @@ void Pitaya::Editor::Editor::OnMouseCurrsorMove(Pitaya::Event::Event event)
 
 void Pitaya::Editor::Editor::AttachRuntimeEnv(int argc, char** argv)
 {
-	//TODO 检测运行时环境
-
 	MOUNT_PREBEGINFRAME_HOOK(Pitaya::Editor::Editor::HookFunc::PreBeginFrame, "Editor::BeginFrame")
 	MOUNT_PREFIXEDUPDATE_HOOK(Pitaya::Editor::Editor::HookFunc::PreFixedUpdate, "Editor::FixUpdate")
 	MOUNT_PREUPDATE_HOOK(Pitaya::Editor::Editor::HookFunc::PreUpdate, "Editor::Update")
