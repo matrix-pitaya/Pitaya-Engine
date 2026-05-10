@@ -212,6 +212,19 @@ namespace Pitaya::Render
 				ShadowSSBO.Capacity = 4096;
 				ShadowSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					static_cast<uint32_t>(ShadowSSBO.Capacity), static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::Shadow));
+
+				// 预分配 Shadow Atlas
+				CSMAtlas.LayerCapacity = 4;
+				CSMAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					CSMAtlas.CSMResolution, CSMAtlas.CSMResolution, CSMAtlas.LayerCapacity, true);
+
+				SpotShadowAtlas.LayerCapacity = 4;
+				SpotShadowAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					SpotShadowAtlas.SpotResolution, SpotShadowAtlas.SpotResolution, SpotShadowAtlas.LayerCapacity, true);
+
+				PointShadowAtlas.LayerCapacity = 6;
+				PointShadowAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+					PointShadowAtlas.PointResolution, PointShadowAtlas.PointResolution, PointShadowAtlas.LayerCapacity, true);
 			}
 		};
 		class RenderPacket

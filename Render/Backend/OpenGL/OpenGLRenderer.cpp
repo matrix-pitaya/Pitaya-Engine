@@ -206,22 +206,22 @@ void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::BeginShadowP
 	uint32_t LayerCapacity = 0;
 	switch (command->LightType)
 	{
-	case 0:
-		atlasTextureHandle = globalRHI.CSMAtlas.TextureHandle;
-		LayerCapacity = globalRHI.CSMAtlas.LayerCapacity;
-		break;
+		case 0:
+			atlasTextureHandle = globalRHI.CSMAtlas.TextureHandle;
+			LayerCapacity = globalRHI.CSMAtlas.LayerCapacity;
+			break;
 
-	case 1:
-		atlasTextureHandle = globalRHI.PointShadowAtlas.TextureHandle;
-		LayerCapacity = globalRHI.PointShadowAtlas.LayerCapacity;
-		break;
+		case 1:
+			atlasTextureHandle = globalRHI.PointShadowAtlas.TextureHandle;
+			LayerCapacity = globalRHI.PointShadowAtlas.LayerCapacity;
+			break;
 
-	case 2:
-		atlasTextureHandle = globalRHI.SpotShadowAtlas.TextureHandle;
-		LayerCapacity = globalRHI.SpotShadowAtlas.LayerCapacity;
-		break;
+		case 2:
+			atlasTextureHandle = globalRHI.SpotShadowAtlas.TextureHandle;
+			LayerCapacity = globalRHI.SpotShadowAtlas.LayerCapacity;
+			break;
 
-	default: return;
+		default: return;
 	}
 	if (LayerCapacity == 0) { return; }
 
