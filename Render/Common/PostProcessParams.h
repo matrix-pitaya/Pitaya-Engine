@@ -28,3 +28,9 @@ namespace Pitaya::Render
         float Gamma = 2.2f;    
     };
 }
+
+template <typename T>
+concept PostProcessParamsType =
+std::is_same_v<T, Pitaya::Render::BloomParams> ||
+std::is_same_v<T, Pitaya::Render::ToneMappingParams> ||
+std::is_same_v<T, Pitaya::Render::GammaCorrectionParams>;

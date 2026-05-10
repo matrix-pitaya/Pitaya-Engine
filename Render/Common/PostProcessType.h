@@ -5,14 +5,14 @@
 
 namespace Pitaya::Render
 {
-	enum class PostProcessType : uint8_t
+	enum class PostProcessType : uint32_t
 	{
 		Bilt = 0,
 		GammaCorrection,
 		Bloom,
 		ToneMapping,
 
-		Unknown
+		Invalid
 	};
 
 	inline std::string_view ToString(PostProcessType type) noexcept
@@ -23,7 +23,7 @@ namespace Pitaya::Render
 			case PostProcessType::GammaCorrection:	return "GammaCorrection";
 			case PostProcessType::Bloom:			return "Bloom";
 			case PostProcessType::ToneMapping:		return "ToneMapping";
-			case PostProcessType::Unknown:			return "Unknown";
+			case PostProcessType::Invalid:			return "Invalid";
 			default:								return "Unknown";
 		}
 	}

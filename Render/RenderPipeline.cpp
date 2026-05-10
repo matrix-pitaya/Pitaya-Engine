@@ -109,7 +109,7 @@ void Pitaya::Render::RenderPipeline::BuildShadowData(Pitaya::Render::Renderer* r
 
 		for (uint32_t i = 0; i < static_cast<uint32_t>(graph.Lights.size()); ++i)
 		{
-			auto& light = graph.Lights[i];
+			const auto& light = graph.Lights[i];
 			if (static_cast<uint32_t>(light.Position_Type.w) != 0 ||
 				light.Direction.w <= 0.0f) { continue; }
 

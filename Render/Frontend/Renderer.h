@@ -897,18 +897,18 @@ namespace Pitaya::Render
 				cmd.PostProcessStep = currentStep;
 				switch (currentStep.Type)
 				{
-				case Pitaya::Render::PostProcessType::Bilt:
-					cmd.ProcessShaderHandle = globalRHI.PostProcessShader.BlitShaderHandle;
-					break;
+					case Pitaya::Render::PostProcessType::Bilt:
+						cmd.ProcessShaderHandle = globalRHI.PostProcessShader.BlitShaderHandle;
+						break;
 
-				case Pitaya::Render::PostProcessType::GammaCorrection:
-					cmd.ProcessShaderHandle = globalRHI.PostProcessShader.GammaCorrectionShaderHandle;
-					break;
+					case Pitaya::Render::PostProcessType::GammaCorrection:
+						cmd.ProcessShaderHandle = globalRHI.PostProcessShader.GammaCorrectionShaderHandle;
+						break;
 
-				case Pitaya::Render::PostProcessType::Unknown:
-				default:
-					cmd.ProcessShaderHandle = globalRHI.PostProcessShader.BlitShaderHandle;
-					break;
+					case Pitaya::Render::PostProcessType::Invalid:
+					default:
+						cmd.ProcessShaderHandle = globalRHI.PostProcessShader.BlitShaderHandle;
+						break;
 				}
 
 				// 处理 MSAA 解析逻辑
@@ -963,13 +963,13 @@ namespace Pitaya::Render
 		{
 			INVOKE_PRERENDERERENDRENDERFRAME_HOOK
 
-				//交换渲染缓冲区
+			//交换渲染缓冲区
 			{
 				std::lock_guard<std::mutex> lock(mutex);
 				renderPacket.SwapBuffer();
 			}
 
-				//唤醒渲染线程工作
+			//唤醒渲染线程工作
 			cond.notify_one();
 		}
 

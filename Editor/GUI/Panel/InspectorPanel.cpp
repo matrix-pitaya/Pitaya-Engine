@@ -11,7 +11,8 @@
 
 #include<entt/entt.hpp>
 #include<glm.hpp>
-#include<type_traits> 
+#include<cmath>
+#include<type_traits>
 #include<gtc/type_ptr.hpp>
 
 namespace
@@ -158,6 +159,10 @@ namespace
 
                 {   // Rotation
                     glm::vec3 rotDeg = glm::degrees(transform->GetLocalEulerAngles());
+                    // Normalize -0.0f to 0.0f to avoid displaying "-0.000"
+                    if (std::abs(rotDeg.x) < 0.001f) { rotDeg.x = 0.0f; }
+                    if (std::abs(rotDeg.y) < 0.001f) { rotDeg.y = 0.0f; }
+                    if (std::abs(rotDeg.z) < 0.001f) { rotDeg.z = 0.0f; }
                     ImGui::AlignTextToFramePadding();
                     ImGui::TextUnformatted("Rotation");
                     ImGui::SameLine(LABEL_WIDTH);

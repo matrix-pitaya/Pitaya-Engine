@@ -9,8 +9,10 @@ bool Pitaya::Game::GameWorld::Initialize()
 	activeScene = PITAYA_NEW(Scene);
 
 	//TODOD 序列化场景
+	entt::entity light = activeScene->CreateEntity("Light");
+	activeScene->AddComponent<Light>(light);
+	activeScene->GetComponent<Transform>(light)->SetLocalEulerAngles(glm::radians(glm::vec3(-9.5f, 25.0f, 2.5f)));
 	activeScene->AddComponent<Camera>(activeScene->CreateEntity("Main Camera"));
-	activeScene->AddComponent<Light>(activeScene->CreateEntity("Light"));
 
 	return true;
 }
