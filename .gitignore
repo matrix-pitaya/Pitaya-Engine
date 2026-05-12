@@ -33,8 +33,5 @@ CppProperties.json
 .vscode/
 .DS_Store
 
-# Claude Code
-.claude/
-
 # 大文件
 thirdparty/
