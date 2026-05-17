@@ -1,25 +1,19 @@
 #pragma once
 
 #include<Core/Singleton/Singleton.h>
+#include<Context/Common/EngineModuleType.h>
 #include<Engine/API/def.h>
 #include<stdexcept>
-#include<type_traits>
 
-namespace Pitaya::Engine { class Engine; class Context; template<typename T> class Module; template<typename T> struct FuncTable; }
-namespace Pitaya::Time { class Chronometer; }
-namespace Pitaya::Log { class Logger; }
-namespace Pitaya::Thread { class ThreadTracker; }
-namespace Pitaya::Event { class EventDispatcher; }
-namespace Pitaya::Input { class InputMonitor; }
-namespace Pitaya::Task { class TaskScheduler; }
-namespace Pitaya::GPU { class RHIDevice; }
-namespace Pitaya::Asset { class AssetHub; }
-namespace Pitaya::Render { class Renderer; class RenderPipeline; }
-namespace Pitaya::Config { class Configurator; }
-namespace Pitaya::Window { class Window; }
-namespace Pitaya::Physics { class PhysicsSimulator; }
-namespace Pitaya::Game { class GameWorld; }
-namespace Pitaya::Script { class ScriptRuntime; }
+namespace Pitaya::Engine 
+{ 
+	class Engine; 
+	class Context; 
+	template<typename T> 
+	class Module; 
+	template<typename T>
+	struct FuncTable; 
+}
 
 namespace Pitaya::Engine
 {
@@ -74,26 +68,9 @@ namespace Pitaya::Engine
 		Context& operator=(Context&&) = delete;
 
 	public:
-		template<typename T>
+		template<EngineModuleType T>
 		inline Pitaya::Engine::Module<T>& GetModule() const noexcept
 		{
-			static_assert(
-				std::is_same_v<T, Pitaya::Task::TaskScheduler> ||
-				std::is_same_v<T, Pitaya::Render::Renderer> ||
-				std::is_same_v<T, Pitaya::Log::Logger> ||
-				std::is_same_v<T, Pitaya::Event::EventDispatcher> ||
-				std::is_same_v<T, Pitaya::Thread::ThreadTracker> ||
-				std::is_same_v<T, Pitaya::GPU::RHIDevice> ||
-				std::is_same_v<T, Pitaya::Time::Chronometer> ||
-				std::is_same_v<T, Pitaya::Input::InputMonitor> ||
-				std::is_same_v<T, Pitaya::Asset::AssetHub> ||
-				std::is_same_v<T, Pitaya::Config::Configurator> ||
-				std::is_same_v<T, Pitaya::Window::Window> ||
-				std::is_same_v<T, Pitaya::Physics::PhysicsSimulator> ||
-				std::is_same_v<T, Pitaya::Game::GameWorld> ||
-				std::is_same_v<T, Pitaya::Script::ScriptRuntime>
-				, "Context::GetModule<T>(): T must be a valid Engine Module Type");
-
 			if constexpr (std::is_same_v<T, Pitaya::Task::TaskScheduler>)			 { return *modules.TaskScheduler; }
 			else if constexpr (std::is_same_v<T, Pitaya::Render::Renderer>)			 { return *modules.Renderer; }
 			else if constexpr (std::is_same_v<T, Pitaya::Log::Logger>)               { return *modules.Logger; }
@@ -109,23 +86,9 @@ namespace Pitaya::Engine
 			else if constexpr (std::is_same_v<T, Pitaya::Game::GameWorld>)			 { return *modules.GameWorld; }
 			else if constexpr (std::is_same_v<T, Pitaya::Script::ScriptRuntime>)	 { return *modules.ScriptRuntime; }
 		}
-		template<typename T>
+		template<EngineModuleType T>
 		inline Pitaya::Engine::FuncTable<T>& GetFuncTable() const noexcept
 		{
-			static_assert(
-				std::is_same_v<T, Pitaya::Time::Chronometer> ||
-				std::is_same_v<T, Pitaya::Log::Logger> ||
-				std::is_same_v<T, Pitaya::Thread::ThreadTracker> ||
-				std::is_same_v<T, Pitaya::Asset::AssetHub> ||
-				std::is_same_v<T, Pitaya::Config::Configurator> ||
-				std::is_same_v<T, Pitaya::Event::EventDispatcher> ||
-				std::is_same_v<T, Pitaya::GPU::RHIDevice> ||
-				std::is_same_v<T, Pitaya::Input::InputMonitor> ||
-				std::is_same_v<T, Pitaya::Task::TaskScheduler> ||
-				std::is_same_v<T, Pitaya::Window::Window>	   ||
-				std::is_same_v<T, Pitaya::Game::GameWorld>
-				, "Context::GetFuncTable<T>(): T must be a valid Engine FuncTable Type");
-
 			if constexpr (std::is_same_v<T, Pitaya::Time::Chronometer>)				{ return *funcTables.Chronometer; }
 			else if constexpr (std::is_same_v<T, Pitaya::Log::Logger>)				{ return *funcTables.Logger; }
 			else if constexpr (std::is_same_v<T, Pitaya::Thread::ThreadTracker>)	{ return *funcTables.ThreadTracker; }

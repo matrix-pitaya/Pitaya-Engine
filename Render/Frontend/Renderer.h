@@ -193,8 +193,7 @@ namespace Pitaya::Render
 
 				auto errTex = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_TEXTURE);
 				Fallback.TextureHandle = Pitaya::GPU::CreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-					static_cast<unsigned char*>(const_cast<void*>(errTex.data)),
-					32, 32, 4, false, false, true);
+					errTex.data, 32, 32, Pitaya::GPU::PixelFormat::RGBA8, false, true);
 				{
 					auto vs = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_VERTEX_SHADER);
 					auto fs = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_FRAGMENT_SHADER);
@@ -232,13 +231,13 @@ namespace Pitaya::Render
 				// 预分配 Shadow Atlas
 				CSMAtlas.LayerCapacity = 4;
 				CSMAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-					CSMAtlas.CSMResolution, CSMAtlas.CSMResolution, CSMAtlas.LayerCapacity, true);
+					CSMAtlas.CSMResolution, CSMAtlas.CSMResolution, CSMAtlas.LayerCapacity, Pitaya::GPU::PixelFormat::Depth32F);
 				SpotShadowAtlas.LayerCapacity = 4;
 				SpotShadowAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-					SpotShadowAtlas.SpotResolution, SpotShadowAtlas.SpotResolution, SpotShadowAtlas.LayerCapacity, true);
+					SpotShadowAtlas.SpotResolution, SpotShadowAtlas.SpotResolution, SpotShadowAtlas.LayerCapacity, Pitaya::GPU::PixelFormat::Depth32F);
 				PointShadowAtlas.LayerCapacity = 6;
 				PointShadowAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-					PointShadowAtlas.PointResolution, PointShadowAtlas.PointResolution, PointShadowAtlas.LayerCapacity, true);
+					PointShadowAtlas.PointResolution, PointShadowAtlas.PointResolution, PointShadowAtlas.LayerCapacity, Pitaya::GPU::PixelFormat::Depth32F);
 			}
 		};
 		class RenderPacket

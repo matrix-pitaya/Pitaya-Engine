@@ -11,13 +11,13 @@ namespace Pitaya::Asset
 	struct RenderTarget : Pitaya::Serialize::Serializable
 	{
         Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle SceneFrameBufferHandle;
-		Pitaya::GPU::FrameBufferSpecification SceneFrameBufferSpecification = { 1600, 900, 4, false, true, true };
+		Pitaya::GPU::FrameBufferSpecification SceneFrameBufferSpecification = { 1600, 900, 4, Pitaya::GPU::PixelFormat::RGBA16F, Pitaya::GPU::PixelFormat::Depth24_Stencil8 };
 
 		Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle PingPongFrameBufferHandles[2] = { };
-		Pitaya::GPU::FrameBufferSpecification PingPongFrameBufferSpecification = { 1600, 900, 1, false, true, false };
+		Pitaya::GPU::FrameBufferSpecification PingPongFrameBufferSpecification = { 1600, 900, 1, Pitaya::GPU::PixelFormat::RGBA16F, Pitaya::GPU::PixelFormat::Invalid };
 
 		Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle FinalFrameBufferHandle;
-		Pitaya::GPU::FrameBufferSpecification FinalFrameBufferSpecification = { 1600, 900, 1, false, false, false };
+		Pitaya::GPU::FrameBufferSpecification FinalFrameBufferSpecification = { 1600, 900, 1, Pitaya::GPU::PixelFormat::RGBA8,    Pitaya::GPU::PixelFormat::Invalid };
 
 		Pitaya::Core::Color ClearColor = Pitaya::Core::Color::SkyBlue;
 		bool ClearDepth = true;
@@ -32,9 +32,8 @@ namespace Pitaya::Asset
                     subContext.Write("Width", spec.Width);
                     subContext.Write("Height", spec.Height);
                     subContext.Write("Samples", spec.Samples);
-                    subContext.Write("SwapChainTarget", spec.SwapChainTarget);
-                    subContext.Write("HDR", spec.HDR);
-                    subContext.Write("HasDepth", spec.HasDepth);
+                    subContext.Write("ColorFormat", std::string(Pitaya::GPU::ToString(spec.ColorFormat)));
+                    subContext.Write("DepthFormat", std::string(Pitaya::GPU::ToString(spec.DepthFormat)));
                 };
             SerializeFrameBufferSpecification(context, "SceneSpec", SceneFrameBufferSpecification);
             SerializeFrameBufferSpecification(context, "PingPongSpec", PingPongFrameBufferSpecification);
@@ -52,13 +51,12 @@ namespace Pitaya::Asset
                     if (context.HasSubContext(name))
                     {
                         const auto& subContext = context.GetSubContext(name);
-                        int out_int; bool out_bool;
+                        int out_int; bool out_bool; std::string out_fmt;
                         if (subContext.Read("Width", out_int)) { spec.Width = out_int; }
                         if (subContext.Read("Height", out_int)) { spec.Height = out_int; }
                         if (subContext.Read("Samples", out_int)) { spec.Samples = out_int; }
-                        if (subContext.Read("SwapChainTarget", out_bool)) { spec.SwapChainTarget = out_bool; }
-                        if (subContext.Read("HDR", out_bool)) { spec.HDR = out_bool; }
-                        if (subContext.Read("HasDepth", out_bool)) { spec.HasDepth = out_bool; }
+                        if (subContext.Read("ColorFormat", out_fmt)) { spec.ColorFormat = Pitaya::GPU::ToEnum<Pitaya::GPU::PixelFormat>(out_fmt); }
+                        if (subContext.Read("DepthFormat", out_fmt)) { spec.DepthFormat = Pitaya::GPU::ToEnum<Pitaya::GPU::PixelFormat>(out_fmt); }
                     }
                 };
             DeserializeFrameBufferSpecification(context, "SceneSpec", SceneFrameBufferSpecification);

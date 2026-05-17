@@ -22,11 +22,17 @@ bool Pitaya::Import::StbImageTextureImporter::Import(Pitaya::Core::GUID guid, co
     stbi_image_free(data);
 	Pitaya::Log::Info("stbimage free data success GUID:" + guid.ToString() + " path:" + file.string());
 
-	//png jpg jpeg tga bmp SRGB | hdr exr RGB
+	// 启发式 Usage 推断（用户可在 Editor 显式覆盖）：
+	//   .hdr / .exr → HDR
+	//   其他 → Color（即 sRGB）
+	// 注意：Normal / Metallic / Roughness / AO 等"数据类"贴图也是 PNG/JPG，
+	// 但目前没有元信息能从扩展名分辨——会被默认成 Color，PBR 时需显式设为 Linear。
 	std::string ext = file.extension().string();
 	Pitaya::Core::ToLower(ext);
 	out.isNearest = false;
-	out.IsSRGB = !(ext == ".hdr" || ext == ".exr");
+	out.Usage = (ext == ".hdr" || ext == ".exr")
+		? Pitaya::Asset::TextureUsage::HDR
+		: Pitaya::Asset::TextureUsage::Color;
 	out.IsGenerateMipmap = isGenerateMipmap;
 	out.GUID = guid;
 	return true;
@@ -53,11 +59,13 @@ bool Pitaya::Import::StbImageTextureImporter::Import(Pitaya::Core::GUID guid, co
 		Pitaya::Log::Info("stbimage free data success GUID:" + guid.ToString() + " path:" + file.string());
 	}
 
-	//png jpg jpeg tga bmp SRGB | hdr exr RGB
+	// 启发式 Usage 推断（用户可在 Editor 显式覆盖）
 	std::string ext = file.extension().string();
 	Pitaya::Core::ToLower(ext);
 	out.isNearest = false;
-	out.IsSRGB = !(ext == ".hdr" || ext == ".exr");
+	out.Usage = (ext == ".hdr" || ext == ".exr")
+		? Pitaya::Asset::TextureUsage::HDR
+		: Pitaya::Asset::TextureUsage::Color;
 	out.IsGenerateMipmap = isGenerateMipmap;
 	out.GUID = guid;
 	return true;

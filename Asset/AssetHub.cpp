@@ -61,7 +61,7 @@ bool Pitaya::Asset::AssetHub::Initialize()
 		result.Height = 1;
 		result.Channels = 4;
 		result.IsGenerateMipmap = false;
-		result.IsSRGB = true;
+		result.Usage = Pitaya::Asset::TextureUsage::Color;
 		result.isNearest = true;
 		result.Data = { 255, 255, 255, 255 };	//纯白贴图
 		result.GUID = Pitaya::Asset::Texture::White;
@@ -549,7 +549,8 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 		return;
 	}
 
-	auto texture2DHandle = Pitaya::GPU::CreateTexture2D(passkey, cpuOpResult_Inner.Data.data(), cpuOpResult_Inner.Width, cpuOpResult_Inner.Height, cpuOpResult_Inner.Channels, cpuOpResult_Inner.IsGenerateMipmap, cpuOpResult_Inner.IsSRGB, cpuOpResult_Inner.isNearest);
+	const Pitaya::GPU::PixelFormat texturePixelFormat = Pitaya::Asset::TextureUsageToPixelFormat(cpuOpResult_Inner.Usage);
+	auto texture2DHandle = Pitaya::GPU::CreateTexture2D(passkey, cpuOpResult_Inner.Data.data(), cpuOpResult_Inner.Width, cpuOpResult_Inner.Height, texturePixelFormat, cpuOpResult_Inner.IsGenerateMipmap, cpuOpResult_Inner.isNearest);
 	if (!texture2DHandle)
 	{
 		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
@@ -569,6 +570,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 
 	texture2D->Texture2DHandle = texture2DHandle;
 	texture2D->Type = Pitaya::GPU::TextureType::Texture2D;
+	texture2D->Usage = cpuOpResult_Inner.Usage;
 	entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Import::TextureCubemapImportResult& cpuOpResult_Inner)
@@ -608,12 +610,13 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 		return;
 	}
 
-	unsigned char* datas[6] = {};
+	const void* datas[6] = {};
 	for (uint32_t i = 0; i < 6; i++)
 	{
 		datas[i] = cpuOpResult_Inner.Data[i].data();
 	}
-	auto textureCubemapHandle = Pitaya::GPU::CreateTextureCubemap(passkey, datas, cpuOpResult_Inner.Width, cpuOpResult_Inner.Height, cpuOpResult_Inner.Channels, cpuOpResult_Inner.IsGenerateMipmap, cpuOpResult_Inner.IsSRGB, cpuOpResult_Inner.isNearest);
+	const Pitaya::GPU::PixelFormat cubemapPixelFormat = Pitaya::Asset::TextureUsageToPixelFormat(cpuOpResult_Inner.Usage);
+	auto textureCubemapHandle = Pitaya::GPU::CreateTextureCubemap(passkey, datas, cpuOpResult_Inner.Width, cpuOpResult_Inner.Height, cubemapPixelFormat, cpuOpResult_Inner.IsGenerateMipmap, cpuOpResult_Inner.isNearest);
 	if (!textureCubemapHandle)
 	{
 		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading);
@@ -633,6 +636,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 
 	textureCubemap->TextureCubemapHandle = textureCubemapHandle;
 	textureCubemap->Type = Pitaya::GPU::TextureType::TextureCubemap;
+	textureCubemap->Usage = cpuOpResult_Inner.Usage;
 	entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Import::ShaderImportResult& cpuOpResult_Inner)

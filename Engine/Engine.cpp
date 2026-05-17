@@ -241,17 +241,21 @@ namespace
 	{
 		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::Shader>(passkey, vertexSource, vertexSize, fragmentSource, fragmentSize, geometrySource, geometrySize);
 	}
-	Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle ENGINE_CALL OnCreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, unsigned char* data, int width, int height, int channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
+	Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle ENGINE_CALL OnCreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const void* data, int width, int height, Pitaya::GPU::PixelFormat format, bool isGenerateMipmap, bool isNearest)
 	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::Texture2D>(passkey, data, width, height, channels, isGenerateMipmap, isSRGB, isNearest);
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::Texture2D>(passkey, data, width, height, format, isGenerateMipmap, isNearest);
 	}
-	Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle ENGINE_CALL OnCreateTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, unsigned char** datas, int* widths, int* heights, int* channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
+	Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle ENGINE_CALL OnCreateTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const void** datas, int* widths, int* heights, Pitaya::GPU::PixelFormat format, bool isGenerateMipmap, bool isNearest)
 	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::TextureCubemap>(passkey, datas, widths, heights, channels, isGenerateMipmap, isSRGB, isNearest);
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::TextureCubemap>(passkey, datas, widths, heights, format, isGenerateMipmap, isNearest);
 	}
-	Pitaya::Core::SlotMap<Pitaya::GPU::Texture2DArray>::Handle ENGINE_CALL OnCreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, int width, int height, int layers, bool isDepth)
+	Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle ENGINE_CALL OnCreateEmptyTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, int size, int mipLevels, Pitaya::GPU::PixelFormat format)
 	{
-		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::Texture2DArray>(passkey, width, height, layers, isDepth);
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::TextureCubemap>(passkey, size, mipLevels, format);
+	}
+	Pitaya::Core::SlotMap<Pitaya::GPU::Texture2DArray>::Handle ENGINE_CALL OnCreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, int width, int height, int layers, Pitaya::GPU::PixelFormat format)
+	{
+		return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::Texture2DArray>(passkey, width, height, layers, format);
 	}
 	Pitaya::Core::SlotMap<Pitaya::GPU::UniformBuffer>::Handle ENGINE_CALL OnCreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, uint32_t size, uint32_t bindingPoint)
 	{
@@ -516,6 +520,7 @@ bool Pitaya::Engine::Engine::Initialize()
 		FUNCTABLE(RHIDevice).OnCreateShaderVFG = OnCreateShaderVFG;
 		FUNCTABLE(RHIDevice).OnCreateTexture2D = OnCreateTexture2D;
 		FUNCTABLE(RHIDevice).OnCreateTextureCubemap = OnCreateTextureCubemap;
+		FUNCTABLE(RHIDevice).OnCreateEmptyTextureCubemap = OnCreateEmptyTextureCubemap;
 		FUNCTABLE(RHIDevice).OnCreateTexture2DArray = OnCreateTexture2DArray;
 		FUNCTABLE(RHIDevice).OnCreateUniformBuffer = OnCreateUniformBuffer;
 		FUNCTABLE(RHIDevice).OnCreateFrameBuffer = OnCreateFrameBuffer;

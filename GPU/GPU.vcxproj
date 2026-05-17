@@ -165,6 +165,7 @@
     <ClInclude Include="Common\FuncTable.h" />
     <ClInclude Include="Common\GPUObjectType.h" />
     <ClInclude Include="Common\MeshType.h" />
+    <ClInclude Include="Common\PixelFormat.h" />
     <ClInclude Include="Common\ShaderType.h" />
     <ClInclude Include="Common\ShaderVariableType.h" />
     <ClInclude Include="Common\TextureCubemapFace.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Common\Identifier.h" />
     <ClInclude Include="Layout\BufferElement.h" />
     <ClInclude Include="Layout\BufferLayout.h" />
+    <ClInclude Include="Backend\OpenGL\PixelFormatGL.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backend\OpenGL\Buffer\OpenGLFrameBuffer.cpp" />

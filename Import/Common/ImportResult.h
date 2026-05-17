@@ -10,6 +10,7 @@
 #include<GPU/Layout/BufferElement.h>
 #include<GPU/Frontend/Buffer/FrameBuffer.h>
 #include<Asset/Common/Mesh.h>
+#include<Asset/Common/TextureUsage.h>
 
 #include<glm.hpp>
 #include<variant>
@@ -17,13 +18,13 @@
 namespace Pitaya::Import
 {
 	struct Texture2DImportResult
-	{                                                                           
+	{
 		int Width = 0;
 		int Height = 0;
 		int Channels = 0;
 		bool IsGenerateMipmap = true;
-		bool IsSRGB = true;
 		bool isNearest = false;
+		Pitaya::Asset::TextureUsage Usage = Pitaya::Asset::TextureUsage::Color;
 		std::vector<uint8_t> Data; //STB加载的像素数据
 		Pitaya::Core::GUID GUID;
 	};
@@ -33,8 +34,8 @@ namespace Pitaya::Import
 		int Height[6] = {};
 		int Channels[6] = {};
 		bool IsGenerateMipmap = true;
-		bool IsSRGB = true;
 		bool isNearest = false;
+		Pitaya::Asset::TextureUsage Usage = Pitaya::Asset::TextureUsage::Color;
 		std::vector<uint8_t> Data[6] = {}; //STB加载的像素数据
 		Pitaya::Core::GUID GUID;
 	};

@@ -66,7 +66,7 @@ namespace
         out.write(reinterpret_cast<const char*>(&result.Channels), sizeof(int));
 
         out.write(reinterpret_cast<const char*>(&result.IsGenerateMipmap), sizeof(bool));
-        out.write(reinterpret_cast<const char*>(&result.IsSRGB), sizeof(bool));
+        out.write(reinterpret_cast<const char*>(&result.Usage), sizeof(Pitaya::Asset::TextureUsage));
         out.write(reinterpret_cast<const char*>(&result.isNearest), sizeof(bool));
 
         uint32_t dataByteSize = static_cast<uint32_t>(result.Data.size());

@@ -1,10 +1,13 @@
 #include<GPU/Frontend/Texture/Texture2D.h>
+#include<GPU/Backend/OpenGL/PixelFormatGL.h>
 
 #if defined(PITAYA_GRAPHICS_OPENGL)
 #include<GL/glew.h>
 
-Pitaya::GPU::Texture2D Pitaya::GPU::Texture2D::Factory::Create(unsigned char* data, int width, int height, int channels, bool isGenerateMipmap, bool isSRGB, bool isNearest)
+Pitaya::GPU::Texture2D Pitaya::GPU::Texture2D::Factory::Create(const void* data, int width, int height, PixelFormat format, bool isGenerateMipmap, bool isNearest)
 {
+	const auto triplet = Pitaya::GPU::PixelFormatToGL(format);
+
 	GLuint target = 0;
 	glGenTextures(1, &target);
 	glBindTexture(GL_TEXTURE_2D, target);
@@ -13,7 +16,7 @@ Pitaya::GPU::Texture2D Pitaya::GPU::Texture2D::Factory::Create(unsigned char* da
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, isNearest ? GL_NEAREST : GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, triplet.InternalFormat, width, height, 0, triplet.Format, triplet.Type, data);
 
 	if (isGenerateMipmap)
 	{
@@ -34,4 +37,3 @@ void Pitaya::GPU::Texture2D::Factory::Destroy(Pitaya::GPU::Texture2D texture)
 	if (id > 0) { glDeleteTextures(1, &id); }
 }
 #endif
-

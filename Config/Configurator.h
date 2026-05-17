@@ -59,9 +59,9 @@ namespace Pitaya::Config
 
 			//Render
 			Pitaya::Render::API RenderAPI = Pitaya::Render::API::OpenGL;
-			Pitaya::GPU::FrameBufferSpecification MainSceneSpec = { 1600, 900, 4, false, true, true };
-			Pitaya::GPU::FrameBufferSpecification MainPingPongSpec = { 1600, 900, 1, false, true, false };
-			Pitaya::GPU::FrameBufferSpecification MainFinalSpec = { 1600, 900, 1, false, false, false };
+			Pitaya::GPU::FrameBufferSpecification MainSceneSpec = { 1600, 900, 4, Pitaya::GPU::PixelFormat::RGBA16F, Pitaya::GPU::PixelFormat::Depth24_Stencil8 };
+			Pitaya::GPU::FrameBufferSpecification MainPingPongSpec = { 1600, 900, 1, Pitaya::GPU::PixelFormat::RGBA16F, Pitaya::GPU::PixelFormat::Invalid };
+			Pitaya::GPU::FrameBufferSpecification MainFinalSpec = { 1600, 900, 1, Pitaya::GPU::PixelFormat::RGBA8,    Pitaya::GPU::PixelFormat::Invalid };
 			bool EnableVSync = true;
 
 			//Window

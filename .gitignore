@@ -35,3 +35,6 @@ CppProperties.json
 
 # 大文件
 thirdparty/
+
+# 本地规划/进度文件
+PLAN.md

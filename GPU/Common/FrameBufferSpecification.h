@@ -1,5 +1,6 @@
 #pragma once
 
+#include<GPU/Common/PixelFormat.h>
 #include<cstdint>
 
 namespace Pitaya::GPU
@@ -9,8 +10,7 @@ namespace Pitaya::GPU
         uint32_t Width = 0;
         uint32_t Height = 0;
         uint32_t Samples = 1;
-        bool SwapChainTarget = false;
-        bool HDR = false;     
-        bool HasDepth = true; 
+        PixelFormat ColorFormat = PixelFormat::RGBA8;
+        PixelFormat DepthFormat = PixelFormat::Depth24_Stencil8;   // Invalid 表示无深度附件
     };
 }

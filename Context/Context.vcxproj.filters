@@ -24,6 +24,9 @@
     <ClInclude Include="Common\Module.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Common\EngineModuleType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Context.cpp">

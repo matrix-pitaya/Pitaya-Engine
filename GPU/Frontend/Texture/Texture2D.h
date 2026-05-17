@@ -1,6 +1,7 @@
 #pragma once
 
 #include<GPU/Common/Identifier.h>
+#include<GPU/Common/PixelFormat.h>
 
 namespace Pitaya::GPU
 {
@@ -11,7 +12,7 @@ namespace Pitaya::GPU
 		{
 			friend class RHIDevice;
 		private:
-			static Texture2D Create(unsigned char* data, int width, int height, int channels, bool isGenerateMipmap, bool isSRGB, bool isNearest);
+			static Texture2D Create(const void* data, int width, int height, PixelFormat format, bool isGenerateMipmap, bool isNearest);
 			static void Destroy(Texture2D);
 		};
 

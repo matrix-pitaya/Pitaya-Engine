@@ -72,6 +72,12 @@
     <ClInclude Include="Common\MeshType.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Common\PixelFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Backend\OpenGL\PixelFormatGL.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="Common\BindPoint.h">
       <Filter>头文件</Filter>
     </ClInclude>

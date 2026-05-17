@@ -65,9 +65,8 @@ void Pitaya::Config::Configurator::ConfigInfo::Serialize(Pitaya::Serialize::Seri
 			subContext.Write("Width", spec.Width);
 			subContext.Write("Height", spec.Height);
 			subContext.Write("Samples", spec.Samples);
-			subContext.Write("SwapChainTarget", spec.SwapChainTarget);
-			subContext.Write("HDR", spec.HDR);
-			subContext.Write("HasDepth", spec.HasDepth);
+			subContext.Write("ColorFormat", std::string(Pitaya::GPU::ToString(spec.ColorFormat)));
+			subContext.Write("DepthFormat", std::string(Pitaya::GPU::ToString(spec.DepthFormat)));
 		};
 	SerializeFrameBufferSpecification(renderer, "MainSceneSpec", MainSceneSpec);
 	SerializeFrameBufferSpecification(renderer, "MainPingPongSpec", MainPingPongSpec);
@@ -141,13 +140,12 @@ void Pitaya::Config::Configurator::ConfigInfo::Deserialize(const Pitaya::Seriali
 				if (context.HasSubContext(name))
 				{
 					const auto& subContext = context.GetSubContext(name);
-					int out_int; bool out_bool;
+					int out_int; bool out_bool; std::string out_fmt;
 					if (subContext.Read("Width", out_int)) { spec.Width = out_int; }
 					if (subContext.Read("Height", out_int)) { spec.Height = out_int; }
 					if (subContext.Read("Samples", out_int)) { spec.Samples = out_int; }
-					if (subContext.Read("SwapChainTarget", out_bool)) { spec.SwapChainTarget = out_bool; }
-					if (subContext.Read("HDR", out_bool)) { spec.HDR = out_bool; }
-					if (subContext.Read("HasDepth", out_bool)) { spec.HasDepth = out_bool; }
+					if (subContext.Read("ColorFormat", out_fmt)) { spec.ColorFormat = Pitaya::GPU::ToEnum<Pitaya::GPU::PixelFormat>(out_fmt); }
+					if (subContext.Read("DepthFormat", out_fmt)) { spec.DepthFormat = Pitaya::GPU::ToEnum<Pitaya::GPU::PixelFormat>(out_fmt); }
 				}
 			};
 		DeserializeFrameBufferSpecification(renderer, "MainSceneSpec", MainSceneSpec);

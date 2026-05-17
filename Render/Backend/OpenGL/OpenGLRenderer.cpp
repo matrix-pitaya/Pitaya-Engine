@@ -152,7 +152,7 @@ void Pitaya::Render::Renderer::NewRenderFrame()
 				Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 				static_cast<int>(resolution),
 				static_cast<int>(resolution),
-				static_cast<int>(newCapacity), true);
+				static_cast<int>(newCapacity), Pitaya::GPU::PixelFormat::Depth32F);
 			atlas.LayerCapacity = newCapacity;
 		};
 	EnsureAtlas(globalRHI.CSMAtlas, renderPacket.back.RequiredCSMLayers, GlobalRHI::ShadowAtlas::CSMResolution);

@@ -1,4 +1,5 @@
 #include<GPU/Frontend/Buffer/FrameBuffer.h>
+#include<GPU/Backend/OpenGL/PixelFormatGL.h>
 #include<string>
 #include<exception>
 #include<stdexcept>
@@ -24,10 +25,8 @@ Pitaya::GPU::FrameBuffer Pitaya::GPU::FrameBuffer::Factory::Create(Pitaya::GPU::
     GLuint intermediateFBO = 0;
     GLuint intermediateColorAttachment = 0;
 
-    bool multisample = specification.Samples > 1;
-
-    GLenum internalFormat = specification.HDR ? GL_RGBA16F : GL_RGBA8;
-    GLenum dataType = specification.HDR ? GL_FLOAT : GL_UNSIGNED_BYTE;
+    const bool multisample = specification.Samples > 1;
+    const auto colorTriplet = Pitaya::GPU::PixelFormatToGL(specification.ColorFormat);
 
     // 创建主渲染 FBO
     glGenFramebuffers(1, &FBO);
@@ -38,13 +37,13 @@ Pitaya::GPU::FrameBuffer Pitaya::GPU::FrameBuffer::Factory::Create(Pitaya::GPU::
     if (multisample)
     {
         glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, colorAttachment);
-        glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, specification.Samples, internalFormat, specification.Width, specification.Height, GL_TRUE);
+        glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, specification.Samples, colorTriplet.InternalFormat, specification.Width, specification.Height, GL_TRUE);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, colorAttachment, 0);
     }
     else
     {
         glBindTexture(GL_TEXTURE_2D, colorAttachment);
-        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, specification.Width, specification.Height, 0, GL_RGBA, dataType, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, colorTriplet.InternalFormat, specification.Width, specification.Height, 0, colorTriplet.Format, colorTriplet.Type, nullptr);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -52,21 +51,24 @@ Pitaya::GPU::FrameBuffer Pitaya::GPU::FrameBuffer::Factory::Create(Pitaya::GPU::
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorAttachment, 0);
     }
 
-    // 创建深度附件
-    if (specification.HasDepth)
+    // 创建深度附件（DepthFormat == Invalid 表示无深度附件）
+    if (specification.DepthFormat != Pitaya::GPU::PixelFormat::Invalid)
     {
+        const auto depthTriplet = Pitaya::GPU::PixelFormatToGL(specification.DepthFormat);
+        const GLenum depthAttachmentPoint = Pitaya::GPU::DepthFormatToAttachment(specification.DepthFormat);
+
         glGenTextures(1, &depthAttachment);
         if (multisample)
         {
             glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, depthAttachment);
-            glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, specification.Samples, GL_DEPTH24_STENCIL8, specification.Width, specification.Height, GL_TRUE);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D_MULTISAMPLE, depthAttachment, 0);
+            glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, specification.Samples, depthTriplet.InternalFormat, specification.Width, specification.Height, GL_TRUE);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, depthAttachmentPoint, GL_TEXTURE_2D_MULTISAMPLE, depthAttachment, 0);
         }
         else
         {
             glBindTexture(GL_TEXTURE_2D, depthAttachment);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, specification.Width, specification.Height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, nullptr);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthAttachment, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, depthTriplet.InternalFormat, specification.Width, specification.Height, 0, depthTriplet.Format, depthTriplet.Type, nullptr);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, depthAttachmentPoint, GL_TEXTURE_2D, depthAttachment, 0);
         }
     }
 
@@ -85,8 +87,8 @@ Pitaya::GPU::FrameBuffer Pitaya::GPU::FrameBuffer::Factory::Create(Pitaya::GPU::
         glGenTextures(1, &intermediateColorAttachment);
         glBindTexture(GL_TEXTURE_2D, intermediateColorAttachment);
 
-        // 这里的 Resolve 纹理格式必须与主 FBO 保持一致 (HDR支持)
-        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, specification.Width, specification.Height, 0, GL_RGBA, dataType, nullptr);
+        // 这里的 Resolve 纹理格式必须与主 FBO 保持一致 (HDR/SRGB/RG 等格式由 ColorFormat 决定)
+        glTexImage2D(GL_TEXTURE_2D, 0, colorTriplet.InternalFormat, specification.Width, specification.Height, 0, colorTriplet.Format, colorTriplet.Type, nullptr);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
