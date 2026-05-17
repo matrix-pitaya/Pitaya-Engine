@@ -36,7 +36,9 @@ CppProperties.json
 # 大文件
 thirdparty/
 
-# 本地规划/进度文件
+# 规划/进度文件
 PLAN.md
 PROCESS.md
+
+# AGENT配置
 CLAUDE.md

@@ -782,7 +782,7 @@ namespace Pitaya::Render
 				cmd.IndexCount = 36;
 				cmd.BaseIndex = 0;
 				cmd.BaseVertex = 0;
-				//异常情况无需骨骼数据
+				cmd.BoneInverseMatrices = nullptr;	//异常情况无需骨骼数据
 			}
 
 			auto GenerateSortKey =	//[Queue][Order][Shader][Material][Mesh][Depth]
