@@ -1,8 +1,8 @@
 #version 460 core
 
 layout (location = 0) in vec3 aPos;
-layout (location = 3) in ivec4 aBoneIds;
 layout (location = 4) in vec4 aBoneWeights;
+layout (location = 5) in vec4 aBoneIndices;
 
 layout(std140, binding = 0) uniform CameraSnapshot
 {
@@ -35,9 +35,10 @@ void main()
     mat4 boneTransform = mat4(0.0);
     for (int i = 0; i < 4; ++i)
     {
-        if (aBoneIds[i] >= 0)
+        int boneId = int(aBoneIndices[i]);
+        if (boneId >= 0)
         {
-            boneTransform += Bones[aBoneIds[i]] * aBoneWeights[i];
+            boneTransform += Bones[boneId] * aBoneWeights[i];
         }
     }
     vec4 skinnedPos = boneTransform * vec4(aPos, 1.0);

@@ -3,6 +3,7 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aTexCoord;
+layout (location = 3) in vec4 aTangent;
 
 layout(std140, binding = 0) uniform CameraSnapshot
 {
@@ -28,7 +29,8 @@ out V2F
 {
 	vec2 texCoord;
 	vec3 fragPos;
-	vec3 normal;  
+	vec3 normal;
+	vec4 tangent;
 	flat uint receiveShadow;
 } v2f;
 
@@ -40,10 +42,11 @@ void main()
 
 	vec4 worldPos = modelMat * vec4(aPos, 1.0f);
 	gl_Position = ViewProjection * worldPos;
-	
+
 	v2f.texCoord = aTexCoord;
 	v2f.fragPos = worldPos.xyz;
-	
-	v2f.normal = mat3(normalMat) * aNormal; 
+
+	v2f.normal = mat3(normalMat) * aNormal;
+	v2f.tangent = vec4(mat3(normalMat) * aTangent.xyz, aTangent.w);
 	v2f.receiveShadow = InstanceInfos[index].Params.x;
 }

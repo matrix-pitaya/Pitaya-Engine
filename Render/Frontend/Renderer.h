@@ -181,7 +181,11 @@ namespace Pitaya::Render
 				auto fallbackVboData = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_VERTICES);
 				auto fallbackIboData = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_INDICES);
 				auto fallbackVBOHandle = Pitaya::GPU::CreateVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-					static_cast<float*>(const_cast<void*>(fallbackVboData.data)), fallbackVboData.size, { { Pitaya::GPU::ShaderVariableType::Float3, 0 } });
+					static_cast<float*>(const_cast<void*>(fallbackVboData.data)), fallbackVboData.size, {
+						{ Pitaya::GPU::ShaderVariableType::Float3, 0 },     // Position
+						{ Pitaya::GPU::ShaderVariableType::Float3, 1 },     // Normal
+						{ Pitaya::GPU::ShaderVariableType::Float2, 2 },     // UV
+						{ Pitaya::GPU::ShaderVariableType::Float4, 3 } });  // Tangent
 				auto fallbackIBOHandle = Pitaya::GPU::CreateIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
 					static_cast<uint32_t*>(const_cast<void*>(fallbackIboData.data)), 36);
 				if (!Pitaya::GPU::LinkVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),

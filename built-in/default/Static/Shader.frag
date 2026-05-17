@@ -57,6 +57,7 @@ in V2F
 	vec2 texCoord;
 	vec3 fragPos;
 	vec3 normal;
+	vec4 tangent;
 	flat uint receiveShadow;
 } v2f;
 
