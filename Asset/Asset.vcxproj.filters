@@ -35,6 +35,9 @@
     <ClInclude Include="Common\Texture.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Common\MaterialParamLayout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="Common\TextureUsage.h">
       <Filter>头文件</Filter>
     </ClInclude>

@@ -12,7 +12,6 @@ namespace Pitaya::Render
 
         Pitaya::Core::SlotMap<Pitaya::GPU::VertexArray>::Handle VertexArrayHandle;
         Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle ShaderHandle;
-        Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle TextureHandles[Pitaya::GPU::MaterialTextureSlotCount] = {};
 
         //渲染状态
         bool DepthTest = true;

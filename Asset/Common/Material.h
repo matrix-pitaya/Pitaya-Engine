@@ -9,208 +9,122 @@
 #include<Asset/Common/FuncTable.h>
 #include<Asset/Common/Texture.h>
 #include<Asset/Common/Shader.h>
-#include<GPU/Common/ShaderVariableType.h>
-#include<GPU/Common/TextureSlot.h>
 #include<Render/Common/RenderQueue.h>
 
 #include<glm.hpp>
-#include<unordered_map>
 #include<cstdint>
 #include<atomic>
+#include<vector>
+#include<type_traits>
+#include<cstring>
 
 namespace Pitaya::Asset
 {
-	struct Material : public Pitaya::Serialize::Serializable
-	{
-		struct Property
-		{
-			struct Variable
-			{
-				union
-				{
-					float Float;
-					glm::vec2 Float2;
-					glm::vec3 Float3;
-					glm::vec4 Float4;
+    struct Material : public Pitaya::Serialize::Serializable
+    {
+        Pitaya::Core::Asset<Pitaya::Asset::Shader> Shader = nullptr;
+        std::vector<float> FloatParams;
+        std::vector<glm::vec4> VectorParams;
+        std::vector<Pitaya::Core::Asset<Pitaya::Asset::Texture>> Textures;
 
-					int Int;
-					glm::ivec2 Int2;
-					glm::ivec3 Int3;
-					glm::ivec4 Int4;
+        Pitaya::Render::RenderQueue RenderQueue = Pitaya::Render::RenderQueue::Geometry;
+        const uint32_t SortId = Next();
+        uint8_t DrawOrder = 0;
+        bool DepthTest = true;
+        bool Blend = false;
+        bool CullFace = true;
 
-					bool Bool;
-				};
+    public:
+        inline static constexpr const Pitaya::Core::GUID Default = Pitaya::Core::GUID("00000000-0000-0001-0000-000000000000");
 
-				Pitaya::GPU::ShaderVariableType Type = Pitaya::GPU::ShaderVariableType::Invalid;
+    public:
+        void SetFloat(std::string_view name, float value)
+        {
+            if (const auto* slot = FindSlot(name))
+            {
+                if (slot->Index < FloatParams.size()) 
+                { 
+                    FloatParams[slot->Index] = value;
+                }
+            }
+        }
+        void SetVec4(std::string_view name, glm::vec4 value)
+        {
+            if (const auto* slot = FindSlot(name))
+            {
+                if (slot->Index < VectorParams.size()) 
+                { 
+                    VectorParams[slot->Index] = value; 
+                }
+            }
+        }
+        void SetTexture(std::string_view name, Pitaya::Core::GUID guid)
+        {
+            if (const auto* slot = FindSlot(name))
+            {
+                if (slot->Index >= Textures.size())
+                {
+                    Textures.resize(slot->Index + 1);
+                }
+                Textures[slot->Index] = Pitaya::Asset::LoadAsset<Pitaya::Asset::Texture>(guid);
+            }
+        }
 
-				Variable& operator=(float value) 
-				{ 
-					Type = Pitaya::GPU::ShaderVariableType::Float;
-					Float = value;
-					return *this;
-				}
-				Variable& operator=(int value) 
-				{
-					Type = Pitaya::GPU::ShaderVariableType::Int;
-					Int = value;
-					return *this;
-				}
-				Variable& operator=(bool value) 
-				{
-					Type = Pitaya::GPU::ShaderVariableType::Bool;
-					Bool = value;
-					return *this;
-				}
-				Variable& operator=(const glm::vec2& value)
-				{
-					Type = Pitaya::GPU::ShaderVariableType::Float2;
-					Float2 = value;
-					return *this;
-				}
-				Variable& operator=(const glm::vec3& value) 
-				{
-					Type = Pitaya::GPU::ShaderVariableType::Float3;
-					Float3 = value;
-					return *this;
-				}
-				Variable& operator=(const glm::vec4& value) 
-				{
-					Type = Pitaya::GPU::ShaderVariableType::Float4;
-					Float4 = value;
-					return *this;
-				}
-				Variable& operator=(const glm::ivec2& value)
-				{
-					Type = Pitaya::GPU::ShaderVariableType::Int2;
-					Int2 = value;
-					return *this;
-				}
-				Variable& operator=(const glm::ivec3& value)
-				{
-					Type = Pitaya::GPU::ShaderVariableType::Int3;
-					Int3 = value;
-					return *this;
-				}
-				Variable& operator=(const glm::ivec4& value)
-				{
-					Type = Pitaya::GPU::ShaderVariableType::Int4;
-					Int4 = value;
-					return *this;
-				}
-			};
+    private:
+        inline static uint32_t Next() noexcept
+        {
+            static std::atomic<uint32_t> sortId = 1;
+            return sortId.fetch_add(1, std::memory_order_relaxed);
+        }
+        inline const ParamSlot* FindSlot(std::string_view name) const
+        {
+            if (Shader && Shader->ParamLayout.TotalBytes != 0)
+            {
+                for (const auto& slot : Shader->ParamLayout.Slots)
+                {
+                    if (slot.Name == name) 
+                    {  
+                        return &slot;
+                    }
+                }
+            }
+            return nullptr;
+        }
 
-			std::unordered_map<std::string, Variable> Variables;
-		};
+    private:
+        void Serialize(Pitaya::Serialize::SerializeContext& context) const override
+        {
+            auto& shader = context.GetSubContext("Shader");
+            shader.Write("GUID", Shader.GetGUID().ToString());
 
-		Pitaya::Core::Asset<Pitaya::Asset::Shader> Shader = nullptr;
-		Pitaya::Core::Asset<Pitaya::Asset::Texture> Textures[Pitaya::GPU::MaterialTextureSlotCount] = {};
-		Material::Property Property;
-		Pitaya::Render::RenderQueue RenderQueue = Pitaya::Render::RenderQueue::Geometry;
-		uint32_t SortId = Next();		//用于生成DrawCommand的SortKey
-		uint8_t DrawOrder = 0;
-		bool DepthTest = true;
-		bool Blend = false;
-		bool CullFace = true;
+            if (Shader && !Shader->ParamLayout.Slots.empty())
+            {
+                auto& textures = context.GetSubContext("Textures");
+                for (auto& slot : Shader->ParamLayout.Slots)
+                {
+                    if (slot.Type != ParamType::Texture) { continue; }
+                    if (slot.Index >= Textures.size()) { continue; }
+                    if (!Textures[slot.Index]) { continue; }
 
-	public:
-		//Material 17-22
-		inline static constexpr const Pitaya::Core::GUID Default = Pitaya::Core::GUID("00000000-0000-0001-0000-000000000000");
-
-	private:
-		inline static uint32_t Next() noexcept
-		{
-			static std::atomic<uint32_t> sortId = 1;
-			return sortId.fetch_add(1, std::memory_order_relaxed);
-		}
-	
-	private:
-		void Serialize(Pitaya::Serialize::SerializeContext& context) const override
-		{
-			//Shader
-			auto& shader = context.GetSubContext("Shader");
-			shader.Write("GUID", Shader.GetGUID().ToString());
-
-			//textures
-			auto& textures = context.GetSubContext("Textures");
-			for (uint32_t i = 0; i < Pitaya::GPU::MaterialTextureSlotCount; i++)
-			{
-				auto& texture = textures.GetSubContext("Type_" + std::to_string(i));
-				texture.Write("GUID", Textures[i].GetGUID().ToString());
-			}
-
-			//rednererqueue
-			auto& renderQueue = context.GetSubContext("RendererQueue");
-			renderQueue.Write("Type", Pitaya::Render::ToString(RenderQueue));
-
-			//draworder
-			auto& drawOrder = context.GetSubContext("Draworder");
-			drawOrder.Write("Value", DrawOrder);
-
-			//property
-			auto& property = context.GetSubContext("Property");
-			auto& key_value = property.GetSubContext("Key_Value");
-			for (auto& [key, value] : Property.Variables)
-			{
-				auto& varContext = property.GetSubContext(key);
-				varContext.Write("Type", static_cast<uint32_t>(value.Type));
-				switch (value.Type)
-				{
-					case Pitaya::GPU::ShaderVariableType::Bool: varContext.Write(key, value.Bool); break;
-					case Pitaya::GPU::ShaderVariableType::Int: varContext.Write(key, value.Int); break;
-					case Pitaya::GPU::ShaderVariableType::Int2: varContext.Write(key, value.Int2); break;
-					case Pitaya::GPU::ShaderVariableType::Int3: varContext.Write(key, value.Int3); break;
-					case Pitaya::GPU::ShaderVariableType::Int4: varContext.Write(key, value.Int4); break;
-					case Pitaya::GPU::ShaderVariableType::Float: varContext.Write(key, value.Float); break;
-					case Pitaya::GPU::ShaderVariableType::Float2: varContext.Write(key, value.Float2); break;
-					case Pitaya::GPU::ShaderVariableType::Float3: varContext.Write(key, value.Float3); break;
-					case Pitaya::GPU::ShaderVariableType::Float4: varContext.Write(key, value.Float4); break;
-					case Pitaya::GPU::ShaderVariableType::Invalid: break;
-					default:break;
-				}
-			}
-		
-			//drawstate
-			auto& drawState = context.GetSubContext("DrawState");
-			drawState.Write("DepthTest", DepthTest);
-			drawState.Write("Blend", Blend);
-			drawState.Write("CullFace", CullFace);
-		}
-		void Deserialize(const Pitaya::Serialize::DeserializeContext& context) override
-		{
-			std::string str;
-			if (context.HasSubContext("Shader"))
-			{
-				auto& shader = context.GetSubContext("Shader");
-				if (shader.Read("GUID", str)) 
-				{ 
-					if (Pitaya::Core::GUID guid = Pitaya::Core::GUID(str))
-					{
-						Shader = Pitaya::Asset::LoadAsset<Pitaya::Asset::Shader>(guid);
-					}
-				}
-			}
-
-			if (context.HasSubContext("Textures"))
-			{
-				auto& textures = context.GetSubContext("Textures");
-				for (uint32_t i = 0; i < Pitaya::GPU::MaterialTextureSlotCount; i++)
-				{
-					str = "Type_" + std::to_string(i);
-					if (textures.HasSubContext(str))
-					{
-						auto& texture = textures.GetSubContext(str);
-						if (texture.Read("GUID", str)) 
-						{ 
-							if (Pitaya::Core::GUID guid = Pitaya::Core::GUID(str))
-							{
-								Textures[i] = Pitaya::Asset::LoadAsset<Pitaya::Asset::Texture>(guid);
-							}
-						}
-					}
-				}
-			}
-
-			//TODO 实现材质反序列化
-		}
-	};
+                    auto& tex = textures.GetSubContext(slot.Name);
+                    tex.Write("GUID", Textures[slot.Index].GetGUID().ToString());
+                }
+            }
+        }
+        void Deserialize(const Pitaya::Serialize::DeserializeContext& context) override
+        {
+            std::string str;
+            if (context.HasSubContext("Shader"))
+            {
+                auto& shader = context.GetSubContext("Shader");
+                if (shader.Read("GUID", str))
+                {
+                    if (Pitaya::Core::GUID guid = Pitaya::Core::GUID(str))
+                    {
+                        Shader = Pitaya::Asset::LoadAsset<Pitaya::Asset::Shader>(guid);
+                    }
+                }
+            }
+        }
+    };
 }

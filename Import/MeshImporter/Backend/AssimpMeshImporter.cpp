@@ -15,6 +15,70 @@
 #include<glm.hpp>
 #include<gtc/type_ptr.hpp>
 
+namespace
+{
+    // 综合导入 ParamLayout — 覆盖 Blinn-Phong + PBR 所有可能的参数
+    // Shader 加载时按自需读取，Material 存全量
+    inline Pitaya::Asset::MaterialParamLayout BuildImportParamLayout()
+    {
+        return {
+            {
+                // Buffer — vec4
+                { "BaseColorFactor", Pitaya::Asset::ParamType::Vector, 0, 0,  16 },
+                { "EmissiveFactor",  Pitaya::Asset::ParamType::Vector, 1, 16, 16 },
+                { "SpecularFactor",  Pitaya::Asset::ParamType::Vector, 2, 32, 16 },
+
+                // Buffer — float
+                { "MetallicFactor",    Pitaya::Asset::ParamType::Float, 0, 48, 4 },
+                { "RoughnessFactor",   Pitaya::Asset::ParamType::Float, 1, 52, 4 },
+                { "OcclusionStrength", Pitaya::Asset::ParamType::Float, 2, 56, 4 },
+                { "AlphaCutoff",       Pitaya::Asset::ParamType::Float, 3, 60, 4 },
+
+                // Texture
+                { "uAlbedoMap",    Pitaya::Asset::ParamType::Texture, 0, 64, 8 },
+                { "uNormalMap",    Pitaya::Asset::ParamType::Texture, 1, 72, 8 },
+                { "uMetallicMap",  Pitaya::Asset::ParamType::Texture, 2, 80, 8 },
+                { "uRoughnessMap", Pitaya::Asset::ParamType::Texture, 3, 88, 8 },
+                { "uAOMap",        Pitaya::Asset::ParamType::Texture, 4, 96, 8 },
+                { "uEmissiveMap",  Pitaya::Asset::ParamType::Texture, 5, 104, 8 },
+                { "uSpecularMap",  Pitaya::Asset::ParamType::Texture, 6, 112, 8 },
+            } ,3,4,7,120 };
+    }
+
+    // assimp 属性 key → 引擎标准名 映射
+    inline const char* MapAssimpPropToEngineName(std::string_view assimpKey)
+    {
+        // aiColor4D 属性: "$clr.xxx"
+        if (assimpKey == "$clr.diffuse")  { return "BaseColorFactor"; }
+        if (assimpKey == "$clr.emissive") { return "EmissiveFactor"; }
+        if (assimpKey == "$clr.specular") { return "SpecularFactor"; }
+
+        // float 属性: "$mat.xxx"
+        if (assimpKey == "$mat.shininess") { return "RoughnessFactor"; }
+        if (assimpKey == "$mat.opacity")   { return "AlphaCutoff"; }
+
+        return nullptr;
+    }
+
+    // assimp 纹理类型 → 引擎标准名 映射
+    inline const char* MapAssimpTexTypeToEngineName(aiTextureType aiType)
+    {
+        switch (aiType)
+        {
+            case aiTextureType_DIFFUSE:
+            case aiTextureType_BASE_COLOR:            return "uAlbedoMap";
+            case aiTextureType_SPECULAR:              return "uSpecularMap";
+            case aiTextureType_NORMALS:               return "uNormalMap";
+            case aiTextureType_METALNESS:             return "uMetallicMap";
+            case aiTextureType_DIFFUSE_ROUGHNESS:     return "uRoughnessMap";
+            case aiTextureType_AMBIENT_OCCLUSION:
+            case aiTextureType_LIGHTMAP:              return "uAOMap";
+            case aiTextureType_EMISSIVE:              return "uEmissiveMap";
+            default:                                  return nullptr;
+        }
+    }
+}
+
 bool Pitaya::Import::AssimpMeshImporter::Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, Pitaya::Import::MeshPreloadResult& out)
 {
     Assimp::Importer importer;
@@ -565,51 +629,49 @@ void Pitaya::Import::AssimpMeshImporter::TraverseNodes(aiNode* node, const glm::
         TraverseNodes(node->mChildren[i], globalTransform, outMeshInfos);
     }
 }
-bool Pitaya::Import::AssimpMeshImporter::ParseMaterial(const aiMaterial* aimaterial, const std::filesystem::path& matFilePath, const std::filesystem::path& modelFilePath)
+bool Pitaya::Import::AssimpMeshImporter::ParseMaterial(const aiMaterial* aimaterial, const std::filesystem::path& matFilePath, const std::filesystem::path& modelFilePath)  //TODO逻辑有点问题 主要是为了把Assimp的材质转化为Engine的.mat材质 后面再修复
 {
     Pitaya::Asset::Material material;
 
-    //设置材质Shader为默认Shader
-    Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry dummyAssetEntry_SHADER;  //dunmmyentry 用于material临时序列化
-    dummyAssetEntry_SHADER.GUID = Pitaya::Asset::Shader::Static;    //TOOD到时候穿个参数进来，看看是用Static还是Skinned
-    material.Shader = &dummyAssetEntry_SHADER;
+    // 构建综合导入 ParamLayout (Blinn-Phong + PBR 全集)
+    Pitaya::Asset::Shader dummyShaderData;
+    dummyShaderData.ParamLayout = BuildImportParamLayout();
 
-    //设置材质属性
-    material.Property.Variables.clear();
+    Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry dummyShader;
+    dummyShader.GUID = Pitaya::Asset::Shader::Static;
+    dummyShader.Data.store(&dummyShaderData, std::memory_order_release);
+    dummyShader.State.SetBits(Pitaya::Core::AssetState::CPULoaded);
+    material.Shader = &dummyShader;
+
+    // assimp 属性 → SetParam (ParamLayout 里有就存，没有就跳过)
     for (unsigned int i = 0; i < aimaterial->mNumProperties; ++i)
     {
         const aiMaterialProperty* prop = aimaterial->mProperties[i];
         if (!prop) { continue; }
 
-        std::string propKey = prop->mKey.C_Str();
+        const char* engineName = MapAssimpPropToEngineName(prop->mKey.C_Str());
+        if (!engineName) { continue; }
+
         if (prop->mType == aiPTI_Float)
         {
             int numFloats = prop->mDataLength / sizeof(float);
             const float* dataPtr = reinterpret_cast<const float*>(prop->mData);
-            if (numFloats == 1) { material.Property.Variables[propKey] = dataPtr[0]; }
-            else if (numFloats == 2) { material.Property.Variables[propKey] = glm::vec2(dataPtr[0], dataPtr[1]); }
-            else if (numFloats == 3) { material.Property.Variables[propKey] = glm::vec3(dataPtr[0], dataPtr[1], dataPtr[2]); }
-            else if (numFloats == 4) { material.Property.Variables[propKey] = glm::vec4(dataPtr[0], dataPtr[1], dataPtr[2], dataPtr[3]); }
+            if (numFloats == 1)      { material.SetFloat(engineName, dataPtr[0]); }
+            else if (numFloats >= 2) { material.SetVec4(engineName, glm::vec4(dataPtr[0], numFloats >= 2 ? dataPtr[1] : 0.0f, numFloats >= 3 ? dataPtr[2] : 0.0f, numFloats >= 4 ? dataPtr[3] : 0.0f)); }
         }
-        else if (prop->mType == aiPTI_Double)
+        else if (prop->mType == aiPTI_Double && prop->mDataLength >= sizeof(double))
         {
-            if (prop->mDataLength >= sizeof(double))
-            {
-                double val = *reinterpret_cast<const double*>(prop->mData);
-                material.Property.Variables[propKey] = static_cast<float>(val);
-            }
+            double val = *reinterpret_cast<const double*>(prop->mData);
+            material.SetFloat(engineName, static_cast<float>(val));
         }
-        else if (prop->mType == aiPTI_Integer)
+        else if (prop->mType == aiPTI_Integer && prop->mDataLength >= sizeof(int))
         {
-            if (prop->mDataLength >= sizeof(int))
-            {
-                int val = *reinterpret_cast<const int*>(prop->mData);
-                material.Property.Variables[propKey] = val;
-            }
+            int val = *reinterpret_cast<const int*>(prop->mData);
+            material.SetFloat(engineName, static_cast<float>(val));
         }
     }
 
-    //设置材质纹理
+    // assimp 纹理 → 直接写 Textures[] (dummy AssetEntry, 不触发 LoadAsset)
     constexpr const aiTextureType texTypes[] = {
         aiTextureType_DIFFUSE, aiTextureType_SPECULAR, aiTextureType_AMBIENT, aiTextureType_EMISSIVE,
         aiTextureType_HEIGHT, aiTextureType_NORMALS, aiTextureType_SHININESS, aiTextureType_OPACITY,
@@ -617,26 +679,34 @@ bool Pitaya::Import::AssimpMeshImporter::ParseMaterial(const aiMaterial* aimater
         aiTextureType_BASE_COLOR, aiTextureType_METALNESS, aiTextureType_DIFFUSE_ROUGHNESS,
         aiTextureType_AMBIENT_OCCLUSION };
 
-    //dunmmyentry 用于material临时序列化
-    Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry dummyAssetEntry_TEXTURES[Pitaya::GPU::MaterialTextureSlotCount] = {};
+    const uint32_t texCount = dummyShaderData.ParamLayout.TextureCount;
+    Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry dummyTextures[16] = {};
+    material.Textures.resize(texCount);
+
     for (auto aiType : texTypes)
     {
+        const char* engineName = MapAssimpTexTypeToEngineName(aiType);
+        if (!engineName) { continue; }
+
+        const Pitaya::Asset::ParamSlot* slot = nullptr;
+        for (auto& s : dummyShaderData.ParamLayout.Slots)
+        {
+            if (s.Name == engineName) { slot = &s; break; }
+        }
+        if (!slot || slot->Index >= texCount) { continue; }
+
         aiString path;
         if (aimaterial->GetTexture(aiType, 0, &path) == AI_SUCCESS)
         {
-            Pitaya::GPU::TextureSlot usage = AiTextureTypeToTextureUsage(aiType);
-            if (static_cast<uint8_t>(usage) >= Pitaya::GPU::MaterialTextureSlotCount) { continue; }
-
             Pitaya::Core::GUID texGuid;
             std::filesystem::path virtualpath;
             if (!(Pitaya::Asset::TransformToVirtualPath(path.C_Str(), modelFilePath.parent_path(), virtualpath) &&
                 Pitaya::Asset::GetAssetGUIDByPath(virtualpath, texGuid)))
             {
-                //转换失败 使用默认白色纹理
                 texGuid = Pitaya::Asset::Texture::White;
             }
-            dummyAssetEntry_TEXTURES[static_cast<uint8_t>(usage)].GUID = texGuid;
-            material.Textures[static_cast<uint8_t>(usage)] = &dummyAssetEntry_TEXTURES[static_cast<uint8_t>(usage)];
+            dummyTextures[slot->Index].GUID = texGuid;
+            material.Textures[slot->Index] = &dummyTextures[slot->Index];
         }
     }
 

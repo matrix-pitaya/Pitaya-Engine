@@ -8,7 +8,7 @@
 
 namespace Pitaya::Asset
 {
-	struct RenderTarget : Pitaya::Serialize::Serializable
+	struct RenderTarget : public Pitaya::Serialize::Serializable
 	{
         Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle SceneFrameBufferHandle;
 		Pitaya::GPU::FrameBufferSpecification SceneFrameBufferSpecification = { 1600, 900, 4, Pitaya::GPU::PixelFormat::RGBA16F, Pitaya::GPU::PixelFormat::Depth24_Stencil8 };

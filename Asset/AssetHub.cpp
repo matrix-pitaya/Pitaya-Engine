@@ -23,6 +23,16 @@ bool Pitaya::Asset::AssetHub::Initialize()
 	{
 		buildIn.DefaultStaticShader.Data.store(Pitaya::Core::New<Pitaya::Asset::Shader>(), std::memory_order_release);
 		buildIn.DefaultStaticShader.GUID = Pitaya::Asset::Shader::Static;
+		{
+			auto* shader = buildIn.DefaultStaticShader.Data.load(std::memory_order_acquire);
+			shader->ParamLayout.Slots =
+			{
+				{ "uAlbedoMap",   Pitaya::Asset::ParamType::Texture, 0, 0,  8 },
+				{ "uSpecularMap", Pitaya::Asset::ParamType::Texture, 1, 8, 8 }
+			};
+			shader->ParamLayout.TextureCount = 2;
+			shader->ParamLayout.TotalBytes = 16;
+		}
 		buildIn.DefaultStaticShader.State.SetBits(Pitaya::Core::AssetState::CPULoading);
 		Pitaya::Import::ShaderImportResult result;
 		{
@@ -45,7 +55,8 @@ bool Pitaya::Asset::AssetHub::Initialize()
 		buildIn.DefaultMaterial.State.SetBits(Pitaya::Core::AssetState::CPULoading);
 		auto* materialNativeData = buildIn.DefaultMaterial.Data.load(std::memory_order_acquire);
 		materialNativeData->Shader = LoadAsset<Pitaya::Asset::Shader>(Pitaya::Asset::Shader::Static);
-		materialNativeData->Textures[static_cast<uint8_t>(Pitaya::GPU::TextureSlot::Albedo)] = LoadAsset<Pitaya::Asset::Texture>(Pitaya::Asset::Texture::White);
+		materialNativeData->Textures.resize(materialNativeData->Shader->ParamLayout.TextureCount);
+		materialNativeData->SetTexture("uAlbedoMap", Pitaya::Asset::Texture::White);
 		buildIn.DefaultMaterial.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
 		buildIn.DefaultMaterial.State.SetBits(Pitaya::Core::AssetState::GPULoaded);
 		materials.Emplace(Pitaya::Asset::Material::Default, &buildIn.DefaultMaterial);
@@ -571,6 +582,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 	texture2D->Texture2DHandle = texture2DHandle;
 	texture2D->Type = Pitaya::GPU::TextureType::Texture2D;
 	texture2D->Usage = cpuOpResult_Inner.Usage;
+	Pitaya::Log::Info("successfully created GPU resources for texture2D GUID: " + cpuOpResult_Inner.GUID.ToString());
 	entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Import::TextureCubemapImportResult& cpuOpResult_Inner)

@@ -9,6 +9,6 @@ namespace Pitaya::Render
 	{
 		glm::mat4 Model;
 		glm::mat4 Normal;
-		glm::uvec4 Params;	// x:是否接受阴影
+		glm::uvec4 Params;	// x: ReceiveShadow, y: MaterialByteOffset, zw: unused
 	};
 }

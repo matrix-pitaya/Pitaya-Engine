@@ -1,9 +1,16 @@
 #version 460 core
 
+#extension GL_ARB_bindless_texture : enable
+
 out vec4 FragColor;
 
-layout(binding = 0) uniform sampler2D Albedo;
-layout(binding = 1) uniform sampler2D Specular;
+layout(std430, binding = 4) readonly buffer MaterialSSBO { float Data[]; };
+
+struct MaterialData
+{
+    uvec2 uAlbedoMap;
+    uvec2 uSpecularMap;
+};
 
 layout(binding = 9)  uniform sampler2DArrayShadow ShadowMap_CSM;
 layout(binding = 10) uniform sampler2DArrayShadow ShadowMap_Spot;
@@ -31,10 +38,10 @@ layout(std430, binding = 3) readonly buffer ShadowInfoBuffer
 
 layout(std140, binding = 0) uniform CameraSnapshot 
 {
-	mat4 View;
-	mat4 Projection;
-	mat4 ViewProjection;
-	vec4 Position;       
+    mat4 View;
+    mat4 Projection;
+    mat4 ViewProjection;
+    vec4 Position;       
 };
 
 struct LightInfo
@@ -54,16 +61,17 @@ layout(std430, binding = 2) readonly buffer LightBuffer
 
 in V2F
 {
-	vec2 texCoord;
-	vec3 fragPos;
-	vec3 normal;
-	vec4 tangent;
-	flat uint receiveShadow;
+    vec2 texCoord;
+    vec3 fragPos;
+    vec3 normal;
+    vec4 tangent;
+    flat uint receiveShadow;
+    flat uint materialByteOffset;
 } v2f;
 
 vec4 GetCascadeSplits(uint idx)
 {
-	return ShadowPayload[idx];
+    return ShadowPayload[idx];
 }
 
 mat4 GetShadowMatrix(uint idx)
@@ -88,18 +96,18 @@ float SampleShadowPCF(sampler2DArrayShadow sm, vec3 proj, float layer, float bia
 {
     if (proj.x < 0.0 || proj.x > 1.0 || proj.y < 0.0 || proj.y > 1.0 || proj.z > 1.0)
     {
-		return 1.0;
-	}
+        return 1.0;
+    }
 
     vec2 ts = 1.0 / vec2(textureSize(sm, 0).xy);
     float s = 0.0;
     for (int x = -1; x <= 1; ++x)
     {
-		for (int y = -1; y <= 1; ++y)
-		{
-			s += texture(sm, vec4(proj.xy + vec2(x,y)*ts, layer, proj.z - bias));
-		}
-	}     
+        for (int y = -1; y <= 1; ++y)
+        {
+            s += texture(sm, vec4(proj.xy + vec2(x,y)*ts, layer, proj.z - bias));
+        }
+    }     
     return s / 9.0;
 }
 
@@ -147,80 +155,90 @@ float CalcCSMShadow(vec3 wp, uint si)
 
 void main()
 {
-	vec4 albedoColor = texture(Albedo, v2f.texCoord);
-	if(albedoColor.a < 0.05) { discard; }
+    uint matBase = v2f.materialByteOffset / 4u;
 
-	vec3 norm = normalize(v2f.normal);
-	vec3 viewDir = normalize(Position.xyz - v2f.fragPos);
+    MaterialData mat;
+    mat.uAlbedoMap = uvec2(
+        floatBitsToUint(Data[matBase + 0u]),
+        floatBitsToUint(Data[matBase + 1u]));
+    mat.uSpecularMap = uvec2(
+        floatBitsToUint(Data[matBase + 2u]),
+        floatBitsToUint(Data[matBase + 3u]));
 
-	// 半球顶环境光(Hemisphere Ambient) 模拟天光与地光 使背面不再是一坨死板的单色 而是有色彩倾向的渐变
-	vec3 skyColor = vec3(0.2, 0.25, 0.3);      // 模拟天空，微偏蓝
-	vec3 groundColor = vec3(0.05, 0.04, 0.03); // 模拟地面反射，偏深褐
-	
-	// 根据法线的 Y 分量 朝上还是朝下 进行插值
-	float hemiLevel = norm.y * 0.5 + 0.5;	// norm.y 在 [-1, 1] 之间，我们把它映射到 [0, 1]
-	vec3 ambient = mix(groundColor, skyColor, hemiLevel) * 0.5; // 总强度系数 0.5
-	
-	vec3 finalColor = albedoColor.rgb * ambient; 
-	vec3 specMapColor = texture(Specular, v2f.texCoord).rgb;
+    vec4 albedoColor = texture(sampler2D(mat.uAlbedoMap), v2f.texCoord);
+    if(albedoColor.a < 0.05) { discard; }
 
-	for(uint i = 0u; i < ActiveLightCount; ++i)
-	{
-		LightInfo light = SceneLights[i];
-		vec3 lightColor = light.Color_Intensity.rgb * light.Color_Intensity.w;
-		uint lightType = uint(light.Position_Type.w);
-		
-		vec3 lightDir = vec3(0.0, 1.0, 0.0);
-		float attenuation = 1.0;
+    vec3 norm = normalize(v2f.normal);
+    vec3 viewDir = normalize(Position.xyz - v2f.fragPos);
 
-		if(lightType == 0u) 
-		{
-			lightDir = normalize(-light.Direction.xyz); 
-		}
-		else if(lightType == 1u) 
-		{
-			lightDir = normalize(light.Position_Type.xyz - v2f.fragPos);
-			float d = length(light.Position_Type.xyz - v2f.fragPos);
-			attenuation = pow(clamp(1.0 - (d/max(light.Params.x, 0.01)), 0.0, 1.0), 2.0);
-		} 
-		else if(lightType == 2u) 
-		{
-			lightDir = normalize(light.Position_Type.xyz - v2f.fragPos);
-			float d = length(light.Position_Type.xyz - v2f.fragPos);
-			float dAtten = pow(clamp(1.0 - (d/max(light.Params.x, 0.01)), 0.0, 1.0), 2.0);
-			float theta = dot(lightDir, normalize(-light.Direction.xyz));
-			float sAtten = clamp((theta - light.Params.z) / (light.Params.y - light.Params.z), 0.0, 1.0);
-			attenuation = dAtten * sAtten;
-		}
+    // 半球顶环境光(Hemisphere Ambient) 模拟天光与地光 使背面不再是一坨死板的单色 而是有色彩倾向的渐变
+    vec3 skyColor = vec3(0.2, 0.25, 0.3);      // 模拟天空，微偏蓝
+    vec3 groundColor = vec3(0.05, 0.04, 0.03); // 模拟地面反射，偏深褐
+    
+    // 根据法线的 Y 分量 朝上还是朝下 进行插值
+    float hemiLevel = norm.y * 0.5 + 0.5;	// norm.y 在 [-1, 1] 之间，我们把它映射到 [0, 1]
+    vec3 ambient = mix(groundColor, skyColor, hemiLevel) * 0.5; // 总强度系数 0.5
+    
+    vec3 finalColor = albedoColor.rgb * ambient; 
+    vec3 specMapColor = texture(sampler2D(mat.uSpecularMap), v2f.texCoord).rgb;
 
-		// 半兰伯特漫反射 (Half-Lambert Diffuse)
-		float NdotL = dot(norm, lightDir);
-		float halfLambert = NdotL * 0.5 + 0.5; 
-		
-		// 再叠一个平方 让暗部稍微深一点 过渡更丝滑
-		float diff = halfLambert * halfLambert; 
-		vec3 diffuse = albedoColor.rgb * diff;
+    for(uint i = 0u; i < ActiveLightCount; ++i)
+    {
+        LightInfo light = SceneLights[i];
+        vec3 lightColor = light.Color_Intensity.rgb * light.Color_Intensity.w;
+        uint lightType = uint(light.Position_Type.w);
+        
+        vec3 lightDir = vec3(0.0, 1.0, 0.0);
+        float attenuation = 1.0;
 
-		// 高光保持 Blinn-Phong
-		vec3 halfwayDir = normalize(lightDir + viewDir);  
-		float spec = pow(max(dot(norm, halfwayDir), 0.0), 32.0); 
-		vec3 specular = specMapColor * spec; 
+        if(lightType == 0u) 
+        {
+            lightDir = normalize(-light.Direction.xyz); 
+        }
+        else if(lightType == 1u) 
+        {
+            lightDir = normalize(light.Position_Type.xyz - v2f.fragPos);
+            float d = length(light.Position_Type.xyz - v2f.fragPos);
+            attenuation = pow(clamp(1.0 - (d/max(light.Params.x, 0.01)), 0.0, 1.0), 2.0);
+        } 
+        else if(lightType == 2u) 
+        {
+            lightDir = normalize(light.Position_Type.xyz - v2f.fragPos);
+            float d = length(light.Position_Type.xyz - v2f.fragPos);
+            float dAtten = pow(clamp(1.0 - (d/max(light.Params.x, 0.01)), 0.0, 1.0), 2.0);
+            float theta = dot(lightDir, normalize(-light.Direction.xyz));
+            float sAtten = clamp((theta - light.Params.z) / (light.Params.y - light.Params.z), 0.0, 1.0);
+            attenuation = dAtten * sAtten;
+        }
 
-		float shadow = 1.0;
-		bool receiveShadow = bool(v2f.receiveShadow & 1u);
-		if(receiveShadow)
-		{
-			float sliceIdx = light.Params.w;
-			if (sliceIdx >= 0.0)
-			{
-				uint si = uint(sliceIdx);
-				if (lightType == 0u) { shadow = CalcCSMShadow(v2f.fragPos, si); }
-				else if (lightType == 2u) { shadow = CalcSpotShadow(v2f.fragPos, si); }
-				else if (lightType == 1u) { shadow = CalcPointShadow(v2f.fragPos, light.Position_Type.xyz, si); }
-			}
-		}
-		finalColor += (diffuse + specular) * lightColor * attenuation * shadow;
-	}
-	
-	FragColor = vec4(finalColor, albedoColor.a);
+        // 半兰伯特漫反射 (Half-Lambert Diffuse)
+        float NdotL = dot(norm, lightDir);
+        float halfLambert = NdotL * 0.5 + 0.5; 
+        
+        // 再叠一个平方 让暗部稍微深一点 过渡更丝滑
+        float diff = halfLambert * halfLambert; 
+        vec3 diffuse = albedoColor.rgb * diff;
+
+        // 高光保持 Blinn-Phong
+        vec3 halfwayDir = normalize(lightDir + viewDir);  
+        float spec = pow(max(dot(norm, halfwayDir), 0.0), 32.0); 
+        vec3 specular = specMapColor * spec; 
+
+        float shadow = 1.0;
+        bool receiveShadow = bool(v2f.receiveShadow & 1u);
+        if(receiveShadow)
+        {
+            float sliceIdx = light.Params.w;
+            if (sliceIdx >= 0.0)
+            {
+                uint si = uint(sliceIdx);
+                if (lightType == 0u) { shadow = CalcCSMShadow(v2f.fragPos, si); }
+                else if (lightType == 2u) { shadow = CalcSpotShadow(v2f.fragPos, si); }
+                else if (lightType == 1u) { shadow = CalcPointShadow(v2f.fragPos, light.Position_Type.xyz, si); }
+            }
+        }
+        finalColor += (diffuse + specular) * lightColor * attenuation * shadow;
+    }
+    
+    FragColor = vec4(finalColor, albedoColor.a);
 }
