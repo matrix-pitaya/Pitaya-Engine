@@ -28,7 +28,7 @@ namespace Pitaya::GPU
                 case Pitaya::GPU::ShaderVariableType::Int3:    return 3;
                 case Pitaya::GPU::ShaderVariableType::Int4:    return 4;
                 case Pitaya::GPU::ShaderVariableType::Bool:    return 1;
-                case Pitaya::GPU::ShaderVariableType::Unknown: return 0;
+                case Pitaya::GPU::ShaderVariableType::Invalid: return 0;
                 default:                                           return 0;
             }
         }
@@ -39,6 +39,6 @@ namespace Pitaya::GPU
         uint32_t Location = 0;
         bool Normalized = false;   
         bool Instanced = false;
-        Pitaya::GPU::ShaderVariableType Type = Pitaya::GPU::ShaderVariableType::Unknown;
+        Pitaya::GPU::ShaderVariableType Type = Pitaya::GPU::ShaderVariableType::Invalid;
     };
 }

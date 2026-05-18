@@ -41,7 +41,7 @@ namespace Pitaya::Asset
 					bool Bool;
 				};
 
-				Pitaya::GPU::ShaderVariableType Type = Pitaya::GPU::ShaderVariableType::Unknown;
+				Pitaya::GPU::ShaderVariableType Type = Pitaya::GPU::ShaderVariableType::Invalid;
 
 				Variable& operator=(float value) 
 				{ 
@@ -164,7 +164,7 @@ namespace Pitaya::Asset
 					case Pitaya::GPU::ShaderVariableType::Float2: varContext.Write(key, value.Float2); break;
 					case Pitaya::GPU::ShaderVariableType::Float3: varContext.Write(key, value.Float3); break;
 					case Pitaya::GPU::ShaderVariableType::Float4: varContext.Write(key, value.Float4); break;
-					case Pitaya::GPU::ShaderVariableType::Unknown: break;
+					case Pitaya::GPU::ShaderVariableType::Invalid: break;
 					default:break;
 				}
 			}

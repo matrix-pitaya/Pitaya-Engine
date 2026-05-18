@@ -4,7 +4,7 @@
 
 namespace Pitaya::GPU
 {
-	enum class ShaderVariableType : uint8_t
+	enum class ShaderVariableType : uint32_t
 	{
 		Float = 0,
 		Float2,
@@ -18,7 +18,7 @@ namespace Pitaya::GPU
 		Int4,
 		Bool,
 
-		Unknown
+		Invalid
 	};
 
     inline uint32_t GetShaderVariableTypeSize(ShaderVariableType type) noexcept
@@ -36,7 +36,7 @@ namespace Pitaya::GPU
             case Pitaya::GPU::ShaderVariableType::Int3:     return 4 * 3;
             case Pitaya::GPU::ShaderVariableType::Int4:     return 4 * 4;
             case Pitaya::GPU::ShaderVariableType::Bool:     return 1;
-            case Pitaya::GPU::ShaderVariableType::Unknown:  return 0;
+            case Pitaya::GPU::ShaderVariableType::Invalid:  return 0;
             default:										return 0;
         }
     }
