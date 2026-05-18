@@ -20,5 +20,6 @@ namespace Pitaya::GPU
 		};
 
 		Pitaya::GPU::Identifier<TextureCubemap> Id = 0;
+		Pitaya::GPU::Identifier<TextureCubemap> SamplerId = 0;
 	};
 }

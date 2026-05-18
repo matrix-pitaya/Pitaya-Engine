@@ -17,5 +17,6 @@ namespace Pitaya::GPU
         };
 
         Pitaya::GPU::Identifier<Texture2DArray> Id = 0;
+	    Pitaya::GPU::Identifier<Texture2DArray> SamplerId = 0;
     };
 }

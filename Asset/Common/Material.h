@@ -183,8 +183,10 @@ namespace Pitaya::Asset
 				auto& shader = context.GetSubContext("Shader");
 				if (shader.Read("GUID", str)) 
 				{ 
-					Pitaya::Core::GUID guid = Pitaya::Core::GUID(str);
-					if (guid) { Shader = Pitaya::Asset::LoadAsset<Pitaya::Asset::Shader>(guid); }
+					if (Pitaya::Core::GUID guid = Pitaya::Core::GUID(str))
+					{
+						Shader = Pitaya::Asset::LoadAsset<Pitaya::Asset::Shader>(guid);
+					}
 				}
 			}
 
@@ -199,8 +201,10 @@ namespace Pitaya::Asset
 						auto& texture = textures.GetSubContext(str);
 						if (texture.Read("GUID", str)) 
 						{ 
-							Pitaya::Core::GUID guid = Pitaya::Core::GUID(str);
-							if (guid) { Textures[i] = Pitaya::Asset::LoadAsset<Pitaya::Asset::Texture>(guid); }
+							if (Pitaya::Core::GUID guid = Pitaya::Core::GUID(str))
+							{
+								Textures[i] = Pitaya::Asset::LoadAsset<Pitaya::Asset::Texture>(guid);
+							}
 						}
 					}
 				}

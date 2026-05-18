@@ -34,7 +34,10 @@ Pitaya::GPU::TextureCubemap Pitaya::GPU::TextureCubemap::Factory::Create(const v
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, isNearest ? GL_NEAREST : GL_LINEAR);
 
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-    return { target };
+
+    GLuint64 handle = glGetTextureHandleARB(target);
+    glMakeTextureHandleResidentARB(handle);
+    return { target, handle };
 }
 Pitaya::GPU::TextureCubemap Pitaya::GPU::TextureCubemap::Factory::Create(int size, int mipLevels, PixelFormat format)
 {
@@ -54,10 +57,15 @@ Pitaya::GPU::TextureCubemap Pitaya::GPU::TextureCubemap::Factory::Create(int siz
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-    return { target };
+
+    GLuint64 handle = glGetTextureHandleARB(target);
+    glMakeTextureHandleResidentARB(handle);
+    return { target, handle };
 }
 void  Pitaya::GPU::TextureCubemap::Factory::Destroy(Pitaya::GPU::TextureCubemap textureCubemap)
 {
+    GLuint64 handle = textureCubemap.SamplerId;
+    if (handle) { glMakeTextureHandleNonResidentARB(handle); }
     GLuint target = textureCubemap.Id;
     if (target > 0) { glDeleteTextures(1, &target); }
 }

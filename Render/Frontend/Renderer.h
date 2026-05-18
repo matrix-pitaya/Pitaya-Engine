@@ -310,30 +310,30 @@ namespace Pitaya::Render
 
 					switch (header.type)
 					{
-					case Pitaya::Render::RenderCommandType::BeginPass:
-						renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BeginPassCommand>(offset));
-						break;
+						case Pitaya::Render::RenderCommandType::BeginPass:
+							renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BeginPassCommand>(offset));
+							break;
 
-					case Pitaya::Render::RenderCommandType::InstanceDraw:
-						renderer->ExecuteCommand(FetchCommand<Pitaya::Render::InstancedDrawCommand>(offset));
-						break;
+						case Pitaya::Render::RenderCommandType::InstanceDraw:
+							renderer->ExecuteCommand(FetchCommand<Pitaya::Render::InstancedDrawCommand>(offset));
+							break;
 
-					case Pitaya::Render::RenderCommandType::PostProcess:
-						renderer->ExecuteCommand(FetchCommand<Pitaya::Render::PostProcessCommand>(offset));
-						break;
+						case Pitaya::Render::RenderCommandType::PostProcess:
+							renderer->ExecuteCommand(FetchCommand<Pitaya::Render::PostProcessCommand>(offset));
+							break;
 
-					case Pitaya::Render::RenderCommandType::BlitToScreen:
-						renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BlitToScreenCommand>(offset));
-						break;
+						case Pitaya::Render::RenderCommandType::BlitToScreen:
+							renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BlitToScreenCommand>(offset));
+							break;
 
-					case Pitaya::Render::RenderCommandType::BeginShadowPass:
-						renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BeginShadowPassCommand>(offset));
-						break;
+						case Pitaya::Render::RenderCommandType::BeginShadowPass:
+							renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BeginShadowPassCommand>(offset));
+							break;
 
-					case Pitaya::Render::RenderCommandType::Invalid:
-					default:
-						offset += header.size;
-						break;
+						case Pitaya::Render::RenderCommandType::Invalid:
+						default:
+							offset += header.size;
+							break;
 					}
 				}
 				back.Clear();	//清空缓冲区

@@ -1,11 +1,10 @@
 #include<GPU/Frontend/Buffer/FrameBuffer.h>
-#include<GPU/Backend/OpenGL/PixelFormatGL.h>
 #include<string>
 #include<exception>
 #include<stdexcept>
 
 #if defined(PITAYA_GRAPHICS_OPENGL)
-#include<GL/glew.h>
+#include<GPU/Backend/OpenGL/PixelFormatGL.h>
 
 Pitaya::GPU::FrameBuffer Pitaya::GPU::FrameBuffer::Factory::Create()
 {

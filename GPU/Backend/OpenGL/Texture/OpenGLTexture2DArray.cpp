@@ -40,10 +40,15 @@ Pitaya::GPU::Texture2DArray Pitaya::GPU::Texture2DArray::Factory::Create(int wid
     }
 
     glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
-    return { target };
+
+    GLuint64 handle = glGetTextureHandleARB(target);
+    glMakeTextureHandleResidentARB(handle);
+    return { target, handle };
 }
 void Pitaya::GPU::Texture2DArray::Factory::Destroy(Pitaya::GPU::Texture2DArray texture2DArray)
 {
+    GLuint64 handle = texture2DArray.SamplerId;
+    if (handle) { glMakeTextureHandleNonResidentARB(handle); }
     GLuint target = texture2DArray.Id;
     if (target != 0) { glDeleteTextures(1, &target); }
 }

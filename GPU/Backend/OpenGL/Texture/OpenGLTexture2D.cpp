@@ -29,10 +29,15 @@ Pitaya::GPU::Texture2D Pitaya::GPU::Texture2D::Factory::Create(const void* data,
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-	return { target };
+
+	GLuint64 handle = glGetTextureHandleARB(target);
+	glMakeTextureHandleResidentARB(handle);
+	return { target, handle };
 }
 void Pitaya::GPU::Texture2D::Factory::Destroy(Pitaya::GPU::Texture2D texture)
 {
+	GLuint64 handle = texture.SamplerId;
+	if (handle) { glMakeTextureHandleNonResidentARB(handle); }
 	GLuint id = texture.Id;
 	if (id > 0) { glDeleteTextures(1, &id); }
 }
