@@ -11,6 +11,7 @@
 #include<stdexcept>
 #include<filesystem>
 #include<fstream>
+#include<sstream>
 
 #if defined(PITAYA_PLATFORM_WINDOWS)
 #include<dbghelp.h>
@@ -126,15 +127,15 @@ namespace
                     SymCleanup(process);
                 }
 
-                auto dumpPath = Pitaya::Core::GetWorkspace() / "crash.log";
-                {
-                    std::ofstream f(dumpPath);
-                    f << "Exception: " << exName << " (0x" << std::hex << record->ExceptionCode << ")\n";
-                    f << "Address:    0x" << std::hex << reinterpret_cast<uintptr_t>(record->ExceptionAddress) << "\n";
-                    if (faultAddr) { f << "FaultAddr:  0x" << std::hex << faultAddr << "\n"; }
-                    f << "Stack:\n" << stackTrace << "\n";
-                }
+                std::ostringstream crashInfo;
+                crashInfo << "Exception: " << exName << " (0x" << std::hex << record->ExceptionCode << ")\n";
+                crashInfo << "Address:    0x" << std::hex << reinterpret_cast<uintptr_t>(record->ExceptionAddress) << "\n";
+                if (faultAddr) { crashInfo << "FaultAddr:  0x" << std::hex << faultAddr << "\n"; }
+                crashInfo << "Stack:\n" << stackTrace << "\n";
+                Pitaya::Core::GenerateFile(Pitaya::Core::GetWorkspace(), "crash.log",
+                    "Pitaya Engine Crash Report", crashInfo.str().c_str());
 
+                auto dumpPath = Pitaya::Core::GetWorkspace() / "crash.log";
                 std::string msg = std::string(exName) + "\n\n" + "Crash dump: " + dumpPath.string();
                 Pitaya::Core::PopMessageBox("Fatal Error", msg.c_str());
                 Pitaya::Core::GenerateFile(Pitaya::Core::GetWorkspace(), "memory.profile",
