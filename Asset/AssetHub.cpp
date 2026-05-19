@@ -56,7 +56,7 @@ bool Pitaya::Asset::AssetHub::Initialize()
 		auto* materialNativeData = buildIn.DefaultMaterial.Data.load(std::memory_order_acquire);
 		materialNativeData->Shader = LoadAsset<Pitaya::Asset::Shader>(Pitaya::Asset::Shader::Static);
 		materialNativeData->Textures.resize(materialNativeData->Shader->ParamLayout.TextureCount);
-		materialNativeData->SetTexture("uAlbedoMap", Pitaya::Asset::Texture::White);
+		materialNativeData->SetTexture("uAlbedoMap", Pitaya::Asset::Texture::White);	//TODO 这里可以直接设置是因为内置资产是同步加载的 考虑对Material、Shader重构一下
 		buildIn.DefaultMaterial.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
 		buildIn.DefaultMaterial.State.SetBits(Pitaya::Core::AssetState::GPULoaded);
 		materials.Emplace(Pitaya::Asset::Material::Default, &buildIn.DefaultMaterial);

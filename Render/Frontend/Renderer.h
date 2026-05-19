@@ -122,7 +122,7 @@ namespace Pitaya::Render
             {
                 Pitaya::Core::SlotMap<Pitaya::GPU::ShaderStorageBuffer>::Handle Handle;
                 size_t Capacity = 0;	//记录当前显存缓冲区的大小
-            } InstanceModelTransformSSBO, BoneInverseMatriceSSBO, SceneLightsSSBO, ShadowSSBO, MaterialSSBO;
+            } InstanceModelTransformSSBO, BoneInverseMatriceSSBO, MaterialSSBO, SceneLightsSSBO, ShadowSSBO;
             //MainDisplayRT
             struct RenderTarget
             {
@@ -356,8 +356,8 @@ namespace Pitaya::Render
                 static_assert(std::is_trivially_copyable<T>::value,
                     "Command must be trivially copyable (POD-like) for raw memory copy!");
 
-                constexpr size_t alignRequirement = alignof(CommandHeader);
-                constexpr size_t dataSize = sizeof(CommandHeader) + sizeof(T);
+                constexpr const size_t alignRequirement = alignof(CommandHeader);
+                constexpr const size_t dataSize = sizeof(CommandHeader) + sizeof(T);
 
                 size_t currentSize = front.CommandBuffer.size();
                 size_t maxSpace = currentSize + dataSize + alignRequirement;
@@ -420,7 +420,6 @@ namespace Pitaya::Render
                         uint32_t drawCommandCount = currentPass.size();
                         sortedIndices.resize(drawCommandCount);
                         std::iota(sortedIndices.begin(), sortedIndices.end(), 0);
-
                         std::sort(sortedIndices.begin(), sortedIndices.end(),
                             [&](uint32_t a, uint32_t b) { return currentPass[a].SortKey < currentPass[b].SortKey; });
 
@@ -458,6 +457,7 @@ namespace Pitaya::Render
                                 currentBatch.BaseInstance = static_cast<uint32_t>(front.InstanceInfo.size());
                             }
 
+                            // 提交实例材质
                             uint32_t matByteOffset = 0;
                             if (cmd.MaterialPtr)	// fallback 材质为 null, fallback shader 不使用材质参数
                             {
@@ -496,8 +496,10 @@ namespace Pitaya::Render
                                 }
                             }
 
+                            // 提交实例数据
                             front.InstanceInfo.push_back({ cmd.ModelMatrix, glm::transpose(glm::inverse(cmd.ModelMatrix)), {cmd.ReceiveShadow, matByteOffset, 0, 0} });
 
+							// 提交骨骼数据
                             if (cmd.BoneInverseMatrices && !cmd.BoneInverseMatrices->empty())
                             {
                                 constexpr const size_t MaxBonesPerInstance = 100;

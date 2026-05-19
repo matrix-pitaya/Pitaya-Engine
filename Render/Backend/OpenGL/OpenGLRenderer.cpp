@@ -233,7 +233,7 @@ void Pitaya::Render::Renderer::NewRenderFrame()
 
 void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::BeginShadowPassCommand* command) const
 {
-    if (!command) return;
+    if (!command) { return; }
 
     // 选择 atlas
     Pitaya::Core::SlotMap<Pitaya::GPU::Texture2DArray>::Handle atlasTextureHandle;

@@ -188,7 +188,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)thirdparty\mimalloc\lib\;$(SolutionDir)library\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>mimalloc.dll.lib;ucrt.lib;msvcrt.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>ucrt.lib;msvcrt.lib</IgnoreSpecificDefaultLibraries>

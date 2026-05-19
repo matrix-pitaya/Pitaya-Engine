@@ -173,7 +173,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)thirdparty\mimalloc\lib\;$(SolutionDir)thirdparty\GLEW\lib\;$(SolutionDir)thirdparty\GLFW\lib\;$(SolutionDir)thirdparty\ASSIMP\lib\;$(SolutionDir)thirdparty\bullet\lib\;$(SolutionDir)thirdparty\yaml\lib\;$(SolutionDir)thirdparty\eastl\lib\;$(SolutionDir)thirdparty\Mono\lib\;$(SolutionDir)library\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>mimalloc.dll.lib;ucrt.lib;msvcrt.lib;glew32.lib;glfw3dll.lib;Opengl32.lib;EASTL.lib;assimp-vc143-mt.lib;draco.lib;kubazip.lib;minizip.lib;poly2tri.lib;polyclipping.lib;pugixml.lib;zlib.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;yaml-cpp.lib;mono-2.0-sgen.lib;Serialize.lib;Import.lib;Context.lib;Hook.lib;Time.lib;Log.lib;Thread.lib;Event.lib;Input.lib;Task.lib;Config.lib;GPU.lib;Asset.lib;Physics.lib;Render.lib;Window.lib;Script.lib;Game.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>ucrt.lib;msvcrt.lib</IgnoreSpecificDefaultLibraries>

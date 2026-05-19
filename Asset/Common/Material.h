@@ -102,9 +102,8 @@ namespace Pitaya::Asset
                 auto& textures = context.GetSubContext("Textures");
                 for (auto& slot : Shader->ParamLayout.Slots)
                 {
-                    if (slot.Type != ParamType::Texture) { continue; }
-                    if (slot.Index >= Textures.size()) { continue; }
-                    if (!Textures[slot.Index]) { continue; }
+                    if (slot.Type != ParamType::Texture || slot.Index >= Textures.size() || !Textures[slot.Index]) 
+                    { continue; }
 
                     auto& tex = textures.GetSubContext(slot.Name);
                     tex.Write("GUID", Textures[slot.Index].GetGUID().ToString());
