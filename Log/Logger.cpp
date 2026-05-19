@@ -13,8 +13,8 @@ bool Pitaya::Log::Logger::Initialize()
 	const std::filesystem::path path = std::filesystem::path(Pitaya::Core::GetWorkspace()) / fileName;
 	ofs.open(path, std::ios::out | std::ios::app);
 	if (!ofs.is_open()) { throw std::runtime_error("Open Log File Fail! Path: " + path.string()); }
-	front.reserve(1024 * 16);
-	back.reserve(1024 * 16);
+	front.reserve(1024 * 64);
+	back.reserve(1024 * 64);
 	isRunning.store(true, std::memory_order_release);
 	logThread = Pitaya::Thread::RegisterThread("Log", &Pitaya::Log::Logger::BootstrapLogThread, this, nullptr);
 	if (logThread == Pitaya::Core::Thread::Identifier::Invalid) { throw std::runtime_error("Log Thread Register Fail!"); }

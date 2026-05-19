@@ -70,7 +70,7 @@ namespace Pitaya::Event
 			}
 
 		private:
-			Pitaya::Core::SlotMap<EventCallBack> maps[static_cast<uint32_t>(EventType::Invalid)] = {};
+			Pitaya::Core::SlotMap<EventCallBack> maps[EventTypeCount] = {};
 		};
 
 	private:

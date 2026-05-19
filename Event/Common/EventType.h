@@ -19,6 +19,8 @@ namespace Pitaya::Event
 		MouseButton,
 		Key,
 
-		Invalid,
+		Invalid
 	};
+
+	inline constexpr const size_t EventTypeCount = static_cast<size_t>(EventType::Invalid);
 }
