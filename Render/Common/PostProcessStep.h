@@ -4,6 +4,7 @@
 #include<Render/Common/PostProcessType.h>
 #include<Render/Common/PostProcessParams.h>
 
+#include<algorithm>
 #include<cstdint>
 #include<cstddef>
 
@@ -11,7 +12,8 @@ namespace Pitaya::Render
 {
     struct PostProcessStep
     {
-        inline static constexpr const uint8_t UniformBufferBytes = 16;
+        inline static constexpr const size_t UniformBufferBytes =
+            std::max({ sizeof(BloomParams), sizeof(ToneMappingParams), sizeof(GammaCorrectionParams) });
 
         std::byte ShaderParams[UniformBufferBytes] = {};
         PostProcessType Type = PostProcessType::Invalid;

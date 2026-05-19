@@ -6,7 +6,7 @@ namespace Pitaya::Render
 {
     struct PostProcessSetting
     {
-        inline static constexpr const uint8_t MAX_STEPS = 8;
+		inline static constexpr const uint8_t MAX_STEPS = 8; //TODO 目前只支持最多8个后处理步骤 后续改成不限制数量，但要考虑渲染模块，避免每一帧拷贝vector在堆区申请无意义内存，还是主线程的渲染线程的时序问题
 
         PostProcessStep Steps[MAX_STEPS] = {};
         uint32_t StepCount = 0;
