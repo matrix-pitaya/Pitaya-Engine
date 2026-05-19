@@ -75,7 +75,7 @@ void Pitaya::Editor::Camera::UpdateCameraVectors()
 	else if (mode == CameraMode::Fly) { pivot = position + forward * distance; }
 	dirty = true;
 }
-void Pitaya::Editor::Camera::Focus(const glm::vec3& targetPoint, float targetDist)
+void Pitaya::Editor::Camera::Focus(glm::vec3 targetPoint, float targetDist)
 {
 	startPos = position;
 	startPivot = (mode == CameraMode::Orbit) ? pivot : (position + forward * 5.0f);

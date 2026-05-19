@@ -49,7 +49,7 @@ namespace Pitaya::Editor
 		void Move(Pitaya::Core::Direction);
 
 	public:
-		void Focus(const glm::vec3& targetPoint, float targetDist = 5.0f);
+		void Focus(glm::vec3 targetPoint, float targetDist = 5.0f);
 
 	private:
 		void OnMouseScroll(Pitaya::Event::MouseScrollEventArgs);
@@ -83,7 +83,7 @@ namespace Pitaya::Editor
 		}
 
 	public:
-		inline void ApplyViewMatrix(const glm::mat4& newViewMatrix)
+		inline void ApplyViewMatrix(glm::mat4 newViewMatrix)
 		{
 			glm::mat4 invView = glm::inverse(newViewMatrix);
 			position = glm::vec3(invView[3]);
