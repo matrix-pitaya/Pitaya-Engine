@@ -10,10 +10,18 @@ bool Pitaya::Editor::Camera::Initialize_Main()
 {
 	//renderTarget.DeserializeFromFile(Pitaya::Core::GetExecutableDirectory() / "appdata/editor/rt/EditorViewPort.rt");
 	falg.store(true, std::memory_order_release);
-	Pitaya::Render::PostProcessStep step;
-	Pitaya::Render::GammaCorrectionParams gama;
-	step.SetParams(gama);
-	setting.AddStep(step);
+	{
+		Pitaya::Render::PostProcessStep step;
+		Pitaya::Render::ToneMappingParams tonemap;
+		step.SetParams(tonemap);
+		setting.AddStep(step);
+	}
+	{
+		Pitaya::Render::PostProcessStep step;
+		Pitaya::Render::GammaCorrectionParams gama;
+		step.SetParams(gama);
+		setting.AddStep(step);
+	}
 	while (falg.load(std::memory_order_acquire)) { std::this_thread::yield(); }
 	return true;
 }

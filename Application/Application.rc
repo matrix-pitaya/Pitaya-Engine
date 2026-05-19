@@ -65,6 +65,8 @@ IDR_BLIT_VERTEX_SHADER                  RCDATA          "../built-in/PostProcess
 IDR_BLIT_FRAGMENT_SHADER                RCDATA          "../built-in/PostProcess/blit/Shader.frag"
 IDR_GAMMA_CORRECTION_VERTEX_SHADER      RCDATA          "../built-in/PostProcess/GammaCorrection/Shader.vert"
 IDR_GAMMA_CORRECTION_FRAGMENT_SHADER    RCDATA          "../built-in/PostProcess/GammaCorrection/Shader.frag"
+IDR_TONEMAPPING_VERTEX_SHADER           RCDATA          "../built-in/PostProcess/ToneMapping/Shader.vert"
+IDR_TONEMAPPING_FRAGMENT_SHADER         RCDATA          "../built-in/PostProcess/ToneMapping/Shader.frag"
 
 // Default Asset
 IDR_DEFAULT_STATIC_VERTEX_SHADER        RCDATA          "../built-in/default/Static/Shader.vert"

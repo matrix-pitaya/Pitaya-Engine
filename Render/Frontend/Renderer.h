@@ -111,6 +111,7 @@ namespace Pitaya::Render
             {
                 Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle BlitShaderHandle;
                 Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle GammaCorrectionShaderHandle;
+                Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle ToneMappingShaderHandle;
             } PostProcessShader;
             //Uniform Buffer
             struct UBO
@@ -169,16 +170,25 @@ namespace Pitaya::Render
                 SceneLightsSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
                     SceneLightsSSBO.Capacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::SceneLights));
 
+                // blit
                 {
                     auto vs = Pitaya::Core::LoadBuiltInRC(IDR_BLIT_VERTEX_SHADER);
                     auto fs = Pitaya::Core::LoadBuiltInRC(IDR_BLIT_FRAGMENT_SHADER);
                     PostProcessShader.BlitShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
                         static_cast<const char*>(vs.data), vs.size, static_cast<const char*>(fs.data), fs.size);
                 }
+				// Gamma Correction
                 {
                     auto vs = Pitaya::Core::LoadBuiltInRC(IDR_GAMMA_CORRECTION_VERTEX_SHADER);
                     auto fs = Pitaya::Core::LoadBuiltInRC(IDR_GAMMA_CORRECTION_FRAGMENT_SHADER);
                     PostProcessShader.GammaCorrectionShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+                        static_cast<const char*>(vs.data), vs.size, static_cast<const char*>(fs.data), fs.size);
+                }
+                // Tone Mapping
+                {
+                    auto vs = Pitaya::Core::LoadBuiltInRC(IDR_TONEMAPPING_VERTEX_SHADER);
+                    auto fs = Pitaya::Core::LoadBuiltInRC(IDR_TONEMAPPING_FRAGMENT_SHADER);
+                    PostProcessShader.ToneMappingShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
                         static_cast<const char*>(vs.data), vs.size, static_cast<const char*>(fs.data), fs.size);
                 }
 
@@ -938,6 +948,10 @@ namespace Pitaya::Render
 
                     case Pitaya::Render::PostProcessType::GammaCorrection:
                         cmd.ProcessShaderHandle = globalRHI.PostProcessShader.GammaCorrectionShaderHandle;
+                        break;
+
+                    case Pitaya::Render::PostProcessType::ToneMapping:
+                        cmd.ProcessShaderHandle = globalRHI.PostProcessShader.ToneMappingShaderHandle;
                         break;
 
                     case Pitaya::Render::PostProcessType::Invalid:
