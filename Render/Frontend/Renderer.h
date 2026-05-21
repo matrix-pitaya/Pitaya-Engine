@@ -89,7 +89,7 @@ namespace Pitaya::Render
         };
 
     public:
-        struct GlobalRHI
+        struct RenderKit
         {
             //Specific
             struct Specific
@@ -142,7 +142,7 @@ namespace Pitaya::Render
                 inline static constexpr const uint32_t PointResolution = 512;
             } CSMAtlas, SpotShadowAtlas, PointShadowAtlas;
 
-            inline void Create(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
+            inline void Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
             {
                 Specific.EmptyVAOHandle = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
                 CameraSnapshotUBO.Handle = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
@@ -206,7 +206,7 @@ namespace Pitaya::Render
                 if (!Pitaya::GPU::LinkVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
                     Fallback.VAOHandle, fallbackVBOHandle, fallbackIBOHandle))
                 {
-                    Pitaya::Core::PopMessageBox("Error", "Create Global RHI Failed! Check Log for Details.");
+                    Pitaya::Core::PopMessageBox("Error", "Create RenderKit Failed! Check Log for Details.");
                     Pitaya::Core::Terminate(-1);
                 }
 
@@ -496,7 +496,7 @@ namespace Pitaya::Render
 
                                         case Pitaya::Asset::ParamType::Texture:
                                             tex2Dhandle = (slot.Index < cmd.MaterialPtr->Textures.size() && cmd.MaterialPtr->Textures[slot.Index].IsReady() && cmd.MaterialPtr->Textures[slot.Index]->Type == Pitaya::GPU::TextureType::Texture2D) ?
-                                                cmd.MaterialPtr->Textures[slot.Index]->Texture2DHandle : renderer->globalRHI.Fallback.TextureHandle;
+                                                cmd.MaterialPtr->Textures[slot.Index]->Texture2DHandle : renderer->renderKit.Fallback.TextureHandle;
                                             std::memcpy(block + slot.Offset, &tex2Dhandle, sizeof(tex2Dhandle));
                                             front.MaterialTexturePatches.push_back(matByteOffset + slot.Offset);
                                             break;
@@ -629,8 +629,8 @@ namespace Pitaya::Render
         inline void RenderThread(void* nativeWindow)
         {
             InitializeRenderContext(nativeWindow);
-            globalRHI.Create(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
-            INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), globalRHI.MainDisplayRenderTarget.FinalFrameBufferHandle)
+            renderKit.Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+            INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), renderKit.MainDisplayRenderTarget.FinalFrameBufferHandle)
 
             while (true)
             {
@@ -743,9 +743,9 @@ namespace Pitaya::Render
 
             switch (lightType)
             {
-                case 0: cmd.Resolution = GlobalRHI::ShadowAtlas::CSMResolution;   break;
-                case 2: cmd.Resolution = GlobalRHI::ShadowAtlas::SpotResolution;  break;
-                case 1: cmd.Resolution = GlobalRHI::ShadowAtlas::PointResolution; break;
+                case 0: cmd.Resolution = RenderKit::ShadowAtlas::CSMResolution;   break;
+                case 2: cmd.Resolution = RenderKit::ShadowAtlas::SpotResolution;  break;
+                case 1: cmd.Resolution = RenderKit::ShadowAtlas::PointResolution; break;
             }
 
             renderPacket.PushCommand(cmd);
@@ -766,8 +766,8 @@ namespace Pitaya::Render
 
             bool hasBones = cmd.BoneInverseMatrices && !cmd.BoneInverseMatrices->empty();
             cmd.ShaderHandle = hasBones
-                ? globalRHI.Specific.DepthOnlySkinnedShaderHandle
-                : globalRHI.Specific.DepthOnlyStaticShaderHandle;
+                ? renderKit.Specific.DepthOnlySkinnedShaderHandle
+                : renderKit.Specific.DepthOnlyStaticShaderHandle;
 
             cmd.MaterialId = 0;
             cmd.DepthTest = true;
@@ -796,7 +796,7 @@ namespace Pitaya::Render
             else
             {
                 Pitaya::GPU::FrameBufferSpecification mainSceneSpec = Pitaya::Config::GetMainSceneSpec();
-                beginPassCommand.SceneFrameBufferHandle = globalRHI.MainDisplayRenderTarget.SceneFrameBufferHandle;
+                beginPassCommand.SceneFrameBufferHandle = renderKit.MainDisplayRenderTarget.SceneFrameBufferHandle;
                 beginPassCommand.ClearColor = Pitaya::Core::Color::SkyBlue;
                 beginPassCommand.Rect = { {0.0f, 0.0f}, { mainSceneSpec.Width, mainSceneSpec.Height } };
                 beginPassCommand.ClearDepth = true;
@@ -829,7 +829,7 @@ namespace Pitaya::Render
             else
             {
                 //Mesh 异常 → fallback 立方体
-                cmd.VertexArrayHandle = globalRHI.Fallback.VAOHandle;
+                cmd.VertexArrayHandle = renderKit.Fallback.VAOHandle;
                 cmd.IndexCount = 36;
                 cmd.BaseIndex = 0;
                 cmd.BaseVertex = 0;
@@ -898,7 +898,7 @@ namespace Pitaya::Render
             }
             else
             {
-                cmd.ShaderHandle = globalRHI.Fallback.ShaderHandle;
+                cmd.ShaderHandle = renderKit.Fallback.ShaderHandle;
                 cmd.MaterialId = 0;
                 cmd.MaterialPtr = nullptr;
                 cmd.DepthTest = true;
@@ -925,8 +925,8 @@ namespace Pitaya::Render
             uint32_t pingpongIndex = 0;
 
             auto mainSceneSpec = Pitaya::Config::GetMainSceneSpec();
-            auto sceneFboHandle = pass.RenderTarget ? pass.RenderTarget->SceneFrameBufferHandle : globalRHI.MainDisplayRenderTarget.SceneFrameBufferHandle;
-            auto finalFboHandle = pass.RenderTarget ? pass.RenderTarget->FinalFrameBufferHandle : globalRHI.MainDisplayRenderTarget.FinalFrameBufferHandle;
+            auto sceneFboHandle = pass.RenderTarget ? pass.RenderTarget->SceneFrameBufferHandle : renderKit.MainDisplayRenderTarget.SceneFrameBufferHandle;
+            auto finalFboHandle = pass.RenderTarget ? pass.RenderTarget->FinalFrameBufferHandle : renderKit.MainDisplayRenderTarget.FinalFrameBufferHandle;
             auto isMultisample = pass.RenderTarget ? pass.RenderTarget->SceneFrameBufferSpecification.Samples > 1 : mainSceneSpec.Samples > 1;
             auto size = pass.RenderTarget ? glm::uvec2(pass.RenderTarget->SceneFrameBufferSpecification.Width, pass.RenderTarget->SceneFrameBufferSpecification.Height) :
                 glm::uvec2(mainSceneSpec.Width, mainSceneSpec.Height);
@@ -936,27 +936,27 @@ namespace Pitaya::Render
             for (uint32_t i = 0; i < pass.PostProcessSetting.StepCount; i++)
             {
                 auto& currentStep = pass.PostProcessSetting.Steps[i];
-                auto targetPingPongFboHandle = pass.RenderTarget ? pass.RenderTarget->PingPongFrameBufferHandles[pingpongIndex] : globalRHI.MainDisplayRenderTarget.PingPongFrameBufferHandles[pingpongIndex];
+                auto targetPingPongFboHandle = pass.RenderTarget ? pass.RenderTarget->PingPongFrameBufferHandles[pingpongIndex] : renderKit.MainDisplayRenderTarget.PingPongFrameBufferHandles[pingpongIndex];
 
                 PostProcessCommand cmd;
                 cmd.PostProcessStep = currentStep;
                 switch (currentStep.Type)
                 {
                     case Pitaya::Render::PostProcessType::Bilt:
-                        cmd.ProcessShaderHandle = globalRHI.PostProcessShader.BlitShaderHandle;
+                        cmd.ProcessShaderHandle = renderKit.PostProcessShader.BlitShaderHandle;
                         break;
 
                     case Pitaya::Render::PostProcessType::GammaCorrection:
-                        cmd.ProcessShaderHandle = globalRHI.PostProcessShader.GammaCorrectionShaderHandle;
+                        cmd.ProcessShaderHandle = renderKit.PostProcessShader.GammaCorrectionShaderHandle;
                         break;
 
                     case Pitaya::Render::PostProcessType::ToneMapping:
-                        cmd.ProcessShaderHandle = globalRHI.PostProcessShader.ToneMappingShaderHandle;
+                        cmd.ProcessShaderHandle = renderKit.PostProcessShader.ToneMappingShaderHandle;
                         break;
 
                     case Pitaya::Render::PostProcessType::Invalid:
                     default:
-                        cmd.ProcessShaderHandle = globalRHI.PostProcessShader.BlitShaderHandle;
+                        cmd.ProcessShaderHandle = renderKit.PostProcessShader.BlitShaderHandle;
                         break;
                 }
 
@@ -984,7 +984,7 @@ namespace Pitaya::Render
             if (firstPass)
             {
                 PostProcessCommand cmd;
-                cmd.ProcessShaderHandle = globalRHI.PostProcessShader.BlitShaderHandle;
+                cmd.ProcessShaderHandle = renderKit.PostProcessShader.BlitShaderHandle;
                 cmd.ReadFrameBufferHandle = currentReadFBOHandle;
                 cmd.WriteFrameBufferHandle = finalFboHandle;
 
@@ -1029,7 +1029,7 @@ namespace Pitaya::Render
         }
 
     private:
-        GlobalRHI globalRHI;
+        RenderKit renderKit;
         RenderPacket renderPacket;
 
         std::mutex mutex;

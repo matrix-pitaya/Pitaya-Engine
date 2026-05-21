@@ -289,7 +289,7 @@ void Pitaya::Render::RenderPipeline::ComputeCSMCascades(const Pitaya::Core::Came
 		}
 
 		// 像素对齐（防止阴影边缘闪烁）
-		float texelSize = (maxBB.x - minBB.x) / static_cast<float>(Pitaya::Render::Renderer::GlobalRHI::ShadowAtlas::CSMResolution);
+		float texelSize = (maxBB.x - minBB.x) / static_cast<float>(Pitaya::Render::Renderer::RenderKit::ShadowAtlas::CSMResolution);
 		minBB.x = std::floor(minBB.x / texelSize) * texelSize;
 		maxBB.x = std::floor(maxBB.x / texelSize) * texelSize;
 		minBB.y = std::floor(minBB.y / texelSize) * texelSize;
