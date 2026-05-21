@@ -11,6 +11,8 @@
 #include<unordered_map>
 #include<memory>
 #include<algorithm>
+#include<filesystem>
+#include<fstream>
 
 #if defined(PITAYA_GRAPHICS_OPENGL)
 #include<GL/glew.h>

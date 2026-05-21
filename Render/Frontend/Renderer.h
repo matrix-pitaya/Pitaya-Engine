@@ -156,7 +156,7 @@ namespace Pitaya::Render
                 Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle BakeFBOHandle;
             } IBL;
 
-            inline void Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const Pitaya::Render::Renderer* renderer)
+            inline void Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
             {
                 Specific.EmptyVAOHandle = Pitaya::GPU::CreateVertexArray(passkey);
                 CameraSnapshotUBO.Handle = Pitaya::GPU::CreateUniformBuffer(passkey, sizeof(Pitaya::Core::CameraSnapshot), 
@@ -281,6 +281,7 @@ namespace Pitaya::Render
                     PointShadowAtlas.LayerCapacity, Pitaya::GPU::PixelFormat::Depth32F);
 
                 // IBL
+                IBL.BakeFBOHandle = Pitaya::GPU::CreateEmptyFrameBuffer(passkey);
                 {
                     auto vs = Pitaya::Core::LoadBuiltInRC(IDR_IBL_EQUIRECT_TO_CUBEMAP_VERTEX_SHADER);
                     auto fs = Pitaya::Core::LoadBuiltInRC(IDR_IBL_EQUIRECT_TO_CUBEMAP_FRAGMENT_SHADER);
@@ -309,10 +310,11 @@ namespace Pitaya::Render
                         static_cast<const char*>(vs.data), vs.size,
                         static_cast<const char*>(fs.data), fs.size);
                 }
-                IBL.BakeFBOHandle = Pitaya::GPU::CreateEmptyFrameBuffer(passkey);
-                IBL.BRDFLUTHandle = Pitaya::GPU::CreateTexture2D(passkey,
-                    nullptr, 512, 512, Pitaya::GPU::PixelFormat::RG16F, false, true);
-                renderer->Bake(passkey, { IBL.BRDFLUTHandle, 512 });    //计算BRDF
+                {
+                    auto brdfData = Pitaya::Core::LoadBuiltInRC(IDR_IBL_BRDF_LUT);
+                    IBL.BRDFLUTHandle = Pitaya::GPU::CreateTexture2D(passkey,
+                        brdfData.data, 512, 512, Pitaya::GPU::PixelFormat::RG16F, false, true);
+                }
             }
         };
         class RenderPacket
@@ -685,7 +687,7 @@ namespace Pitaya::Render
         inline void RenderThread(void* nativeWindow)
         {
             InitializeRenderContext(nativeWindow);
-            renderKit.Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), this);
+            renderKit.Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
             INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), renderKit.MainDisplayRenderTarget.FinalFrameBufferHandle)
 
             while (true)
