@@ -144,121 +144,129 @@ namespace Pitaya::Render
                 inline static constexpr const uint32_t PointResolution = 512;
             } CSMAtlas, SpotShadowAtlas, PointShadowAtlas;
 
-            inline void Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
+            inline void Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
             {
-                Specific.EmptyVAOHandle = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
-                CameraSnapshotUBO.Handle = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                    sizeof(Pitaya::Core::CameraSnapshot), static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::CameraSnapshot));
-                PostProcessParamsUBO.Handle = Pitaya::GPU::CreateUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                    Pitaya::Render::PostProcessStep::UniformBufferBytes, static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
+                Specific.EmptyVAOHandle = Pitaya::GPU::CreateVertexArray(passkey);
+                CameraSnapshotUBO.Handle = Pitaya::GPU::CreateUniformBuffer(passkey, sizeof(Pitaya::Core::CameraSnapshot), 
+                    static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::CameraSnapshot));
+                PostProcessParamsUBO.Handle = Pitaya::GPU::CreateUniformBuffer(passkey, Pitaya::Render::PostProcessStep::UniformBufferBytes, 
+                    static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
 
                 // 初始分配1024个位置
                 InstanceModelTransformSSBO.Capacity = 1024 * sizeof(InstanceInfo);
-                InstanceModelTransformSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                    InstanceModelTransformSSBO.Capacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform));
+                InstanceModelTransformSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(passkey, InstanceModelTransformSSBO.Capacity, 
+                    static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::InstanceModelTransform));
 
                 // 初始分配一段骨骼容量
                 BoneInverseMatriceSSBO.Capacity = 4096 * sizeof(glm::mat4);
-                BoneInverseMatriceSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                    BoneInverseMatriceSSBO.Capacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::BoneInverseMatrice));
+                BoneInverseMatriceSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(passkey, BoneInverseMatriceSSBO.Capacity, 
+                    static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::BoneInverseMatrice));
 
                 // 预分配材质容量
                 MaterialSSBO.Capacity = 4096 * sizeof(float);
-                MaterialSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                    static_cast<uint32_t>(MaterialSSBO.Capacity), static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::Material));
+                MaterialSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(passkey, static_cast<uint32_t>(MaterialSSBO.Capacity), 
+                    static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::Material));
 
                 // 初始分配10个光源位置
                 SceneLightsSSBO.Capacity = 10 * sizeof(Pitaya::Render::LightInfo);
-                SceneLightsSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                    SceneLightsSSBO.Capacity, static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::SceneLights));
+                SceneLightsSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(passkey, SceneLightsSSBO.Capacity, 
+                    static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::SceneLights));
 
                 // blit
                 {
                     auto vs = Pitaya::Core::LoadBuiltInRC(IDR_BLIT_VERTEX_SHADER);
                     auto fs = Pitaya::Core::LoadBuiltInRC(IDR_BLIT_FRAGMENT_SHADER);
-                    PostProcessShader.BlitShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                        static_cast<const char*>(vs.data), vs.size, static_cast<const char*>(fs.data), fs.size);
+                    PostProcessShader.BlitShaderHandle = Pitaya::GPU::CreateShader(passkey, 
+                        static_cast<const char*>(vs.data), vs.size, 
+                        static_cast<const char*>(fs.data), fs.size);
                 }
 				// Gamma Correction
                 {
                     auto vs = Pitaya::Core::LoadBuiltInRC(IDR_GAMMA_CORRECTION_VERTEX_SHADER);
                     auto fs = Pitaya::Core::LoadBuiltInRC(IDR_GAMMA_CORRECTION_FRAGMENT_SHADER);
-                    PostProcessShader.GammaCorrectionShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                        static_cast<const char*>(vs.data), vs.size, static_cast<const char*>(fs.data), fs.size);
+                    PostProcessShader.GammaCorrectionShaderHandle = Pitaya::GPU::CreateShader(passkey,
+                        static_cast<const char*>(vs.data), vs.size, 
+                        static_cast<const char*>(fs.data), fs.size);
                 }
                 // Tone Mapping
                 {
                     auto vs = Pitaya::Core::LoadBuiltInRC(IDR_TONEMAPPING_VERTEX_SHADER);
                     auto fs = Pitaya::Core::LoadBuiltInRC(IDR_TONEMAPPING_FRAGMENT_SHADER);
-                    PostProcessShader.ToneMappingShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                        static_cast<const char*>(vs.data), vs.size, static_cast<const char*>(fs.data), fs.size);
+                    PostProcessShader.ToneMappingShaderHandle = Pitaya::GPU::CreateShader(passkey,
+                        static_cast<const char*>(vs.data), vs.size, 
+                        static_cast<const char*>(fs.data), fs.size);
                 }
 
-                Fallback.VAOHandle = Pitaya::GPU::CreateVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+                Fallback.VAOHandle = Pitaya::GPU::CreateVertexArray(passkey);
                 auto fallbackVboData = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_VERTICES);
                 auto fallbackIboData = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_INDICES);
-                auto fallbackVBOHandle = Pitaya::GPU::CreateVertexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+                auto fallbackVBOHandle = Pitaya::GPU::CreateVertexBuffer(passkey,
                     static_cast<float*>(const_cast<void*>(fallbackVboData.data)), fallbackVboData.size, {
                         { Pitaya::GPU::ShaderVariableType::Float3, 0 },     // Position
                         { Pitaya::GPU::ShaderVariableType::Float3, 1 },     // Normal
                         { Pitaya::GPU::ShaderVariableType::Float2, 2 },     // UV
                         { Pitaya::GPU::ShaderVariableType::Float4, 3 } });  // Tangent
-                auto fallbackIBOHandle = Pitaya::GPU::CreateIndexBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
+                auto fallbackIBOHandle = Pitaya::GPU::CreateIndexBuffer(passkey,
                     static_cast<uint32_t*>(const_cast<void*>(fallbackIboData.data)), 36);
-                if (!Pitaya::GPU::LinkVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                    Fallback.VAOHandle, fallbackVBOHandle, fallbackIBOHandle))
+                if (!Pitaya::GPU::LinkVertexArray(passkey, Fallback.VAOHandle, fallbackVBOHandle, fallbackIBOHandle))
                 {
                     Pitaya::Core::PopMessageBox("Error", "Create RenderKit Failed! Check Log for Details.");
                     Pitaya::Core::Terminate(-1);
                 }
 
                 auto errTex = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_TEXTURE);
-                Fallback.TextureHandle = Pitaya::GPU::CreateTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                    errTex.data, 32, 32, Pitaya::GPU::PixelFormat::RGBA8, false, true);
+                Fallback.TextureHandle = Pitaya::GPU::CreateTexture2D(passkey, errTex.data, 32, 32, 
+                    Pitaya::GPU::PixelFormat::RGBA8, false, true);
                 {
                     auto vs = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_VERTEX_SHADER);
                     auto fs = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_FRAGMENT_SHADER);
-                    Fallback.ShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                        static_cast<const char*>(vs.data), vs.size, static_cast<const char*>(fs.data), fs.size);
+                    Fallback.ShaderHandle = Pitaya::GPU::CreateShader(passkey, 
+                        static_cast<const char*>(vs.data), vs.size, 
+                        static_cast<const char*>(fs.data), fs.size);
                 }
 
                 //MainDisplayRenderTarget
                 Pitaya::GPU::FrameBufferSpecification mainSceneSpec = Pitaya::Config::GetMainSceneSpec();
                 Pitaya::GPU::FrameBufferSpecification mainPingPongSpec = Pitaya::Config::GetMainPingPongSpec();
                 Pitaya::GPU::FrameBufferSpecification mainFinalSpec = Pitaya::Config::GetMainFinalSpec();
-                MainDisplayRenderTarget.SceneFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainSceneSpec);
-                MainDisplayRenderTarget.PingPongFrameBufferHandles[0] = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainPingPongSpec);
-                MainDisplayRenderTarget.PingPongFrameBufferHandles[1] = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainPingPongSpec);
-                MainDisplayRenderTarget.FinalFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), mainFinalSpec);
+                MainDisplayRenderTarget.SceneFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(passkey, mainSceneSpec);
+                MainDisplayRenderTarget.PingPongFrameBufferHandles[0] = Pitaya::GPU::CreateFrameBuffer(passkey, mainPingPongSpec);
+                MainDisplayRenderTarget.PingPongFrameBufferHandles[1] = Pitaya::GPU::CreateFrameBuffer(passkey, mainPingPongSpec);
+                MainDisplayRenderTarget.FinalFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(passkey, mainFinalSpec);
 
                 // Shadow
-                Specific.ShadowFBO = Pitaya::GPU::CreateEmptyFrameBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+                Specific.ShadowFBO = Pitaya::GPU::CreateEmptyFrameBuffer(passkey);
                 {
                     auto vs = Pitaya::Core::LoadBuiltInRC(IDR_SHADOW_STATIC_VERTEX_SHADER);
                     auto fs = Pitaya::Core::LoadBuiltInRC(IDR_SHADOW_STATIC_FRAGMENT_SHADER);
-                    Specific.DepthOnlyStaticShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                        static_cast<const char*>(vs.data), vs.size, static_cast<const char*>(fs.data), fs.size);
+                    Specific.DepthOnlyStaticShaderHandle = Pitaya::GPU::CreateShader(passkey,
+                        static_cast<const char*>(vs.data), vs.size, 
+                        static_cast<const char*>(fs.data), fs.size);
                 }
                 {
                     auto vs = Pitaya::Core::LoadBuiltInRC(IDR_SHADOW_SKINNED_VERTEX_SHADER);
                     auto fs = Pitaya::Core::LoadBuiltInRC(IDR_SHADOW_SKINNED_FRAGMENT_SHADER);
-                    Specific.DepthOnlySkinnedShaderHandle = Pitaya::GPU::CreateShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                        static_cast<const char*>(vs.data), vs.size, static_cast<const char*>(fs.data), fs.size);
+                    Specific.DepthOnlySkinnedShaderHandle = Pitaya::GPU::CreateShader(passkey,
+                        static_cast<const char*>(vs.data), vs.size, 
+                        static_cast<const char*>(fs.data), fs.size);
                 }
                 ShadowSSBO.Capacity = 4096;
-                ShadowSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                    static_cast<uint32_t>(ShadowSSBO.Capacity), static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::Shadow));
+                ShadowSSBO.Handle = Pitaya::GPU::CreateShaderStorageBuffer(passkey, static_cast<uint32_t>(ShadowSSBO.Capacity), 
+                    static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::Shadow));
 
                 // 预分配 Shadow Atlas
                 CSMAtlas.LayerCapacity = 4;
-                CSMAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                    CSMAtlas.CSMResolution, CSMAtlas.CSMResolution, CSMAtlas.LayerCapacity, Pitaya::GPU::PixelFormat::Depth32F);
+                CSMAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(passkey, 
+                    CSMAtlas.CSMResolution, CSMAtlas.CSMResolution,
+                    CSMAtlas.LayerCapacity, Pitaya::GPU::PixelFormat::Depth32F);
                 SpotShadowAtlas.LayerCapacity = 4;
-                SpotShadowAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                    SpotShadowAtlas.SpotResolution, SpotShadowAtlas.SpotResolution, SpotShadowAtlas.LayerCapacity, Pitaya::GPU::PixelFormat::Depth32F);
+                SpotShadowAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(passkey,
+                    SpotShadowAtlas.SpotResolution, SpotShadowAtlas.SpotResolution, 
+                    SpotShadowAtlas.LayerCapacity, Pitaya::GPU::PixelFormat::Depth32F);
                 PointShadowAtlas.LayerCapacity = 6;
-                PointShadowAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(),
-                    PointShadowAtlas.PointResolution, PointShadowAtlas.PointResolution, PointShadowAtlas.LayerCapacity, Pitaya::GPU::PixelFormat::Depth32F);
+                PointShadowAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(passkey,
+                    PointShadowAtlas.PointResolution, PointShadowAtlas.PointResolution,
+                    PointShadowAtlas.LayerCapacity, Pitaya::GPU::PixelFormat::Depth32F);
             }
         };
         class RenderPacket

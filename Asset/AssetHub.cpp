@@ -403,122 +403,6 @@ void Pitaya::Asset::AssetHub::Release()
 	//registry.SerializeToFile();  //TOOD 序列化数据
 }
 
-bool Pitaya::Asset::AssetHub::TransformToVirtualPath(const std::filesystem::path& inputPath, const std::filesystem::path& basePath, std::filesystem::path& out_virtualpath) const
-{
-	std::filesystem::path absolutePath = inputPath.is_absolute() ? inputPath : basePath / inputPath;
-	try
-	{
-		absolutePath = std::filesystem::canonical(absolutePath);
-	}
-	catch(...)
-	{
-		try 
-		{
-			absolutePath = std::filesystem::weakly_canonical(absolutePath);
-		}
-		catch (...) 
-		{
-			absolutePath = std::filesystem::absolute(absolutePath);
-		}
-	}
-
-	//如果是引擎内置资源
-	if (Pitaya::Core::IsSubPath(absolutePath, engineRoot))
-	{
-		std::filesystem::path relative = std::filesystem::relative(absolutePath, engineRoot);
-		out_virtualpath = "engine:/" + relative.generic_string();
-		return true;
-	}
-
-	//如果是项目资源
-	if (Pitaya::Core::IsSubPath(absolutePath, projectRoot))
-	{
-		std::filesystem::path relative = std::filesystem::relative(absolutePath, projectRoot);
-		out_virtualpath = "project:/" + relative.generic_string();
-		return true;
-	}
-
-	Pitaya::Log::Error("transform absolute to virtual path fail, absolute not engine or project, path:" + absolutePath.string());
-	return false;
-}
-bool Pitaya::Asset::AssetHub::RegisterExternalFile(const std::filesystem::path& inputPath, const std::filesystem::path& basePath, std::filesystem::path& out_virtualpath, Pitaya::Core::GUID& out_guid)
-{
-	if (!TransformToVirtualPath(inputPath, basePath, out_virtualpath))
-	{
-		Pitaya::Log::Error("register external file fail, transform fail, path:" + inputPath.string());
-		return false;
-	}
-
-	//如果是引擎内置资源
-	if (IsBuildInAsset(out_virtualpath))
-	{
-		Pitaya::Log::Error("register external file fail, cant registe engine buildin asset, path:" + inputPath.string());
-		return false;
-	}
-	
-	//如果已经包含该路径
-	bool hasRegisted = false;
-	registry.Map.FindOperateKV(out_virtualpath,
-		[&hasRegisted, &out_guid](const std::filesystem::path& _path, Pitaya::Core::GUID _guid)
-		{
-			hasRegisted = true;
-			out_guid = _guid;
-		},
-		[](const std::filesystem::path& _path)
-		{
-
-		});
-	if (hasRegisted)
-	{
-		Pitaya::Log::Info("erternal asset has registerd, path:" + inputPath.string());
-		return true;
-	}
-
-	out_guid = Pitaya::Core::GUID::New();
-	registry.Map.Insert(out_guid, out_virtualpath);
-	return true;
-}
-
-Pitaya::Asset::AssetType Pitaya::Asset::AssetHub::GetAssetType(const std::filesystem::path& path) const
-{
-	if (!CheckIsVirtualPath(path))
-	{
-		Pitaya::Log::Error("get asset type fail! path is not virtual path, path:" + path.string());
-		return Pitaya::Asset::AssetType::Unknown;
-	}
-
-	std::filesystem::path resolvePath = GetResolvePath(path);
-	if (!CheckAssetValid(resolvePath))
-	{
-		Pitaya::Log::Error("get asset type fail! path invalid, path:" + resolvePath.string());
-		return Pitaya::Asset::AssetType::Unknown;
-	}
-
-	if (std::filesystem::is_regular_file(resolvePath))
-	{
-		std::string ext = resolvePath.extension().string();
-		Pitaya::Core::ToLower(ext);
-
-		//Texture
-		if (TextureExtensions.contains(ext) || ext == ".cubemap") { return Pitaya::Asset::AssetType::Texture; }
-
-		//Shader
-		if (ext == ".shader") {return Pitaya::Asset::AssetType::Shader;}
-
-		//Material
-		if (MaterialExtensions.contains(ext)) { return Pitaya::Asset::AssetType::Material; }
-
-		//Mesh
-		if (MeshExtensions.contains(ext)) { return Pitaya::Asset::AssetType::Mesh; }
-
-		//RenderTarget
-		if (RenderTargetExtensions.contains(ext)) { return Pitaya::Asset::AssetType::RenderTarget; }
-	}
-
-	Pitaya::Log::Error("unknwon path:" + path.string());
-	return Pitaya::Asset::AssetType::Unknown;
-}
-
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, std::monostate&)
 {
 	Pitaya::Log::Error("unknown cpu operate result");
@@ -990,6 +874,123 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Asset::Texture2DUnloadRequire& cpuOpResult_Inner)
 {
 	Pitaya::GPU::DestroyTexture2D(passkey, cpuOpResult_Inner.Texture2DHandle);
+}
+
+//TODO 资产模块 从该行向下 全部需要重构
+bool Pitaya::Asset::AssetHub::TransformToVirtualPath(const std::filesystem::path& inputPath, const std::filesystem::path& basePath, std::filesystem::path& out_virtualpath) const
+{
+	std::filesystem::path absolutePath = inputPath.is_absolute() ? inputPath : basePath / inputPath;
+	try
+	{
+		absolutePath = std::filesystem::canonical(absolutePath);
+	}
+	catch (...)
+	{
+		try
+		{
+			absolutePath = std::filesystem::weakly_canonical(absolutePath);
+		}
+		catch (...)
+		{
+			absolutePath = std::filesystem::absolute(absolutePath);
+		}
+	}
+
+	//如果是引擎内置资源
+	if (Pitaya::Core::IsSubPath(absolutePath, engineRoot))
+	{
+		std::filesystem::path relative = std::filesystem::relative(absolutePath, engineRoot);
+		out_virtualpath = "engine:/" + relative.generic_string();
+		return true;
+	}
+
+	//如果是项目资源
+	if (Pitaya::Core::IsSubPath(absolutePath, projectRoot))
+	{
+		std::filesystem::path relative = std::filesystem::relative(absolutePath, projectRoot);
+		out_virtualpath = "project:/" + relative.generic_string();
+		return true;
+	}
+
+	Pitaya::Log::Error("transform absolute to virtual path fail, absolute not engine or project, path:" + absolutePath.string());
+	return false;
+}
+bool Pitaya::Asset::AssetHub::RegisterExternalFile(const std::filesystem::path& inputPath, const std::filesystem::path& basePath, std::filesystem::path& out_virtualpath, Pitaya::Core::GUID& out_guid)
+{
+	if (!TransformToVirtualPath(inputPath, basePath, out_virtualpath))
+	{
+		Pitaya::Log::Error("register external file fail, transform fail, path:" + inputPath.string());
+		return false;
+	}
+
+	//如果是引擎内置资源
+	if (IsBuildInAsset(out_virtualpath))
+	{
+		Pitaya::Log::Error("register external file fail, cant registe engine buildin asset, path:" + inputPath.string());
+		return false;
+	}
+
+	//如果已经包含该路径
+	bool hasRegisted = false;
+	registry.Map.FindOperateKV(out_virtualpath,
+		[&hasRegisted, &out_guid](const std::filesystem::path& _path, Pitaya::Core::GUID _guid)
+		{
+			hasRegisted = true;
+			out_guid = _guid;
+		},
+		[](const std::filesystem::path& _path)
+		{
+
+		});
+	if (hasRegisted)
+	{
+		Pitaya::Log::Info("erternal asset has registerd, path:" + inputPath.string());
+		return true;
+	}
+
+	out_guid = Pitaya::Core::GUID::New();
+	registry.Map.Insert(out_guid, out_virtualpath);
+	return true;
+}
+
+Pitaya::Asset::AssetType Pitaya::Asset::AssetHub::GetAssetType(const std::filesystem::path& path) const
+{
+	if (!CheckIsVirtualPath(path))
+	{
+		Pitaya::Log::Error("get asset type fail! path is not virtual path, path:" + path.string());
+		return Pitaya::Asset::AssetType::Unknown;
+	}
+
+	std::filesystem::path resolvePath = GetResolvePath(path);
+	if (!CheckAssetValid(resolvePath))
+	{
+		Pitaya::Log::Error("get asset type fail! path invalid, path:" + resolvePath.string());
+		return Pitaya::Asset::AssetType::Unknown;
+	}
+
+	if (std::filesystem::is_regular_file(resolvePath))
+	{
+		std::string ext = resolvePath.extension().string();
+		Pitaya::Core::ToLower(ext);
+
+		//Texture
+		if (TextureExtensions.contains(ext) || ext == ".cubemap") { return Pitaya::Asset::AssetType::Texture; }
+
+		//Shader
+		if (ext == ".shader") { return Pitaya::Asset::AssetType::Shader; }
+
+		//Material
+		if (MaterialExtensions.contains(ext)) { return Pitaya::Asset::AssetType::Material; }
+
+		//Mesh
+		if (MeshExtensions.contains(ext)) { return Pitaya::Asset::AssetType::Mesh; }
+
+		//RenderTarget
+		if (RenderTargetExtensions.contains(ext)) { return Pitaya::Asset::AssetType::RenderTarget; }
+	}
+
+	Pitaya::Log::Error("unknwon path:" + path.string());
+	return Pitaya::Asset::AssetType::Unknown;
 }
 
 bool Pitaya::Asset::AssetHub::CheckIsVirtualPath(const std::filesystem::path& path) const

@@ -24,10 +24,10 @@ void Pitaya::Game::GameWorld::Release()
 void Pitaya::Game::GameWorld::LateUpdate()
 {
 	//渲染前调用
-	if (activeScene) { activeScene->ProcessHierarchySystem(); }
+	if (auto* _activeScene = GetActiveScene()) { _activeScene->ProcessHierarchySystem(); }
 }
 void Pitaya::Game::GameWorld::EndFrame()
 {
 	//帧末延迟销毁
-	if (activeScene) { activeScene->ProcessDelayDestroyQueue(); }
+	if (auto* _activeScene = GetActiveScene()) { _activeScene->ProcessDelayDestroyQueue(); }
 }

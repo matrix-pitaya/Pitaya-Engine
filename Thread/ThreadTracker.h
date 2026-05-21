@@ -109,7 +109,7 @@ namespace Pitaya::Thread
 			ThreadInfo threadInfo { name, std::forward<Func>(func), std::forward<Args>(args)... };
 			Pitaya::Core::Thread::Identifier id = threadInfo.thread.GetThreadId();
 			registry.Emplace(id, std::move(threadInfo));
-			Pitaya::Log::Info(std::string(name) + " thread created and registered");
+			Pitaya::Log::Info("{} thread created and registered", name);
 			return id;
 		}
 		inline bool UnregisterThread(Pitaya::Core::Thread::Identifier id)
@@ -117,7 +117,7 @@ namespace Pitaya::Thread
 			auto [iterator, valid] = registry.Find(id);
 			if (!valid)
 			{
-				Pitaya::Log::Error("unregistered uhread id:" + std::to_string(id));
+				Pitaya::Log::Error("unregistered uhread id: {}", static_cast<uint64_t>(id));
 				return false;
 			}
 			
@@ -137,7 +137,7 @@ namespace Pitaya::Thread
 			auto [iterator, valid] = registry.Find(id);
 			if (!valid)
 			{
-				Pitaya::Log::Error("unregistered uhread id:" + std::to_string(id));
+				Pitaya::Log::Error("unregistered uhread id: {}" , static_cast<uint64_t>(id));
 				return false;
 			}
 
@@ -163,7 +163,7 @@ namespace Pitaya::Thread
 			auto [iterator, valid] = registry.Find(id);
 			if (!valid)
 			{
-				Pitaya::Log::Error("try find unregistered thread id:" + std::to_string(id));
+				Pitaya::Log::Error("try find unregistered thread id: {}" , static_cast<uint64_t>(id));
 				return false;
 			}
 			return iterator->second.thread.IsRunning();
