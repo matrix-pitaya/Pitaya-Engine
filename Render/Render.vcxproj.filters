@@ -84,6 +84,12 @@
     <ClInclude Include="Command\BeginShadowPassCommand.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Specific\LightShadowSetup.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Specific\ShadowPassSetup.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backend\OpenGL\OpenGLRenderer.cpp">

@@ -138,8 +138,8 @@ void Pitaya::Render::RenderPipeline::BuildShadowData(Pitaya::Render::Renderer* r
 void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer* renderer)
 {
 	//提交光源阴影数据
-	renderer->SubmitLightShadow(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), graph.ShadowSlices, graph.ShadowMatrices,
-		graph.CascadeSplits, graph.DirLightShadowCount, graph.SpotLightShadowCount, graph.PointLightShadowCount);
+	renderer->SubmitLightShadow(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), { graph.ShadowSlices, graph.ShadowMatrices,
+		graph.CascadeSplits, graph.DirLightShadowCount, graph.SpotLightShadowCount, graph.PointLightShadowCount });
 
 	//提交阴影投射物
 	for (const auto& slice : graph.ShadowSlices)
@@ -150,7 +150,7 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 			const glm::mat4& shadowVP = graph.ShadowMatrices[slice.MatrixOffset + m];
 			Pitaya::Core::Frustum lightFrustum{ shadowVP };
 			Pitaya::Core::Print(Pitaya::Core::Color::Yellow, "Begin Shadow Pass");
-			renderer->BeginShadowPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), slice.LightType, layer, shadowVP);
+			renderer->BeginShadowPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), { slice.LightType, layer, shadowVP });
 			uint32_t submitCount = 0;
 			for (const auto& item : graph.Items)
 			{

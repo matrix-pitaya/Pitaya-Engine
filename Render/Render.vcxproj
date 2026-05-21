@@ -178,11 +178,13 @@
     <ClInclude Include="Common\RenderLayer.h" />
     <ClInclude Include="Common\RenderQueue.h" />
     <ClInclude Include="Common\ShadowInfo.h" />
+    <ClInclude Include="Specific\LightShadowSetup.h" />
     <ClInclude Include="Specific\RenderItem.h" />
     <ClInclude Include="Specific\RenderTargetSnapshot.h" />
     <ClInclude Include="Frontend\Renderer.h" />
     <ClInclude Include="RenderPipeline.h" />
     <ClInclude Include="Specific\RenderPass.h" />
+    <ClInclude Include="Specific\ShadowPassSetup.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backend\OpenGL\OpenGLRenderer.cpp" />

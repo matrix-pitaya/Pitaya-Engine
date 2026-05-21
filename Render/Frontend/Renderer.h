@@ -26,6 +26,8 @@
 #include<Render/Command/BeginShadowPassCommand.h>
 #include<Render/Specific/RenderPass.h>
 #include<Render/Specific/RenderItem.h>
+#include<Render/Specific/LightShadowSetup.h>
+#include<Render/Specific/ShadowPassSetup.h>
 
 #include<GPU/Common/FuncTable.h>
 #include<GPU/Common/TextureType.h>
@@ -670,11 +672,11 @@ namespace Pitaya::Render
             renderPacket.front.Clear();
             INVOKE_POSTRENDERERBEGINRENDERFRAME_HOOK
         }
-        inline void SubmitLightShadow(Pitaya::Core::PassKey<RenderPipeline>, const std::vector<Pitaya::Render::ShadowCasterSlice>& slices, const std::vector<glm::mat4>& matrices, const std::vector<Pitaya::Render::CascadeSplitInfo>& cascadeSplits, uint32_t dirCount, uint32_t spotCount, uint32_t pointCount)
+        inline void SubmitLightShadow(Pitaya::Core::PassKey<RenderPipeline>, const LightShadowSetup& setup)
         {
             // 计算各 atlas 所需的最大 layer 数
             uint32_t maxCSMLayer = 0, maxSpotLayer = 0, maxPointLayer = 0;
-            for (const auto& s : slices)
+            for (const auto& s : setup.Slices)
             {
                 uint32_t endLayer = s.LayerOffset + s.MatrixCount;
                 switch (s.LightType)
@@ -691,9 +693,9 @@ namespace Pitaya::Render
             // 序列化 SSBO 数据
             // 布局: Header | CascadeSplit[] | SliceGPU[] | mat4[]
             size_t headerSize = sizeof(Pitaya::Render::ShadowSSBOHeader);
-            size_t splitsSize = cascadeSplits.size() * sizeof(Pitaya::Render::CascadeSplitInfo);
-            size_t slicesSize = slices.size() * sizeof(Pitaya::Render::ShadowSliceGPU);
-            size_t matricesSize = matrices.size() * sizeof(glm::mat4);
+            size_t splitsSize = setup.CascadeSplits.size() * sizeof(Pitaya::Render::CascadeSplitInfo);
+            size_t slicesSize = setup.Slices.size() * sizeof(Pitaya::Render::ShadowSliceGPU);
+            size_t matricesSize = setup.Matrices.size() * sizeof(glm::mat4);
             size_t totalSize = headerSize + splitsSize + slicesSize + matricesSize;
 
             if (totalSize > 0)
@@ -702,27 +704,27 @@ namespace Pitaya::Render
                 shadowData.resize(totalSize);
 
                 Pitaya::Render::ShadowSSBOHeader header;
-                header.DirectionalLightCount = dirCount;
-                header.SpotLightCount = spotCount;
-                header.PointLightCount = pointCount;
-                header.TotalMatrixCount = static_cast<uint32_t>(matrices.size());
-                header.CascadeSplitCount = static_cast<uint32_t>(cascadeSplits.size());
-                header.ShadowSliceCount = static_cast<uint32_t>(slices.size());
+                header.DirectionalLightCount = setup.DirCount;
+                header.SpotLightCount = setup.SpotCount;
+                header.PointLightCount = setup.PointCount;
+                header.TotalMatrixCount = static_cast<uint32_t>(setup.Matrices.size());
+                header.CascadeSplitCount = static_cast<uint32_t>(setup.CascadeSplits.size());
+                header.ShadowSliceCount = static_cast<uint32_t>(setup.Slices.size());
                 std::memcpy(shadowData.data(), &header, headerSize);
 
                 if (splitsSize > 0)
                 {
-                    std::memcpy(shadowData.data() + headerSize, cascadeSplits.data(), splitsSize);
+                    std::memcpy(shadowData.data() + headerSize, setup.CascadeSplits.data(), splitsSize);
                 }
 
                 if (slicesSize > 0)
                 {
-                    std::vector<Pitaya::Render::ShadowSliceGPU> gpuSlices(slices.size());
-                    for (size_t i = 0; i < slices.size(); ++i)
+                    std::vector<Pitaya::Render::ShadowSliceGPU> gpuSlices(setup.Slices.size());
+                    for (size_t i = 0; i < setup.Slices.size(); ++i)
                     {
-                        gpuSlices[i].MatrixOffset = slices[i].MatrixOffset;
-                        gpuSlices[i].LayerOffset = slices[i].LayerOffset;
-                        gpuSlices[i].LightType = slices[i].LightType;
+                        gpuSlices[i].MatrixOffset = setup.Slices[i].MatrixOffset;
+                        gpuSlices[i].LayerOffset = setup.Slices[i].LayerOffset;
+                        gpuSlices[i].LightType = setup.Slices[i].LightType;
                         gpuSlices[i]._pad0 = 0;
                     }
                     std::memcpy(shadowData.data() + headerSize + splitsSize, gpuSlices.data(), slicesSize);
@@ -730,18 +732,18 @@ namespace Pitaya::Render
 
                 if (matricesSize > 0)
                 {
-                    std::memcpy(shadowData.data() + headerSize + splitsSize + slicesSize, matrices.data(), matricesSize);
+                    std::memcpy(shadowData.data() + headerSize + splitsSize + slicesSize, setup.Matrices.data(), matricesSize);
                 }
             }
         }
-        inline void BeginShadowPass(Pitaya::Core::PassKey<RenderPipeline>, uint32_t lightType, uint32_t layer, const glm::mat4& shadowVP)
+        inline void BeginShadowPass(Pitaya::Core::PassKey<RenderPipeline>, const ShadowPassSetup& setup)
         {
             Pitaya::Render::BeginShadowPassCommand cmd;
-            cmd.LightType = lightType;
-            cmd.Layer = layer;
-            cmd.ShadowViewProjection = shadowVP;
+            cmd.LightType = setup.LightType;
+            cmd.Layer = setup.Layer;
+            cmd.ShadowViewProjection = setup.ShadowViewProjection;
 
-            switch (lightType)
+            switch (setup.LightType)
             {
                 case 0: cmd.Resolution = RenderKit::ShadowAtlas::CSMResolution;   break;
                 case 2: cmd.Resolution = RenderKit::ShadowAtlas::SpotResolution;  break;
@@ -1029,14 +1031,13 @@ namespace Pitaya::Render
         }
 
     private:
-        RenderKit renderKit;
-        RenderPacket renderPacket;
-
         std::mutex mutex;
         std::condition_variable cond;
         std::atomic<bool> isRunning = false;
         Pitaya::Core::Thread::Identifier renderThread;
         Pitaya::Core::Storage<8> backendStorage;
+        Pitaya::Render::Renderer::RenderKit renderKit;
+        Pitaya::Render::Renderer::RenderPacket renderPacket;
     };
 }
 
