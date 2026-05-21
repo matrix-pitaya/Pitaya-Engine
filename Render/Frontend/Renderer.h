@@ -24,6 +24,8 @@
 #include<Render/Command/BlitToScreenCommand.h>
 #include<Render/Command/PostProcessCommand.h>
 #include<Render/Command/BeginShadowPassCommand.h>
+#include<Render/Bake-Input/IBLBakeInput.h>
+#include<Render/Bake-Input/BRDFLUTBakeInput.h>
 #include<Render/Specific/RenderPass.h>
 #include<Render/Specific/RenderItem.h>
 #include<Render/Specific/LightShadowSetup.h>
@@ -143,8 +145,18 @@ namespace Pitaya::Render
                 inline static constexpr const uint32_t SpotResolution = 1024;
                 inline static constexpr const uint32_t PointResolution = 512;
             } CSMAtlas, SpotShadowAtlas, PointShadowAtlas;
+            //IBL
+            struct IBL
+            {
+                Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle EquirectToCubemapShaderHandle;
+                Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle IrradianceShaderHandle;
+                Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle PrefilterShaderHandle;
+                Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle BRDFLUTGenShaderHandle;
+                Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle BRDFLUTHandle;
+                Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle BakeFBOHandle;
+            } IBL;
 
-            inline void Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
+            inline void Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const Pitaya::Render::Renderer* renderer)
             {
                 Specific.EmptyVAOHandle = Pitaya::GPU::CreateVertexArray(passkey);
                 CameraSnapshotUBO.Handle = Pitaya::GPU::CreateUniformBuffer(passkey, sizeof(Pitaya::Core::CameraSnapshot), 
@@ -180,7 +192,7 @@ namespace Pitaya::Render
                         static_cast<const char*>(vs.data), vs.size, 
                         static_cast<const char*>(fs.data), fs.size);
                 }
-				// Gamma Correction
+                // Gamma Correction
                 {
                     auto vs = Pitaya::Core::LoadBuiltInRC(IDR_GAMMA_CORRECTION_VERTEX_SHADER);
                     auto fs = Pitaya::Core::LoadBuiltInRC(IDR_GAMMA_CORRECTION_FRAGMENT_SHADER);
@@ -267,6 +279,40 @@ namespace Pitaya::Render
                 PointShadowAtlas.TextureHandle = Pitaya::GPU::CreateTexture2DArray(passkey,
                     PointShadowAtlas.PointResolution, PointShadowAtlas.PointResolution,
                     PointShadowAtlas.LayerCapacity, Pitaya::GPU::PixelFormat::Depth32F);
+
+                // IBL
+                {
+                    auto vs = Pitaya::Core::LoadBuiltInRC(IDR_IBL_EQUIRECT_TO_CUBEMAP_VERTEX_SHADER);
+                    auto fs = Pitaya::Core::LoadBuiltInRC(IDR_IBL_EQUIRECT_TO_CUBEMAP_FRAGMENT_SHADER);
+                    IBL.EquirectToCubemapShaderHandle = Pitaya::GPU::CreateShader(passkey,
+                        static_cast<const char*>(vs.data), vs.size,
+                        static_cast<const char*>(fs.data), fs.size);
+                }
+                {
+                    auto vs = Pitaya::Core::LoadBuiltInRC(IDR_IBL_IRRADIANCE_CONVOLUTION_VERTEX_SHADER);
+                    auto fs = Pitaya::Core::LoadBuiltInRC(IDR_IBL_IRRADIANCE_CONVOLUTION_FRAGMENT_SHADER);
+                    IBL.IrradianceShaderHandle = Pitaya::GPU::CreateShader(passkey,
+                        static_cast<const char*>(vs.data), vs.size,
+                        static_cast<const char*>(fs.data), fs.size);
+                }
+                {
+                    auto vs = Pitaya::Core::LoadBuiltInRC(IDR_IBL_GGX_PREFILTER_VERTEX_SHADER);
+                    auto fs = Pitaya::Core::LoadBuiltInRC(IDR_IBL_GGX_PREFILTER_FRAGMENT_SHADER);
+                    IBL.PrefilterShaderHandle = Pitaya::GPU::CreateShader(passkey,
+                        static_cast<const char*>(vs.data), vs.size,
+                        static_cast<const char*>(fs.data), fs.size);
+                }
+                {
+                    auto vs = Pitaya::Core::LoadBuiltInRC(IDR_IBL_BRDF_LUT_GEN_VERTEX_SHADER);
+                    auto fs = Pitaya::Core::LoadBuiltInRC(IDR_IBL_BRDF_LUT_GEN_FRAGMENT_SHADER);
+                    IBL.BRDFLUTGenShaderHandle = Pitaya::GPU::CreateShader(passkey,
+                        static_cast<const char*>(vs.data), vs.size,
+                        static_cast<const char*>(fs.data), fs.size);
+                }
+                IBL.BakeFBOHandle = Pitaya::GPU::CreateEmptyFrameBuffer(passkey);
+                IBL.BRDFLUTHandle = Pitaya::GPU::CreateTexture2D(passkey,
+                    nullptr, 128, 128, Pitaya::GPU::PixelFormat::RG16F, false, true);
+                renderer->Bake(passkey, { IBL.BRDFLUTHandle, 512 });    //计算BRDF
             }
         };
         class RenderPacket
@@ -519,7 +565,7 @@ namespace Pitaya::Render
                             // 提交实例数据
                             front.InstanceInfo.push_back({ cmd.ModelMatrix, glm::transpose(glm::inverse(cmd.ModelMatrix)), {cmd.ReceiveShadow, matByteOffset, 0, 0} });
 
-							// 提交骨骼数据
+                            // 提交骨骼数据
                             if (cmd.BoneInverseMatrices && !cmd.BoneInverseMatrices->empty())
                             {
                                 constexpr const size_t MaxBonesPerInstance = 100;
@@ -639,7 +685,7 @@ namespace Pitaya::Render
         inline void RenderThread(void* nativeWindow)
         {
             InitializeRenderContext(nativeWindow);
-            renderKit.Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+            renderKit.Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), this);
             INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), renderKit.MainDisplayRenderTarget.FinalFrameBufferHandle)
 
             while (true)
@@ -668,11 +714,15 @@ namespace Pitaya::Render
         void SwapBuffer() const;
 
     private:
-        void ExecuteCommand(const Pitaya::Render::BeginPassCommand* command) const;
-        void ExecuteCommand(const Pitaya::Render::InstancedDrawCommand* command) const;
-        void ExecuteCommand(const Pitaya::Render::PostProcessCommand* command) const;
-        void ExecuteCommand(const Pitaya::Render::BlitToScreenCommand* command) const;
-        void ExecuteCommand(const Pitaya::Render::BeginShadowPassCommand* command) const;
+        void ExecuteCommand(const Pitaya::Render::BeginPassCommand*) const;
+        void ExecuteCommand(const Pitaya::Render::InstancedDrawCommand*) const;
+        void ExecuteCommand(const Pitaya::Render::PostProcessCommand*) const;
+        void ExecuteCommand(const Pitaya::Render::BlitToScreenCommand*) const;
+        void ExecuteCommand(const Pitaya::Render::BeginShadowPassCommand*) const;
+
+    public:
+        bool Bake(Pitaya::Core::PassKey<Renderer>, const IBLBakeInput&) const;
+        bool Bake(Pitaya::Core::PassKey<Renderer>, const BRDFLUTBakeInput&) const;
 
     public:
         inline void BeginRenderFrame(Pitaya::Core::PassKey<RenderPipeline>)

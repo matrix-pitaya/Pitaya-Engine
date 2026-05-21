@@ -4,6 +4,7 @@
 #include<GPU/Frontend/Buffer/UniformBuffer.h>
 #include<GPU/Frontend/Texture/Texture2D.h>
 #include<GPU/Frontend/Texture/Texture2DArray.h>
+#include<GPU/Frontend/Texture/TextureCubemap.h>
 #include<GPU/Common/TextureSlot.h>
 #include<Log/Common/FuncTable.h>
 
@@ -135,7 +136,7 @@ void Pitaya::Render::Renderer::NewRenderFrame()
 
             glNamedBufferSubData(shaderStorageBuffer.Id, 0, uploadMaterialSize, renderPacket.back.MaterialParams.data());
 
-			// 将Texture2D Handle 转化为 Texture2D SamplerId 用于在 Shader 中通过 sampler采样纹理数据
+            // 将Texture2D Handle 转化为 Texture2D SamplerId 用于在 Shader 中通过 sampler采样纹理数据
             for (uint32_t offset : renderPacket.back.MaterialTexturePatches)
             {
                 Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle handle;
@@ -519,5 +520,101 @@ void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::BlitToScreen
         glBindVertexArray(vao.Id);
         glDrawArrays(GL_TRIANGLES, 0, 3);
     }
+}
+
+bool Pitaya::Render::Renderer::Bake(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const Pitaya::Render::IBLBakeInput& input) const
+{
+    Pitaya::GPU::Shader equirectShader, irradianceShader, prefilterShader;
+    Pitaya::GPU::FrameBuffer bakeFbo;
+    Pitaya::GPU::Texture2D equirectTex;
+    Pitaya::GPU::TextureCubemap envCubemap, irradianceCubemap, prefilteredCubemap;
+    if (!Pitaya::GPU::GetShader(passkey, renderKit.IBL.EquirectToCubemapShaderHandle, equirectShader) ||
+        !Pitaya::GPU::GetShader(passkey, renderKit.IBL.IrradianceShaderHandle, irradianceShader) ||
+        !Pitaya::GPU::GetShader(passkey, renderKit.IBL.PrefilterShaderHandle, prefilterShader) ||
+        !Pitaya::GPU::GetFrameBuffer(passkey, renderKit.IBL.BakeFBOHandle, bakeFbo) ||
+        !Pitaya::GPU::GetTexture2D(passkey, input.Equirect, equirectTex) ||
+        !Pitaya::GPU::GetTextureCubemap(passkey, input.EnvCubemap, envCubemap) ||
+        !Pitaya::GPU::GetTextureCubemap(passkey, input.Irradiance, irradianceCubemap) ||
+        !Pitaya::GPU::GetTextureCubemap(passkey, input.Prefiltered, prefilteredCubemap))
+    { return false; }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, bakeFbo.Id);
+
+    // Equirect -> Cubemap (6 pass, 512x512)
+    {
+        glUseProgram(equirectShader.Id);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, equirectTex.Id);
+        glViewport(0, 0, 512, 512);
+
+        for (uint32_t face = 0; face < 6; ++face)
+        {
+            glUniform1i(0, static_cast<int>(face));
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, envCubemap.Id, 0);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+        }
+    }
+
+    // Irradiance Convolution (6 pass, 32x32)
+    {
+        glUseProgram(irradianceShader.Id);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap.Id);
+        glViewport(0, 0, 32, 32);
+
+        for (uint32_t face = 0; face < 6; ++face)
+        {
+            glUniform1i(0, static_cast<int>(face));
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, irradianceCubemap.Id, 0);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+        }
+    }
+
+    // GGX Prefilter (6 face x 5 mip = 30 pass, 128x128)
+    {
+        glUseProgram(prefilterShader.Id);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap.Id);
+
+        uint32_t maxMip = 5;
+        for (uint32_t mip = 0; mip < maxMip; ++mip)
+        {
+            uint32_t mipSize = 128 >> mip;
+            glViewport(0, 0, mipSize, mipSize);
+
+            float roughness = static_cast<float>(mip) / static_cast<float>(maxMip - 1);
+            glUniform1f(1, roughness);
+
+            for (uint32_t face = 0; face < 6; ++face)
+            {
+                glUniform1i(0, static_cast<int>(face));
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                    GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, prefilteredCubemap.Id, mip);
+                glDrawArrays(GL_TRIANGLES, 0, 3);
+            }
+        }
+    }
+
+    return true;
+}
+bool Pitaya::Render::Renderer::Bake(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const Pitaya::Render::BRDFLUTBakeInput& input) const
+{
+	Pitaya::GPU::Shader shader;
+	Pitaya::GPU::FrameBuffer fbo;
+	Pitaya::GPU::Texture2D lutTex;
+	if (!Pitaya::GPU::GetShader(passkey, renderKit.IBL.BRDFLUTGenShaderHandle, shader) ||
+		!Pitaya::GPU::GetFrameBuffer(passkey, renderKit.IBL.BakeFBOHandle, fbo) ||
+		!Pitaya::GPU::GetTexture2D(passkey, input.Output, lutTex))
+	{ return false; }
+
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo.Id);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, lutTex.Id, 0);
+	glUseProgram(shader.Id);
+	glViewport(0, 0, static_cast<GLsizei>(input.Resolution), static_cast<GLsizei>(input.Resolution));
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	return true;
 }
 #endif

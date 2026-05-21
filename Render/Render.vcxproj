@@ -160,11 +160,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Bake-Input\BRDFLUTBakeInput.h" />
     <ClInclude Include="Command\BeginPassCommand.h" />
     <ClInclude Include="Command\BeginShadowPassCommand.h" />
     <ClInclude Include="Command\BlitToScreenCommand.h" />
     <ClInclude Include="Command\DrawCommand.h" />
     <ClInclude Include="Command\DrawSkyboxCommand.h" />
+    <ClInclude Include="Bake-Input\IBLBakeInput.h" />
     <ClInclude Include="Command\InstancedDrawCommand.h" />
     <ClInclude Include="Command\PostProcessCommand.h" />
     <ClInclude Include="Common\API.h" />

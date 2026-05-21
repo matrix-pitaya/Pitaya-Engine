@@ -407,7 +407,7 @@ namespace Pitaya::Asset
 			// 在时间预算内处理资产
 			Pitaya::Core::InvokeWithTimeBudget(
 				[this]() ->bool { return cacheAssetOperateQueue.empty(); },
-				[this, passkey]() { std::visit([this, passkey](auto& result_Inner) { this->SyncAssetOperate(passkey,result_Inner); }, cacheAssetOperateQueue.front().Data); cacheAssetOperateQueue.pop(); },
+				[this, passkey]() { std::visit([this, passkey](auto& result_Inner) { this->SyncAssetOperate(passkey, result_Inner); }, cacheAssetOperateQueue.front().Data); cacheAssetOperateQueue.pop(); },
 				std::chrono::milliseconds(2));
 		}
 		inline bool IsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)

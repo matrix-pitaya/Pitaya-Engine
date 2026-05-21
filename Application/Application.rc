@@ -78,6 +78,16 @@ IDR_SHADOW_STATIC_FRAGMENT_SHADER       RCDATA          "../built-in/Shadow/Stat
 IDR_SHADOW_SKINNED_VERTEX_SHADER        RCDATA          "../built-in/Shadow/Skinned/Shader.vert"
 IDR_SHADOW_SKINNED_FRAGMENT_SHADER      RCDATA          "../built-in/Shadow/Skinned/Shader.frag"
 
+// IBL Shader Resources
+IDR_IBL_EQUIRECT_TO_CUBEMAP_VERTEX_SHADER        RCDATA          "../built-in/IBL/EquirectToCubemap/Shader.vert"
+IDR_IBL_EQUIRECT_TO_CUBEMAP_FRAGMENT_SHADER      RCDATA          "../built-in/IBL/EquirectToCubemap/Shader.frag"
+IDR_IBL_IRRADIANCE_CONVOLUTION_VERTEX_SHADER     RCDATA          "../built-in/IBL/IrradianceConvolution/Shader.vert"
+IDR_IBL_IRRADIANCE_CONVOLUTION_FRAGMENT_SHADER   RCDATA          "../built-in/IBL/IrradianceConvolution/Shader.frag"
+IDR_IBL_GGX_PREFILTER_VERTEX_SHADER              RCDATA          "../built-in/IBL/GGXPrefilter/Shader.vert"
+IDR_IBL_GGX_PREFILTER_FRAGMENT_SHADER            RCDATA          "../built-in/IBL/GGXPrefilter/Shader.frag"
+IDR_IBL_BRDF_LUT_GEN_VERTEX_SHADER               RCDATA          "../built-in/IBL/BRDFLUTGen/Shader.vert"
+IDR_IBL_BRDF_LUT_GEN_FRAGMENT_SHADER             RCDATA          "../built-in/IBL/BRDFLUTGen/Shader.frag"
+
 // Font
 IDR_FONT_FA_SOLID_900_TTF               RCDATA          "../built-in/fonts/fa-solid-900.ttf"
 IDR_FONT_SEGOEUI_TTF                    RCDATA          "../built-in/fonts/segoeui.ttf"
