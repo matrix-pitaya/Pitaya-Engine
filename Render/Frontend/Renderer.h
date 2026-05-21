@@ -311,7 +311,7 @@ namespace Pitaya::Render
                 }
                 IBL.BakeFBOHandle = Pitaya::GPU::CreateEmptyFrameBuffer(passkey);
                 IBL.BRDFLUTHandle = Pitaya::GPU::CreateTexture2D(passkey,
-                    nullptr, 128, 128, Pitaya::GPU::PixelFormat::RG16F, false, true);
+                    nullptr, 512, 512, Pitaya::GPU::PixelFormat::RG16F, false, true);
                 renderer->Bake(passkey, { IBL.BRDFLUTHandle, 512 });    //计算BRDF
             }
         };
