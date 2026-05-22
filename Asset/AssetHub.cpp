@@ -323,7 +323,7 @@ bool Pitaya::Asset::AssetHub::Initialize()
 		buildIn.DefaultSkyBox.State.SetBits(Pitaya::Core::AssetState::CPULoading);
 		auto rc = Pitaya::Core::LoadBuiltInRC(IDR_SKYBOX_HDR);
 		Pitaya::Import::SkyBoxImportResult result;
-		Pitaya::Import::Import(Pitaya::Asset::SkyBox::Default, rc.data, rc.size, result);
+		Pitaya::Import::Import(Pitaya::Asset::SkyBox::Default, rc.data, rc.size, true, result);
 		buildIn.DefaultSkyBox.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
 		skyboxes.Emplace(Pitaya::Asset::SkyBox::Default, &buildIn.DefaultSkyBox);
 		cacheAssetOperateQueue.push({ result });
@@ -1779,7 +1779,7 @@ void Pitaya::Asset::AssetHub::LoadRenderTarget(Pitaya::Core::GUID guid, const st
 void Pitaya::Asset::AssetHub::LoadSkyBoxAsset(Pitaya::Core::GUID guid, const std::filesystem::path& path)
 {
 	Pitaya::Import::SkyBoxImportResult result;
-	if (Pitaya::Import::Import(guid, path, result))
+	if (Pitaya::Import::Import(guid, path, true, result))
 	{
 		assetOperateQueue.Push({ result });
 	}

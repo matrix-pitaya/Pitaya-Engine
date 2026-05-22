@@ -26,6 +26,7 @@
 #include<Render/Command/BlitToScreenCommand.h>
 #include<Render/Command/PostProcessCommand.h>
 #include<Render/Command/BeginShadowPassCommand.h>
+#include<Render/Command/DrawSkyboxCommand.h>
 #include<Render/Bake-Input/IBLBakeInput.h>
 #include<Render/Bake-Input/BRDFLUTBakeInput.h>
 #include<Render/Specific/RenderPass.h>
@@ -115,6 +116,11 @@ namespace Pitaya::Render
                 Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle ShaderHandle;
                 Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle TextureHandle;
             } Fallback;
+            //SkyBox
+            struct SkyBox
+            {
+                Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle ShaderHandle;
+            } SkyBox;
             //PostProcess Shader
             struct PostProcessShader
             {
@@ -322,6 +328,15 @@ namespace Pitaya::Render
                     IBL.BRDFLUTHandle = Pitaya::GPU::CreateTexture2D(passkey,
                         brdfData.data, 512, 512, Pitaya::GPU::PixelFormat::RG16F, false, true);
                 }
+
+                // SkyBox
+                {
+                    auto vs = Pitaya::Core::LoadBuiltInRC(IDR_SKYBOX_VERTEX_SHADER);
+                    auto fs = Pitaya::Core::LoadBuiltInRC(IDR_SKYBOX_FRAGMENT_SHADER);
+                    SkyBox.ShaderHandle = Pitaya::GPU::CreateShader(passkey,
+                        static_cast<const char*>(vs.data), vs.size,
+                        static_cast<const char*>(fs.data), fs.size);
+                }
             }
         };
         class RenderPacket
@@ -414,6 +429,10 @@ namespace Pitaya::Render
 
                         case Pitaya::Render::RenderCommandType::BeginShadowPass:
                             renderer->ExecuteCommand(FetchCommand<Pitaya::Render::BeginShadowPassCommand>(offset));
+                            break;
+
+                        case Pitaya::Render::RenderCommandType::DrawSkybox:
+                            renderer->ExecuteCommand(FetchCommand<Pitaya::Render::DrawSkyboxCommand>(offset));
                             break;
 
                         case Pitaya::Render::RenderCommandType::Invalid:
@@ -732,6 +751,7 @@ namespace Pitaya::Render
         void ExecuteCommand(const Pitaya::Render::PostProcessCommand*) const;
         void ExecuteCommand(const Pitaya::Render::BlitToScreenCommand*) const;
         void ExecuteCommand(const Pitaya::Render::BeginShadowPassCommand*) const;
+        void ExecuteCommand(const Pitaya::Render::DrawSkyboxCommand*) const;
 
     public:
         bool Bake(Pitaya::Core::PassKey<Renderer>, const IBLBakeInput&) const;
@@ -899,6 +919,11 @@ namespace Pitaya::Render
             beginPassCommand.LightDataOffset = (currentTotal >= pass.LightCount)
                 ? static_cast<uint32_t>(currentTotal - pass.LightCount) : 0;
             renderPacket.PushCommand(beginPassCommand);
+        }
+        inline void SubmitDrawSkybox(Pitaya::Core::PassKey<RenderPipeline>)
+        {
+            DrawSkyboxCommand cmd;
+            renderPacket.PushCommand(cmd);
         }
         inline void Submit(Pitaya::Core::PassKey<RenderPipeline>, const RenderItem& item)
         {

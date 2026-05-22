@@ -18,6 +18,6 @@ namespace Pitaya::Import
 	ENGINE_API bool ENGINE_CALL Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, Pitaya::Import::MeshPreloadResult& out, Pitaya::Import::MeshAPI api = Pitaya::Import::MeshAPI::Assimp);
 	ENGINE_API bool ENGINE_CALL Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, const Pitaya::Import::MeshPreloadResult& preload, Pitaya::Import::StaticMeshImportResult& out, Pitaya::Import::MeshAPI api = Pitaya::Import::MeshAPI::Assimp);
 	ENGINE_API bool ENGINE_CALL Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, const Pitaya::Import::MeshPreloadResult& preload, Pitaya::Import::SkinnedMeshImportResult& out, Pitaya::Import::MeshAPI api = Pitaya::Import::MeshAPI::Assimp);
-	ENGINE_API bool ENGINE_CALL Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, Pitaya::Import::SkyBoxImportResult& out);
-	ENGINE_API bool ENGINE_CALL Import(Pitaya::Core::GUID guid, const void* data, size_t size, Pitaya::Import::SkyBoxImportResult& out);
+	ENGINE_API bool ENGINE_CALL Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, bool isFlipVerticallyOnLoad, Pitaya::Import::SkyBoxImportResult& out);
+	ENGINE_API bool ENGINE_CALL Import(Pitaya::Core::GUID guid, const void* data, size_t size, bool isFlipVerticallyOnLoad, Pitaya::Import::SkyBoxImportResult& out);
 }

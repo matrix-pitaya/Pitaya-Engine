@@ -686,6 +686,10 @@ void Pitaya::Engine::Engine::Render()
     //获取当前激活场景
     if (auto* scene = MODULE(GameWorld)->GetActiveScene())
     {
+        //提交SceneEnv
+        MODULE(RenderPipeline)->OverrideRenderSceneEnv(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
+            scene->Setting.SkyBox.IsReady() ? scene->Setting.SkyBox.GetNativeAssetData() : nullptr, scene->Setting.AmbientColor);
+
         //提交Light
         for (auto [entity, light, transform] : scene->ECS.GetView<Pitaya::Game::Light, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each())
         {
@@ -747,9 +751,6 @@ void Pitaya::Engine::Engine::Render()
                 }
             }
         }
-
-        MODULE(RenderPipeline)->OverrideRenderSceneEnv(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
-            scene->Setting.SkyBox.IsReady() ? scene->Setting.SkyBox.GetNativeAssetData() : nullptr, scene->Setting.AmbientColor);
     }
 
     MODULE(RenderPipeline)->Execute(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(), MODULE(Renderer).GetKernel());

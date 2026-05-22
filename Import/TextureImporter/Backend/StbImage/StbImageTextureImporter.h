@@ -4,7 +4,7 @@
 
 namespace Pitaya::Import
 {
-	class StbImageTextureImporter : public TextureImporter
+	class StbImageTextureImporter final : public TextureImporter
 	{
 	public:
 		StbImageTextureImporter() = default;
@@ -13,7 +13,7 @@ namespace Pitaya::Import
 	public:
 		bool Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, bool isFlipVerticallyOnLoad, bool isGenerateMipmap, Pitaya::Import::Texture2DImportResult& out) override;
 		bool Import(Pitaya::Core::GUID guid, const std::filesystem::path& file,  const std::vector<std::filesystem::path>& paths, bool isFlipVerticallyOnLoad, bool isGenerateMipmap, Pitaya::Import::TextureCubemapImportResult& out) override;
-		bool Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, SkyBoxImportResult& out) override;
-		bool Import(Pitaya::Core::GUID guid, const void* data, size_t size, SkyBoxImportResult& out) override;
+		bool Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, bool isFlipVerticallyOnLoad, SkyBoxImportResult& out) override;
+		bool Import(Pitaya::Core::GUID guid, const void* data, size_t size, bool isFlipVerticallyOnLoad, SkyBoxImportResult& out) override;
 	};
 }

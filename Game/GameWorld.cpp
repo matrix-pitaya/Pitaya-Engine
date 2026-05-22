@@ -7,6 +7,7 @@
 bool Pitaya::Game::GameWorld::Initialize()
 {
 	activeScene = PITAYA_NEW(Scene);
+	activeScene->Setting.SkyBox = Pitaya::Asset::LoadAsset<Pitaya::Asset::SkyBox>(Pitaya::Asset::SkyBox::Default);
 	activeScene->ECS.ReserveDestroyQueue(1024);
 
 	//TODOD 序列化场景

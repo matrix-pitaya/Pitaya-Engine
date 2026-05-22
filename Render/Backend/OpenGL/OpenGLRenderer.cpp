@@ -337,6 +337,27 @@ void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::BeginShadowP
         }
     }
 }
+void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::DrawSkyboxCommand* command) const
+{
+    if (!command) { return; }
+
+    Pitaya::GPU::Shader skyboxShader;
+    if (!Pitaya::GPU::GetShader(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), renderKit.SkyBox.ShaderHandle, skyboxShader))
+    { return; }
+
+    glUseProgram(skyboxShader.Id);
+    glDepthFunc(GL_LEQUAL);
+    glDisable(GL_CULL_FACE);
+
+    Pitaya::GPU::VertexArray vao;
+    if (Pitaya::GPU::GetVertexArray(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), renderKit.Fallback.VAOHandle, vao))  // Fallback VAO 为立方体
+    {
+        glBindVertexArray(vao.Id);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+    }
+
+    glEnable(GL_CULL_FACE);
+}
 void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::BeginPassCommand* command) const
 {
     if (!command) { return; }
@@ -551,6 +572,7 @@ void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::BlitToScreen
 
 bool Pitaya::Render::Renderer::Bake(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const Pitaya::Render::IBLBakeInput& input) const
 {
+    Pitaya::GPU::VertexArray emptyVAO;
     Pitaya::GPU::Shader equirectShader, irradianceShader, prefilterShader;
     Pitaya::GPU::FrameBuffer bakeFbo;
     Pitaya::GPU::Texture2D equirectTex;
@@ -562,11 +584,16 @@ bool Pitaya::Render::Renderer::Bake(Pitaya::Core::PassKey<Pitaya::Render::Render
         !Pitaya::GPU::GetTexture2D(passkey, input.Equirect, equirectTex) ||
         !Pitaya::GPU::GetTextureCubemap(passkey, input.EnvCubemap, envCubemap) ||
         !Pitaya::GPU::GetTextureCubemap(passkey, input.Irradiance, irradianceCubemap) ||
-        !Pitaya::GPU::GetTextureCubemap(passkey, input.Prefiltered, prefilteredCubemap))
+        !Pitaya::GPU::GetTextureCubemap(passkey, input.Prefiltered, prefilteredCubemap) || 
+        !Pitaya::GPU::GetVertexArray(passkey, renderKit.Specific.EmptyVAOHandle, emptyVAO))
     { return false; }
 
-    glBindFramebuffer(GL_FRAMEBUFFER, bakeFbo.Id);
+    glBindVertexArray(emptyVAO.Id);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+    glDisable(GL_CULL_FACE);
 
+    glBindFramebuffer(GL_FRAMEBUFFER, bakeFbo.Id);
     // Equirect -> Cubemap (6 pass, 512x512)
     {
         glUseProgram(equirectShader.Id);
@@ -624,24 +651,37 @@ bool Pitaya::Render::Renderer::Bake(Pitaya::Core::PassKey<Pitaya::Render::Render
         }
     }
 
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_STENCIL_TEST);
+    glEnable(GL_DEPTH_TEST);
     return true;
 }
 bool Pitaya::Render::Renderer::Bake(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const Pitaya::Render::BRDFLUTBakeInput& input) const
 {
-	Pitaya::GPU::Shader shader;
-	Pitaya::GPU::FrameBuffer fbo;
-	Pitaya::GPU::Texture2D lutTex;
-	if (!Pitaya::GPU::GetShader(passkey, renderKit.IBL.BRDFLUTGenShaderHandle, shader) ||
-		!Pitaya::GPU::GetFrameBuffer(passkey, renderKit.IBL.BakeFBOHandle, fbo) ||
-		!Pitaya::GPU::GetTexture2D(passkey, input.Output, lutTex))
-	{ return false; }
+    Pitaya::GPU::VertexArray emptyVAO;
+    Pitaya::GPU::Shader shader;
+    Pitaya::GPU::FrameBuffer fbo;
+    Pitaya::GPU::Texture2D lutTex;
+    if (!Pitaya::GPU::GetShader(passkey, renderKit.IBL.BRDFLUTGenShaderHandle, shader) ||
+        !Pitaya::GPU::GetFrameBuffer(passkey, renderKit.IBL.BakeFBOHandle, fbo) ||
+        !Pitaya::GPU::GetTexture2D(passkey, input.Output, lutTex) || 
+        !Pitaya::GPU::GetVertexArray(passkey, renderKit.Specific.EmptyVAOHandle, emptyVAO))
+    { return false; }
 
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo.Id);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, lutTex.Id, 0);
-	glUseProgram(shader.Id);
-	glViewport(0, 0, static_cast<GLsizei>(input.Resolution), static_cast<GLsizei>(input.Resolution));
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindVertexArray(emptyVAO.Id);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+    glDisable(GL_CULL_FACE);
 
-	return true;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo.Id);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, lutTex.Id, 0);
+    glUseProgram(shader.Id);
+    glViewport(0, 0, static_cast<GLsizei>(input.Resolution), static_cast<GLsizei>(input.Resolution));
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_STENCIL_TEST);
+    glEnable(GL_DEPTH_TEST);
+    return true;
 }
 #endif

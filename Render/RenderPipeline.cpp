@@ -209,6 +209,7 @@ void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer*
 			renderer->SubmitLight(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), localLight);
 		}
 		renderer->BeginPass(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), pass);	//提交BeginPass命令 并在命令中更新CameraSnapshotUBO数据（一个Camera对应一个Pass）
+		if (graph.SceneEnv.SkyBox) { renderer->SubmitDrawSkybox(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>()); }
 		Pitaya::Core::Frustum frustum = pass.CameraSnapshot.CreateFrustum();
 		uint32_t submitCount = 0;
 		for (auto& item : graph.Items)	//处理所有渲染对象

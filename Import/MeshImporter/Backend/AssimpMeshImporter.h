@@ -12,7 +12,7 @@ namespace Pitaya::Asset
 
 namespace Pitaya::Import
 {
-	class AssimpMeshImporter : public MeshImporter
+	class AssimpMeshImporter final : public MeshImporter
 	{
         struct AssimpTextureInfo
         {
