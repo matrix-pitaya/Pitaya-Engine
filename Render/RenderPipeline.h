@@ -12,7 +12,7 @@
 #include<Render/Common/ShadowInfo.h>
 #include<Render/Specific/RenderPass.h>
 #include<Render/Specific/RenderItem.h>
-#include<Render/Specific/RenderSceneEnv.h>
+#include<Render/Specific/SceneEnv.h>
 
 #include<glm.hpp>
 
@@ -58,7 +58,7 @@ namespace Pitaya::Render
             std::vector<CascadeSplitInfo> CascadeSplits;
             std::vector<glm::mat4> ShadowMatrices;
             glm::vec3 FrustumCorners[8] = {};
-            RenderSceneEnv SceneEnv;
+            SceneEnv SceneEnv;
             uint32_t DirLightShadowCount = 0;
             uint32_t SpotLightShadowCount = 0;
             uint32_t PointLightShadowCount = 0;
@@ -124,7 +124,7 @@ namespace Pitaya::Render
         {
             graph.Lights.emplace_back(light);
         }
-        inline void OverrideRenderSceneEnv(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, const Pitaya::Asset::SkyBox* skyBox, glm::vec3 ambientColor)
+        inline void OverrideSceneEnv(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, const Pitaya::Asset::SkyBox* skyBox, glm::vec3 ambientColor)
         {
             graph.SceneEnv = { skyBox, ambientColor };
         }

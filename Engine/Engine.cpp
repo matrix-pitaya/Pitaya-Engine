@@ -687,7 +687,7 @@ void Pitaya::Engine::Engine::Render()
     if (auto* scene = MODULE(GameWorld)->GetActiveScene())
     {
         //提交SceneEnv
-        MODULE(RenderPipeline)->OverrideRenderSceneEnv(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
+        MODULE(RenderPipeline)->OverrideSceneEnv(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
             scene->Setting.SkyBox.IsReady() ? scene->Setting.SkyBox.GetNativeAssetData() : nullptr, scene->Setting.AmbientColor);
 
         //提交Light

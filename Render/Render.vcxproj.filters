@@ -69,7 +69,7 @@
     <ClInclude Include="Specific\RenderItem.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Specific\RenderSceneEnv.h">
+    <ClInclude Include="Specific\SceneEnv.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Specific\SceneInfoSetup.h">

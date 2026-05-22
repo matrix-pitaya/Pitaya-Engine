@@ -184,7 +184,7 @@
     <ClInclude Include="Common\ShadowInfo.h" />
     <ClInclude Include="Specific\LightShadowSetup.h" />
     <ClInclude Include="Specific\RenderItem.h" />
-    <ClInclude Include="Specific\RenderSceneEnv.h" />
+    <ClInclude Include="Specific\SceneEnv.h" />
     <ClInclude Include="Specific\SceneInfoSetup.h" />
     <ClInclude Include="Specific\RenderTargetSnapshot.h" />
     <ClInclude Include="Frontend\Renderer.h" />

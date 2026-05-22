@@ -138,7 +138,7 @@ void Pitaya::Render::RenderPipeline::BuildShadowData(Pitaya::Render::Renderer* r
 void Pitaya::Render::RenderPipeline::SubmitRenderGraph(Pitaya::Render::Renderer* renderer)
 {
 	//提交场景环境数据
-	renderer->SubmitRenderSceneEnv(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), graph.SceneEnv);
+	renderer->SubmitSceneEnv(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), graph.SceneEnv);
 
 	//提交光源阴影数据
 	renderer->SubmitLightShadow(Pitaya::Core::PassKey<Pitaya::Render::RenderPipeline>(), { graph.ShadowSlices, graph.ShadowMatrices,

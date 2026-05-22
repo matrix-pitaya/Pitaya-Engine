@@ -33,8 +33,8 @@
 #include<Render/Specific/RenderItem.h>
 #include<Render/Specific/LightShadowSetup.h>
 #include<Render/Specific/ShadowPassSetup.h>
-#include<Render/Specific/RenderSceneEnv.h>
 #include<Render/Specific/SceneInfoSetup.h>
+#include<Render/Specific/SceneEnv.h>
 
 #include<GPU/Common/FuncTable.h>
 #include<GPU/Common/TextureType.h>
@@ -763,7 +763,7 @@ namespace Pitaya::Render
             renderPacket.front.Clear();
             INVOKE_POSTRENDERERBEGINRENDERFRAME_HOOK
         }
-        inline void SubmitRenderSceneEnv(Pitaya::Core::PassKey<RenderPipeline>, const RenderSceneEnv& env)
+        inline void SubmitSceneEnv(Pitaya::Core::PassKey<RenderPipeline>, const SceneEnv& env)
         {
             auto& setup = renderPacket.front.SceneInfoSetup;
             setup.AmbientColor = glm::vec4(env.AmbientColor, 1.0f);
