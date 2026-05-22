@@ -88,7 +88,7 @@ IDR_IBL_GGX_PREFILTER_FRAGMENT_SHADER            RCDATA          "../built-in/IB
 IDR_IBL_BRDF_LUT_GEN_VERTEX_SHADER               RCDATA          "../built-in/IBL/BRDFLUTGen/Shader.vert"
 IDR_IBL_BRDF_LUT_GEN_FRAGMENT_SHADER             RCDATA          "../built-in/IBL/BRDFLUTGen/Shader.frag"
 IDR_IBL_BRDF_LUT                                 RCDATA          "../built-in/IBL/BRDFLUT.raw"
-IDR_SKYBOX_HDR                                   RCDATA          "../built-in/SkyBox/SkyBox.hdr"
+IDR_SKYBOX_HDR                                   RCDATA          "../built-in/SkyBox/SkyBox-4K.hdr"
 
 // SkyBox Shader Resources
 IDR_SKYBOX_VERTEX_SHADER                         RCDATA          "../built-in/SkyBox/Shader.vert"
