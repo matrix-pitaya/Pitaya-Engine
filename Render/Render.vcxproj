@@ -178,10 +178,14 @@
     <ClInclude Include="Common\PostProcessType.h" />
     <ClInclude Include="Common\RenderCommandType.h" />
     <ClInclude Include="Common\RenderLayer.h" />
+    <ClInclude Include="Common\FuncTable.h" />
     <ClInclude Include="Common\RenderQueue.h" />
+    <ClInclude Include="Common\SceneInfo.h" />
     <ClInclude Include="Common\ShadowInfo.h" />
     <ClInclude Include="Specific\LightShadowSetup.h" />
     <ClInclude Include="Specific\RenderItem.h" />
+    <ClInclude Include="Specific\RenderSceneEnv.h" />
+    <ClInclude Include="Specific\SceneInfoSetup.h" />
     <ClInclude Include="Specific\RenderTargetSnapshot.h" />
     <ClInclude Include="Frontend\Renderer.h" />
     <ClInclude Include="RenderPipeline.h" />

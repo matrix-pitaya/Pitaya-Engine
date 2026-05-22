@@ -1,18 +1,22 @@
 #pragma once
 
-#include<cstdint>
+#include<type_traits>
 
 namespace Pitaya::Asset
 {
-	enum class AssetType : uint8_t
-	{
-		Texture = 0,
-		Shader,
-		Material,
-		Mesh,
-		RenderTarget,
-
-		Unknown
-	};
+	struct Texture;
+	struct Material;
+	struct Mesh;
+	struct Shader;
+	struct RenderTarget;
+	struct SkyBox;
 }
 
+template <typename T>
+concept AssetType =
+std::is_same_v<T, Pitaya::Asset::Texture> ||
+std::is_same_v<T, Pitaya::Asset::Material> ||
+std::is_same_v<T, Pitaya::Asset::Mesh> ||
+std::is_same_v<T, Pitaya::Asset::Shader> ||
+std::is_same_v<T, Pitaya::Asset::RenderTarget> ||
+std::is_same_v<T, Pitaya::Asset::SkyBox>;

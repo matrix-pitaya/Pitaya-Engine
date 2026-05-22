@@ -21,6 +21,7 @@
 #include<Asset/Common/Shader.h>
 #include<Asset/Common/Texture.h>
 #include<Asset/Common/AssetType.h>
+#include<Asset/Common/SkyBox.h>
 
 #include<chrono>
 
@@ -72,6 +73,7 @@ namespace Pitaya::Asset
 			Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry Cube;
 			Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry Panel;
 			Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry Sphere;
+			Pitaya::Core::Asset<Pitaya::Asset::SkyBox>::AssetEntry DefaultSkyBox;
 		};
 
 	private:
@@ -89,20 +91,14 @@ namespace Pitaya::Asset
 		void Release();
 
 	public:
-		template<typename T>
+		template<AssetType T>
 		inline Pitaya::Core::Asset<T> LoadAsset(Pitaya::Core::GUID guid)
 		{
-			static_assert(std::is_same_v<T, Pitaya::Asset::Texture> ||
-				std::is_same_v<T, Pitaya::Asset::Shader> ||
-				std::is_same_v<T, Pitaya::Asset::Mesh> ||
-				std::is_same_v<T, Pitaya::Asset::RenderTarget> ||
-				std::is_same_v<T, Pitaya::Asset::Material>,
-				"Unknow Asset!");
-
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { if (guid == Pitaya::Asset::Shader::Static) { return Pitaya::Core::Asset<Pitaya::Asset::Shader>(&buildIn.DefaultStaticShader); } }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Material>) { if (guid == Pitaya::Asset::Material::Default) { return Pitaya::Core::Asset<Pitaya::Asset::Material>(&buildIn.DefaultMaterial); } }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Texture>) { if (guid == Pitaya::Asset::Texture::White) { return Pitaya::Core::Asset<Pitaya::Asset::Texture>(&buildIn.White); } }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Mesh>) { if (guid == Pitaya::Asset::Mesh::Sphere) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Sphere); } else if (guid == Pitaya::Asset::Mesh::Cube) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Cube); } else if (guid == Pitaya::Asset::Mesh::Panel) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Panel); } }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::SkyBox>) { if (guid == Pitaya::Asset::SkyBox::Default) { return Pitaya::Core::Asset<Pitaya::Asset::SkyBox>(&buildIn.DefaultSkyBox); } }
 
 			std::filesystem::path path;
 			if (!GetAssetPathByGUID(guid, path))
@@ -112,16 +108,9 @@ namespace Pitaya::Asset
 			}
 			return LoadAsset<T>(guid, path);
 		}
-		template<typename T>
+		template<AssetType T>
 		inline bool UnloadAsset(Pitaya::Core::GUID guid)
 		{
-			static_assert(std::is_same_v<T, Pitaya::Asset::Texture> ||
-				std::is_same_v<T, Pitaya::Asset::Shader> ||
-				std::is_same_v<T, Pitaya::Asset::Mesh> ||
-				std::is_same_v<T, Pitaya::Asset::RenderTarget> ||
-				std::is_same_v<T, Pitaya::Asset::Material>,
-				"Unknow Asset!");
-
 			if (IsBuildInAsset<T>(guid))
 			{
 				Pitaya::Log::Write(Pitaya::Log::LogLevel::Warning, "Can't Unload Buildin Asset!");
@@ -159,16 +148,9 @@ namespace Pitaya::Asset
 		}
 
 	private:
-		template<typename T>
+		template<AssetType T>
 		inline Pitaya::Core::Asset<T> LoadAsset(Pitaya::Core::GUID guid, const std::filesystem::path& path)
 		{
-			static_assert(std::is_same_v<T, Pitaya::Asset::Texture> ||
-				std::is_same_v<T, Pitaya::Asset::Shader> ||
-				std::is_same_v<T, Pitaya::Asset::Mesh> ||
-				std::is_same_v<T, Pitaya::Asset::RenderTarget> ||
-				std::is_same_v<T, Pitaya::Asset::Material>,
-				"Unknow Asset!");
-
 			if (!CheckIsVirtualPath(path))
 			{
 				Pitaya::Log::Error("load asset fail! path is not virtual path, path:" + path.string());
@@ -224,16 +206,9 @@ namespace Pitaya::Asset
 		}
 
 	private:
-		template<typename T>
+		template<AssetType T>
 		inline void AsyncLoadAsset(Pitaya::Core::GUID guid, const std::filesystem::path& path)
 		{
-			static_assert(std::is_same_v<T, Pitaya::Asset::Texture> ||
-				std::is_same_v<T, Pitaya::Asset::Shader> ||
-				std::is_same_v<T, Pitaya::Asset::Mesh> ||
-				std::is_same_v<T, Pitaya::Asset::RenderTarget> ||
-				std::is_same_v<T, Pitaya::Asset::Material>,
-				"Unknow Asset!");
-
 			Pitaya::Task::PostJob(
 				[this, guid, path]()
 				{
@@ -242,6 +217,7 @@ namespace Pitaya::Asset
 					else if constexpr (std::is_same_v<T, Pitaya::Asset::Mesh>) { LoadMeshAsset(guid, path); }
 					else if constexpr (std::is_same_v<T, Pitaya::Asset::Material>) { LoadMaterialAsset(guid, path); }
 					else if constexpr (std::is_same_v<T, Pitaya::Asset::RenderTarget>) { LoadRenderTarget(guid, path); }
+					else if constexpr (std::is_same_v<T, Pitaya::Asset::SkyBox>) { LoadSkyBoxAsset(guid, path); }
 					else { Pitaya::Log::Error("async load asset fail,GUID:" + guid.ToString() + " path:" + path.string()); }
 				}, "Async Load Asset path: " + path.string() + " GUID: " + guid.ToString());
 		}
@@ -251,22 +227,16 @@ namespace Pitaya::Asset
 		bool RegisterExternalFile(const std::filesystem::path& inputPath, const std::filesystem::path& basePath, std::filesystem::path& out_virtualpath, Pitaya::Core::GUID& out_guid);
 
 	private:
-		template<typename T>
+		template<AssetType T>
 		Pitaya::Core::ThreadSafeHashMap<Pitaya::Core::GUID,
 			typename Pitaya::Core::Asset<T>::AssetEntry*>& GetAssetEntryMap()
 		{
-			static_assert(std::is_same_v<T, Pitaya::Asset::Texture> ||
-				std::is_same_v<T, Pitaya::Asset::Shader> ||
-				std::is_same_v<T, Pitaya::Asset::Mesh> ||
-				std::is_same_v<T, Pitaya::Asset::RenderTarget> ||
-				std::is_same_v<T, Pitaya::Asset::Material>,
-				"Unknow Asset!");
-
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Texture>) { return textures; }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { return shaders; }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Mesh>) { return meshes; }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Material>) { return materials; }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::RenderTarget>) { return rendertargets; }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::SkyBox>) { return skyboxes; }
 		}
 
 	public:
@@ -329,29 +299,23 @@ namespace Pitaya::Asset
 		}
 
 	private:
-		template<typename T>
+		template<AssetType T>
 		inline bool IsBuildInAsset(Pitaya::Core::GUID guid)
 		{
-			static_assert(std::is_same_v<T, Pitaya::Asset::Texture> ||
-				std::is_same_v<T, Pitaya::Asset::Shader> ||
-				std::is_same_v<T, Pitaya::Asset::Mesh> ||
-				std::is_same_v<T, Pitaya::Asset::RenderTarget> ||
-				std::is_same_v<T, Pitaya::Asset::Material>,
-				"Unknow Asset!");
-
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Texture>) { return guid == Pitaya::Asset::Texture::White; }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { return guid == Pitaya::Asset::Shader::Static; }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Mesh>) { return guid == Pitaya::Asset::Mesh::Cube || guid == Pitaya::Asset::Mesh::Panel || guid == Pitaya::Asset::Mesh::Sphere; }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::Material>) { return guid == Pitaya::Asset::Material::Default; }
 			if constexpr (std::is_same_v<T, Pitaya::Asset::RenderTarget>) { return false; }
+			if constexpr (std::is_same_v<T, Pitaya::Asset::SkyBox>) { return guid == Pitaya::Asset::SkyBox::Default; }
 		}
 		inline bool IsBuildInAsset(const std::filesystem::path& virtualPath)
 		{
 			return virtualPath.string().starts_with("engine:/");
 		}
 
-	private:
-		Pitaya::Asset::AssetType GetAssetType(const std::filesystem::path& path) const;
+	//private:
+	//	Pitaya::Asset::AssetType GetAssetType(const std::filesystem::path& path) const;
 
 	private:
 		//TODO 实现函数 每一帧遍历16-32个资源，判断能否销毁
@@ -379,6 +343,9 @@ namespace Pitaya::Asset
 
 	private:
 		void LoadRenderTarget(Pitaya::Core::GUID guid, const std::filesystem::path& file);
+
+	private:
+		void LoadSkyBoxAsset(Pitaya::Core::GUID guid, const std::filesystem::path& path);
 
 	private:
 		bool CheckIsVirtualPath(const std::filesystem::path& path) const;
@@ -424,20 +391,7 @@ namespace Pitaya::Asset
 		void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::SkinnedMeshImportResult&);
 		void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::RenderTargetImportResult&);
 		void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Asset::Texture2DUnloadRequire&);
-
-	private:
-		const std::unordered_set<std::string> TextureExtensions =
-		{ ".png", ".jpg", ".jpeg", ".bmp", ".tga",	".gif",				//普通位图
-		  ".hdr", ".exr" };												//高动态范围图（仍属于2D纹理）
-		const std::unordered_map<std::string, Pitaya::GPU::ShaderType> ShaderExtensions =
-		{ {".vert", Pitaya::GPU::ShaderType::Vertex},{".frag", Pitaya::GPU::ShaderType::Fragment},
-		  {".geom", Pitaya::GPU::ShaderType::Geometry}, };
-		const std::unordered_set<std::string> MeshExtensions =
-		{ ".obj" };
-		const std::unordered_set<std::string> MaterialExtensions =
-		{ ".mat" };
-		const std::unordered_set<std::string> RenderTargetExtensions =
-		{ ".rt" };
+		void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::SkyBoxImportResult&);
 
 	private:
 		inline static constexpr const char* fileName = "asset.cfg";
@@ -456,6 +410,8 @@ namespace Pitaya::Asset
 			Pitaya::Core::Asset<Pitaya::Asset::Material>::AssetEntry*> materials;
 		Pitaya::Core::ThreadSafeHashMap<Pitaya::Core::GUID,
 			Pitaya::Core::Asset<Pitaya::Asset::RenderTarget>::AssetEntry*> rendertargets;
+		Pitaya::Core::ThreadSafeHashMap<Pitaya::Core::GUID,
+			Pitaya::Core::Asset<Pitaya::Asset::SkyBox>::AssetEntry*> skyboxes;
 
 		//存储CPU操作资源结果（任务线程添加 → 渲染线程处理）
 		Pitaya::Core::ThreadSafeQueue<Pitaya::Asset::AssetOperate> assetOperateQueue;

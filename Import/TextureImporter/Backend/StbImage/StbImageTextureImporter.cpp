@@ -67,3 +67,35 @@ bool Pitaya::Import::StbImageTextureImporter::Import(Pitaya::Core::GUID guid, co
 	out.GUID = guid;
 	return true;
 }
+bool Pitaya::Import::StbImageTextureImporter::Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, SkyBoxImportResult& out)
+{
+	float* pixels = stbi_loadf(file.string().c_str(), &out.Width, &out.Height, nullptr, 4);
+	if (!pixels)
+	{
+		Pitaya::Log::Error("stbimage load hdr fail GUID:" + guid.ToString() + " path:" + file.string());
+		return false;
+	}
+
+	size_t floatCount = static_cast<size_t>(out.Width) * static_cast<size_t>(out.Height) * 4;
+	out.Data.assign(pixels, pixels + floatCount);
+	stbi_image_free(pixels);
+	out.GUID = guid;
+	return true;
+}
+bool Pitaya::Import::StbImageTextureImporter::Import(Pitaya::Core::GUID guid, const void* data, size_t size, SkyBoxImportResult& out)
+{
+	float* pixels = stbi_loadf_from_memory(static_cast<const stbi_uc*>(data), static_cast<int>(size),
+		&out.Width, &out.Height, nullptr, 4);
+	if (!pixels)
+	{
+		Pitaya::Log::Error("stbimage load hdr from memory fail GUID:" + guid.ToString());
+		return false;
+	}
+
+	size_t floatCount = static_cast<size_t>(out.Width) * static_cast<size_t>(out.Height) * 4;
+	out.Data.assign(pixels, pixels + floatCount);
+	stbi_image_free(pixels);
+	out.GUID = guid;
+	return true;
+}
+

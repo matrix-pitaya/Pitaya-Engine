@@ -19,6 +19,7 @@ namespace Pitaya::Asset
 			Pitaya::Import::StaticMeshImportResult,
 			Pitaya::Import::SkinnedMeshImportResult,
 			Pitaya::Import::RenderTargetImportResult,
+			Pitaya::Import::SkyBoxImportResult,
 			Pitaya::Asset::Texture2DUnloadRequire> Data;
 	};
 }

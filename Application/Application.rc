@@ -88,6 +88,7 @@ IDR_IBL_GGX_PREFILTER_FRAGMENT_SHADER            RCDATA          "../built-in/IB
 IDR_IBL_BRDF_LUT_GEN_VERTEX_SHADER               RCDATA          "../built-in/IBL/BRDFLUTGen/Shader.vert"
 IDR_IBL_BRDF_LUT_GEN_FRAGMENT_SHADER             RCDATA          "../built-in/IBL/BRDFLUTGen/Shader.frag"
 IDR_IBL_BRDF_LUT                                 RCDATA          "../built-in/IBL/BRDFLUT.raw"
+IDR_SKYBOX_HDR                                   RCDATA          "../built-in/SkyBox.hdr"
 
 // Font
 IDR_FONT_FA_SOLID_900_TTF               RCDATA          "../built-in/fonts/fa-solid-900.ttf"

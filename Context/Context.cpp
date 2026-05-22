@@ -38,6 +38,7 @@ bool Pitaya::Engine::Context::Verify() const
 		if (!FUNCTABLE(Chronometer)) { throw std::runtime_error("Context [FuncTable] miss [Chronometer]"); }
 		if (!FUNCTABLE(Window)) { throw std::runtime_error("Context [FuncTable] miss [Window]"); }
 		if (!FUNCTABLE(GameWorld)) { throw std::runtime_error("Context [FuncTable] miss [GameWorld]"); }
+		if (!FUNCTABLE(Renderer)) { throw std::runtime_error("Context [FuncTable] miss [Renderer]"); }
 	} while (false);
 	return true;
 }
@@ -76,6 +77,7 @@ void Pitaya::Engine::Context::Nullify() noexcept
 		FUNCTABLE(TaskScheduler) = nullptr;
 		FUNCTABLE(Window) = nullptr;
 		FUNCTABLE(GameWorld) = nullptr;
+		FUNCTABLE(Renderer) = nullptr;
 	} while (false);
 }
 

@@ -8,7 +8,7 @@
 
 namespace
 {
-	inline static std::unique_ptr<Pitaya::Import::TextureImporter> CreateTextureImporter(Pitaya::Import::TextureAPI api) noexcept
+	inline std::unique_ptr<Pitaya::Import::TextureImporter> CreateTextureImporter(Pitaya::Import::TextureAPI api) noexcept
 	{
 		switch (api)
 		{
@@ -24,7 +24,7 @@ namespace
 				return std::make_unique<Pitaya::Import::StbImageTextureImporter>();
 		}
 	}
-	inline static std::unique_ptr<Pitaya::Import::MeshImporter> CreateMeshImporter(Pitaya::Import::MeshAPI api)
+	inline std::unique_ptr<Pitaya::Import::MeshImporter> CreateMeshImporter(Pitaya::Import::MeshAPI api)
 	{
 		switch (api)
 		{
@@ -70,3 +70,12 @@ bool Pitaya::Import::Import(Pitaya::Core::GUID guid, const std::filesystem::path
 {
 	return CreateMeshImporter(api)->Import(guid, file, preload, out);
 }
+bool Pitaya::Import::Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, Pitaya::Import::SkyBoxImportResult& out)
+{
+	return CreateTextureImporter(Pitaya::Import::TextureAPI::StbImage)->Import(guid, file, out);
+}
+bool Pitaya::Import::Import(Pitaya::Core::GUID guid, const void* data, size_t size, Pitaya::Import::SkyBoxImportResult& out)
+{
+	return CreateTextureImporter(Pitaya::Import::TextureAPI::StbImage)->Import(guid, data, size, out);
+}
+

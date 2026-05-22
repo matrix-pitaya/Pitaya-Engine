@@ -15,5 +15,7 @@ namespace Pitaya::Import
 	public:
 		virtual bool Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, bool isFlipVerticallyOnLoad, bool isGenerateMipmap, Texture2DImportResult& out) = 0;
 		virtual bool Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, const std::vector<std::filesystem::path>& paths, bool isFlipVerticallyOnLoad, bool isGenerateMipmap, TextureCubemapImportResult& out) = 0;
+		virtual bool Import(Pitaya::Core::GUID guid, const std::filesystem::path& file, SkyBoxImportResult& out) = 0;
+		virtual bool Import(Pitaya::Core::GUID guid, const void* data, size_t size, SkyBoxImportResult& out) = 0;
 	};
 }

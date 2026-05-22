@@ -108,6 +108,14 @@ namespace Pitaya::Import
 		bool IsValid = false;
 	};
 
+	struct SkyBoxImportResult
+	{
+		int Width = 0;
+		int Height = 0;
+		std::vector<float> Data;
+		Pitaya::Core::GUID GUID;
+	};
+
 	struct RenderTargetImportResult
 	{
 		Pitaya::Core::GUID GUID;

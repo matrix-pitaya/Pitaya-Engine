@@ -30,6 +30,9 @@
     <ClInclude Include="Common\API.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Common\FuncTable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="Common\RenderQueue.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -66,6 +69,12 @@
     <ClInclude Include="Specific\RenderItem.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Specific\RenderSceneEnv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Specific\SceneInfoSetup.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="Command\BlitToScreenCommand.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -76,6 +85,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Command\DrawSkyboxCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\SceneInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Common\ShadowInfo.h">

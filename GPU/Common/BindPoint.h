@@ -7,7 +7,8 @@ namespace Pitaya::GPU
 	enum class UBOBindPoint : uint32_t
 	{
 		CameraSnapshot = 0,
-		PostProcessUBO = 1
+		PostProcessUBO = 1,
+		SceneInfo = 2
 	};
 
 	enum class SSBOBindPoint : uint32_t

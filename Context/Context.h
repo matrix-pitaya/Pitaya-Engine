@@ -55,6 +55,7 @@ namespace Pitaya::Engine
 			Pitaya::Engine::FuncTable<Pitaya::Task::TaskScheduler>* TaskScheduler = nullptr;
 			Pitaya::Engine::FuncTable<Pitaya::Window::Window>* Window = nullptr;
 			Pitaya::Engine::FuncTable<Pitaya::Game::GameWorld>* GameWorld = nullptr;
+			Pitaya::Engine::FuncTable<Pitaya::Render::Renderer>* Renderer = nullptr;
 		};
 
 	private:
@@ -100,6 +101,7 @@ namespace Pitaya::Engine
 			else if constexpr (std::is_same_v<T, Pitaya::Task::TaskScheduler>)		{ return *funcTables.TaskScheduler; }
 			else if constexpr (std::is_same_v<T, Pitaya::Window::Window>)			{ return *funcTables.Window; }
 			else if constexpr (std::is_same_v<T, Pitaya::Game::GameWorld>)			{ return *funcTables.GameWorld; }
+			else if constexpr (std::is_same_v<T, Pitaya::Render::Renderer>)			{ return *funcTables.Renderer; }
 		}
 
 	private:

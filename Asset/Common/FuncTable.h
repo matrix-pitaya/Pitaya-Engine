@@ -4,18 +4,10 @@
 #include<Core/Asset/Asset.h>
 #include<Core/Identifier/GUID.h>
 #include<Context/Context.h>
+#include<Asset/Common/AssetType.h>
 #include<stdexcept>
 #include<string>
 #include<filesystem>
-
-namespace Pitaya::Asset
-{
-	struct Texture;
-	struct Material;
-	struct Mesh;
-	struct Shader;
-	struct RenderTarget;
-}
 
 namespace Pitaya::Engine
 {
@@ -42,6 +34,7 @@ namespace Pitaya::Engine
 			if (!OnLoadMesh) { throw std::runtime_error("FuncTable miss [Asset::OnLoadMesh] Function!"); }
 			if (!OnLoadMaterial) { throw std::runtime_error("FuncTable miss [Asset::OnLoadMaterial] Function!"); }
 			if (!OnLoadRenderTarget) { throw std::runtime_error("FuncTable miss [Asset::OnLoadRenderTarget] Function!"); }
+			if (!OnLoadSkyBox) { throw std::runtime_error("FuncTable miss [Asset::OnLoadSkyBox] Function!"); }
 			if (!OnGetAssetPathByGUID) { throw std::runtime_error("FuncTable miss [Asset::GetAssetPathByGUID] Function!"); }
 			if (!OnGetAssetGUIDByPath) { throw std::runtime_error("FuncTable miss [Asset::GetAssetGUIDByPath] Function!"); }
 			if (!OnTransformToVirtualPath) { throw std::runtime_error("FuncTable miss [Asset::TransformToVirtualPath] Function!"); }
@@ -57,6 +50,7 @@ namespace Pitaya::Engine
 			OnLoadMesh = nullptr;
 			OnLoadMaterial = nullptr;
 			OnLoadRenderTarget = nullptr;
+			OnLoadSkyBox = nullptr;
 			OnGetAssetPathByGUID = nullptr;
 			OnGetAssetGUIDByPath = nullptr;
 			OnTransformToVirtualPath = nullptr;
@@ -85,6 +79,10 @@ namespace Pitaya::Engine
 		inline Pitaya::Core::Asset<Pitaya::Asset::RenderTarget> InvokeOnLoadRenderTarget(Pitaya::Core::GUID guid)
 		{
 			return OnLoadRenderTarget(guid);
+		}
+		inline Pitaya::Core::Asset<Pitaya::Asset::SkyBox> InvokeOnLoadSkyBox(Pitaya::Core::GUID guid)
+		{
+			return OnLoadSkyBox(guid);
 		}
 		inline bool InvokeOnGetAssetPathByGUID(Pitaya::Core::GUID guid, std::filesystem::path& out_path)
 		{
@@ -117,6 +115,7 @@ namespace Pitaya::Engine
 		Pitaya::Core::Asset<Pitaya::Asset::Mesh>(ENGINE_CALL *OnLoadMesh)(Pitaya::Core::GUID) = nullptr;
 		Pitaya::Core::Asset<Pitaya::Asset::Material>(ENGINE_CALL *OnLoadMaterial)(Pitaya::Core::GUID) = nullptr;
 		Pitaya::Core::Asset<Pitaya::Asset::RenderTarget>(ENGINE_CALL *OnLoadRenderTarget)(Pitaya::Core::GUID) = nullptr;
+		Pitaya::Core::Asset<Pitaya::Asset::SkyBox>(ENGINE_CALL *OnLoadSkyBox)(Pitaya::Core::GUID) = nullptr;
 		bool (ENGINE_CALL *OnGetAssetPathByGUID)(Pitaya::Core::GUID, std::filesystem::path&) = nullptr;
 		bool (ENGINE_CALL *OnGetAssetGUIDByPath)(const std::filesystem::path&, Pitaya::Core::GUID&) = nullptr;
 		bool (ENGINE_CALL *OnTransformToVirtualPath)(const std::filesystem::path&, const std::filesystem::path&, std::filesystem::path&) = nullptr;
@@ -128,21 +127,15 @@ namespace Pitaya::Engine
 
 namespace Pitaya::Asset
 {
-	template<typename T>
+	template<AssetType T>
 	inline Pitaya::Core::Asset<T> LoadAsset(Pitaya::Core::GUID guid)
 	{
-		static_assert(std::is_same_v<T, Pitaya::Asset::Texture> ||
-			std::is_same_v<T, Pitaya::Asset::Shader> ||
-			std::is_same_v<T, Pitaya::Asset::Mesh> ||
-			std::is_same_v<T, Pitaya::Asset::RenderTarget> ||
-			std::is_same_v<T, Pitaya::Asset::Material>,
-			"Unknow Asset!");
-
 		if constexpr (std::is_same_v<T, Pitaya::Asset::Texture>) { return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Asset::AssetHub>().InvokeOnLoadTexture(guid); }
 		if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Asset::AssetHub>().InvokeOnLoadShader(guid); }
 		if constexpr (std::is_same_v<T, Pitaya::Asset::Mesh>) { return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Asset::AssetHub>().InvokeOnLoadMesh(guid); }
 		if constexpr (std::is_same_v<T, Pitaya::Asset::Material>) { return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Asset::AssetHub>().InvokeOnLoadMaterial(guid); }
 		if constexpr (std::is_same_v<T, Pitaya::Asset::RenderTarget>) { return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Asset::AssetHub>().InvokeOnLoadRenderTarget(guid); }
+		if constexpr (std::is_same_v<T, Pitaya::Asset::SkyBox>) { return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Asset::AssetHub>().InvokeOnLoadSkyBox(guid); }
 	}
 	inline bool GetAssetPathByGUID(Pitaya::Core::GUID guid, std::filesystem::path& out_path)
 	{

@@ -6,18 +6,31 @@
 #include<GPU/Frontend/Shader/Shader.h>
 #include<GPU/Frontend/Buffer/VertexArray.h>
 #include<GPU/Frontend/Buffer/FrameBuffer.h>
+#include<Render/Common/FuncTable.h>
 #include<Import/Import.h>
 #include<Import/Common/MeshVertex.h>
 #include<Core/Utils/File.h>
 #include<Core/Utils/System.h>
 #include<Application/Built-in.h>
 
+namespace
+{
+	const std::unordered_set<std::string> TextureExtensions =
+	{ ".png", ".jpg", ".jpeg", ".bmp", ".tga",	".gif",				//普通位图
+	  ".hdr", ".exr" };												//高动态范围图（仍属于2D纹理）
+	const std::unordered_map<std::string, Pitaya::GPU::ShaderType> ShaderExtensions =
+	{ {".vert", Pitaya::GPU::ShaderType::Vertex},{".frag", Pitaya::GPU::ShaderType::Fragment},
+	  {".geom", Pitaya::GPU::ShaderType::Geometry}, };
+	const std::unordered_set<std::string> MeshExtensions =
+	{ ".obj" };
+	const std::unordered_set<std::string> MaterialExtensions =
+	{ ".mat" };
+	const std::unordered_set<std::string> RenderTargetExtensions =
+	{ ".rt" };
+}
+
 bool Pitaya::Asset::AssetHub::Initialize()
 {
-	engineRoot = Pitaya::Core::GetExecutableDirectory() / "resource";
-	projectRoot = Pitaya::Core::GetWorkspace() / "Asset" / "Resource";
-	//registry.DeserializeFromFile();	//TOOD 反序列化数据
-	
 	//加载内置资源
 	//Default Shader
 	{
@@ -303,10 +316,31 @@ bool Pitaya::Asset::AssetHub::Initialize()
 		cacheAssetOperateQueue.push({ result });
 	}
 
+	//Default SkyBox
+	{
+		buildIn.DefaultSkyBox.Data.store(Pitaya::Core::New<Pitaya::Asset::SkyBox>(), std::memory_order_release);
+		buildIn.DefaultSkyBox.GUID = Pitaya::Asset::SkyBox::Default;
+		buildIn.DefaultSkyBox.State.SetBits(Pitaya::Core::AssetState::CPULoading);
+		auto rc = Pitaya::Core::LoadBuiltInRC(IDR_SKYBOX_HDR);
+		Pitaya::Import::SkyBoxImportResult result;
+		Pitaya::Import::Import(Pitaya::Asset::SkyBox::Default, rc.data, rc.size, result);
+		buildIn.DefaultSkyBox.State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
+		skyboxes.Emplace(Pitaya::Asset::SkyBox::Default, &buildIn.DefaultSkyBox);
+		cacheAssetOperateQueue.push({ result });
+	}
+
+
+	// TODO 重构
+	engineRoot = Pitaya::Core::GetExecutableDirectory() / "resource";
+	projectRoot = Pitaya::Core::GetWorkspace() / "Asset" / "Resource";
+	//registry.DeserializeFromFile();	//TOOD 反序列化数据
+	// END TODO
+
 	return true;
 }
 void Pitaya::Asset::AssetHub::Release()
 {
+	// TODO 重构
 	//从资源池移除内置资源
 	shaders.Erase(Pitaya::Asset::Shader::Static);
 	textures.Erase(Pitaya::Asset::Texture::White);
@@ -314,6 +348,7 @@ void Pitaya::Asset::AssetHub::Release()
 	meshes.Erase(Pitaya::Asset::Mesh::Cube);
 	meshes.Erase(Pitaya::Asset::Mesh::Sphere);
 	meshes.Erase(Pitaya::Asset::Mesh::Panel);
+	skyboxes.Erase(Pitaya::Asset::SkyBox::Default);
 
 	//清理资源池资源
 	meshes.ForEachCheckErase(
@@ -366,11 +401,8 @@ void Pitaya::Asset::AssetHub::Release()
 		{
 			if (_entry)
 			{
-				//清除Entry内部data数据
 				Pitaya::Core::Delete(_entry->Data.load(std::memory_order_acquire));
 				_entry->Data.store(nullptr, std::memory_order_release);
-
-				//清除Entry
 				Pitaya::Core::Delete(_entry);
 				_entry = nullptr;
 			}
@@ -391,6 +423,18 @@ void Pitaya::Asset::AssetHub::Release()
 			}
 			return true;
 		});
+	skyboxes.ForEachCheckErase(
+		[](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::SkyBox>::AssetEntry*& _entry)
+		{
+			if (_entry)
+			{
+				Pitaya::Core::Delete(_entry->Data.load(std::memory_order_acquire));
+				_entry->Data.store(nullptr, std::memory_order_release);
+				Pitaya::Core::Delete(_entry);
+				_entry = nullptr;
+			}
+			return true;
+		});
 
 	//清除内置资源
 	Pitaya::Core::Delete(buildIn.DefaultStaticShader.Data.load(std::memory_order_acquire)); buildIn.DefaultStaticShader.Data.store(nullptr, std::memory_order_release);
@@ -399,8 +443,10 @@ void Pitaya::Asset::AssetHub::Release()
 	Pitaya::Core::Delete(buildIn.Cube.Data.load(std::memory_order_acquire)); buildIn.Cube.Data.store(nullptr, std::memory_order_release);
 	Pitaya::Core::Delete(buildIn.Sphere.Data.load(std::memory_order_acquire)); buildIn.Sphere.Data.store(nullptr, std::memory_order_release);
 	Pitaya::Core::Delete(buildIn.Panel.Data.load(std::memory_order_acquire)); buildIn.Panel.Data.store(nullptr, std::memory_order_release);
-
+	Pitaya::Core::Delete(buildIn.DefaultSkyBox.Data.load(std::memory_order_acquire)); buildIn.DefaultSkyBox.Data.store(nullptr, std::memory_order_release);
+	
 	//registry.SerializeToFile();  //TOOD 序列化数据
+	// END TODO
 }
 
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, std::monostate&)
@@ -875,8 +921,48 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Ren
 {
 	Pitaya::GPU::DestroyTexture2D(passkey, cpuOpResult_Inner.Texture2DHandle);
 }
+void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Import::SkyBoxImportResult& cpuOpResult_Inner)
+{
+	std::string log;
+	Pitaya::Core::Asset<Pitaya::Asset::SkyBox>::AssetEntry* entry = nullptr;
+	skyboxes.FindOperateKV(cpuOpResult_Inner.GUID,
+		[&log, &entry](Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::SkyBox>::AssetEntry* _entry)
+		{
+			if (!_entry) { log = "skybox assetentry Is Empty GUID: " + _guid.ToString(); return; }
+			if (_entry->State.HasBits(Pitaya::Core::AssetState::Unload)) { log = "skybox marked as unload GUID: " + _guid.ToString(); return; }
+			_entry->State.SetBits(Pitaya::Core::AssetState::GPULoading);
+			entry = _entry;
+		},
+		[&log](Core::GUID _guid) { log = "skybox assetentry not found GUID: " + _guid.ToString(); });
+	if (!log.empty()) { Pitaya::Log::Error(log); }
+	if (!entry) { return; }
+
+	auto* skyBox = entry->Data.load(std::memory_order_acquire);
+	if (!skyBox) { Pitaya::Log::Error("skybox asset entry data is Empty!" + cpuOpResult_Inner.GUID.ToString()); entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading); return; }
+
+	auto equirectHandle = Pitaya::GPU::CreateTexture2D(passkey, cpuOpResult_Inner.Data.data(),
+		cpuOpResult_Inner.Width, cpuOpResult_Inner.Height, Pitaya::GPU::PixelFormat::RGBA16F, false, false);
+	auto envHandle = Pitaya::GPU::CreateEmptyTextureCubemap(passkey, 512, 1, Pitaya::GPU::PixelFormat::RGBA16F);
+	auto irradianceHandle = Pitaya::GPU::CreateEmptyTextureCubemap(passkey, 32, 1, Pitaya::GPU::PixelFormat::RGBA16F);
+	auto prefilteredHandle = Pitaya::GPU::CreateEmptyTextureCubemap(passkey, 128, 5, Pitaya::GPU::PixelFormat::RGBA16F);
+	if (!equirectHandle || !envHandle || !irradianceHandle || !prefilteredHandle) { entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading); return; }
+	skyBox->EquirectHandle = equirectHandle;
+	skyBox->EnvCubemapHandle = envHandle;
+	skyBox->IrradianceHandle = irradianceHandle;
+	skyBox->PrefilteredHandle = prefilteredHandle;
+
+	if (!Pitaya::Render::BakeIBL(passkey, { equirectHandle, envHandle, irradianceHandle, prefilteredHandle }))
+	{
+		Pitaya::Log::Error("skybox asset entry data bake IBL fail! GUID:" + cpuOpResult_Inner.GUID.ToString());
+		entry->State.ModifyBits(Pitaya::Core::AssetState::GPUFailed, Pitaya::Core::AssetState::GPULoading); 
+		return;
+	}
+
+	entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
+}
 
 //TODO 资产模块 从该行向下 全部需要重构
+// TODO 重构
 bool Pitaya::Asset::AssetHub::TransformToVirtualPath(const std::filesystem::path& inputPath, const std::filesystem::path& basePath, std::filesystem::path& out_virtualpath) const
 {
 	std::filesystem::path absolutePath = inputPath.is_absolute() ? inputPath : basePath / inputPath;
@@ -953,45 +1039,45 @@ bool Pitaya::Asset::AssetHub::RegisterExternalFile(const std::filesystem::path& 
 	return true;
 }
 
-Pitaya::Asset::AssetType Pitaya::Asset::AssetHub::GetAssetType(const std::filesystem::path& path) const
-{
-	if (!CheckIsVirtualPath(path))
-	{
-		Pitaya::Log::Error("get asset type fail! path is not virtual path, path:" + path.string());
-		return Pitaya::Asset::AssetType::Unknown;
-	}
-
-	std::filesystem::path resolvePath = GetResolvePath(path);
-	if (!CheckAssetValid(resolvePath))
-	{
-		Pitaya::Log::Error("get asset type fail! path invalid, path:" + resolvePath.string());
-		return Pitaya::Asset::AssetType::Unknown;
-	}
-
-	if (std::filesystem::is_regular_file(resolvePath))
-	{
-		std::string ext = resolvePath.extension().string();
-		Pitaya::Core::ToLower(ext);
-
-		//Texture
-		if (TextureExtensions.contains(ext) || ext == ".cubemap") { return Pitaya::Asset::AssetType::Texture; }
-
-		//Shader
-		if (ext == ".shader") { return Pitaya::Asset::AssetType::Shader; }
-
-		//Material
-		if (MaterialExtensions.contains(ext)) { return Pitaya::Asset::AssetType::Material; }
-
-		//Mesh
-		if (MeshExtensions.contains(ext)) { return Pitaya::Asset::AssetType::Mesh; }
-
-		//RenderTarget
-		if (RenderTargetExtensions.contains(ext)) { return Pitaya::Asset::AssetType::RenderTarget; }
-	}
-
-	Pitaya::Log::Error("unknwon path:" + path.string());
-	return Pitaya::Asset::AssetType::Unknown;
-}
+//Pitaya::Asset::AssetType Pitaya::Asset::AssetHub::GetAssetType(const std::filesystem::path& path) const
+//{
+//	if (!CheckIsVirtualPath(path))
+//	{
+//		Pitaya::Log::Error("get asset type fail! path is not virtual path, path:" + path.string());
+//		return Pitaya::Asset::AssetType::Unknown;
+//	}
+//
+//	std::filesystem::path resolvePath = GetResolvePath(path);
+//	if (!CheckAssetValid(resolvePath))
+//	{
+//		Pitaya::Log::Error("get asset type fail! path invalid, path:" + resolvePath.string());
+//		return Pitaya::Asset::AssetType::Unknown;
+//	}
+//
+//	if (std::filesystem::is_regular_file(resolvePath))
+//	{
+//		std::string ext = resolvePath.extension().string();
+//		Pitaya::Core::ToLower(ext);
+//
+//		//Texture
+//		if (TextureExtensions.contains(ext) || ext == ".cubemap") { return Pitaya::Asset::AssetType::Texture; }
+//
+//		//Shader
+//		if (ext == ".shader") { return Pitaya::Asset::AssetType::Shader; }
+//
+//		//Material
+//		if (MaterialExtensions.contains(ext)) { return Pitaya::Asset::AssetType::Material; }
+//
+//		//Mesh
+//		if (MeshExtensions.contains(ext)) { return Pitaya::Asset::AssetType::Mesh; }
+//
+//		//RenderTarget
+//		if (RenderTargetExtensions.contains(ext)) { return Pitaya::Asset::AssetType::RenderTarget; }
+//	}
+//
+//	Pitaya::Log::Error("unknwon path:" + path.string());
+//	return Pitaya::Asset::AssetType::Unknown;
+//}
 
 bool Pitaya::Asset::AssetHub::CheckIsVirtualPath(const std::filesystem::path& path) const
 {
@@ -1690,6 +1776,24 @@ void Pitaya::Asset::AssetHub::LoadRenderTarget(Pitaya::Core::GUID guid, const st
 
 	entry->State.ModifyBits(Pitaya::Core::AssetState::CPULoaded, Pitaya::Core::AssetState::CPULoading);
 }
+void Pitaya::Asset::AssetHub::LoadSkyBoxAsset(Pitaya::Core::GUID guid, const std::filesystem::path& path)
+{
+	Pitaya::Import::SkyBoxImportResult result;
+	if (Pitaya::Import::Import(guid, path, result))
+	{
+		assetOperateQueue.Push({ result });
+	}
+	else
+	{
+		Pitaya::Log::Error(path.string() + " SkyBox Load Fail");
+		skyboxes.FindOperateKV(guid,
+			[](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::SkyBox>::AssetEntry* _entry)
+			{
+				if (_entry) { _entry->State.SetBits(Pitaya::Core::AssetState::CPUFailed); }
+			},
+			[](Pitaya::Core::GUID) {});
+	}
+}
 
 void Pitaya::Asset::AssetHub::AssetRegistry::Serialize(Pitaya::Serialize::SerializeContext&) const
 {
@@ -1699,3 +1803,4 @@ void Pitaya::Asset::AssetHub::AssetRegistry::Deserialize(const Pitaya::Serialize
 {
 
 }
+//ENDTODO

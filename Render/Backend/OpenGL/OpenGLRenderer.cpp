@@ -226,6 +226,27 @@ void Pitaya::Render::Renderer::NewRenderFrame()
     BindShadowAtlas(renderKit.CSMAtlas, static_cast<uint32_t>(Pitaya::GPU::TextureSlot::CSM));
     BindShadowAtlas(renderKit.SpotShadowAtlas, static_cast<uint32_t>(Pitaya::GPU::TextureSlot::SPOT));
     BindShadowAtlas(renderKit.PointShadowAtlas, static_cast<uint32_t>(Pitaya::GPU::TextureSlot::POINT));
+
+    // 上传 SceneInfo UBO
+    const auto& setup = renderPacket.back.SceneInfoSetup;
+    Pitaya::Render::SceneInfo sceneInfo = {};
+    sceneInfo.AmbientColor = setup.AmbientColor;
+    sceneInfo.DeltaTime = setup.DeltaTime;
+    Pitaya::GPU::TextureCubemap cubemap;
+    if (Pitaya::GPU::GetTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), setup.EnvCubemapHandle, cubemap))
+        { sceneInfo.EnvCubemapHandle = cubemap.SamplerId; }
+    if (Pitaya::GPU::GetTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), setup.IrradianceHandle, cubemap))
+        { sceneInfo.IrradianceHandle = cubemap.SamplerId; }
+    if (Pitaya::GPU::GetTextureCubemap(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), setup.PrefilteredHandle, cubemap))
+        { sceneInfo.PrefilteredHandle = cubemap.SamplerId; }
+    Pitaya::GPU::Texture2D tex2D;
+    if (Pitaya::GPU::GetTexture2D(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), setup.BRDFLUTHandle, tex2D))
+        { sceneInfo.BRDFLUTHandle = tex2D.SamplerId; }
+    Pitaya::GPU::UniformBuffer ubo;
+    if (Pitaya::GPU::GetUniformBuffer(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), renderKit.SceneInfoUBO.Handle, ubo))
+    {
+        glNamedBufferSubData(ubo.Id, 0, sizeof(Pitaya::Render::SceneInfo), &sceneInfo);
+    }
 }
 void Pitaya::Render::Renderer::SwapBuffer() const
 {

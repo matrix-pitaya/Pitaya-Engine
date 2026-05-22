@@ -11,6 +11,7 @@
 #include<Log/Common/FuncTable.h>
 #include<Config/Common/FunctionTable.h>
 #include<Window/Common/FuncTable.h>
+#include<Time/Common/FuncTable.h>
 
 #include<Render/Common/API.h>
 #include<Render/Common/RenderCommandType.h>
@@ -18,6 +19,7 @@
 #include<Render/Common/InstanceInfo.h>
 #include<Render/Common/LightInfo.h>
 #include<Render/Common/ShadowInfo.h>
+#include<Render/Common/SceneInfo.h>
 #include<Render/Command/BeginPassCommand.h>
 #include<Render/Command/DrawCommand.h>
 #include<Render/Command/InstancedDrawCommand.h>
@@ -30,6 +32,8 @@
 #include<Render/Specific/RenderItem.h>
 #include<Render/Specific/LightShadowSetup.h>
 #include<Render/Specific/ShadowPassSetup.h>
+#include<Render/Specific/RenderSceneEnv.h>
+#include<Render/Specific/SceneInfoSetup.h>
 
 #include<GPU/Common/FuncTable.h>
 #include<GPU/Common/TextureType.h>
@@ -43,6 +47,7 @@
 #include<Asset/Common/Texture.h>
 #include<Asset/Common/Material.h>
 #include<Asset/Common/RenderTarget.h>
+#include<Asset/Common/SkyBox.h>
 
 #include<Application/Built-in.h>
 
@@ -121,7 +126,7 @@ namespace Pitaya::Render
             struct UBO
             {
                 Pitaya::Core::SlotMap<Pitaya::GPU::UniformBuffer>::Handle Handle;
-            } CameraSnapshotUBO, PostProcessParamsUBO;
+            } CameraSnapshotUBO, PostProcessParamsUBO, SceneInfoUBO;
             //ShaderStorageBuffer
             struct SSBO
             {
@@ -161,8 +166,10 @@ namespace Pitaya::Render
                 Specific.EmptyVAOHandle = Pitaya::GPU::CreateVertexArray(passkey);
                 CameraSnapshotUBO.Handle = Pitaya::GPU::CreateUniformBuffer(passkey, sizeof(Pitaya::Core::CameraSnapshot), 
                     static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::CameraSnapshot));
-                PostProcessParamsUBO.Handle = Pitaya::GPU::CreateUniformBuffer(passkey, Pitaya::Render::PostProcessStep::UniformBufferBytes, 
+                PostProcessParamsUBO.Handle = Pitaya::GPU::CreateUniformBuffer(passkey, Pitaya::Render::PostProcessStep::UniformBufferBytes,
                     static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::PostProcessUBO));
+                SceneInfoUBO.Handle = Pitaya::GPU::CreateUniformBuffer(passkey, sizeof(Pitaya::Render::SceneInfo),
+                    static_cast<uint32_t>(Pitaya::GPU::UBOBindPoint::SceneInfo));
 
                 // 初始分配1024个位置
                 InstanceModelTransformSSBO.Capacity = 1024 * sizeof(InstanceInfo);
@@ -330,6 +337,7 @@ namespace Pitaya::Render
                 std::vector<uint32_t> MaterialTexturePatches;
                 std::vector<LightInfo> Lights;
                 std::vector<std::byte> ShadowSSBOData;
+                SceneInfoSetup SceneInfoSetup;
                 uint32_t RequiredCSMLayers = 0;
                 uint32_t RequiredSpotLayers = 0;
                 uint32_t RequiredPointLayers = 0;
@@ -343,6 +351,7 @@ namespace Pitaya::Render
                     MaterialTexturePatches.clear();
                     Lights.clear();
                     ShadowSSBOData.clear();
+                    SceneInfoSetup = {};
                     RequiredCSMLayers = 0;
                     RequiredSpotLayers = 0;
                     RequiredPointLayers = 0;
@@ -733,6 +742,25 @@ namespace Pitaya::Render
         {
             renderPacket.front.Clear();
             INVOKE_POSTRENDERERBEGINRENDERFRAME_HOOK
+        }
+        inline void SubmitRenderSceneEnv(Pitaya::Core::PassKey<RenderPipeline>, const RenderSceneEnv& env)
+        {
+            auto& setup = renderPacket.front.SceneInfoSetup;
+            setup.AmbientColor = glm::vec4(env.AmbientColor, 1.0f);
+            setup.BRDFLUTHandle = renderKit.IBL.BRDFLUTHandle;
+            setup.DeltaTime = Pitaya::Time::delta();
+            if (env.SkyBox)
+            {
+                setup.EnvCubemapHandle = env.SkyBox->EnvCubemapHandle;
+                setup.IrradianceHandle = env.SkyBox->IrradianceHandle;
+                setup.PrefilteredHandle = env.SkyBox->PrefilteredHandle;
+            }
+            else
+            {
+                setup.EnvCubemapHandle = Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle::Invalid;
+                setup.IrradianceHandle = Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle::Invalid;
+                setup.PrefilteredHandle = Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle::Invalid;
+            }
         }
         inline void SubmitLightShadow(Pitaya::Core::PassKey<RenderPipeline>, const LightShadowSetup& setup)
         {
