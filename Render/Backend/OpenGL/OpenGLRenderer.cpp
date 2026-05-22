@@ -64,10 +64,6 @@ void Pitaya::Render::Renderer::ReleaseRenderContext()
     backendStorage.Cast<OpenGLGraphicsContext>().Window = nullptr;
 }
 
-void Pitaya::Render::Renderer::SwapBuffer() const
-{
-    glfwSwapBuffers(backendStorage.Cast<OpenGLGraphicsContext>().Window);
-}
 void Pitaya::Render::Renderer::NewRenderFrame()
 {
     Pitaya::GPU::ShaderStorageBuffer shaderStorageBuffer;
@@ -230,6 +226,16 @@ void Pitaya::Render::Renderer::NewRenderFrame()
     BindShadowAtlas(renderKit.CSMAtlas, static_cast<uint32_t>(Pitaya::GPU::TextureSlot::CSM));
     BindShadowAtlas(renderKit.SpotShadowAtlas, static_cast<uint32_t>(Pitaya::GPU::TextureSlot::SPOT));
     BindShadowAtlas(renderKit.PointShadowAtlas, static_cast<uint32_t>(Pitaya::GPU::TextureSlot::POINT));
+}
+void Pitaya::Render::Renderer::SwapBuffer() const
+{
+    glfwSwapBuffers(backendStorage.Cast<OpenGLGraphicsContext>().Window);
+}
+void Pitaya::Render::Renderer::WaitFence() const
+{
+    GLsync fence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+    glClientWaitSync(fence, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+    glDeleteSync(fence);
 }
 
 void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::BeginShadowPassCommand* command) const

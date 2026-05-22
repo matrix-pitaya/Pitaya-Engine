@@ -53,5 +53,8 @@
     <ClInclude Include="Common\FuncTable.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Common\SkyBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

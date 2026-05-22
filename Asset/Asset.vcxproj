@@ -170,6 +170,7 @@
     <ClInclude Include="Common\Mesh.h" />
     <ClInclude Include="Common\RenderTarget.h" />
     <ClInclude Include="Common\Shader.h" />
+    <ClInclude Include="Common\SkyBox.h" />
     <ClInclude Include="Common\Texture.h" />
     <ClInclude Include="Common\MaterialParamLayout.h" />
     <ClInclude Include="Common\TextureUsage.h" />

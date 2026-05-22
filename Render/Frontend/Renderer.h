@@ -703,6 +703,7 @@ namespace Pitaya::Render
                     NewRenderFrame();
                     renderPacket.ParseCommand(this);
                     SwapBuffer();
+                    WaitFence();
                 }
             }
 
@@ -714,6 +715,7 @@ namespace Pitaya::Render
     private:
         void NewRenderFrame();
         void SwapBuffer() const;
+        void WaitFence() const;
 
     private:
         void ExecuteCommand(const Pitaya::Render::BeginPassCommand*) const;
