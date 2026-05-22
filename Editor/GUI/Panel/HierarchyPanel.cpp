@@ -19,18 +19,18 @@ void Pitaya::Editor::HierarchyPanel::OnImGuiRender()
             {
                 // 找到当前链表中最后一个根节点
                 entt::entity lastRoot = entt::null;
-                entt::entity curr = scene->GetRootEntity();
+                entt::entity curr = scene->ECS.GetRootEntity();
                 while (curr != entt::null)
                 {
                     lastRoot = curr;
-                    auto* link = scene->GetComponent<Pitaya::Game::ChildLink>(curr);
+                    auto* link = scene->ECS.GetComponent<Pitaya::Game::ChildLink>(curr);
                     curr = link ? link->GetNextSibling() : entt::null;
                 }
 
                 // 如果要拖拽的节点本身就是最后一个根节点，则无需操作
                 if (draggedEntity != lastRoot)
                 {
-                    scene->SetRelationship(draggedEntity, entt::null, lastRoot);
+                    scene->ECS.SetRelationship(draggedEntity, entt::null, lastRoot);
                 }
             }
         }
@@ -55,11 +55,11 @@ void Pitaya::Editor::HierarchyPanel::DrawSceneTree()
 {
     if (auto* scene = Pitaya::Game::GetActiveScene())
     {
-        entt::entity curr = scene->GetRootEntity();
+        entt::entity curr = scene->ECS.GetRootEntity();
         while (curr != entt::null)
         {
             // 注意：在循环开始前获取下一个节点，防止操作改变了当前节点的 Next 指针
-            auto* link = scene->GetComponent<Pitaya::Game::ChildLink>(curr);
+            auto* link = scene->ECS.GetComponent<Pitaya::Game::ChildLink>(curr);
             entt::entity next = link ? link->GetNextSibling() : entt::null;
             DrawEntityNode(scene, curr);
             curr = next;
@@ -69,14 +69,14 @@ void Pitaya::Editor::HierarchyPanel::DrawSceneTree()
 void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, entt::entity entity)
 {
     // 获取基础组件信息
-    auto* metadata = scene->GetComponent<Pitaya::Game::Metadata>(entity);
-    auto* link = scene->GetComponent<Pitaya::Game::ChildLink>(entity);
+    auto* metadata = scene->ECS.GetComponent<Pitaya::Game::Metadata>(entity);
+    auto* link = scene->ECS.GetComponent<Pitaya::Game::ChildLink>(entity);
     const char* name = metadata ? metadata->GetName().data() : "[Error] UnMetadata";
     bool hasChildren = link && link->GetFirstChild() != entt::null;
 
     // 活性状态视觉处理
     bool isSelfActive = metadata ? metadata->IsActive() : true;
-    bool isHierarchyActive = !scene->HasComponent<Pitaya::Game::Disabled>(entity);
+    bool isHierarchyActive = !scene->ECS.HasComponent<Pitaya::Game::Disabled>(entity);
 
     bool pushedColor = false;
     if (!isSelfActive)
@@ -128,7 +128,7 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
                 float itemRectMaxY = ImGui::GetItemRectMax().y;
                 float itemHeight = itemRectMaxY - itemRectMinY;
 
-                auto* parentComp = scene->GetComponent<Pitaya::Game::Parent>(entity);
+                auto* parentComp = scene->ECS.GetComponent<Pitaya::Game::Parent>(entity);
                 entt::entity parentId = parentComp ? parentComp->GetId() : entt::null;
 
                 ImDrawList* drawList = ImGui::GetWindowDrawList();
@@ -141,11 +141,11 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
                     drawList->AddLine(ImVec2(lineX, itemRectMinY), ImVec2(lineX + lineW, itemRectMinY), ImColor(255, 255, 0), 2.0f);
                     if (payload->IsDelivery())
                     {
-                        auto* selfLink = scene->GetComponent<Pitaya::Game::ChildLink>(entity);
+                        auto* selfLink = scene->ECS.GetComponent<Pitaya::Game::ChildLink>(entity);
                         entt::entity prevSibling = selfLink->GetPreviousSibling();
                         if (draggedEntity != prevSibling) // 防止重复设置
                         {
-                            scene->SetRelationship(draggedEntity, parentId, prevSibling);
+                            scene->ECS.SetRelationship(draggedEntity, parentId, prevSibling);
                         }
                     }
                 }
@@ -155,7 +155,7 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
                     drawList->AddLine(ImVec2(lineX, itemRectMaxY), ImVec2(lineX + lineW, itemRectMaxY), ImColor(255, 255, 0), 2.0f);
                     if (payload->IsDelivery())
                     {
-                        scene->SetRelationship(draggedEntity, parentId, entity);
+                        scene->ECS.SetRelationship(draggedEntity, parentId, entity);
                     }
                 }
                 // C. 中间区域：成为当前节点的子物体
@@ -163,7 +163,7 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
                 {
                     if (payload->IsDelivery())
                     {
-                        scene->SetRelationship(draggedEntity, entity, entt::null);
+                        scene->ECS.SetRelationship(draggedEntity, entity, entt::null);
                     }
                 }
             }
@@ -174,7 +174,7 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
     // 双击聚焦
     if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
     {
-        if (auto* transform = scene->GetComponent<Pitaya::Game::Transform>(entity))
+        if (auto* transform = scene->ECS.GetComponent<Pitaya::Game::Transform>(entity))
         {
             Pitaya::Editor::Editor::Instance().GetCamera().Focus(transform->GetWorldPosition());
         }
@@ -200,7 +200,7 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
                 selection.SelectedEntity = entt::null;
                 selection.Type = Pitaya::Editor::GUI::Context::Selection::Type::Entity;
             }
-            scene->DestroyEntity(entity);
+            scene->ECS.DestroyEntity(entity);
         }
         ImGui::EndPopup();
     }
@@ -213,7 +213,7 @@ void Pitaya::Editor::HierarchyPanel::DrawEntityNode(Pitaya::Game::Scene* scene, 
             entt::entity currChild = link->GetFirstChild();
             while (currChild != entt::null)
             {
-                auto* childLink = scene->GetComponent<Pitaya::Game::ChildLink>(currChild);
+                auto* childLink = scene->ECS.GetComponent<Pitaya::Game::ChildLink>(currChild);
                 entt::entity nextChild = childLink ? childLink->GetNextSibling() : entt::null;
 
                 // 递归调用
@@ -234,32 +234,32 @@ void Pitaya::Editor::HierarchyPanel::DrawEmptyPopup()
             auto* scene = Pitaya::Game::GetActiveScene();
             if (scene)
             {
-                if (ImGui::MenuItem("Empty")) { scene->CreateEntity("Empty"); }
+                if (ImGui::MenuItem("Empty")) { scene->ECS.CreateEntity("Empty"); }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Cube"))
                 {
-                    auto e = scene->CreateEntity("Cube");
-                    scene->AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Cube);
+                    auto e = scene->ECS.CreateEntity("Cube");
+                    scene->ECS.AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Cube);
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Sphere"))
                 {
-                    auto e = scene->CreateEntity("Sphere");
-                    scene->AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Sphere);
+                    auto e = scene->ECS.CreateEntity("Sphere");
+                    scene->ECS.AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Sphere);
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Panel"))
                 {
-                    auto e = scene->CreateEntity("Panel");
-                    scene->AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Panel);
+                    auto e = scene->ECS.CreateEntity("Panel");
+                    scene->ECS.AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Panel);
                 }
 
                 //TO REMOVE
                 /*ImGui::Separator();
                 if (ImGui::MenuItem("Backpack"))
                 {
-                    auto e = scene->CreateEntity("Backpack");
-                    scene->AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Backpack);
+                    auto e = scene->ECS.CreateEntity("Backpack");
+                    scene->ECS.AddComponent<Pitaya::Game::MeshRenderer>(e).LoadMesh(Pitaya::Asset::Mesh::Backpack);
                 }*/
                 //END TO REMOVE
             }

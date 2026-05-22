@@ -178,6 +178,8 @@
     <ClInclude Include="Component\Transform.h" />
     <ClInclude Include="GameWorld.h" />
     <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\SceneECS.h" />
+    <ClInclude Include="Scene\SceneSetting.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameWorld.cpp" />

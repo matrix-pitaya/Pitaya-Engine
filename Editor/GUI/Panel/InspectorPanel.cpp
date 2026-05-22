@@ -29,14 +29,14 @@ namespace
     {
         if (auto* scene = Pitaya::Game::GetActiveScene())
         {
-            if (!scene->HasComponent<T>(e)) { scene->AddComponent<T>(e); }
+            if (!scene->ECS.HasComponent<T>(e)) { scene->ECS.AddComponent<T>(e); }
         }
     }
     template<typename T>
     bool HasComponentAction(entt::entity e)
     {
         auto* scene = Pitaya::Game::GetActiveScene();
-        return scene && scene->HasComponent<T>(e);
+        return scene && scene->ECS.HasComponent<T>(e);
     }
     inline constexpr const auto AvailableComponents = std::to_array<ComponentItem>({
             { ICON_FA_LIGHTBULB,      "Light",                      AddComponentAction<Pitaya::Game::Light>,                    HasComponentAction<Pitaya::Game::Light> },
@@ -52,7 +52,7 @@ namespace
     {
         if (auto* scene = Pitaya::Game::GetActiveScene())
         {
-            if (auto* component = scene->GetComponent<Component>(e))
+            if (auto* component = scene->ECS.GetComponent<Component>(e))
             {
                 constexpr const bool isRemovable = !std::is_same_v<Component, Pitaya::Game::Metadata> &&
                     !std::is_same_v<Component, Pitaya::Game::Transform>;
@@ -100,7 +100,7 @@ namespace
 
                 if constexpr (isRemovable)
                 {
-                    if (removeComponent) { scene->RemoveComponent<Component>(e); }
+                    if (removeComponent) { scene->ECS.RemoveComponent<Component>(e); }
                 }
 
                 ImGui::PopID();

@@ -18,6 +18,12 @@
     <ClInclude Include="Scene\Scene.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\SceneECS.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneSetting.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="Component\Camera.h">
       <Filter>头文件</Filter>
     </ClInclude>

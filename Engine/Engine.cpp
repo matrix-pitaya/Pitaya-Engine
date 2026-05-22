@@ -669,7 +669,7 @@ void Pitaya::Engine::Engine::Render()
 	if (auto* scene = MODULE(GameWorld)->GetActiveScene())
 	{
 		//提交Light
-		for (auto [entity, light, transform] : scene->GetView<Pitaya::Game::Light, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each())
+		for (auto [entity, light, transform] : scene->ECS.GetView<Pitaya::Game::Light, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each())
 		{
 			MODULE(RenderPipeline)->AddSceneLight(Pitaya::Core::PassKey<Pitaya::Engine::Engine>(), 
 				{ glm::vec4(transform.GetWorldPosition(), static_cast<float>(light.GetType())) ,
@@ -679,10 +679,10 @@ void Pitaya::Engine::Engine::Render()
 		}
 		
 		//提交MeshRenderer
-		for (auto [entity, meshrenderer, transform] : scene->GetGroup<Pitaya::Game::MeshRenderer>(entt::get<Pitaya::Game::Transform>, entt::exclude<Pitaya::Game::Disabled>).each())
+		for (auto [entity, meshrenderer, transform] : scene->ECS.GetGroup<Pitaya::Game::MeshRenderer>(entt::get<Pitaya::Game::Transform>, entt::exclude<Pitaya::Game::Disabled>).each())
 		{
 			//尝试获取材质覆盖组件
-			auto* materialOverride = scene->GetComponent<Pitaya::Game::MaterialOverride>(entity);
+			auto* materialOverride = scene->ECS.GetComponent<Pitaya::Game::MaterialOverride>(entity);
 			const auto& mesh = meshrenderer.GetMesh();
 			const auto& materials = materialOverride ? materialOverride->GetOverrideMaterials() : meshrenderer.GetMaterials();	//如果有材质覆盖组件 优先使用覆盖的材质列表 否则使用MeshRenderer自带的材质列表
 			if (mesh.IsReady() && mesh.GetNativeAssetData() && !mesh.GetNativeAssetData()->SubMeshs.empty())
@@ -711,7 +711,7 @@ void Pitaya::Engine::Engine::Render()
 		if (INVOKE_SHOULDSUBMITSCENECAMERAPASS_HOOK)
 		{
 			//提交Pass
-			for (auto [entity, camera, transform] : scene->GetView<Pitaya::Game::Camera, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each())
+			for (auto [entity, camera, transform] : scene->ECS.GetView<Pitaya::Game::Camera, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each())
 			{
 				if (camera.GetIsRenderToMainDisplayRT())
 				{

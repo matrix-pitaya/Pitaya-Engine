@@ -5,7 +5,7 @@
 
 namespace Pitaya::Game
 {
-	class Scene;
+	class SceneECS;
 	struct Metadata
 	{
 	public:
@@ -45,11 +45,11 @@ namespace Pitaya::Game
 		}
 
 	public:
-		inline void MarkDirty(Pitaya::Core::PassKey<Scene>) noexcept
+		inline void MarkDirty(Pitaya::Core::PassKey<SceneECS>) noexcept
 		{
 			dirty = true;
 		}
-		inline void MarkClear(Pitaya::Core::PassKey<Scene>) noexcept
+		inline void MarkClear(Pitaya::Core::PassKey<SceneECS>) noexcept
 		{
 			dirty = false;
 		}

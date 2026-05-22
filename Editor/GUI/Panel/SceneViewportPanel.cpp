@@ -92,7 +92,7 @@ void Pitaya::Editor::SceneViewportPanel::DrawGizmos()
         ImDrawList* drawList = window->DrawList;
         if (gizmoState.ShowCameraGizmo)
         {
-            for (auto [entity, camera, transform] : scene->GetView<Pitaya::Game::Camera, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each()) // 遍历当前场景中所有的「场景相机」(CameraComponent)
+            for (auto [entity, camera, transform] : scene->ECS.GetView<Pitaya::Game::Camera, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each()) // 遍历当前场景中所有的「场景相机」(CameraComponent)
             {
                 glm::vec3 worldPos = transform.GetWorldPosition();  //获取这个场景相机的 3D 世界坐标
                 glm::vec4 clipSpacePos = editorCameraViewProj * glm::vec4(worldPos, 1.0f);    //将 3D 坐标转换到剪裁空间 (Clip Space)
@@ -244,7 +244,7 @@ void Pitaya::Editor::SceneViewportPanel::DrawGizmos()
                     }
                 };
 
-            for (auto [entity, light, transform] : scene->GetView<Pitaya::Game::Light, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each())
+            for (auto [entity, light, transform] : scene->ECS.GetView<Pitaya::Game::Light, Pitaya::Game::Transform>(entt::exclude<Pitaya::Game::Disabled>).each())
             {
                 glm::vec3 worldPos = transform.GetWorldPosition();
 
@@ -321,7 +321,7 @@ void Pitaya::Editor::SceneViewportPanel::DrawGizmos()
         TransformTool currentTool = toolState.ActiveTool;
         if (selection.SelectedEntity != entt::null && currentTool != TransformTool::Select)
         {
-            if (auto* selectedTransform = scene->GetComponent<Pitaya::Game::Transform>(selection.SelectedEntity))
+            if (auto* selectedTransform = scene->ECS.GetComponent<Pitaya::Game::Transform>(selection.SelectedEntity))
             {
                 // 获取当前选中物体的世界矩阵
                 glm::mat4 transformMatrix = selectedTransform->GetWorldMatrix();
@@ -358,13 +358,13 @@ void Pitaya::Editor::SceneViewportPanel::DrawGizmos()
                     glm::mat4 newLocalMatrix = newWorldMatrix; // 默认等于世界矩阵 (假设它是根节点)
 
                     // 如果实体有父节点，我们需要将这个新的世界矩阵转换回相对父节点的局部矩阵
-                    if (scene->HasComponent<Pitaya::Game::Parent>(selection.SelectedEntity))
+                    if (scene->ECS.HasComponent<Pitaya::Game::Parent>(selection.SelectedEntity))
                     {
-                        if (auto* parent = scene->GetComponent<Pitaya::Game::Parent>(selection.SelectedEntity))
+                        if (auto* parent = scene->ECS.GetComponent<Pitaya::Game::Parent>(selection.SelectedEntity))
                         {
                             if (parent->GetId() != entt::null)
                             {
-                                if (auto* parentTransform = scene->GetComponent<Pitaya::Game::Transform>(parent->GetId()))
+                                if (auto* parentTransform = scene->ECS.GetComponent<Pitaya::Game::Transform>(parent->GetId()))
                                 {
                                     glm::mat4 parentWorldMatrix = parentTransform->GetWorldMatrix();
                                     newLocalMatrix = glm::inverse(parentWorldMatrix) * newWorldMatrix;  // 核心数学公式：局部矩阵 = 逆(父节点世界矩阵) * 新的世界矩阵
