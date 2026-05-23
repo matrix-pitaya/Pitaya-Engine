@@ -40,5 +40,9 @@ void main()
     vec2 uv = v2f.texCoord * 2.0 - 1.0;
     vec3 dir = UVToDirection(uv, uFace);
     vec2 equirectUV = DirectionToUV(dir);
-    FragColor = vec4(texture(uEquirect, equirectUV).rgb, 1.0);
+    vec3 color = texture(uEquirect, equirectUV).rgb;
+    // HDR 天空盒中太阳像素能量极高，单样本命中会污染 irradiance/prefilter 整桶
+    // clamp 到 500 保留 HDR 高动态但截断 firefly
+    color = min(color, vec3(500.0));
+    FragColor = vec4(color, 1.0);
 }

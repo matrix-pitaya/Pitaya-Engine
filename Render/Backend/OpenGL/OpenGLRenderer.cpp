@@ -54,6 +54,7 @@ bool Pitaya::Render::Renderer::InitializeRenderContext(void* nativeWindow)
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);	//设置更新模板缓冲区方式
     glStencilMask(0xFF);						//设置允许写入模板缓冲区
     glEnable(GL_MULTISAMPLE);					//启用多重采样抗锯齿
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);		//cubemap 跨面双线性
     //glEnable(GL_FRAMEBUFFER_SRGB);			//开启SRGB帧缓冲区进行Gamma矫正（通过后处理进行矫正）
 
     backendStorage.Cast<OpenGLGraphicsContext>().Window = glfwWindow;
@@ -228,8 +229,8 @@ void Pitaya::Render::Renderer::NewRenderFrame()
     BindShadowAtlas(renderKit.PointShadowAtlas, static_cast<uint32_t>(Pitaya::GPU::TextureSlot::POINT));
 
     // 上传 SceneInfo UBO
-    const auto& setup = renderPacket.back.SceneInfoSetup;
     Pitaya::Render::SceneInfo sceneInfo = {};
+    const auto& setup = renderPacket.back.SceneInfoSetup;
     sceneInfo.AmbientColor = setup.AmbientColor;
     sceneInfo.DeltaTime = setup.DeltaTime;
     Pitaya::GPU::TextureCubemap cubemap;
@@ -608,6 +609,10 @@ bool Pitaya::Render::Renderer::Bake(Pitaya::Core::PassKey<Pitaya::Render::Render
                 GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, envCubemap.Id, 0);
             glDrawArrays(GL_TRIANGLES, 0, 3);
         }
+
+        // GGX Prefilter 需要按 PDF 自适应采样 envCubemap 不同 mip 才能压住 firefly
+        glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap.Id);
+        glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
     }
 
     // Irradiance Convolution (6 pass, 32x32)
@@ -626,16 +631,16 @@ bool Pitaya::Render::Renderer::Bake(Pitaya::Core::PassKey<Pitaya::Render::Render
         }
     }
 
-    // GGX Prefilter (6 face x 5 mip = 30 pass, 128x128)
+    // GGX Prefilter (6 face x 6 mip = 36 pass, 256x256)
     {
         glUseProgram(prefilterShader.Id);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap.Id);
 
-        uint32_t maxMip = 5;
+        uint32_t maxMip = 6;
         for (uint32_t mip = 0; mip < maxMip; ++mip)
         {
-            uint32_t mipSize = 128 >> mip;
+            uint32_t mipSize = 256 >> mip;
             glViewport(0, 0, mipSize, mipSize);
 
             float roughness = static_cast<float>(mip) / static_cast<float>(maxMip - 1);

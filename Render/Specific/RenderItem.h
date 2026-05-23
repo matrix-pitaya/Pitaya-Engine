@@ -2,8 +2,7 @@
 
 #include<Core/StateFlags/StateFlags.h>
 #include<Render/Common/RenderLayer.h>
-#include<Asset/Common/Material.h>
-#include<Asset/Common/Mesh.h>
+#include<Asset/Common/AssetType.h>
 
 #include<glm.hpp>
 #include<vector>

@@ -22,6 +22,6 @@ layout(std140, binding = 2) uniform SceneInfo
 void main()
 {
     vec3 direction = normalize(v2f.worldPos);
-    vec3 color = texture(samplerCube(EnvCubemapHandle), direction).rgb;
+    vec3 color = textureLod(samplerCube(EnvCubemapHandle), direction, 0.0).rgb;
     FragColor = vec4(color, 1.0);
 }

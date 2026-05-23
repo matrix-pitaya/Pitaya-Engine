@@ -5,8 +5,7 @@
 #include<Render/Command/PostProcessCommand.h>
 #include<Render/Common/PostProcessSetting.h>
 #include<Render/Common/RenderLayer.h>
-
-namespace Pitaya::Asset { class RenderTarget; }
+#include<Asset/Common/AssetType.h>
 
 namespace Pitaya::Render
 {

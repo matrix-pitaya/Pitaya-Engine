@@ -20,6 +20,8 @@ namespace Pitaya::Asset
 		TextureUsage Usage = TextureUsage::Color;
 
 		//Texture 1-12
-		inline static constexpr const Pitaya::Core::GUID White = Pitaya::Core::GUID("00000000-0000-0000-0000-000000000001");
+		inline static constexpr const Pitaya::Core::GUID White      = Pitaya::Core::GUID("00000000-0000-0000-0000-000000000001");
+		inline static constexpr const Pitaya::Core::GUID Black      = Pitaya::Core::GUID("00000000-0000-0000-0000-000000000002");
+		inline static constexpr const Pitaya::Core::GUID FlatNormal = Pitaya::Core::GUID("00000000-0000-0000-0000-000000000003");
 	};
 }

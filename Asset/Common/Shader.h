@@ -13,6 +13,7 @@ namespace Pitaya::Asset
 		MaterialParamLayout ParamLayout;
 	
 		//Shader 13-16
-		inline static constexpr const Pitaya::Core::GUID Static = Pitaya::Core::GUID("00000000-0000-0000-0001-000000000000");
+		inline static constexpr const Pitaya::Core::GUID PBRStatic = Pitaya::Core::GUID("00000000-0000-0000-0001-000000000001");
+		inline static constexpr const Pitaya::Core::GUID PBRSkinned = Pitaya::Core::GUID("00000000-0000-0000-0001-000000000002");
 	};
 }

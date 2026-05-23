@@ -68,9 +68,11 @@ IDR_GAMMA_CORRECTION_FRAGMENT_SHADER    RCDATA          "../built-in/PostProcess
 IDR_TONEMAPPING_VERTEX_SHADER           RCDATA          "../built-in/PostProcess/ToneMapping/Shader.vert"
 IDR_TONEMAPPING_FRAGMENT_SHADER         RCDATA          "../built-in/PostProcess/ToneMapping/Shader.frag"
 
-// Default Asset
-IDR_DEFAULT_STATIC_VERTEX_SHADER        RCDATA          "../built-in/default/Static/Shader.vert"
-IDR_DEFAULT_STATIC_FRAGMENT_SHADER      RCDATA          "../built-in/default/Static/Shader.frag"
+// PBR
+IDR_PBR_STATIC_VERTEX_SHADER            RCDATA          "../built-in/PBR/Static/Shader.vert"
+IDR_PBR_STATIC_FRAGMENT_SHADER          RCDATA          "../built-in/PBR/Static/Shader.frag"
+IDR_PBR_SKINNED_VERTEX_SHADER           RCDATA          "../built-in/PBR/Skinned/Shader.vert"
+IDR_PBR_SKINNED_FRAGMENT_SHADER         RCDATA          "../built-in/PBR/Skinned/Shader.frag"
 
 // Shadow
 IDR_SHADOW_STATIC_VERTEX_SHADER         RCDATA          "../built-in/Shadow/Static/Shader.vert"
@@ -87,7 +89,6 @@ IDR_IBL_GGX_PREFILTER_VERTEX_SHADER              RCDATA          "../built-in/IB
 IDR_IBL_GGX_PREFILTER_FRAGMENT_SHADER            RCDATA          "../built-in/IBL/GGXPrefilter/Shader.frag"
 IDR_IBL_BRDF_LUT_GEN_VERTEX_SHADER               RCDATA          "../built-in/IBL/BRDFLUTGen/Shader.vert"
 IDR_IBL_BRDF_LUT_GEN_FRAGMENT_SHADER             RCDATA          "../built-in/IBL/BRDFLUTGen/Shader.frag"
-IDR_IBL_BRDF_LUT                                 RCDATA          "../built-in/IBL/BRDFLUT.raw"
 IDR_SKYBOX_HDR                                   RCDATA          "../built-in/SkyBox/SkyBox-4K.hdr"
 
 // SkyBox Shader Resources

@@ -6,7 +6,9 @@
 #include<Core/Asset/Asset.h>
 #include<Core/Utils/Console.h>
 #include<Core/Utils/System.h>
+
 #include<Hook/def.h>
+
 #include<Thread/Common/FuncTable.h>
 #include<Log/Common/FuncTable.h>
 #include<Config/Common/FunctionTable.h>
@@ -49,6 +51,7 @@
 #include<Asset/Common/Material.h>
 #include<Asset/Common/RenderTarget.h>
 #include<Asset/Common/SkyBox.h>
+#include<Asset/Common/Mesh.h>
 
 #include<Application/Built-in.h>
 
@@ -167,7 +170,7 @@ namespace Pitaya::Render
                 Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle BakeFBOHandle;
             } IBL;
 
-            inline void Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
+            inline void Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, const Pitaya::Render::Renderer const* renderer)
             {
                 Specific.EmptyVAOHandle = Pitaya::GPU::CreateVertexArray(passkey);
                 CameraSnapshotUBO.Handle = Pitaya::GPU::CreateUniformBuffer(passkey, sizeof(Pitaya::Core::CameraSnapshot), 
@@ -324,9 +327,14 @@ namespace Pitaya::Render
                         static_cast<const char*>(fs.data), fs.size);
                 }
                 {
-                    auto brdfData = Pitaya::Core::LoadBuiltInRC(IDR_IBL_BRDF_LUT);
+                    // 创建 RG16F 空贴图，实际数据由 Build 末尾调用 renderer->Bake(BRDFLUTBakeInput) 现场烘培填充
                     IBL.BRDFLUTHandle = Pitaya::GPU::CreateTexture2D(passkey,
-                        brdfData.data, 512, 512, Pitaya::GPU::PixelFormat::RG16F, false, true);
+                        nullptr, 512, 512, Pitaya::GPU::PixelFormat::RG16F, false, true);
+                    if (!renderer->Bake(passkey, { IBL.BRDFLUTHandle, 512 })) //实时烘培 BRDFLUT，覆盖刚才创建的空贴图
+                    {   
+                        Pitaya::Core::PopMessageBox("Error", "Bake BRDF Fail!");
+                        Pitaya::Core::Terminate(-1);
+                    }  
                 }
 
                 // SkyBox
@@ -391,7 +399,7 @@ namespace Pitaya::Render
             RenderPacket& operator=(RenderPacket&&) = delete;
 
         public:
-            inline void ParseCommand(const Pitaya::Render::Renderer* renderer)
+            inline void ParseCommand(const Pitaya::Render::Renderer const* renderer)
             {
                 size_t offset = 0;
                 const size_t bufferSize = back.CommandBuffer.size();
@@ -501,7 +509,7 @@ namespace Pitaya::Render
                     skinnedPass.emplace_back(std::move(cmd));
                 }
             }
-            inline void CompilePass(Pitaya::Render::Renderer* renderer)
+            inline void CompilePass(const Pitaya::Render::Renderer const* renderer)
             {
                 uint32_t beforeBatch = skinnedPass.size() + staticPass.size();
                 if (beforeBatch == 0) { return; }
@@ -715,7 +723,7 @@ namespace Pitaya::Render
         inline void RenderThread(void* nativeWindow)
         {
             InitializeRenderContext(nativeWindow);
-            renderKit.Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer>());
+            renderKit.Build(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), this);
             INVOKE_POSTRENDERCONTEXTINITIALIZED_HOOK(Pitaya::Core::PassKey<Pitaya::Render::Renderer>(), renderKit.MainDisplayRenderTarget.FinalFrameBufferHandle)
 
             while (true)

@@ -71,6 +71,12 @@ void main()
     vec3 R = N;
     vec3 V = R;
 
+    // envCubemap mip0 = 512x512，HDR 天空盒里太阳像素能量极高
+    // 直接采 mip0 在高 roughness 桶里 1024 样本不够压住 firefly
+    // 按 GGX PDF 自适应 mip：单样本立体角越大，采越高 mip（已被预滤波平均）
+    const float envFaceSize = 512.0;
+    float saTexel = 4.0 * PI / (6.0 * envFaceSize * envFaceSize);
+
     vec3 prefilteredColor = vec3(0.0);
     float totalWeight = 0.0;
 
@@ -83,7 +89,20 @@ void main()
         float NdotL = max(dot(N, L), 0.0);
         if (NdotL > 0.0)
         {
-            prefilteredColor += textureLod(uEnvCubemap, L, 0.0).rgb * NdotL;
+            float NdotH = max(dot(N, H), 0.0);
+            float VdotH = max(dot(V, H), 0.0);
+            float a = uRoughness * uRoughness;
+            float a2 = a * a;
+            float d = (NdotH * NdotH) * (a2 - 1.0) + 1.0;
+            float D = a2 / (PI * d * d);
+            float pdf = (D * NdotH / (4.0 * VdotH)) + 0.0001;
+
+            float saSample = 1.0 / (float(SAMPLE_COUNT) * pdf + 0.0001);
+            float mipLevel = uRoughness == 0.0 ? 0.0 : 0.5 * log2(saSample / saTexel);
+
+            // clamp 防止下游残留 Inf/NaN 污染整桶（Filament 做法）
+            vec3 sampleColor = min(textureLod(uEnvCubemap, L, mipLevel).rgb, vec3(65000.0));
+            prefilteredColor += sampleColor * NdotL;
             totalWeight += NdotL;
         }
     }

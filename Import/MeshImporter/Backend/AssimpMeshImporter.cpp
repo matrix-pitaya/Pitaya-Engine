@@ -17,8 +17,7 @@
 
 namespace
 {
-    // 综合导入 ParamLayout — 覆盖 Blinn-Phong + PBR 所有可能的参数
-    // Shader 加载时按自需读取，Material 存全量
+    // PBR ParamLayout (2 Vector + 4 Float + 6 Texture, TotalBytes=96)
     inline Pitaya::Asset::MaterialParamLayout BuildImportParamLayout()
     {
         return {
@@ -26,23 +25,21 @@ namespace
                 // Buffer — vec4
                 { "BaseColorFactor", Pitaya::Asset::ParamType::Vector, 0, 0,  16 },
                 { "EmissiveFactor",  Pitaya::Asset::ParamType::Vector, 1, 16, 16 },
-                { "SpecularFactor",  Pitaya::Asset::ParamType::Vector, 2, 32, 16 },
 
                 // Buffer — float
-                { "MetallicFactor",    Pitaya::Asset::ParamType::Float, 0, 48, 4 },
-                { "RoughnessFactor",   Pitaya::Asset::ParamType::Float, 1, 52, 4 },
-                { "OcclusionStrength", Pitaya::Asset::ParamType::Float, 2, 56, 4 },
-                { "AlphaCutoff",       Pitaya::Asset::ParamType::Float, 3, 60, 4 },
+                { "MetallicFactor",    Pitaya::Asset::ParamType::Float, 0, 32, 4 },
+                { "RoughnessFactor",   Pitaya::Asset::ParamType::Float, 1, 36, 4 },
+                { "OcclusionStrength", Pitaya::Asset::ParamType::Float, 2, 40, 4 },
+                { "AlphaCutoff",       Pitaya::Asset::ParamType::Float, 3, 44, 4 },
 
                 // Texture
-                { "uAlbedoMap",    Pitaya::Asset::ParamType::Texture, 0, 64, 8 },
-                { "uNormalMap",    Pitaya::Asset::ParamType::Texture, 1, 72, 8 },
-                { "uMetallicMap",  Pitaya::Asset::ParamType::Texture, 2, 80, 8 },
-                { "uRoughnessMap", Pitaya::Asset::ParamType::Texture, 3, 88, 8 },
-                { "uAOMap",        Pitaya::Asset::ParamType::Texture, 4, 96, 8 },
-                { "uEmissiveMap",  Pitaya::Asset::ParamType::Texture, 5, 104, 8 },
-                { "uSpecularMap",  Pitaya::Asset::ParamType::Texture, 6, 112, 8 },
-            } ,3,4,7,120 };
+                { "uAlbedoMap",    Pitaya::Asset::ParamType::Texture, 0, 48, 8 },
+                { "uNormalMap",    Pitaya::Asset::ParamType::Texture, 1, 56, 8 },
+                { "uMetallicMap",  Pitaya::Asset::ParamType::Texture, 2, 64, 8 },
+                { "uRoughnessMap", Pitaya::Asset::ParamType::Texture, 3, 72, 8 },
+                { "uAOMap",        Pitaya::Asset::ParamType::Texture, 4, 80, 8 },
+                { "uEmissiveMap",  Pitaya::Asset::ParamType::Texture, 5, 88, 8 },
+            } ,2,4,6,96 };
     }
 
     // assimp 属性 key → 引擎标准名 映射
@@ -51,8 +48,6 @@ namespace
         // aiColor4D 属性: "$clr.xxx"
         if (assimpKey == "$clr.diffuse")  { return "BaseColorFactor"; }
         if (assimpKey == "$clr.emissive") { return "EmissiveFactor"; }
-        if (assimpKey == "$clr.specular") { return "SpecularFactor"; }
-
         // float 属性: "$mat.xxx"
         if (assimpKey == "$mat.shininess") { return "RoughnessFactor"; }
         if (assimpKey == "$mat.opacity")   { return "AlphaCutoff"; }
@@ -67,7 +62,6 @@ namespace
         {
             case aiTextureType_DIFFUSE:
             case aiTextureType_BASE_COLOR:            return "uAlbedoMap";
-            case aiTextureType_SPECULAR:              return "uSpecularMap";
             case aiTextureType_NORMALS:               return "uNormalMap";
             case aiTextureType_METALNESS:             return "uMetallicMap";
             case aiTextureType_DIFFUSE_ROUGHNESS:     return "uRoughnessMap";
@@ -126,7 +120,7 @@ bool Pitaya::Import::AssimpMeshImporter::Import(Pitaya::Core::GUID guid, const s
         if (matName == AI_DEFAULT_MATERIAL_NAME || matName.empty())
         {
             //默认材质则使用引擎内置材质
-            out.MaterialGUIDs.push_back(Pitaya::Asset::Material::Default);
+            out.MaterialGUIDs.push_back(Pitaya::Asset::Material::PBR);
             continue;
         }
 
@@ -638,7 +632,7 @@ bool Pitaya::Import::AssimpMeshImporter::ParseMaterial(const aiMaterial* aimater
     dummyShaderData.ParamLayout = BuildImportParamLayout();
 
     Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry dummyShader;
-    dummyShader.GUID = Pitaya::Asset::Shader::Static;
+    dummyShader.GUID = Pitaya::Asset::Shader::PBRStatic;
     dummyShader.Data.store(&dummyShaderData, std::memory_order_release);
     dummyShader.State.SetBits(Pitaya::Core::AssetState::CPULoaded);
     material.Shader = &dummyShader;

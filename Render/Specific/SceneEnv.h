@@ -1,8 +1,7 @@
 #pragma once
 
+#include<Asset/Common/AssetType.h>
 #include<glm.hpp>
-
-namespace Pitaya::Asset { struct SkyBox; }
 
 namespace Pitaya::Render
 {

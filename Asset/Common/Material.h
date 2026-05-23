@@ -35,7 +35,7 @@ namespace Pitaya::Asset
         bool CullFace = true;
 
     public:
-        inline static constexpr const Pitaya::Core::GUID Default = Pitaya::Core::GUID("00000000-0000-0001-0000-000000000000");
+        inline static constexpr const Pitaya::Core::GUID PBR = Pitaya::Core::GUID("00000000-0000-0001-0000-000000000001");
 
     public:
         void SetFloat(std::string_view name, float value)

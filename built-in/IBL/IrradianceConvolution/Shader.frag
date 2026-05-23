@@ -36,22 +36,22 @@ void main()
     up = cross(N, right);
 
     vec3 irradiance = vec3(0.0);
-    float sampleDelta = 0.025;
-    uint nrSamples = 0;
+    const uint PHI_STEPS   = 256u;
+    const uint THETA_STEPS = 96u;
 
-    for (float phi = 0.0; phi < 2.0 * PI; phi += sampleDelta)
+    for (uint pi = 0u; pi < PHI_STEPS; ++pi)
     {
-        for (float theta = 0.0; theta < 0.5 * PI; theta += sampleDelta)
+        float phi = 2.0 * PI * (float(pi) + 0.5) / float(PHI_STEPS);
+        for (uint ti = 0u; ti < THETA_STEPS; ++ti)
         {
-            vec3 tangentDir = vec3(
-                sin(theta) * cos(phi),
-                sin(theta) * sin(phi),
-                cos(theta));
+            float theta = 0.5 * PI * (float(ti) + 0.5) / float(THETA_STEPS);
+            vec3 tangentDir = vec3(sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta));
             vec3 sampleDir = tangentDir.x * right + tangentDir.y * up + tangentDir.z * N;
-            irradiance += texture(uEnvCubemap, sampleDir).rgb * cos(theta) * sin(theta);
-            nrSamples++;
+            irradiance += textureLod(uEnvCubemap, sampleDir, 0.0).rgb * cos(theta) * sin(theta);
         }
     }
-    irradiance = PI * irradiance / float(nrSamples);
+    float dphi   = 2.0 * PI / float(PHI_STEPS);
+    float dtheta = 0.5 * PI / float(THETA_STEPS);
+    irradiance = irradiance * dphi * dtheta;
     FragColor = vec4(irradiance, 1.0);
 }

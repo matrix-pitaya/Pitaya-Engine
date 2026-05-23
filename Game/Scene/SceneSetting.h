@@ -9,6 +9,6 @@ namespace Pitaya::Game
 	struct SceneSetting
 	{
 		Pitaya::Core::Asset<Pitaya::Asset::SkyBox> SkyBox = nullptr;
-		glm::vec3 AmbientColor = glm::vec3(1.0f);
+		glm::vec3 AmbientColor = glm::vec3(0.2f);
 	};
 }
