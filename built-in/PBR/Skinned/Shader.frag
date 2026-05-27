@@ -255,22 +255,16 @@ void main()
     else
     {
         vec3 irradiance = texture(samplerCube(IrradianceHandle), N).rgb;
-        vec3 diffuseIBL = kD_ibl * albedoLinear * irradiance;
+        vec3 diffuseIBL = kD_ibl * albedoLinear * irradiance / PI;
 
         vec3 R = reflect(-V, N);
         const float MAX_MIP = 5.0;
-        float lod = roughness * roughness * MAX_MIP;
-        float lod0 = floor(lod);
-        float lod1 = min(lod0 + 1.0, MAX_MIP);
-        float lodFrac = lod - lod0;
-        vec3 c0 = textureLod(samplerCube(PrefilteredHandle), R, lod0).rgb;
-        vec3 c1 = textureLod(samplerCube(PrefilteredHandle), R, lod1).rgb;
-        vec3 prefilteredColor = mix(c0, c1, lodFrac);
+        float lod = roughness * MAX_MIP;
+        vec3 prefilteredColor = textureLod(samplerCube(PrefilteredHandle), R, lod).rgb;
         vec2 brdf = texture(sampler2D(BRDFLUTHandle), vec2(max(dot(N, V), 0.0), roughness)).rg;
         vec3 specularIBL = prefilteredColor * (kS * brdf.x + brdf.y);
 
-        vec3 iblAmbient = (diffuseIBL + specularIBL) * ao;
-        ambient = max(iblAmbient, fallbackAmbient);
+        ambient = (diffuseIBL + specularIBL) * ao;
     }
 
     vec3 Lo = vec3(0.0);
