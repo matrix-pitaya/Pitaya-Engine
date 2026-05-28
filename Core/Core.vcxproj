@@ -178,6 +178,7 @@
     <ClInclude Include="Identifier\UID.h" />
     <ClInclude Include="PCH\stdafx.h" />
     <ClInclude Include="Storage\Storage.h" />
+    <ClInclude Include="Utils\Check.h" />
     <ClInclude Include="Utils\Console.h" />
     <ClInclude Include="Container\ObjectPool.h" />
     <ClInclude Include="Math\AABB.h" />

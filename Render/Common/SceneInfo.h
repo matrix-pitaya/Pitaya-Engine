@@ -8,7 +8,7 @@ namespace Pitaya::Render
 	struct STD140_LAYOUT SceneInfo
 	{
 		glm::vec4 AmbientColor;
-		uint64_t EnvCubemapHandle ;
+		uint64_t EnvCubemapHandle;
 		uint64_t IrradianceHandle;
 		uint64_t PrefilteredHandle;
 		uint64_t BRDFLUTHandle;

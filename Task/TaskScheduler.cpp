@@ -16,8 +16,8 @@ bool Pitaya::Task::TaskScheduler::Initialize()
 	isRunning.store(true, std::memory_order_release);
 	for (size_t i = 0; i < jobExecuterCount; i++)
 	{
-		jobThreads[i] = Pitaya::Thread::RegisterThread
-		("JobThread_" + std::to_string(i + 1), &Pitaya::Task::TaskScheduler::BootstrapJobThread, this, nullptr);
+		jobThreads[i] = Pitaya::Thread::RegisterThread("JobThread_" + std::to_string(i + 1), 
+			&Pitaya::Task::TaskScheduler::BootstrapJobThread, this, nullptr);
 	}
 	return true;
 }
@@ -25,9 +25,10 @@ void Pitaya::Task::TaskScheduler::Release()
 {
 	isRunning.store(false, std::memory_order_release);
 	cond.notify_all();
-	for (auto token : jobThreads)
-	{
-		Pitaya::Thread::UnregisterThread(token);
-	}
+	for (auto threadId : jobThreads) { Pitaya::Thread::UnregisterThread(threadId); }
 	jobThreads.clear();
+}
+void Pitaya::Task::TaskScheduler::TuneThreadPool(Pitaya::Core::PassKey<Pitaya::Engine::Engine>)
+{
+	//TODO 根据忙线程数量动态调整线程池大小
 }

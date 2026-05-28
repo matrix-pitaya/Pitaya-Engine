@@ -24,7 +24,7 @@ namespace Pitaya::Editor
 			static void PreEndFrame();
 			static void PostRendererIntialize(void*);
 			static void PostRendererRelease();
-			static void PostRenderContextInitialized(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle);
+			static void PostRenderContextInitialized(Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle);
 			static void PreRenderContextReleased();
 			static void PostRendererSwapBuffer();
 			static void PreRendererEndRenderFrame();
@@ -52,7 +52,7 @@ namespace Pitaya::Editor
 	private:
 		bool Initialize_Main(void* nativeWindow);
 		void Release_Main();
-		bool Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle rtHandle);
+		bool Initialize_Render(Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle rtHandle);
 		void Release_Render();
 
 	private:

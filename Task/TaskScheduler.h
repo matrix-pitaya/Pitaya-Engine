@@ -2,6 +2,7 @@
 
 #include<Core/Thread/Thread.h>
 #include<Core/Allocate/Allocate.h>
+#include<Core/PassKey/PassKey.h>
 #include<Context/Common/Module.h>
 #include<Log/Common/FuncTable.h>
 
@@ -46,7 +47,7 @@ namespace Pitaya::Task
 	private:
 		struct Job
 		{
-			explicit Job(std::function<void()> func, std::string_view name = "Unknown")
+			explicit Job(std::function<void()> func, std::string_view name)
 				:func(std::move(func)), name(name) {}
 			Job() = default;
 			Job(const Job&) = delete;
@@ -57,18 +58,18 @@ namespace Pitaya::Task
 			{
 				if (!func)
 				{
-					Pitaya::Log::Warning(name + " Job Is Empty!");
+					Pitaya::Log::Warning("{} Job Is Empty!", name);
 					return;
 				}
 
-				Pitaya::Log::Info(name + " Job Star!");
+				Pitaya::Log::Info("{} Job Star!", name);
 				func();
-				Pitaya::Log::Info(name + " Job Over!");
+				Pitaya::Log::Info("{} Job Over!", name);
 			}
 
 		private:
 			std::function<void()> func;
-			std::string name = "Unknown";
+			std::string name;
 		};
 
 	private:
@@ -86,9 +87,12 @@ namespace Pitaya::Task
 		void Release();
 
 	public:
+		void TuneThreadPool(Pitaya::Core::PassKey<Pitaya::Engine::Engine>);
+
+	public:
 		inline void PostJob(std::function<void()> func, std::string_view name = "Unknown")
 		{
-			Pitaya::Log::Info(std::string(name) + " Job is Posted!");
+			Pitaya::Log::Info("{} Job is Posted!", name);
 			{
 				std::lock_guard<std::mutex> lock(mutex);
 				jobs.emplace(std::move(func), name);
@@ -109,9 +113,7 @@ namespace Pitaya::Task
 				{
 					std::unique_lock<std::mutex> lock(mutex);
 					cond.wait(lock, [this] {return !jobs.empty() || !isRunning.load(std::memory_order_acquire); });
-
 					if (!isRunning.load(std::memory_order_acquire) && jobs.empty()) { break; }
-
 					job = std::move(jobs.front());
 					jobs.pop();
 				}

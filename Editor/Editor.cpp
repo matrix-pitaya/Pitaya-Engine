@@ -3,6 +3,7 @@
 #include<Render/RenderPipeline.h>
 #include<Time/Common/FuncTable.h> 
 #include<Core/Utils/System.h>
+#include<Core/Utils/Check.h>
 #include<Hook/def.h>
 
 extern "C" EDITOR_API void EDITOR_CALL AttachRuntimeEnv(int argc, char** argv)
@@ -41,13 +42,9 @@ void Pitaya::Editor::Editor::HookFunc::PostRendererRelease()
 {
 	Pitaya::Editor::Editor::Instance().Release_Main();
 }
-void Pitaya::Editor::Editor::HookFunc::PostRenderContextInitialized(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle rtHandle)
+void Pitaya::Editor::Editor::HookFunc::PostRenderContextInitialized(Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle rtHandle)
 {
-	if (!Pitaya::Editor::Editor::Instance().Initialize_Render(passkey, rtHandle))
-	{
-		Pitaya::Core::PopMessageBox("Error", "Editor Render Initialize Fail!");
-		Pitaya::Core::Terminate(-1);
-	}
+	PITAYA_CHECK(Pitaya::Editor::Editor::Instance().Initialize_Render(rtHandle))
 }
 void Pitaya::Editor::Editor::HookFunc::PreRenderContextReleased()
 {
@@ -138,9 +135,9 @@ bool Pitaya::Editor::Editor::Initialize_Main(void* nativeWindow)
 	
 	return camera.Initialize_Main() && gui.Initialize_Main(nativeWindow);
 }
-bool Pitaya::Editor::Editor::Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle rtHandle)
+bool Pitaya::Editor::Editor::Initialize_Render(Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle rtHandle)
 {
-	return camera.Initialize_Render(passkey) && gui.Initialize_Render(passkey, rtHandle, camera.renderTarget.FinalFrameBufferHandle);
+	return camera.Initialize_Render() && gui.Initialize_Render(rtHandle, camera.renderTarget.FinalFrameBufferHandle);
 }
 void Pitaya::Editor::Editor::Release_Main()
 {

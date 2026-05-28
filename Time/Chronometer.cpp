@@ -11,7 +11,6 @@ bool Pitaya::Time::Chronometer::Initialize()
 #if defined(PITAYA_PLATFORM_WINDOWS)
 	timeBeginPeriod(1);
 #endif
-	SetFPS(144.0f);
 	start = std::chrono::steady_clock::now();
 	tick = start;
 	lastTick = start;

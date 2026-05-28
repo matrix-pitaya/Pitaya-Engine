@@ -230,7 +230,7 @@ bool Pitaya::Window::Window::Initialize(int width, int height, const char* title
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 	//glfwWindowHint(GLFW_SAMPLES, 4);
-
+	
 	//创建窗口
 	auto window = glfwCreateWindow(width, height, title, NULL, NULL);
 	//检测窗口是否创建成功

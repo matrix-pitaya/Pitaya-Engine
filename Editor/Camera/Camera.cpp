@@ -29,13 +29,13 @@ void Pitaya::Editor::Camera::Release_Main()
 {
 	//renderTarget.SerializeToFile(Pitaya::Core::GetExecutableDirectory() / "appdata/editor/rt/EditorViewPort.rt");
 }
-bool Pitaya::Editor::Camera::Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
+bool Pitaya::Editor::Camera::Initialize_Render()
 {
 	while (!falg.load(std::memory_order_acquire)) { std::this_thread::yield(); }
-	renderTarget.SceneFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(passkey, renderTarget.SceneFrameBufferSpecification);
-	renderTarget.PingPongFrameBufferHandles[0] = Pitaya::GPU::CreateFrameBuffer(passkey, renderTarget.PingPongFrameBufferSpecification);
-	renderTarget.PingPongFrameBufferHandles[1] = Pitaya::GPU::CreateFrameBuffer(passkey, renderTarget.PingPongFrameBufferSpecification);
-	renderTarget.FinalFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(passkey, renderTarget.FinalFrameBufferSpecification);
+	renderTarget.SceneFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(renderTarget.SceneFrameBufferSpecification);
+	renderTarget.PingPongFrameBufferHandles[0] = Pitaya::GPU::CreateFrameBuffer(renderTarget.PingPongFrameBufferSpecification);
+	renderTarget.PingPongFrameBufferHandles[1] = Pitaya::GPU::CreateFrameBuffer(renderTarget.PingPongFrameBufferSpecification);
+	renderTarget.FinalFrameBufferHandle = Pitaya::GPU::CreateFrameBuffer(renderTarget.FinalFrameBufferSpecification);
 	falg.store(false, std::memory_order_release);
 	return true;
 }

@@ -132,5 +132,8 @@
     <ClInclude Include="PCH\stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\Check.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

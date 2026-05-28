@@ -24,6 +24,11 @@ namespace Pitaya::Core
     {
         const void* data = nullptr;
         size_t size = 0;
+
+        inline explicit operator bool() const noexcept 
+        { 
+            return data != nullptr && size > 0;
+        }
     };
     inline BuiltRC LoadBuiltInRC(const char* resourceName, const char* moduleName = nullptr)
     {

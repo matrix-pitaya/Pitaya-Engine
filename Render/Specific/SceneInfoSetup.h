@@ -10,7 +10,7 @@ namespace Pitaya::Render
 	struct SceneInfoSetup
 	{
 		glm::vec4 AmbientColor = glm::vec4(1.0f);
-		Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle EnvCubemapHandle;
+		Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle EnvCubemapHandle; 
 		Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle IrradianceHandle;
 		Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle PrefilteredHandle;
 		Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle BRDFLUTHandle;

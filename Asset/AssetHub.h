@@ -369,7 +369,7 @@ namespace Pitaya::Asset
         }
 
     public:
-        inline void SyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey)
+        inline void SyncAssetToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
         {
             // 每一帧最多处理5个资源操作 避免过多资源操作导致的卡顿
             if (cacheAssetOperateQueue.empty()) { cacheAssetOperateQueue = assetOperateQueue.PopN(5); }
@@ -377,7 +377,7 @@ namespace Pitaya::Asset
             // 在时间预算内处理资产
             Pitaya::Core::InvokeWithTimeBudget(
                 [this]() ->bool { return cacheAssetOperateQueue.empty(); },
-                [this, passkey]() { std::visit([this, passkey](auto& result_Inner) { this->SyncAssetOperate(passkey, result_Inner); }, cacheAssetOperateQueue.front().Data); cacheAssetOperateQueue.pop(); },
+                [this]() { std::visit([this](auto& result_Inner) { this->SyncAssetOperate(result_Inner); }, cacheAssetOperateQueue.front().Data); cacheAssetOperateQueue.pop(); },
                 std::chrono::milliseconds(2));
         }
         inline bool IsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
@@ -386,15 +386,15 @@ namespace Pitaya::Asset
         }
 
     private:
-        void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, std::monostate&);
-        void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::Texture2DImportResult&);
-        void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::TextureCubemapImportResult&);
-        void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::ShaderImportResult&);
-        void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::StaticMeshImportResult&);
-        void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::SkinnedMeshImportResult&);
-        void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::RenderTargetImportResult&);
-        void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Asset::Texture2DUnloadRequire&);
-        void SyncAssetOperate(Pitaya::Core::PassKey<Pitaya::Render::Renderer>, Pitaya::Import::SkyBoxImportResult&);
+        void SyncAssetOperate(std::monostate&);
+        void SyncAssetOperate(Pitaya::Import::Texture2DImportResult&);
+        void SyncAssetOperate(Pitaya::Import::TextureCubemapImportResult&);
+        void SyncAssetOperate(Pitaya::Import::ShaderImportResult&);
+        void SyncAssetOperate(Pitaya::Import::StaticMeshImportResult&);
+        void SyncAssetOperate(Pitaya::Import::SkinnedMeshImportResult&);
+        void SyncAssetOperate(Pitaya::Import::RenderTargetImportResult&);
+        void SyncAssetOperate(Pitaya::Asset::Texture2DUnloadRequire&);
+        void SyncAssetOperate(Pitaya::Import::SkyBoxImportResult&);
 
     private:
         inline static constexpr const char* fileName = "asset.cfg";

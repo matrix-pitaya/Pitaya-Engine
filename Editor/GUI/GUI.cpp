@@ -139,7 +139,7 @@ bool Pitaya::Editor::GUI::Initialize_Main(void* nativeWindow)
 	while (!isRenderReady.load(std::memory_order_acquire)){ std::this_thread::yield(); }
 	return drawer.Initialize(nativeWindow);
 }
-bool Pitaya::Editor::GUI::Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer> passkey, Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle gameRtHandle, Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle editorRtHandle)
+bool Pitaya::Editor::GUI::Initialize_Render(Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle gameRtHandle, Pitaya::Core::SlotMap<Pitaya::GPU::FrameBuffer>::Handle editorRtHandle)
 {
 	ImGuiContext* context = nullptr;
 	while (!(context = imGuiContext.load(std::memory_order_acquire))) { std::this_thread::yield(); }
@@ -150,8 +150,8 @@ bool Pitaya::Editor::GUI::Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render
 #endif
 	Pitaya::GPU::FrameBuffer gameRtFrambuffer;
 	Pitaya::GPU::FrameBuffer editorRtFrambuffer;
-	if (!Pitaya::GPU::GetFrameBuffer(passkey, gameRtHandle, gameRtFrambuffer) || 
-		!Pitaya::GPU::GetFrameBuffer(passkey, editorRtHandle, editorRtFrambuffer))
+	if (!Pitaya::GPU::GetFrameBuffer(gameRtHandle, gameRtFrambuffer) || 
+		!Pitaya::GPU::GetFrameBuffer(editorRtHandle, editorRtFrambuffer))
 	{ return false; }
 	panels.gameViewportPanel.textureId = reinterpret_cast<void*>(static_cast<uint64_t>(gameRtFrambuffer.ColorAttachmentId));
 	panels.sceneViewportPanel.textureId = reinterpret_cast<void*>(static_cast<uint64_t>(editorRtFrambuffer.ColorAttachmentId));

@@ -39,7 +39,7 @@ namespace Pitaya::Editor
 
 	private:
 		bool Initialize_Main();
-		bool Initialize_Render(Pitaya::Core::PassKey<Pitaya::Render::Renderer>);
+		bool Initialize_Render();
 		void Release_Main();
 		void Release_Render();
 
