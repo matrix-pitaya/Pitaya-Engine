@@ -61,15 +61,7 @@ namespace Pitaya::Core
         if constexpr (std::is_polymorphic_v<T>) { static_assert(std::has_virtual_destructor_v<T>, "Polymorphic types must have a virtual destructor"); }
 
         if (!ptr) { return; }
-        void* rawMemory = nullptr;
-        if constexpr (std::is_polymorphic_v<T>)
-        {
-            rawMemory = dynamic_cast<void*>(ptr);
-        }
-        else
-        {
-            rawMemory = static_cast<void*>(ptr);
-        }
+        void* rawMemory = static_cast<void*>(ptr);
 
         ptr->~T();
         constexpr bool overAligned = alignof(T) > alignof(std::max_align_t);
@@ -131,18 +123,7 @@ namespace Pitaya::Core
         static_assert(sizeof(T) > 0, "Can't delete an incomplete type");                \
         static_assert(!std::is_array_v<T>, "Use un-implemented DeleteArray config");    \
                                                                                         \
-        void* rawMemory = [](auto* p) -> void*                                          \
-        {                                                                               \
-            using U = std::remove_cv_t<std::remove_pointer_t<decltype(p)>>;             \
-            if constexpr (std::is_polymorphic_v<U>)                                     \
-            {                                                                           \
-                return dynamic_cast<void*>(p);                                          \
-            }                                                                           \
-            else                                                                        \
-            {                                                                           \
-                return static_cast<void*>(p);                                           \
-            }                                                                           \
-        }(_p);                                                                          \
+        void* rawMemory = static_cast<void*>(_p);                                       \
                                                                                         \
         _p->~T();                                                                       \
                                                                                         \

@@ -33,6 +33,15 @@
     <ClInclude Include="Component\RigidBody.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Component\BoxCollider.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\SphereCollider.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\CapsuleCollider.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="Component\Transform.h">
       <Filter>头文件</Filter>
     </ClInclude>
