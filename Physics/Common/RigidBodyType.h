@@ -5,7 +5,7 @@
 
 namespace Pitaya::Physics
 {
-	enum class RigidBodyType : uint8_t
+	enum class RigidBodyType : uint32_t
 	{
 		Static,
 		Dynamic,

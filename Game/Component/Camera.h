@@ -2,7 +2,7 @@
 
 #include<Core/Camera/CameraState.h>
 #include<Core/StateFlags/StateFlags.h>
-#include<Core/Asset/Asset.h>
+#include<Core/Asset/AssetRef.h>
 #include<Asset/Common/RenderTarget.h>
 #include<Asset/Common/FuncTable.h>
 #include<Render/Common/PostProcessSetting.h>
@@ -61,7 +61,7 @@ namespace Pitaya::Game
 	private:
 		Pitaya::Core::CameraState cameraState;
 		Pitaya::Core::StateFlags<Pitaya::Render::RenderLayer> cullingMask = static_cast<Pitaya::Render::RenderLayer>(~static_cast<uint32_t>(Pitaya::Render::RenderLayer::EditorOnly));
-		Pitaya::Core::Asset<Pitaya::Asset::RenderTarget> renderTarget = nullptr;	//为nullptr则渲染到MainDisplayRT
+		Pitaya::Core::AssetRef<Pitaya::Asset::RenderTarget> renderTarget = nullptr;	//为nullptr则渲染到MainDisplayRT
 		Pitaya::Render::PostProcessSetting postProcessSetting;		//TODO 换成Asset 然后生成PostProcessSetting 
 	};
 }

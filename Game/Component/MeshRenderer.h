@@ -1,7 +1,7 @@
 #pragma once
 
 #include<Core/StateFlags/StateFlags.h>
-#include<Core/Asset/Asset.h>
+#include<Core/Asset/AssetRef.h>
 #include<Asset/Common/FuncTable.h>
 #include<Asset/Common/Material.h>
 #include<Asset/Common/Mesh.h>
@@ -16,13 +16,13 @@ namespace Pitaya::Game
 		{
 			mesh = Pitaya::Asset::LoadAsset<Pitaya::Asset::Mesh>(meshGUID);
 		}
-		inline const Pitaya::Core::Asset<Pitaya::Asset::Mesh>& GetMesh() const noexcept
+		inline const Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>& GetMesh() const noexcept
 		{
 			return mesh;
 		}
-		inline const std::vector<Pitaya::Core::Asset<Pitaya::Asset::Material>>& GetMaterials() const noexcept
+		inline const std::vector<Pitaya::Core::AssetRef<Pitaya::Asset::Material>>& GetMaterials() const noexcept
 		{
-			static const std::vector<Pitaya::Core::Asset<Pitaya::Asset::Material>> Empty;
+			static const std::vector<Pitaya::Core::AssetRef<Pitaya::Asset::Material>> Empty;
 			return mesh.IsReady() ? mesh->Materials : Empty;
 		}
 		inline Pitaya::Render::RenderLayer GetLayerMask() const noexcept
@@ -51,7 +51,7 @@ namespace Pitaya::Game
 		}
 
 	private:
-		Pitaya::Core::Asset<Pitaya::Asset::Mesh> mesh = nullptr;
+		Pitaya::Core::AssetRef<Pitaya::Asset::Mesh> mesh = nullptr;
 		Pitaya::Core::StateFlags<Pitaya::Render::RenderLayer> layerMask = Pitaya::Render::RenderLayer::Default;
 		bool enableShadowCast = true;
 		bool receiveShadow = true;

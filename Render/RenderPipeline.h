@@ -1,7 +1,7 @@
 #pragma once
 
 #include<Core/Allocate/Allocate.h>
-#include<Core/Asset/Asset.h>
+#include<Core/Asset/AssetRef.h>
 #include<Core/PassKey/PassKey.h>
 
 #include<Context/Common/Module.h>
@@ -116,7 +116,7 @@ namespace Pitaya::Render
         {
             graph.Passes.emplace_back(cameraSnapshot, setting, cullingMask, rt, nearClip, farClip, 0);
         }
-        inline void AddRenderItem(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Asset::Mesh* mesh, Pitaya::Asset::Material* material, Pitaya::Render::RenderLayer layerMask, const glm::mat4& model, uint32_t subMeshIndex, bool enableShadowCast, bool receiveShadow)
+        inline void AddRenderItem(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, Pitaya::Asset::Mesh* mesh, Pitaya::Asset::Material* material, Pitaya::Render::RenderLayer layerMask, glm::mat4 model, uint32_t subMeshIndex, bool enableShadowCast, bool receiveShadow)
         {
             graph.Items.emplace_back(mesh, material, layerMask, model, subMeshIndex, enableShadowCast, receiveShadow);
         }

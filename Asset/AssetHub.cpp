@@ -467,7 +467,7 @@ void Pitaya::Asset::AssetHub::Release()
 
     //清理资源池资源
     meshes.ForEachCheckErase(
-        [](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry*& _entry)
+        [](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry*& _entry)
         {
             if (_entry)
             {
@@ -482,7 +482,7 @@ void Pitaya::Asset::AssetHub::Release()
             return true;
         });
     textures.ForEachCheckErase(
-        [](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry*& _entry)
+        [](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry*& _entry)
         {
             if (_entry)
             {
@@ -497,7 +497,7 @@ void Pitaya::Asset::AssetHub::Release()
             return true;
         });
     shaders.ForEachCheckErase(
-        [](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry*& _entry)
+        [](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry*& _entry)
         {
             if (_entry)
             {
@@ -512,7 +512,7 @@ void Pitaya::Asset::AssetHub::Release()
             return true;
         });
     materials.ForEachCheckErase(
-        [](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Material>::AssetEntry*& _entry)
+        [](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Material>::AssetEntry*& _entry)
         {
             if (_entry)
             {
@@ -524,7 +524,7 @@ void Pitaya::Asset::AssetHub::Release()
             return true;
         });
     rendertargets.ForEachCheckErase(
-        [](Pitaya::Core::GUID, Pitaya::Core::Asset<Pitaya::Asset::RenderTarget>::AssetEntry*& _entry)
+        [](Pitaya::Core::GUID, Pitaya::Core::AssetRef<Pitaya::Asset::RenderTarget>::AssetEntry*& _entry)
         {
             if (_entry)
             {
@@ -539,7 +539,7 @@ void Pitaya::Asset::AssetHub::Release()
             return true;
         });
     skyboxes.ForEachCheckErase(
-        [](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::SkyBox>::AssetEntry*& _entry)
+        [](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::SkyBox>::AssetEntry*& _entry)
         {
             if (_entry)
             {
@@ -574,9 +574,9 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(std::monostate&)
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::Texture2DImportResult& cpuOpResult_Inner)
 {
     std::string log;
-    Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry* entry = nullptr;
     textures.FindOperateKV(cpuOpResult_Inner.GUID,
-        [&log, &entry, &cpuOpResult_Inner](Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry* _entry)
+        [&log, &entry, &cpuOpResult_Inner](Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -636,9 +636,9 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::Texture2DImportRe
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::TextureCubemapImportResult& cpuOpResult_Inner)
 {
     std::string log;
-    Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry* entry = nullptr;
     textures.FindOperateKV(cpuOpResult_Inner.GUID,
-        [&log, &entry, &cpuOpResult_Inner](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry* _entry)
+        [&log, &entry, &cpuOpResult_Inner](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -702,9 +702,9 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::TextureCubemapImp
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::ShaderImportResult& cpuOpResult_Inner)
 {
     std::string log;
-    Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry* entry = nullptr;
     shaders.FindOperateKV(cpuOpResult_Inner.GUID,
-        [&log,&entry,&cpuOpResult_Inner](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry* _entry)
+        [&log,&entry,&cpuOpResult_Inner](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -790,9 +790,9 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::ShaderImportResul
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::StaticMeshImportResult& cpuOpResult_Inner)
 {
     std::string log;
-    Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry* entry = nullptr;
     meshes.FindOperateKV(cpuOpResult_Inner.GUID,
-        [&log, &entry, &cpuOpResult_Inner](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry* _entry)
+        [&log, &entry, &cpuOpResult_Inner](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -877,9 +877,9 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::StaticMeshImportR
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::SkinnedMeshImportResult& cpuOpResult_Inner)
 {
     std::string log;
-    Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry* entry = nullptr;
     meshes.FindOperateKV(cpuOpResult_Inner.GUID,
-        [&log, &entry, &cpuOpResult_Inner](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry* _entry)
+        [&log, &entry, &cpuOpResult_Inner](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -967,9 +967,9 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::SkinnedMeshImport
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::RenderTargetImportResult& cpuOpResult_Inner)
 {
     std::string log;
-    Pitaya::Core::Asset<Pitaya::Asset::RenderTarget>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::RenderTarget>::AssetEntry* entry = nullptr;
     rendertargets.FindOperateKV(cpuOpResult_Inner.GUID,
-        [&log, &entry, &cpuOpResult_Inner](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::RenderTarget>::AssetEntry* _entry)
+        [&log, &entry, &cpuOpResult_Inner](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::RenderTarget>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -1042,9 +1042,9 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Asset::Texture2DUnloadReq
 void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::SkyBoxImportResult& cpuOpResult_Inner)
 {
     std::string log;
-    Pitaya::Core::Asset<Pitaya::Asset::SkyBox>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::SkyBox>::AssetEntry* entry = nullptr;
     skyboxes.FindOperateKV(cpuOpResult_Inner.GUID,
-        [&log, &entry](Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::SkyBox>::AssetEntry* _entry)
+        [&log, &entry](Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::SkyBox>::AssetEntry* _entry)
         {
             if (!_entry) { log = "skybox assetentry Is Empty GUID: " + _guid.ToString(); return; }
             if (_entry->State.HasBits(Pitaya::Core::AssetState::Unload)) { log = "skybox marked as unload GUID: " + _guid.ToString(); return; }
@@ -1382,7 +1382,7 @@ void Pitaya::Asset::AssetHub::LoadTextureAsset(Pitaya::Core::GUID guid, const st
     //文件格式异常 标记CPU加载失败
     std::string log;
     textures.FindOperateKV(guid,
-        [&log, &path](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry* _entry)
+        [&log, &path](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -1402,9 +1402,9 @@ void Pitaya::Asset::AssetHub::LoadTextureAsset(Pitaya::Core::GUID guid, const st
 bool Pitaya::Asset::AssetHub::LoadTexture2DAsset(Pitaya::Core::GUID guid, const std::filesystem::path& path, Pitaya::Import::Texture2DImportResult& result)
 {
     std::string log;
-    Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry* entry = nullptr;
     textures.FindOperateKV(guid,
-        [&path, &log, &entry](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry* _entry)
+        [&path, &log, &entry](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -1449,9 +1449,9 @@ bool Pitaya::Asset::AssetHub::LoadTexture2DAsset(Pitaya::Core::GUID guid, const 
 bool Pitaya::Asset::AssetHub::LoadTextureCubemapAsset(Pitaya::Core::GUID guid, const std::filesystem::path& file,const std::vector<std::filesystem::path>& paths, Pitaya::Import::TextureCubemapImportResult& result)
 {
     std::string log;
-    Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry* entry = nullptr;
     textures.FindOperateKV(guid,
-        [&file, &log, &entry](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry* _entry)
+        [&file, &log, &entry](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -1561,7 +1561,7 @@ void Pitaya::Asset::AssetHub::LoadShaderAsset(Pitaya::Core::GUID guid, const std
     //异常状态Shader 标记CPU加载失败
     std::string log;
     shaders.FindOperateKV(guid,
-        [&log, &folder](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry* _entry)
+        [&log, &folder](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -1584,9 +1584,9 @@ bool Pitaya::Asset::AssetHub::LoadVFShaderAsset(Pitaya::Core::GUID guid, const s
     std::string log;
     std::string strPath = folder.string();
     
-    Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry* entry = nullptr;
     shaders.FindOperateKV(guid,
-        [strPath, &log, &entry](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry* _entry)
+        [strPath, &log, &entry](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -1635,9 +1635,9 @@ bool Pitaya::Asset::AssetHub::LoadVFGShaderAsset(Pitaya::Core::GUID guid, const 
     std::string log;
     std::string strPath = folder.string();
     
-    Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry* entry = nullptr;
     shaders.FindOperateKV(guid,
-        [strPath, &log, &entry](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry* _entry)
+        [strPath, &log, &entry](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -1724,9 +1724,9 @@ bool Pitaya::Asset::AssetHub::LoadStaticMeshAsset(Pitaya::Core::GUID guid, const
 {
     std::string log;
     std::string path = file.string();
-    Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry* entry = nullptr;
     meshes.FindOperateKV(guid,
-        [path, &log, &entry](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry* _entry)
+        [path, &log, &entry](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -1787,9 +1787,9 @@ void Pitaya::Asset::AssetHub::LoadMaterialAsset(Pitaya::Core::GUID guid, const s
 
     std::string log;
     std::string path = file.string();
-    Pitaya::Core::Asset<Pitaya::Asset::Material>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::Material>::AssetEntry* entry = nullptr;
     materials.FindOperateKV(guid,
-        [path,&log,&entry](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::Material>::AssetEntry* _entry)
+        [path,&log,&entry](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::Material>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -1844,9 +1844,9 @@ void Pitaya::Asset::AssetHub::LoadRenderTarget(Pitaya::Core::GUID guid, const st
 
     std::string log;
     std::string path = file.string();
-    Pitaya::Core::Asset<Pitaya::Asset::RenderTarget>::AssetEntry* entry = nullptr;
+    Pitaya::Core::AssetRef<Pitaya::Asset::RenderTarget>::AssetEntry* entry = nullptr;
     rendertargets.FindOperateKV(guid,
-        [path, &log, &entry](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::RenderTarget>::AssetEntry* _entry)
+        [path, &log, &entry](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::RenderTarget>::AssetEntry* _entry)
         {
             if (!_entry)
             {
@@ -1905,7 +1905,7 @@ void Pitaya::Asset::AssetHub::LoadSkyBoxAsset(Pitaya::Core::GUID guid, const std
     {
         Pitaya::Log::Error(path.string() + " SkyBox Load Fail");
         skyboxes.FindOperateKV(guid,
-            [](Pitaya::Core::GUID _guid, Pitaya::Core::Asset<Pitaya::Asset::SkyBox>::AssetEntry* _entry)
+            [](Pitaya::Core::GUID _guid, Pitaya::Core::AssetRef<Pitaya::Asset::SkyBox>::AssetEntry* _entry)
             {
                 if (_entry) { _entry->State.SetBits(Pitaya::Core::AssetState::CPUFailed); }
             },

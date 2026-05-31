@@ -27,7 +27,7 @@ namespace Pitaya::Asset
 		std::vector<SubMesh> SubMeshs;
 		Pitaya::Core::AABB BoundingBox;
 
-		std::vector<Pitaya::Core::Asset<Pitaya::Asset::Material>> Materials;
+		std::vector<Pitaya::Core::AssetRef<Pitaya::Asset::Material>> Materials;
 		Pitaya::GPU::MeshType Type = Pitaya::GPU::MeshType::Static;
 
 		//骨骼数据专属

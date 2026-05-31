@@ -126,27 +126,27 @@ namespace
 
 
 #pragma region Asset
-    Pitaya::Core::Asset<Pitaya::Asset::Texture> ENGINE_CALL OnLoadTexture(Pitaya::Core::GUID guid)
+    Pitaya::Core::AssetRef<Pitaya::Asset::Texture> ENGINE_CALL OnLoadTexture(Pitaya::Core::GUID guid)
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->LoadAsset<Pitaya::Asset::Texture>(guid);
     }
-    Pitaya::Core::Asset<Pitaya::Asset::Shader> ENGINE_CALL OnLoadShader(Pitaya::Core::GUID guid)
+    Pitaya::Core::AssetRef<Pitaya::Asset::Shader> ENGINE_CALL OnLoadShader(Pitaya::Core::GUID guid)
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->LoadAsset<Pitaya::Asset::Shader>(guid);
     }
-    Pitaya::Core::Asset<Pitaya::Asset::Mesh> ENGINE_CALL OnLoadMesh(Pitaya::Core::GUID guid)
+    Pitaya::Core::AssetRef<Pitaya::Asset::Mesh> ENGINE_CALL OnLoadMesh(Pitaya::Core::GUID guid)
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->LoadAsset<Pitaya::Asset::Mesh>(guid);
     }
-    Pitaya::Core::Asset<Pitaya::Asset::Material> ENGINE_CALL OnLoadMaterial(Pitaya::Core::GUID guid)
+    Pitaya::Core::AssetRef<Pitaya::Asset::Material> ENGINE_CALL OnLoadMaterial(Pitaya::Core::GUID guid)
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->LoadAsset<Pitaya::Asset::Material>(guid);
     }
-    Pitaya::Core::Asset<Pitaya::Asset::RenderTarget> ENGINE_CALL OnLoadRenderTarget(Pitaya::Core::GUID guid)
+    Pitaya::Core::AssetRef<Pitaya::Asset::RenderTarget> ENGINE_CALL OnLoadRenderTarget(Pitaya::Core::GUID guid)
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->LoadAsset<Pitaya::Asset::RenderTarget>(guid);
     }
-    Pitaya::Core::Asset<Pitaya::Asset::SkyBox> ENGINE_CALL OnLoadSkyBox(Pitaya::Core::GUID guid)
+    Pitaya::Core::AssetRef<Pitaya::Asset::SkyBox> ENGINE_CALL OnLoadSkyBox(Pitaya::Core::GUID guid)
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Asset::AssetHub>()->LoadAsset<Pitaya::Asset::SkyBox>(guid);
     }
@@ -708,21 +708,20 @@ void Pitaya::Engine::Engine::Render()
         //提交MeshRenderer
         for (auto [entity, meshrenderer, transform] : scene->ECS.GetGroup<Pitaya::Game::MeshRenderer>(entt::get<Pitaya::Game::Transform>, entt::exclude<Pitaya::Game::Disabled>).each())
         {
-            //尝试获取材质覆盖组件
-            auto* materialOverride = scene->ECS.GetComponent<Pitaya::Game::MaterialOverride>(entity);
-            const auto& mesh = meshrenderer.GetMesh();
-            const auto& materials = materialOverride ? materialOverride->GetOverrideMaterials() : meshrenderer.GetMaterials();	//如果有材质覆盖组件 优先使用覆盖的材质列表 否则使用MeshRenderer自带的材质列表
-            if (mesh.IsReady() && mesh.GetNativeAssetData() && !mesh.GetNativeAssetData()->SubMeshs.empty())
+            const auto& mesh = meshrenderer.GetMesh(); auto* nativeMesh = mesh.GetNativeAssetData();
+            if (mesh.IsReady() && nativeMesh && !nativeMesh->SubMeshs.empty())
             {
-                for (uint32_t i = 0; i < mesh.GetNativeAssetData()->SubMeshs.size(); ++i)
+                auto* materialOverride = scene->ECS.GetComponent<Pitaya::Game::MaterialOverride>(entity);   //尝试获取材质覆盖组件
+                const auto& materials = materialOverride ? materialOverride->GetOverrideMaterials() : meshrenderer.GetMaterials();	//如果有材质覆盖组件 优先使用覆盖的材质列表 否则使用MeshRenderer自带的材质列表
+                for (uint32_t i = 0; i < nativeMesh->SubMeshs.size(); ++i)
                 {
-                    uint32_t matIndex = mesh.GetNativeAssetData()->SubMeshs[i].MaterialIndex;
-                    Pitaya::Asset::Material* nativeMaterial =
-                        (matIndex < materials.size() && materials[matIndex].IsReady()) ? materials[matIndex].GetNativeAssetData() : nullptr;
+                    uint32_t matIndex = nativeMesh->SubMeshs[i].MaterialIndex;
+                    Pitaya::Asset::Material* nativeMaterial = (matIndex < materials.size() && materials[matIndex].IsReady()) ? 
+                        materials[matIndex].GetNativeAssetData() : nullptr;
 
                     MODULE(RenderPipeline)->AddRenderItem(
                         Pitaya::Core::PassKey<Pitaya::Engine::Engine>(),
-                        mesh.GetNativeAssetData(), nativeMaterial, meshrenderer.GetLayerMask(), transform.GetWorldMatrix(), 
+                        nativeMesh, nativeMaterial, meshrenderer.GetLayerMask(), transform.GetWorldMatrix(),
                         i, meshrenderer.GetEnableShadowCast(), meshrenderer.GetReceiveShadow());
                 }
             }

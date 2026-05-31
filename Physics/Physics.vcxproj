@@ -164,6 +164,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\API.h" />
+    <ClInclude Include="Common\CollisionLayer.h" />
+    <ClInclude Include="Common\PhysicsBody.h" />
     <ClInclude Include="Common\RigidBodyType.h" />
     <ClInclude Include="Frontend\PhysicsSimulator.h" />
   </ItemGroup>

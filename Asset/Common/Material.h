@@ -2,7 +2,7 @@
 
 #include<Core/Color/Color.h>
 #include<Core/Identifier/GUID.h>
-#include<Core/Asset/Asset.h>
+#include<Core/Asset/AssetRef.h>
 
 #include<Serialize/Serializable.h>
 
@@ -22,10 +22,10 @@ namespace Pitaya::Asset
 {
     struct Material : public Pitaya::Serialize::Serializable
     {
-        Pitaya::Core::Asset<Pitaya::Asset::Shader> Shader = nullptr;
+        Pitaya::Core::AssetRef<Pitaya::Asset::Shader> Shader = nullptr;
         std::vector<float> FloatParams;
         std::vector<glm::vec4> VectorParams;
-        std::vector<Pitaya::Core::Asset<Pitaya::Asset::Texture>> Textures;
+        std::vector<Pitaya::Core::AssetRef<Pitaya::Asset::Texture>> Textures;
 
         Pitaya::Render::RenderQueue RenderQueue = Pitaya::Render::RenderQueue::Geometry;
         const uint32_t SortId = Next();

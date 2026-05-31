@@ -10,7 +10,7 @@
 #include<Assimp/Scene.h>
 #include<Assimp/Postprocess.h>
 
-#include<Core/Asset/Asset.h>
+#include<Core/Asset/AssetRef.h>
 
 #include<glm.hpp>
 #include<gtc/type_ptr.hpp>
@@ -631,7 +631,7 @@ bool Pitaya::Import::AssimpMeshImporter::ParseMaterial(const aiMaterial* aimater
     Pitaya::Asset::Shader dummyShaderData;
     dummyShaderData.ParamLayout = BuildImportParamLayout();
 
-    Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry dummyShader;
+    Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry dummyShader;
     dummyShader.GUID = Pitaya::Asset::Shader::PBRStatic;
     dummyShader.Data.store(&dummyShaderData, std::memory_order_release);
     dummyShader.State.SetBits(Pitaya::Core::AssetState::CPULoaded);
@@ -674,7 +674,7 @@ bool Pitaya::Import::AssimpMeshImporter::ParseMaterial(const aiMaterial* aimater
         aiTextureType_AMBIENT_OCCLUSION };
 
     const uint32_t texCount = dummyShaderData.ParamLayout.TextureCount;
-    Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry dummyTextures[16] = {};
+    Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry dummyTextures[16] = {};
     material.Textures.resize(texCount);
 
     for (auto aiType : texTypes)

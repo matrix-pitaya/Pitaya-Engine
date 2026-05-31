@@ -2,7 +2,7 @@
 
 #include<Core/Camera/CameraState.h>
 #include<Core/Direction/Direction.h>
-#include<Core/Asset/Asset.h>
+#include<Core/Asset/AssetRef.h>
 #include<Core/StateFlags/StateFlags.h>
 #include<Core/PassKey/PassKey.h>
 

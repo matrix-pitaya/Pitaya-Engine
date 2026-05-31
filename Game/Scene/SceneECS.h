@@ -174,18 +174,23 @@ namespace Pitaya::Game
 				entt::entity entity = delayDestroyQueue[i];
 				if (!ecsRegistry.valid(entity)) { continue; }
 
-				UnlinkFromCurrent(entity);
-
+				// 销毁前先把子节点从当前实体的链表上摘除——否则子节点后续 UnlinkFromCurrent 会访问已销毁的父实体
 				if (auto* link = GetComponent<ChildLink>(entity))
 				{
 					entt::entity currChild = link->GetFirstChild();
 					while (currChild != entt::null)
 					{
 						entt::entity nextChild = GetComponent<ChildLink>(currChild)->GetNextSibling();
+						RemoveComponent<Parent>(currChild);
+						auto* childLink = GetComponent<ChildLink>(currChild);
+						childLink->SetPreviousSibling(entt::null);
+						childLink->SetNextSibling(entt::null);
 						DestroyEntity(currChild);
 						currChild = nextChild;
 					}
 				}
+
+				UnlinkFromCurrent(entity);
 				ecsRegistry.destroy(entity);
 			}
 			delayDestroyQueue.clear();

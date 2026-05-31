@@ -164,7 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Allocate\Allocate.h" />
-    <ClInclude Include="Asset\Asset.h" />
+    <ClInclude Include="Asset\AssetRef.h" />
     <ClInclude Include="Camera\CameraSnapshot.h" />
     <ClInclude Include="Camera\CameraState.h" />
     <ClInclude Include="Color\Color.h" />

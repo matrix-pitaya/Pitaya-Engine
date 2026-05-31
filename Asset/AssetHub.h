@@ -4,7 +4,7 @@
 #include<Core/Container/ThreadSafe/ThreadSafeQueue.h>
 #include<Core/Container/ThreadSafe/ThreadSafeHashMap.h>
 #include<Core/Container/ThreadSafe/ThreadSafeBidirectionalMap.h>
-#include<Core/Asset/Asset.h>
+#include<Core/Asset/AssetRef.h>
 #include<Core/Utils/Time.h>
 
 #include<Serialize/Serializable.h>
@@ -67,16 +67,16 @@ namespace Pitaya::Asset
         };
         struct BuildInAsset
         {
-            Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry White;
-            Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry Black;
-            Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry FlatNormal;
-            Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry PBRStaticShader;
-            Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry PBRSkinnedShader;
-            Pitaya::Core::Asset<Pitaya::Asset::Material>::AssetEntry PBRMaterial;
-            Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry Cube;
-            Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry Panel;
-            Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry Sphere;
-            Pitaya::Core::Asset<Pitaya::Asset::SkyBox>::AssetEntry DefaultSkyBox;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry White;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry Black;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry FlatNormal;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry PBRStaticShader;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry PBRSkinnedShader;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Material>::AssetEntry PBRMaterial;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry Cube;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry Panel;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry Sphere;
+            Pitaya::Core::AssetRef<Pitaya::Asset::SkyBox>::AssetEntry DefaultSkyBox;
         };
 
     private:
@@ -95,13 +95,13 @@ namespace Pitaya::Asset
 
     public:
         template<AssetType T>
-        inline Pitaya::Core::Asset<T> LoadAsset(Pitaya::Core::GUID guid)
+        inline Pitaya::Core::AssetRef<T> LoadAsset(Pitaya::Core::GUID guid)
         {
-            if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { if (guid == Pitaya::Asset::Shader::PBRStatic) { return Pitaya::Core::Asset<Pitaya::Asset::Shader>(&buildIn.PBRStaticShader); } else if (guid == Pitaya::Asset::Shader::PBRSkinned) { return Pitaya::Core::Asset<Pitaya::Asset::Shader>(&buildIn.PBRSkinnedShader); } }
-            if constexpr (std::is_same_v<T, Pitaya::Asset::Material>) { if (guid == Pitaya::Asset::Material::PBR) { return Pitaya::Core::Asset<Pitaya::Asset::Material>(&buildIn.PBRMaterial); } }
-            if constexpr (std::is_same_v<T, Pitaya::Asset::Texture>) { if (guid == Pitaya::Asset::Texture::White) { return Pitaya::Core::Asset<Pitaya::Asset::Texture>(&buildIn.White); } else if (guid == Pitaya::Asset::Texture::Black) { return Pitaya::Core::Asset<Pitaya::Asset::Texture>(&buildIn.Black); } else if (guid == Pitaya::Asset::Texture::FlatNormal) { return Pitaya::Core::Asset<Pitaya::Asset::Texture>(&buildIn.FlatNormal); } }
-            if constexpr (std::is_same_v<T, Pitaya::Asset::Mesh>) { if (guid == Pitaya::Asset::Mesh::Sphere) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Sphere); } else if (guid == Pitaya::Asset::Mesh::Cube) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Cube); } else if (guid == Pitaya::Asset::Mesh::Panel) { return Pitaya::Core::Asset<Pitaya::Asset::Mesh>(&buildIn.Panel); } }
-            if constexpr (std::is_same_v<T, Pitaya::Asset::SkyBox>) { if (guid == Pitaya::Asset::SkyBox::Default) { return Pitaya::Core::Asset<Pitaya::Asset::SkyBox>(&buildIn.DefaultSkyBox); } }
+            if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { if (guid == Pitaya::Asset::Shader::PBRStatic) { return Pitaya::Core::AssetRef<Pitaya::Asset::Shader>(&buildIn.PBRStaticShader); } else if (guid == Pitaya::Asset::Shader::PBRSkinned) { return Pitaya::Core::AssetRef<Pitaya::Asset::Shader>(&buildIn.PBRSkinnedShader); } }
+            if constexpr (std::is_same_v<T, Pitaya::Asset::Material>) { if (guid == Pitaya::Asset::Material::PBR) { return Pitaya::Core::AssetRef<Pitaya::Asset::Material>(&buildIn.PBRMaterial); } }
+            if constexpr (std::is_same_v<T, Pitaya::Asset::Texture>) { if (guid == Pitaya::Asset::Texture::White) { return Pitaya::Core::AssetRef<Pitaya::Asset::Texture>(&buildIn.White); } else if (guid == Pitaya::Asset::Texture::Black) { return Pitaya::Core::AssetRef<Pitaya::Asset::Texture>(&buildIn.Black); } else if (guid == Pitaya::Asset::Texture::FlatNormal) { return Pitaya::Core::AssetRef<Pitaya::Asset::Texture>(&buildIn.FlatNormal); } }
+            if constexpr (std::is_same_v<T, Pitaya::Asset::Mesh>) { if (guid == Pitaya::Asset::Mesh::Sphere) { return Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>(&buildIn.Sphere); } else if (guid == Pitaya::Asset::Mesh::Cube) { return Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>(&buildIn.Cube); } else if (guid == Pitaya::Asset::Mesh::Panel) { return Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>(&buildIn.Panel); } }
+            if constexpr (std::is_same_v<T, Pitaya::Asset::SkyBox>) { if (guid == Pitaya::Asset::SkyBox::Default) { return Pitaya::Core::AssetRef<Pitaya::Asset::SkyBox>(&buildIn.DefaultSkyBox); } }
 
             std::filesystem::path path;
             if (!GetAssetPathByGUID(guid, path))
@@ -125,7 +125,7 @@ namespace Pitaya::Asset
             bool success = false;
             auto& map = GetAssetEntryMap<T>();
             map.FindOperateKV(guid,
-                [&success, &log, &level](Pitaya::Core::GUID _guid, typename Pitaya::Core::Asset<T>::AssetEntry* _entry)
+                [&success, &log, &level](Pitaya::Core::GUID _guid, typename Pitaya::Core::AssetRef<T>::AssetEntry* _entry)
                 {
                     if (!_entry)
                     {
@@ -152,7 +152,7 @@ namespace Pitaya::Asset
 
     private:
         template<AssetType T>
-        inline Pitaya::Core::Asset<T> LoadAsset(Pitaya::Core::GUID guid, const std::filesystem::path& path)
+        inline Pitaya::Core::AssetRef<T> LoadAsset(Pitaya::Core::GUID guid, const std::filesystem::path& path)
         {
             if (!CheckIsVirtualPath(path))
             {
@@ -170,10 +170,10 @@ namespace Pitaya::Asset
             std::string log;
             Pitaya::Log::LogLevel level = Pitaya::Log::LogLevel::Info;
             bool asyncLoad = false;
-            typename Pitaya::Core::Asset<T> asset = nullptr;
+            typename Pitaya::Core::AssetRef<T> asset = nullptr;
             auto& map = GetAssetEntryMap<T>();
             map.FindOperateKVOrInsert(guid,
-                [&asset, &asyncLoad, &log, &level](Pitaya::Core::GUID _guid, typename Pitaya::Core::Asset<T>::AssetEntry* _entry)
+                [&asset, &asyncLoad, &log, &level](Pitaya::Core::GUID _guid, typename Pitaya::Core::AssetRef<T>::AssetEntry* _entry)
                 {
                     if (!_entry)
                     {
@@ -191,13 +191,13 @@ namespace Pitaya::Asset
                         //TODO 处理特殊情况 资产标记为unload后重新调用此函数加载 需要判断是否为Unload，如果是根据CPU、GPU状态进行不同处理
                     }
                 },
-                [&asset, &asyncLoad, &log, &level](Pitaya::Core::GUID _guid) -> std::optional<std::pair<Pitaya::Core::GUID, typename Pitaya::Core::Asset<T>::AssetEntry*>>
+                [&asset, &asyncLoad, &log, &level](Pitaya::Core::GUID _guid) -> std::optional<std::pair<Pitaya::Core::GUID, typename Pitaya::Core::AssetRef<T>::AssetEntry*>>
                 {
                     level = Pitaya::Log::LogLevel::Info;
                     log = "asset entry inexistence, create asset entry GUID:" + _guid.ToString();
 
                     asyncLoad = true;
-                    typename Pitaya::Core::Asset<T>::AssetEntry* entry = Pitaya::Core::New<typename Pitaya::Core::Asset<T>::AssetEntry>();
+                    typename Pitaya::Core::AssetRef<T>::AssetEntry* entry = Pitaya::Core::New<typename Pitaya::Core::AssetRef<T>::AssetEntry>();
                     entry->GUID = _guid;
                     entry->Data.store(Pitaya::Core::New<T>(), std::memory_order_release);
                     asset = entry;
@@ -232,7 +232,7 @@ namespace Pitaya::Asset
     private:
         template<AssetType T>
         Pitaya::Core::ThreadSafeHashMap<Pitaya::Core::GUID,
-            typename Pitaya::Core::Asset<T>::AssetEntry*>& GetAssetEntryMap()
+            typename Pitaya::Core::AssetRef<T>::AssetEntry*>& GetAssetEntryMap()
         {
             if constexpr (std::is_same_v<T, Pitaya::Asset::Texture>) { return textures; }
             if constexpr (std::is_same_v<T, Pitaya::Asset::Shader>) { return shaders; }
@@ -404,17 +404,17 @@ namespace Pitaya::Asset
         std::filesystem::path projectRoot;
         
         Pitaya::Core::ThreadSafeHashMap<Pitaya::Core::GUID,
-            Pitaya::Core::Asset<Pitaya::Asset::Mesh>::AssetEntry*> meshes;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry*> meshes;
         Pitaya::Core::ThreadSafeHashMap<Pitaya::Core::GUID,
-            Pitaya::Core::Asset<Pitaya::Asset::Texture>::AssetEntry*> textures;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry*> textures;
         Pitaya::Core::ThreadSafeHashMap<Pitaya::Core::GUID,
-            Pitaya::Core::Asset<Pitaya::Asset::Shader>::AssetEntry*> shaders;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry*> shaders;
         Pitaya::Core::ThreadSafeHashMap<Pitaya::Core::GUID,
-            Pitaya::Core::Asset<Pitaya::Asset::Material>::AssetEntry*> materials;
+            Pitaya::Core::AssetRef<Pitaya::Asset::Material>::AssetEntry*> materials;
         Pitaya::Core::ThreadSafeHashMap<Pitaya::Core::GUID,
-            Pitaya::Core::Asset<Pitaya::Asset::RenderTarget>::AssetEntry*> rendertargets;
+            Pitaya::Core::AssetRef<Pitaya::Asset::RenderTarget>::AssetEntry*> rendertargets;
         Pitaya::Core::ThreadSafeHashMap<Pitaya::Core::GUID,
-            Pitaya::Core::Asset<Pitaya::Asset::SkyBox>::AssetEntry*> skyboxes;
+            Pitaya::Core::AssetRef<Pitaya::Asset::SkyBox>::AssetEntry*> skyboxes;
 
         //存储CPU操作资源结果（任务线程添加 → 渲染线程处理）
         Pitaya::Core::ThreadSafeQueue<Pitaya::Asset::AssetOperate> assetOperateQueue;

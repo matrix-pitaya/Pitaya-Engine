@@ -2,7 +2,7 @@
 #include<Render/Frontend/Renderer.h>
 
 #include<Core/Utils/Console.h>
-#include<Core/Asset/Asset.h>
+#include<Core/Asset/AssetRef.h>
 
 #include<Hook/def.h>
 

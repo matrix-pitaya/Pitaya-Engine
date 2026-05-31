@@ -1,7 +1,7 @@
 #pragma once
 
 #include<Editor/GUI/Panel/Panel.h>
-#include<Core/Asset/Asset.h>
+#include<Core/Asset/AssetRef.h>
 #include<Asset/Common/RenderTarget.h>
 #include<Asset/Common/FuncTable.h>
 

@@ -3,7 +3,7 @@
 #include<Core/Allocate/Allocate.h>
 #include<Core/Storage/Storage.h>
 #include<Core/Camera/CameraSnapshot.h>
-#include<Core/Asset/Asset.h>
+#include<Core/Asset/AssetRef.h>
 #include<Core/Utils/Console.h>
 #include<Core/Utils/System.h>
 #include<Core/Utils/Check.h>

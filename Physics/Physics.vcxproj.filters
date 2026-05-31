@@ -23,6 +23,12 @@
     <ClInclude Include="Common\RigidBodyType.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Common\CollisionLayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\PhysicsBody.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="Frontend\PhysicsSimulator.h">
       <Filter>头文件</Filter>
     </ClInclude>
