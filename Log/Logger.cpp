@@ -114,9 +114,9 @@ void Pitaya::Log::Logger::ParseBuffer(const std::vector<std::byte>& buffer)
 		std::string_view msgText(reinterpret_cast<const char*>(buffer.data() + offset), msgLen);
 		offset += msgLen;
 
-		char buffer[32] = {};
-		Pitaya::Core::Date(buffer, logTime);
-		ofs << "[" << buffer << "][" << ToString(level) << "][" <<
+		char date[32] = {};
+		Pitaya::Core::Date(date, logTime);
+		ofs << "[" << date << "][" << ToString(level) << "][" <<
 			Pitaya::Thread::GetThreadName(threadId) << "]" << msgText << "\n";
 	}
 }
