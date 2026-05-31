@@ -1,8 +1,8 @@
 #pragma once
 
 #include<Physics/Common/PhysicsCommandType.h>
-#include<Physics/Common/PhysicsBody.h>
 #include<Physics/Common/ForceMode.h>
+#include<Physics/Specific/PhysicsBody.h>
 #include<Core/Container/SlotMap.h>
 #include<glm.hpp>
 

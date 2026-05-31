@@ -175,8 +175,10 @@
     <ClInclude Include="Command\SetLinearVelocityCommand.h" />
     <ClInclude Include="Command\SetTransformCommand.h" />
     <ClInclude Include="Command\UpdateBodyParamsCommand.h" />
-    <ClInclude Include="Common\PhysicsBody.h" />
     <ClInclude Include="Common\PhysicsCommandType.h" />
+    <ClInclude Include="Specific\BodyTransform.h" />
+    <ClInclude Include="Specific\PhysicsBody.h" />
+    <ClInclude Include="Specific\PhysicsSnapshot.h" />
     <ClInclude Include="Common\RigidBodyType.h" />
     <ClInclude Include="Frontend\PhysicsSimulator.h" />
   </ItemGroup>

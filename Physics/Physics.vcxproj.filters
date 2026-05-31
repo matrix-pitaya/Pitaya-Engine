@@ -56,10 +56,16 @@
     <ClInclude Include="Command\UpdateBodyParamsCommand.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\PhysicsBody.h">
+    <ClInclude Include="Common\PhysicsCommandType.h" />
+    <ClInclude Include="Specific\BodyTransform.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\PhysicsCommandType.h">
+    <ClInclude Include="Specific\PhysicsBody.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Specific\PhysicsSnapshot.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Frontend\PhysicsSimulator.h">

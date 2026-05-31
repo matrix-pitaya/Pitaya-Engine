@@ -1,10 +1,10 @@
 #pragma once
 
-#include<Physics/Common/RigidBodyType.h>
-#include<Physics/Common/PhysicsBody.h>
-#include<Physics/Common/CollisionLayer.h>
 #include<Core/Container/SlotMap.h>
 #include<Core/StateFlags/StateFlags.h>
+#include<Physics/Common/RigidBodyType.h>
+#include<Physics/Common/CollisionLayer.h>
+#include<Physics/Specific/PhysicsBody.h>
 #include<glm.hpp>
 
 namespace Pitaya::Game
