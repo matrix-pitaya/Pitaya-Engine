@@ -1,6 +1,7 @@
 #include<Editor/Editor.h>
 #include<Event/Common/FuncTable.h>
 #include<Render/RenderPipeline.h>
+#include<Physics/Frontend/PhysicsSimulator.h>
 #include<Time/Common/FuncTable.h> 
 #include<Core/Utils/System.h>
 #include<Core/Utils/Check.h>
@@ -103,7 +104,7 @@ void Pitaya::Editor::Editor::HookFunc::PostChronometerTick()
 	auto& editor = Pitaya::Editor::Editor::Instance();
 	if (editor.gui.panels.profilerPanel.GetIsVisable())
 	{
-		editor.profiler.SetTimeState({ Pitaya::Time::delta(), Pitaya::Time::Fixdelta(), Pitaya::Time::UnscaledDelta(),
+		editor.profiler.SetTimeState({ Pitaya::Time::delta(), Pitaya::Physics::PhysicsSimulator::FixedTimestep, Pitaya::Time::UnscaledDelta(),
 			Pitaya::Time::TimeScale(), Pitaya::Time::Framerate(), Pitaya::Time::Seconds(), Pitaya::Time::Milliseconds() });
 	}
 }
@@ -114,9 +115,11 @@ void Pitaya::Editor::Editor::HookFunc::PostLog(Pitaya::Log::LogLevel level, std:
 		Pitaya::Editor::Editor::Instance().gui.panels.consolePanel.Console(level, message);
 	}
 }
-bool Pitaya::Editor::Editor::HookFunc::TerminateFixedUpdate()
+bool Pitaya::Editor::Editor::HookFunc::ShouldPhysicsStep()
 {
-	return Pitaya::Editor::Editor::Instance().stateMachine.GetCurrentState() == Pitaya::Editor::EngineState::Edit;
+	auto& editor = Pitaya::Editor::Editor::Instance();
+	return editor.stateMachine.GetCurrentState() == Pitaya::Editor::EngineState::Play && 
+		!editor.gui.context.ToolState.IsPaused;
 }
 bool Pitaya::Editor::Editor::HookFunc::TerminateRenderPipelineSubmitFinalBlit()
 {
@@ -206,7 +209,7 @@ void Pitaya::Editor::Editor::AttachRuntimeEnv(int argc, char** argv)
 	MOUNT_POSTRENDERERPARSECOMMAND_HOOK(Pitaya::Editor::Editor::HookFunc::PostRendererParseCommand, "Editor::GUI::Draw | Editor::GUI::ReleaseBackDrawData")
 	MOUNT_POSTCHRONOMETERTICK_HOOK(Pitaya::Editor::Editor::HookFunc::PostChronometerTick, "Editor::Profiler::UploadTimeState")
 	MOUNT_POSTLOG_HOOK(Pitaya::Editor::Editor::HookFunc::PostLog, "Editor::GUI::Console")
-	MOUNT_TERMINATEFIXEDUPDATE_HOOK(Pitaya::Editor::Editor::HookFunc::TerminateFixedUpdate, "Editor::StateMachine::IsEdit")
+	MOUNT_SHOULDPHYSICSSTEP_HOOK(Pitaya::Editor::Editor::HookFunc::ShouldPhysicsStep, "Editor::StateMachine::IsPlaying")
 	MOUNT_TERMINATERENDERPIPELINESUBMITFINALBLIT_HOOK(Pitaya::Editor::Editor::HookFunc::TerminateRenderPipelineSubmitFinalBlit,"Editor::TerminateRenderPipelineSubmitFinalBlit")
 }
 

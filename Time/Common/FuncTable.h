@@ -23,8 +23,7 @@ namespace Pitaya::Engine
 	public:
 		inline bool Verify() const
 		{
-			if (!Ondelta) { throw std::runtime_error("FuncTable miss [Time::delta] Function!"); }
-			if (!OnFixdelta) { throw std::runtime_error("FuncTable miss [Time::Fixdelta] Function!"); }
+			if (!Ondelta) { throw std::runtime_error("FuncTable miss [Time::delta] Function!"); }	
 			if (!OnUnscaledDelta) { throw std::runtime_error("FuncTable miss [Time::UnscaledDelta] Function!"); }
 			if (!OnTimeScale) { throw std::runtime_error("FuncTable miss [Time::TimeScale] Function!"); }
 			if (!OnFramerate) { throw std::runtime_error("FuncTable miss [Time::Framerate] Function!"); }
@@ -35,7 +34,6 @@ namespace Pitaya::Engine
 		inline void Nullify() noexcept
 		{
 			Ondelta = nullptr;
-			OnFixdelta = nullptr;
 			OnUnscaledDelta = nullptr;
 			OnTimeScale = nullptr;
 			OnFramerate = nullptr;
@@ -47,10 +45,6 @@ namespace Pitaya::Engine
 		inline float InvokeOndelta() const noexcept
 		{
 			return Ondelta();
-		}
-		inline float InvokeOnFixdelta() const noexcept
-		{
-			return OnFixdelta();
 		}
 		inline float InvokeOnUnscaledDelta() const noexcept
 		{
@@ -75,7 +69,6 @@ namespace Pitaya::Engine
 
 	private:
 		float (ENGINE_CALL *Ondelta)() noexcept = nullptr;
-		float (ENGINE_CALL *OnFixdelta)() noexcept = nullptr;
 		float (ENGINE_CALL *OnUnscaledDelta)() noexcept = nullptr;
 		float (ENGINE_CALL *OnTimeScale)() noexcept = nullptr;
 		float (ENGINE_CALL *OnFramerate)() noexcept = nullptr;
@@ -89,10 +82,6 @@ namespace Pitaya::Time
 	inline float delta() noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Time::Chronometer>().InvokeOndelta();
-	}
-	inline float Fixdelta() noexcept
-	{
-		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Time::Chronometer>().InvokeOnFixdelta();
 	}
 	inline float UnscaledDelta() noexcept
 	{

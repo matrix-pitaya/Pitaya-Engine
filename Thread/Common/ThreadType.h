@@ -9,6 +9,7 @@ namespace Pitaya::Thread
         Main = 0,
         Render,
         Log,
+        Physics,
         Job,
         Invalid
     };
@@ -17,6 +18,6 @@ namespace Pitaya::Thread
 
     inline bool GetIsPrimaryThreadType(ThreadType type) noexcept
     {
-        return type == ThreadType::Main || type == ThreadType::Render || type == ThreadType::Log;
+        return static_cast<size_t>(type) < PrimaryThreadTypeCount;
 	}
 }

@@ -22,7 +22,7 @@
 #define MOUNT_TERMINATERENDERPIPELINESUBMITFINALBLIT_HOOK(func,name) do { Pitaya::Engine::Global_TerminateRenderPipelineSubmitFinalBlit_Hook.Func = func; Pitaya::Engine::Global_TerminateRenderPipelineSubmitFinalBlit_Hook.Name = name; } while(false);
 #define MOUNT_POSTCHRONOMETERTICK_HOOK(func,name) do { Pitaya::Engine::Global_PostChronometerTick_Hook.Func = func; Pitaya::Engine::Global_PostChronometerTick_Hook.Name = name; } while(false);
 #define MOUNT_POSTLOG_HOOK(func,name) do { Pitaya::Engine::Global_PostLog_Hook.Func = func; Pitaya::Engine::Global_PostLog_Hook.Name = name; } while(false);
-#define MOUNT_TERMINATEFIXEDUPDATE_HOOK(func,name) do { Pitaya::Engine::Global_TerminateFixedUpdate_Hook.Func = func; Pitaya::Engine::Global_TerminateFixedUpdate_Hook.Name = name; } while(false);
+#define MOUNT_SHOULDPHYSICSSTEP_HOOK(func,name) do { Pitaya::Engine::Global_ShouldPhysicsStep_Hook.Func = func; Pitaya::Engine::Global_ShouldPhysicsStep_Hook.Name = name; } while(false);
 
 
 #define INVOKE_PREBEGINFRAME_HOOK if(Pitaya::Engine::Global_PreBeginFrame_Hook.Func) { Pitaya::Engine::Global_PreBeginFrame_Hook.Func(); }
@@ -44,7 +44,7 @@
 #define INVOKE_TERMINATERENDERPIPELINESUBMITFINALBLIT_HOOK if(Pitaya::Engine::Global_TerminateRenderPipelineSubmitFinalBlit_Hook.Func && Pitaya::Engine::Global_TerminateRenderPipelineSubmitFinalBlit_Hook.Func()) { return; }
 #define INVOKE_POSTCHRONOMETERTICK_HOOK if(Pitaya::Engine::Global_PostChronometerTick_Hook.Func) { Pitaya::Engine::Global_PostChronometerTick_Hook.Func(); }
 #define INVOKE_POSTLOG_HOOK(Leve,Message) if(Pitaya::Engine::Global_PostLog_Hook.Func) { Pitaya::Engine::Global_PostLog_Hook.Func(Leve,Message); }
-#define INVOKE_TERMINATEFIXEDUPDATE_HOOK if(Pitaya::Engine::Global_TerminateFixedUpdate_Hook.Func && Pitaya::Engine::Global_TerminateFixedUpdate_Hook.Func()) { return; }
+#define INVOKE_SHOULDPHYSICSSTEP_HOOK (Pitaya::Engine::Global_ShouldPhysicsStep_Hook.Func ? Pitaya::Engine::Global_ShouldPhysicsStep_Hook.Func() : true)
 
 
 #define DISCARD_HOOK                                                                                                                                                            \
@@ -69,7 +69,7 @@
         Pitaya::Engine::Global_TerminateRenderPipelineSubmitFinalBlit_Hook.Func = nullptr; Pitaya::Engine::Global_TerminateRenderPipelineSubmitFinalBlit_Hook.Name = nullptr;   \
         Pitaya::Engine::Global_PostChronometerTick_Hook.Func = nullptr; Pitaya::Engine::Global_PostChronometerTick_Hook.Name = nullptr;                                         \
         Pitaya::Engine::Global_PostLog_Hook.Func = nullptr; Pitaya::Engine::Global_PostLog_Hook.Name = nullptr;                                                                 \
-        Pitaya::Engine::Global_TerminateFixedUpdate_Hook.Func = nullptr; Pitaya::Engine::Global_TerminateFixedUpdate_Hook.Name = nullptr;                                       \
+        Pitaya::Engine::Global_ShouldPhysicsStep_Hook.Func = nullptr; Pitaya::Engine::Global_ShouldPhysicsStep_Hook.Name = nullptr;                                       \
     } while (false);
 
 
@@ -98,7 +98,7 @@
             "TerminateRenderPipelineSubmitFinalBlit     %s\n"                                        \
             "PostChronometerTick                        %s\n"                                        \
             "PostLog                                    %s\n"                                        \
-            "TerminateFixedUpdate                       %s\n",                                       \
+            "ShouldPhysicsStep                          %s\n",                                       \
             Pitaya::Engine::Global_PreBeginFrame_Hook.Func ? (Pitaya::Engine::Global_PreBeginFrame_Hook.Name ? Pitaya::Engine::Global_PreBeginFrame_Hook.Name : "UnNamed") : "Unmounted",                                                                               \
             Pitaya::Engine::Global_PreFixedUpdate_Hook.Func ? (Pitaya::Engine::Global_PreFixedUpdate_Hook.Name ? Pitaya::Engine::Global_PreFixedUpdate_Hook.Name : "UnNamed") : "Unmounted",                                                                            \
             Pitaya::Engine::Global_PreUpdate_Hook.Func ? (Pitaya::Engine::Global_PreUpdate_Hook.Name ? Pitaya::Engine::Global_PreUpdate_Hook.Name : "UnNamed") : "Unmounted",                                                                                           \
@@ -118,7 +118,7 @@
             Pitaya::Engine::Global_TerminateRenderPipelineSubmitFinalBlit_Hook.Func ? (Pitaya::Engine::Global_TerminateRenderPipelineSubmitFinalBlit_Hook.Name ? Pitaya::Engine::Global_TerminateRenderPipelineSubmitFinalBlit_Hook.Name : "UnNamed") : "Unmounted",    \
             Pitaya::Engine::Global_PostChronometerTick_Hook.Func ? (Pitaya::Engine::Global_PostChronometerTick_Hook.Name ? Pitaya::Engine::Global_PostChronometerTick_Hook.Name : "UnNamed") : "Unmounted",                                                             \
             Pitaya::Engine::Global_PostLog_Hook.Func ? (Pitaya::Engine::Global_PostLog_Hook.Name ? Pitaya::Engine::Global_PostLog_Hook.Name : "UnNamed") : "Unmounted",                                                                                                 \
-            Pitaya::Engine::Global_TerminateFixedUpdate_Hook.Func ? (Pitaya::Engine::Global_TerminateFixedUpdate_Hook.Name ? Pitaya::Engine::Global_TerminateFixedUpdate_Hook.Name : "UnNamed") : "Unmounted"                                                           \
+            Pitaya::Engine::Global_ShouldPhysicsStep_Hook.Func ? (Pitaya::Engine::Global_ShouldPhysicsStep_Hook.Name ? Pitaya::Engine::Global_ShouldPhysicsStep_Hook.Name : "UnNamed") : "Unmounted"                                                           \
         );                                                                                                                                                                                                                                                              \
         return buffer;                                                                                                                                                                                                                                                  \
     }()

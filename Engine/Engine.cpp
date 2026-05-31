@@ -30,10 +30,6 @@ namespace
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Time::Chronometer>()->Getdelta();
     }
-    float ENGINE_CALL OnFixdelta() noexcept
-    {
-        return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Time::Chronometer>()->GetFixdelta();
-    }
     float ENGINE_CALL OnUnscaledDelta() noexcept
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Time::Chronometer>()->GetUnscaledDelta();
@@ -469,7 +465,6 @@ bool Pitaya::Engine::Engine::Initialize()
 
 #pragma region Time
         FUNCTABLE(Chronometer).Ondelta = Ondelta;
-        FUNCTABLE(Chronometer).OnFixdelta = OnFixdelta;
         FUNCTABLE(Chronometer).OnUnscaledDelta = OnUnscaledDelta;
         FUNCTABLE(Chronometer).OnTimeScale = OnTimeScale;
         FUNCTABLE(Chronometer).OnFramerate = OnFramerate;
@@ -645,11 +640,11 @@ bool Pitaya::Engine::Engine::Initialize()
         if (!MODULE(AssetHub).Initialize()) { throw std::runtime_error("Engine [AssetHub] Module Initialize Fail!"); }
         if (!MODULE(GameWorld).Initialize()) { throw std::runtime_error("Engine [GameWorld] Module Initialize Fail!"); }
         //if (!MODULE(ScriptRuntime).Initialize()) { throw std::runtime_error("Engine [ScriptRuntime] Module Initialize Fail!"); }
-        if (!MODULE(PhysicsSimulator).Initialize()) { throw std::runtime_error("Engine [PhysicsSimulator] Module Initialize Fail!"); }
         if (!MODULE(RHIDevice).Initialize()) { throw std::runtime_error("Engine [RHIDevice] Module Initialize Fail!"); }
         if (!MODULE(Window).Initialize(MODULE(Configurator)->GetWindowWidth(), MODULE(Configurator)->GetWindowHeight(), MODULE(Configurator)->GetWindowName().data())) { throw std::runtime_error("Engine [Window] Module Initialize Fail!"); }
         if (!MODULE(RenderPipeline).Initialize()) { throw std::runtime_error("[RenderPipeline] Module Initialize Fail!"); }
         if (!MODULE(Renderer).Initialize(MODULE(Window)->GetNativeWindow())) { throw std::runtime_error("[Renderer] Module Initialize Fail!"); }
+        if (!MODULE(PhysicsSimulator).Initialize()) { throw std::runtime_error("Engine [PhysicsSimulator] Module Initialize Fail!"); }
         if (!MODULE(Chronometer).Initialize()) { throw std::runtime_error("Engine [Chronometer] Module Initialize Fail!"); }
     } while (false);
 
@@ -671,7 +666,11 @@ void Pitaya::Engine::Engine::BeginFrame()
 }
 void Pitaya::Engine::Engine::FixedUpdate()
 {
-    INVOKE_TERMINATEFIXEDUPDATE_HOOK
+    if (!INVOKE_SHOULDPHYSICSSTEP_HOOK) { return; }
+
+    INVOKE_PREFIXEDUPDATE_HOOK
+
+    // TODO B.3.5: TranslateECSChanges();
 
     MODULE(PhysicsSimulator).FixedUpdate();
 }

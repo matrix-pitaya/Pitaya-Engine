@@ -2,7 +2,6 @@
 #include<Physics/Common/RigidBodyType.h>
 #include<Time/Common/FuncTable.h>
 #include<Core/Allocate/Allocate.h>
-#include<Hook/def.h>
 
 #if defined(PITAYA_PHYSICS_BULLET)
 #include<btBulletDynamicsCommon.h>
@@ -280,7 +279,7 @@ namespace
         }
         inline void Simulation()
         {
-            dynamicsWorld->stepSimulation(Pitaya::Time::delta(), Pitaya::Physics::PhysicsSimulator::MaxFixupdataExecuteTimes, Pitaya::Time::Fixdelta());
+            dynamicsWorld->stepSimulation(Pitaya::Time::delta(), Pitaya::Physics::PhysicsSimulator::MaxFixupdataExecuteTimes, Pitaya::Physics::PhysicsSimulator::FixedTimestep);
         }
         inline bool RaycastClosest(const btVector3& from, const btVector3& to, btCollisionWorld::ClosestRayResultCallback& resultOut)
         {
@@ -322,16 +321,12 @@ namespace
     };
 }
 
-bool Pitaya::Physics::PhysicsSimulator::Initialize()
+bool Pitaya::Physics::PhysicsSimulator::InitializePhysicsContext()
 {
-	return true;
+    return true;
 }
-void Pitaya::Physics::PhysicsSimulator::Release()
+void Pitaya::Physics::PhysicsSimulator::ReleasePhysicsContext()
 {
 
-}
-void Pitaya::Physics::PhysicsSimulator::FixedUpdate()
-{
-	INVOKE_PREFIXEDUPDATE_HOOK
 }
 #endif

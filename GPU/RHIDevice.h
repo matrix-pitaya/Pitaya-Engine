@@ -109,7 +109,7 @@ namespace Pitaya::GPU
             }
 
         private:
-            std::tuple<
+			std::tuple< //主线程只允许拷贝传递Handle 渲染线程通过Handle访问GPU资源 因此不需要加锁 SlotMap仅允许通过渲染线程访问
                 Pitaya::Core::SlotMap<VertexArray>,
                 Pitaya::Core::SlotMap<VertexBuffer>,
                 Pitaya::Core::SlotMap<IndexBuffer>,

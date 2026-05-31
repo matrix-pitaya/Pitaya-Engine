@@ -35,7 +35,7 @@ namespace Pitaya::Editor
 			static void PostRendererParseCommand();
 			static void PostChronometerTick();
 			static void PostLog(Pitaya::Log::LogLevel, std::string_view);
-			static bool TerminateFixedUpdate();
+			static bool ShouldPhysicsStep();
 			static bool TerminateRenderPipelineSubmitFinalBlit();
 		};
 

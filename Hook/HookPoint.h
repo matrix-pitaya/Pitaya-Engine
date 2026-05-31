@@ -34,7 +34,7 @@ namespace Pitaya::Engine
 	extern "C" ENGINE_API extern Hook<bool(ENGINE_CALL)()> Global_TerminateRenderPipelineSubmitFinalBlit_Hook;
 
 	//Physics
-	extern "C" ENGINE_API extern Hook<bool(ENGINE_CALL)()> Global_TerminateFixedUpdate_Hook;
+	extern "C" ENGINE_API extern Hook<bool(ENGINE_CALL)()> Global_ShouldPhysicsStep_Hook;
 
 	//Time
 	extern "C" ENGINE_API extern Hook<void(ENGINE_CALL)()> Global_PostChronometerTick_Hook;

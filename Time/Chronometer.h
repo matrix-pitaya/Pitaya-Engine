@@ -93,10 +93,6 @@ namespace Pitaya::Time
         {
             return delta;
         }
-        inline float GetFixdelta() const noexcept
-        {
-            return fixdelta;
-        }
         inline float GetUnscaledDelta() const noexcept
         {
             return unscaledDeltaTime;
@@ -121,7 +117,6 @@ namespace Pitaya::Time
 
     private:
         float delta = 0.0f;
-        float fixdelta = 1.0f / 60.0f;
         float unscaledDeltaTime = 0.0f;
         float scale = 1.0f;
 

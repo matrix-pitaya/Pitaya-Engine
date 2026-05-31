@@ -22,7 +22,7 @@ Pitaya::Engine::Hook<bool(ENGINE_CALL)()> Pitaya::Engine::Global_ShouldSubmitSce
 Pitaya::Engine::Hook<bool(ENGINE_CALL)()> Pitaya::Engine::Global_TerminateRenderPipelineSubmitFinalBlit_Hook;
 
 //Physics
-Pitaya::Engine::Hook<bool(ENGINE_CALL)()> Pitaya::Engine::Global_TerminateFixedUpdate_Hook;
+Pitaya::Engine::Hook<bool(ENGINE_CALL)()> Pitaya::Engine::Global_ShouldPhysicsStep_Hook;
 
 //Time		    
 Pitaya::Engine::Hook<void(ENGINE_CALL)()> Pitaya::Engine::Global_PostChronometerTick_Hook;
