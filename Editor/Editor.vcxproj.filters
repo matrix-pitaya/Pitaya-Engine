@@ -105,6 +105,9 @@
     <ClInclude Include="GUI\FileDialog\Tinyfiledialogs\tinyfiledialogs.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\Utils\Color.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp">

@@ -197,6 +197,7 @@
     <ClInclude Include="GUI\Panel\SceneViewportPanel.h" />
     <ClInclude Include="GUI\Panel\UtilsPanel.h" />
     <ClInclude Include="GUI\Panel\ViewportPanel.h" />
+    <ClInclude Include="GUI\Utils\Color.h" />
     <ClInclude Include="Profiler\Profiler.h" />
     <ClInclude Include="Profiler\FrameState.h" />
     <ClInclude Include="Profiler\RenderState.h" />

@@ -279,7 +279,7 @@ namespace
         }
         inline void Simulation()
         {
-            dynamicsWorld->stepSimulation(Pitaya::Time::delta(), Pitaya::Physics::PhysicsSimulator::MaxFixupdataExecuteTimes, Pitaya::Physics::PhysicsSimulator::FixedTimestep);
+            dynamicsWorld->stepSimulation(Pitaya::Time::delta(), Pitaya::Physics::PhysicsSimulator::MaxFixedUpdateExecuteTimes, Pitaya::Physics::PhysicsSimulator::FixedTimestep);
         }
         inline bool RaycastClosest(const btVector3& from, const btVector3& to, btCollisionWorld::ClosestRayResultCallback& resultOut)
         {

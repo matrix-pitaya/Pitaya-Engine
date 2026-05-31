@@ -70,7 +70,7 @@ namespace
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Thread::ThreadTracker>()->UnregisterThread(id);
     }
-    std::string ENGINE_CALL OnGetThreadName(Pitaya::Core::Thread::Identifier id) noexcept
+    std::string_view ENGINE_CALL OnGetThreadName(Pitaya::Core::Thread::Identifier id) noexcept
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Thread::ThreadTracker>()->GetThreadName(id);
     }

@@ -53,7 +53,6 @@ namespace Pitaya::Core
 	inline void CopyStringToBuffer(std::string_view sv, char* buffer, size_t size) noexcept
 	{
 		if (buffer == nullptr || size == 0) { return; }
-
 		const size_t copyLength = std::min(sv.size(), size - 1);
 		std::memcpy(buffer, sv.data(), copyLength);
 		buffer[copyLength] = '\0';
@@ -62,7 +61,7 @@ namespace Pitaya::Core
 	template <size_t N>
 	inline void CopyStringToCharArray(std::string_view sv, char(&arr)[N]) noexcept
 	{
-		size_t copyLength = std::min(sv.size(), N - 1);
+		const size_t copyLength = std::min(sv.size(), N - 1);
 		std::memcpy(arr, sv.data(), copyLength);
 		arr[copyLength] = '\0';
 	}

@@ -1,35 +1,51 @@
 #pragma once
 
-#include<string>
 #include<chrono>
 
 namespace Pitaya::Core
 {
-	inline std::string Date()
+	template<size_t N>
+	inline void Date(char(&temp)[N])
 	{
 		auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 		struct tm buf;
 		localtime_s(&buf, &t);
-		char temp[32] = {};
-		std::strftime(temp, sizeof(temp), "%Y-%m-%d %H:%M:%S", &buf);
-		return temp;
+		std::strftime(temp, N, "%Y-%m-%d %H:%M:%S", &buf);
 	}
-	inline std::string Date(std::chrono::system_clock::time_point tp)
+	template<size_t N>
+	inline void Date(char(&temp)[N], std::chrono::system_clock::time_point tp)
 	{
 		auto t = std::chrono::system_clock::to_time_t(tp);
 		struct tm buf;
 		localtime_s(&buf, &t);
-		char temp[32] = {};
-		std::strftime(temp, sizeof(temp), "%Y-%m-%d %H:%M:%S", &buf);
-		return temp;
+		std::strftime(temp, N, "%Y-%m-%d %H:%M:%S", &buf);
 	}
-	inline std::string Date(time_t tp)
+	template<size_t N>
+	inline void Date(char(&temp)[N], time_t tp)
 	{
 		struct tm buf;
 		localtime_s(&buf, &tp);
-		char temp[32] = {};
-		std::strftime(temp, sizeof(temp), "%Y-%m-%d %H:%M:%S", &buf);
-		return temp;
+		std::strftime(temp, N, "%Y-%m-%d %H:%M:%S", &buf);
+	}
+	inline void Date(char* temp, size_t size)
+	{
+		auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+		struct tm buf;
+		localtime_s(&buf, &t);
+		std::strftime(temp, size, "%Y-%m-%d %H:%M:%S", &buf);
+	}
+	inline void Date(char* temp, size_t size, std::chrono::system_clock::time_point tp)
+	{
+		auto t = std::chrono::system_clock::to_time_t(tp);
+		struct tm buf;
+		localtime_s(&buf, &t);
+		std::strftime(temp, size, "%Y-%m-%d %H:%M:%S", &buf);
+	}
+	inline void Date(char* temp, size_t size, time_t tp)
+	{
+		struct tm buf;
+		localtime_s(&buf, &tp);
+		std::strftime(temp, size, "%Y-%m-%d %H:%M:%S", &buf);
 	}
 
 	template<typename TerminateCondition, typename Func>
@@ -37,7 +53,7 @@ namespace Pitaya::Core
 	{
 		if (terminateCondition()) { return true; }
 		const auto startTime = std::chrono::steady_clock::now();
-		do { func(); if (terminateCondition()) { return true; } } 
+		do { func(); if (terminateCondition()) { return true; } }
 		while (std::chrono::steady_clock::now() - startTime < timeBudget);
 		return false;
 	}

@@ -4,7 +4,9 @@
 #include<Core/Thread/Thread.h>
 #include<Core/Container/ThreadSafe/ThreadSafeQueue.h>
 #include<Core/Utils/Time.h>
+#include<Core/Utils/String.h>
 #include<Editor/GUI/Panel/Panel.h>
+#include<Editor/GUI/Utils/Color.h>
 #include<Log/Common/LogLevel.h>
 #include<Thread/Common/FuncTable.h>
 
@@ -17,8 +19,8 @@ namespace Pitaya::Editor
         struct ConsoleMessage
         {
             ImVec4 color;
-            std::string time;
-            std::string thread;
+			std::array<char, 32> time;
+			std::array<char, 32> thread;
             std::string message;
             std::string_view level;
         };
@@ -39,27 +41,29 @@ namespace Pitaya::Editor
         {
             ConsoleMessage msg;
             msg.message = message;
-            msg.thread = "[" + Pitaya::Thread::GetThreadName(Pitaya::Core::Thread::GetCurrentThreadId()) + "]";
-            msg.time = "[" + Pitaya::Core::Date() + "]";
+            Pitaya::Core::CopyStringToBuffer(
+                Pitaya::Thread::GetThreadName(Pitaya::Core::Thread::GetCurrentThreadId()),
+                msg.thread.data(), msg.thread.size());
+            Pitaya::Core::Date(msg.time.data(), msg.time.size());
             switch (level)
             {
                 case Pitaya::Log::LogLevel::Info:   
-                    msg.color = ImVec4(Pitaya::Core::Color::White.r, Pitaya::Core::Color::White.g, Pitaya::Core::Color::White.b, Pitaya::Core::Color::White.a);
+                    msg.color = Pitaya::Editor::ToImVec4(Pitaya::Core::Color::White); 
                     msg.level = "[Info]";
                     break;
                 
                 case Pitaya::Log::LogLevel::Debug:   
-                    msg.color = ImVec4(Pitaya::Core::Color::Green.r, Pitaya::Core::Color::Green.g, Pitaya::Core::Color::Green.b, Pitaya::Core::Color::Green.a);
+                    msg.color = Pitaya::Editor::ToImVec4(Pitaya::Core::Color::Green); 
                     msg.level = "[Debug]";
                     break;
                 
                 case Pitaya::Log::LogLevel::Warning: 
-                    msg.color = ImVec4(Pitaya::Core::Color::Yellow.r, Pitaya::Core::Color::Yellow.g, Pitaya::Core::Color::Yellow.b, Pitaya::Core::Color::Yellow.a);    
+                    msg.color = Pitaya::Editor::ToImVec4(Pitaya::Core::Color::Yellow);
                     msg.level = "[Warning]";
                     break;
                 
                 case Pitaya::Log::LogLevel::Error:   
-                    msg.color = ImVec4(Pitaya::Core::Color::Red.r, Pitaya::Core::Color::Red.g, Pitaya::Core::Color::Red.b, Pitaya::Core::Color::Red.a);                
+                    msg.color = Pitaya::Editor::ToImVec4(Pitaya::Core::Color::Red);
                     msg.level = "[Error]";
                     break;
             }
@@ -113,9 +117,17 @@ namespace Pitaya::Editor
                     ImGui::PushStyleColor(ImGuiCol_Text, msg.color);
                     ImGui::TextUnformatted(msg.level.data());
                     ImGui::SameLine();
-                    ImGui::TextUnformatted(msg.time.c_str());
+                    ImGui::TextUnformatted("[");
                     ImGui::SameLine();
-                    ImGui::TextUnformatted(msg.thread.c_str());
+                    ImGui::TextUnformatted(msg.time.data());
+                    ImGui::SameLine();
+                    ImGui::TextUnformatted("]");
+                    ImGui::SameLine();
+                    ImGui::TextUnformatted("[");
+                    ImGui::SameLine();
+                    ImGui::TextUnformatted(msg.thread.data());
+                    ImGui::SameLine();
+                    ImGui::TextUnformatted("]");
                     ImGui::SameLine();
                     ImGui::TextUnformatted(msg.message.c_str());
                     ImGui::PopStyleColor();

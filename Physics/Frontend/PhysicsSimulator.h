@@ -7,7 +7,6 @@
 #include<Hook/def.h>
 
 #include<Thread/Common/FuncTable.h>
-#include<Physics/Common/API.h>
 
 #include<atomic>
 #include<chrono>
@@ -114,8 +113,8 @@ namespace Pitaya::Physics
 			lastFixedUpdateTime = now;
 			accumulator += elapsed;
 
-			constexpr const float MaxAccumulatedTime = FixedTimestep * MaxFixupdataExecuteTimes;
-			accumulator = accumulator > MaxAccumulatedTime ? MaxAccumulatedTime : accumulator;
+			constexpr const float maxAccumulatedTime = FixedTimestep * MaxFixedUpdateExecuteTimes;
+			accumulator = accumulator > maxAccumulatedTime ? maxAccumulatedTime : accumulator;
 			while (accumulator >= FixedTimestep)
 			{
 				pendingStepCount.fetch_add(1, std::memory_order_release);
@@ -130,8 +129,8 @@ namespace Pitaya::Physics
 		}
 
 	public:
-		inline static constexpr float FixedTimestep = 1.0f / 60.0f;
-		inline static constexpr uint32_t MaxFixupdataExecuteTimes = 5;
+		inline static constexpr const float FixedTimestep = 1.0f / 60.0f;
+		inline static constexpr const uint32_t MaxFixedUpdateExecuteTimes = 5;
 
 	private:
 		float accumulator = 0.0f;

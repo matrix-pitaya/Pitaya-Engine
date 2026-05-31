@@ -280,10 +280,9 @@ namespace Pitaya::Thread
 			}
 			return registry.GetThreadIsRunning(id);
 		}
-		inline std::string GetThreadName(Pitaya::Core::Thread::Identifier id)
+		inline std::string_view GetThreadName(Pitaya::Core::Thread::Identifier id)
 		{
-			return registry.Contains(id) ? std::string(registry.GetThreadName(id)) :
-				"try find unregistered thread id:" + std::to_string(id);
+			return registry.Contains(id) ? registry.GetThreadName(id) : "try find unregistered thread";
 		}
 
 	private:
