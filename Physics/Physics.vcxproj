@@ -149,7 +149,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)thirdparty\bullet\include\;$(SolutionDir)thirdparty\mimalloc\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)thirdparty\bullet\include\;$(SolutionDir)thirdparty\mimalloc\include\;$(SolutionDir)thirdparty\glm\;$(SolutionDir)thirdparty\entt\</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename).obj</ObjectFileName>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <ForcedIncludeFiles>$(SolutionDir)Engine\Build-Options.h</ForcedIncludeFiles>
@@ -165,7 +165,18 @@
   <ItemGroup>
     <ClInclude Include="Common\API.h" />
     <ClInclude Include="Common\CollisionLayer.h" />
+    <ClInclude Include="Command\AddForceCommand.h" />
+    <ClInclude Include="Command\AddTorqueCommand.h" />
+    <ClInclude Include="Command\CreateBodyCommand.h" />
+    <ClInclude Include="Command\DestroyBodyCommand.h" />
+    <ClInclude Include="Common\ForceMode.h" />
+    <ClInclude Include="Command\SetAngularVelocityCommand.h" />
+    <ClInclude Include="Command\SetGravityCommand.h" />
+    <ClInclude Include="Command\SetLinearVelocityCommand.h" />
+    <ClInclude Include="Command\SetTransformCommand.h" />
+    <ClInclude Include="Command\UpdateBodyParamsCommand.h" />
     <ClInclude Include="Common\PhysicsBody.h" />
+    <ClInclude Include="Common\PhysicsCommandType.h" />
     <ClInclude Include="Common\RigidBodyType.h" />
     <ClInclude Include="Frontend\PhysicsSimulator.h" />
   </ItemGroup>

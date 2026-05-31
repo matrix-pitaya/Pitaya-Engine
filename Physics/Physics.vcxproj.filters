@@ -26,7 +26,40 @@
     <ClInclude Include="Common\CollisionLayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Command\AddForceCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\AddTorqueCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\CreateBodyCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\DestroyBodyCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\ForceMode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\SetAngularVelocityCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\SetGravityCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\SetLinearVelocityCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\SetTransformCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\UpdateBodyParamsCommand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="Common\PhysicsBody.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\PhysicsCommandType.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Frontend\PhysicsSimulator.h">

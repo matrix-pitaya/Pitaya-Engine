@@ -2,15 +2,28 @@
 
 #include<Core/Allocate/Allocate.h>
 #include<Core/Storage/Storage.h>
+#include<Core/PassKey/PassKey.h>
 #include<Context/Common/Module.h>
 
 #include<Hook/def.h>
+
+#include<Physics/Command/CreateBodyCommand.h>
+#include<Physics/Command/DestroyBodyCommand.h>
+#include<Physics/Command/SetTransformCommand.h>
+#include<Physics/Command/SetLinearVelocityCommand.h>
+#include<Physics/Command/SetAngularVelocityCommand.h>
+#include<Physics/Command/AddForceCommand.h>
+#include<Physics/Command/AddTorqueCommand.h>
+#include<Physics/Command/SetGravityCommand.h>
+#include<Physics/Command/UpdateBodyParamsCommand.h>
 
 #include<Thread/Common/FuncTable.h>
 
 #include<atomic>
 #include<chrono>
 #include<thread>
+#include<vector>
+#include<cstring>
 
 namespace Pitaya::Physics
 {
@@ -48,6 +61,66 @@ namespace Pitaya::Physics
             }
         };
 
+    public:
+        class PhysicsCommandPacket
+        {
+            friend class PhysicsSimulator;
+        public:
+            struct Buffer
+            {
+                std::vector<std::byte> CommandBuffer;
+
+                inline void Clear() noexcept
+                {
+                    CommandBuffer.clear();
+                }
+            };
+
+        private:
+            struct CommandHeader
+            {
+                Pitaya::Physics::PhysicsCommandType Type = Pitaya::Physics::PhysicsCommandType::Invalid;
+                uint32_t Size = 0;
+            };
+
+        private:
+            PhysicsCommandPacket() = default;
+            ~PhysicsCommandPacket() = default;
+
+        public:
+            PhysicsCommandPacket(const PhysicsCommandPacket&) = delete;
+            PhysicsCommandPacket& operator=(const PhysicsCommandPacket&) = delete;
+            PhysicsCommandPacket(PhysicsCommandPacket&&) = delete;
+            PhysicsCommandPacket& operator=(PhysicsCommandPacket&&) = delete;
+
+        public:
+            template<typename T>
+            inline void Push(const T& cmd)
+            {
+                static_assert(std::is_trivially_copyable_v<T>, "Physics command must be trivially copyable");
+
+                CommandHeader header;
+                header.Type = T::Type;
+                header.Size = sizeof(T);
+
+                Buffer& writeBuffer = buffers[writeIndex.load(std::memory_order_acquire)];
+                const size_t offset = writeBuffer.CommandBuffer.size();
+                writeBuffer.CommandBuffer.resize(offset + sizeof(CommandHeader) + sizeof(T));
+                std::memcpy(writeBuffer.CommandBuffer.data() + offset, &header, sizeof(CommandHeader));
+                std::memcpy(writeBuffer.CommandBuffer.data() + offset + sizeof(CommandHeader), &cmd, sizeof(T));
+            }
+            inline void SwapBuffer()
+            {
+                uint32_t newIndex = 1 - writeIndex.load(std::memory_order_acquire);
+                buffers[newIndex].Clear();
+                writeIndex.store(newIndex, std::memory_order_release);
+            }
+
+        private:
+            Buffer buffers[2];
+            std::atomic<uint32_t> writeIndex = 0;
+        };
+
     private:
         PhysicsSimulator() = default;
         ~PhysicsSimulator() = default;
@@ -57,6 +130,13 @@ namespace Pitaya::Physics
         PhysicsSimulator& operator=(const PhysicsSimulator&) = delete;
         PhysicsSimulator(PhysicsSimulator&&) = delete;
         PhysicsSimulator& operator=(PhysicsSimulator&&) = delete;
+
+    public:
+        template<typename T>
+        inline void PushCommand(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, const T& cmd)
+        {
+            physicsCommandPacket.Push(cmd);
+        }
 
     private:
         inline bool Initialize()
@@ -74,7 +154,7 @@ namespace Pitaya::Physics
             isRunning.store(false, std::memory_order_release);
             Pitaya::Thread::UnregisterThread(physicsThread);
         }
-        
+
     private:
         bool InitializePhysicsContext();
         void ReleasePhysicsContext();
@@ -95,6 +175,7 @@ namespace Pitaya::Physics
                     continue;
                 }
 
+                physicsCommandPacket.SwapBuffer();
                 // TODO B.3.7: ConsumeCommands();
                 // TODO B.3.7: for (uint32_t i = 0; i < stepsToRun; ++i) world.stepSimulation(FixedTimestep);
                 pendingStepCount.fetch_sub(stepsToRun, std::memory_order_release);
@@ -139,5 +220,6 @@ namespace Pitaya::Physics
         std::chrono::steady_clock::time_point lastFixedUpdateTime;
         Pitaya::Core::Thread::Identifier physicsThread;
         Pitaya::Core::Storage<40> backendStorage;
+        Pitaya::Physics::PhysicsSimulator::PhysicsCommandPacket physicsCommandPacket;
     };
 }
