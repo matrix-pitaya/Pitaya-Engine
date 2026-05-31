@@ -16,7 +16,7 @@ bool Pitaya::Log::Logger::Initialize()
 	front.reserve(1024 * 64);
 	back.reserve(1024 * 64);
 	isRunning.store(true, std::memory_order_release);
-	logThread = Pitaya::Thread::RegisterThread("Log", &Pitaya::Log::Logger::BootstrapLogThread, this, nullptr);
+	logThread = Pitaya::Thread::RegisterThread(Pitaya::Thread::ThreadType::Log, "Log", &Pitaya::Log::Logger::BootstrapLogThread, this, nullptr);
 	if (logThread == Pitaya::Core::Thread::Identifier::Invalid) { throw std::runtime_error("Log Thread Register Fail!"); }
 	return true;
 }

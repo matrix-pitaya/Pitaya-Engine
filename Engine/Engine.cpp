@@ -66,9 +66,9 @@ namespace
 
 
 #pragma region Thread
-    Pitaya::Core::Thread::Identifier ENGINE_CALL OnRegisterThread(std::string_view name, void(*Thread)(void*, void*), void* bootstraper, void* args)
+    Pitaya::Core::Thread::Identifier ENGINE_CALL OnRegisterThread(Pitaya::Thread::ThreadType type, std::string_view name, void(*Thread)(void*, void*), void* bootstraper, void* args)
     {
-        return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Thread::ThreadTracker>()->RegisterThread(name, Thread, bootstraper, args);
+        return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Thread::ThreadTracker>()->RegisterThread(type, name, Thread, bootstraper, args);
     }
     bool ENGINE_CALL OnUnregisterThread(Pitaya::Core::Thread::Identifier id) noexcept
     {
@@ -81,6 +81,10 @@ namespace
     bool ENGINE_CALL OnGetThreadIsRunning(Pitaya::Core::Thread::Identifier id) noexcept
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Thread::ThreadTracker>()->GetThreadIsRunning(id);
+    }
+    bool ENGINE_CALL OnGetIsInThread(Pitaya::Thread::ThreadType type) noexcept
+    {
+        return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Thread::ThreadTracker>()->GetIsInThread(type);
     }
 #pragma endregion
 
@@ -374,10 +378,6 @@ namespace
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Render::Renderer>()->Bake(input);
     }
-    bool ENGINE_CALL OnIsInRenderThread() noexcept
-    {
-        return Pitaya::Engine::Context::Instance().GetModule<Pitaya::Render::Renderer>()->IsInRenderThread();
-    }
 #pragma endregion
 }
 
@@ -488,6 +488,7 @@ bool Pitaya::Engine::Engine::Initialize()
         FUNCTABLE(ThreadTracker).OnUnregisterThread = OnUnregisterThread;
         FUNCTABLE(ThreadTracker).OnGetThreadName = OnGetThreadName;
         FUNCTABLE(ThreadTracker).OnGetThreadIsRunning = OnGetThreadIsRunning;
+        FUNCTABLE(ThreadTracker).OnGetIsInThread = OnGetIsInThread;
 #pragma endregion
 
 
@@ -574,7 +575,6 @@ bool Pitaya::Engine::Engine::Initialize()
 
 #pragma region Render
         FUNCTABLE(Renderer).OnBakeIBL = OnBakeIBL;
-        FUNCTABLE(Renderer).OnIsInRenderThread = OnIsInRenderThread;
 #pragma endregion
     } while (false);
 

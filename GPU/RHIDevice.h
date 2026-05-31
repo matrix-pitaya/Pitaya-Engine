@@ -4,7 +4,7 @@
 #include<Core/Container/SlotMap.h>
 #include<Core/Utils/Check.h>
 #include<GPU/Common/GPUObjectType.h>
-#include<Render/Common/FuncTable.h>
+#include<Thread/Common/FuncTable.h>
 #include<GPU/Frontend/Texture/Texture2D.h>
 #include<GPU/Frontend/Texture/TextureCubemap.h>
 #include<GPU/Frontend/Texture/Texture2DArray.h>
@@ -140,30 +140,30 @@ namespace Pitaya::GPU
         template<GPUObjectType T, typename... Args>
         inline auto Create(Args&&... args)
         {
-            PITAYA_CHECK(Pitaya::Render::IsInRenderThread());
+            PITAYA_CHECK(Pitaya::Thread::GetIsInThread(Pitaya::Thread::ThreadType::Render));
             return registry.Create<T>(std::forward<Args>(args)...);
         }
         template<GPUObjectType T>
         inline bool Destroy(typename Pitaya::Core::SlotMap<T>::Handle handle)
         {
-            PITAYA_CHECK(Pitaya::Render::IsInRenderThread());
+            PITAYA_CHECK(Pitaya::Thread::GetIsInThread(Pitaya::Thread::ThreadType::Render));
             return registry.Destroy<T>(handle);
         }
         template<GPUObjectType T>
         inline bool Get(typename Pitaya::Core::SlotMap<T>::Handle handle, T& out) const
         {
-            PITAYA_CHECK(Pitaya::Render::IsInRenderThread());
+            PITAYA_CHECK(Pitaya::Thread::GetIsInThread(Pitaya::Thread::ThreadType::Render));
             return registry.Get<T>(handle, out);
         }
         inline void DestroyAllGPUResource()
         {
-            PITAYA_CHECK(Pitaya::Render::IsInRenderThread());
+            PITAYA_CHECK(Pitaya::Thread::GetIsInThread(Pitaya::Thread::ThreadType::Render));
             registry.DestroyAll();
         }
         inline bool LinkVertexArray(Pitaya::Core::SlotMap<VertexArray>::Handle vaoHandle,
             Pitaya::Core::SlotMap<VertexBuffer>::Handle vboHandle, Pitaya::Core::SlotMap<IndexBuffer>::Handle eboHandle)
         {
-            PITAYA_CHECK(Pitaya::Render::IsInRenderThread());
+            PITAYA_CHECK(Pitaya::Thread::GetIsInThread(Pitaya::Thread::ThreadType::Render));
             Pitaya::GPU::VertexArray vao;
             Pitaya::GPU::VertexBuffer vbo;
             Pitaya::GPU::IndexBuffer ebo;

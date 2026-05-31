@@ -68,10 +68,9 @@ namespace Pitaya::Time
         }
         inline void FrameSync(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) noexcept
         {
-            float targetFrameTime = 1.0f / 144.0f;	//开启Syn垂直同步后 游戏帧率受窗口限制（屏幕刷新率）
+            constexpr const float targetFrameTime = 1.0f / 144.0f;	//开启Syn垂直同步后 游戏帧率受窗口限制（屏幕刷新率）
             std::chrono::nanoseconds frameNanos = std::chrono::nanoseconds(static_cast<int64_t>(targetFrameTime * 1e9f));
-            std::chrono::nanoseconds vsyncMargin = std::chrono::nanoseconds(500000);    //提前唤醒防止丢帧
-            std::chrono::steady_clock::time_point targetTimePoint = tick + frameNanos - vsyncMargin;
+            std::chrono::steady_clock::time_point targetTimePoint = tick + frameNanos;
             std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
             if (now < targetTimePoint)
             {

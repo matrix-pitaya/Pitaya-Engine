@@ -164,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\FuncTable.h" />
+    <ClInclude Include="Common\ThreadType.h" />
     <ClInclude Include="ThreadTracker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

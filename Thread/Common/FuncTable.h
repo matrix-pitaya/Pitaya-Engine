@@ -2,6 +2,7 @@
 
 #include<Context/Context.h>
 #include<Core/Thread/Thread.h>
+#include<Thread/Common/ThreadType.h>
 #include<stdexcept>
 #include<string>
 
@@ -27,6 +28,7 @@ namespace Pitaya::Engine
 			if (!OnUnregisterThread) { throw std::runtime_error("FuncTable miss [Thread::UnregisterThread] Function!"); }
 			if (!OnGetThreadName) { throw std::runtime_error("FuncTable miss [Thread::GetThreadName] Function!"); }
 			if (!OnGetThreadIsRunning) { throw std::runtime_error("FuncTable miss [Thread::GetThreadIsRunning] Function!"); }
+			if (!OnGetIsInThread) { throw std::runtime_error("FuncTable miss [Thread::GetIsInThread] Function!"); }
 			return true;
 		}
 		inline void Nullify() noexcept
@@ -35,12 +37,13 @@ namespace Pitaya::Engine
 			OnUnregisterThread = nullptr;
 			OnGetThreadName = nullptr;
 			OnGetThreadIsRunning = nullptr;
+			OnGetIsInThread = nullptr;
 		}
 
 	public:
-		inline Pitaya::Core::Thread::Identifier InvokeOnRegisterThread(std::string_view name, void(*Thread)(void*, void*), void* bootstraper, void* args)
+		inline Pitaya::Core::Thread::Identifier InvokeOnRegisterThread(Pitaya::Thread::ThreadType type, std::string_view name, void(*Thread)(void*, void*), void* bootstraper, void* args)
 		{
-			return OnRegisterThread(name, Thread, bootstraper, args);
+			return OnRegisterThread(type, name, Thread, bootstraper, args);
 		}
 		inline bool InvokeOnUnregisterThread(Pitaya::Core::Thread::Identifier id) noexcept
 		{
@@ -54,20 +57,25 @@ namespace Pitaya::Engine
 		{
 			return OnGetThreadIsRunning(id);
 		}
+		inline bool InvokeOnGetIsInThread(Pitaya::Thread::ThreadType type) noexcept
+		{
+			return OnGetIsInThread(type);
+		}
 
 	private:
-		Pitaya::Core::Thread::Identifier (ENGINE_CALL *OnRegisterThread)(std::string_view, void(*)(void*, void*), void*, void*) = nullptr;
+		Pitaya::Core::Thread::Identifier (ENGINE_CALL *OnRegisterThread)(Pitaya::Thread::ThreadType, std::string_view, void(*)(void*, void*), void*, void*) = nullptr;
 		bool (ENGINE_CALL *OnUnregisterThread)(Pitaya::Core::Thread::Identifier) noexcept = nullptr;
 		std::string (ENGINE_CALL *OnGetThreadName)(Pitaya::Core::Thread::Identifier) noexcept = nullptr;
 		bool (ENGINE_CALL *OnGetThreadIsRunning)(Pitaya::Core::Thread::Identifier) noexcept = nullptr;
+		bool (ENGINE_CALL *OnGetIsInThread)(Pitaya::Thread::ThreadType) noexcept = nullptr;
 	};
 }
 
 namespace Pitaya::Thread
 {
-	inline Pitaya::Core::Thread::Identifier RegisterThread(std::string_view name, void(*Thread)(void*, void*), void* bootstraper, void* args)
+	inline Pitaya::Core::Thread::Identifier RegisterThread(Pitaya::Thread::ThreadType type, std::string_view name, void(*Thread)(void*, void*), void* bootstraper, void* args)
 	{
-		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Thread::ThreadTracker>().InvokeOnRegisterThread(name, Thread, bootstraper, args);
+		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Thread::ThreadTracker>().InvokeOnRegisterThread(type, name, Thread, bootstraper, args);
 	}
 	inline bool UnregisterThread(Pitaya::Core::Thread::Identifier id) noexcept
 	{
@@ -80,5 +88,9 @@ namespace Pitaya::Thread
 	inline bool GetThreadIsRunning(Pitaya::Core::Thread::Identifier id) noexcept
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Thread::ThreadTracker>().InvokeOnGetThreadIsRunning(id);
+	}
+	inline bool GetIsInThread(Pitaya::Thread::ThreadType type) noexcept
+	{
+		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Thread::ThreadTracker>().InvokeOnGetIsInThread(type);
 	}
 }

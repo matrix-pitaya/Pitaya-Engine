@@ -25,13 +25,11 @@ namespace Pitaya::Engine
 		inline bool Verify() const
 		{
 			if (!OnBakeIBL) { throw std::runtime_error("FuncTable miss [Render::OnBakeIBL] Function!"); }
-			if (!OnIsInRenderThread) { throw std::runtime_error("FuncTable miss [Render::OnIsInRenderThread] Function!"); }
-			return true;
+				return true;
 		}
 		inline void Nullify() noexcept
 		{
 			OnBakeIBL = nullptr;
-			OnIsInRenderThread = nullptr;
 		}
 
 	public:
@@ -39,14 +37,9 @@ namespace Pitaya::Engine
 		{
 			return OnBakeIBL(input);
 		}
-		inline bool InvokeOnIsInRenderThread() noexcept
-		{
-			return OnIsInRenderThread();
-		}
 
 	private:
 		bool (ENGINE_CALL *OnBakeIBL)(const Pitaya::Render::IBLBakeInput&) = nullptr;
-		bool (ENGINE_CALL *OnIsInRenderThread)() noexcept = nullptr;
 	};
 }
 
@@ -55,9 +48,5 @@ namespace Pitaya::Render
 	inline bool BakeIBL(const IBLBakeInput& input)
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Render::Renderer>().InvokeOnBakeIBL(input);
-	}
-	inline bool IsInRenderThread() noexcept
-	{
-		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::Render::Renderer>().InvokeOnIsInRenderThread();
 	}
 }

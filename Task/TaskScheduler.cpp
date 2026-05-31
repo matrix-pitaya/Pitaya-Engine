@@ -16,7 +16,7 @@ bool Pitaya::Task::TaskScheduler::Initialize()
 	isRunning.store(true, std::memory_order_release);
 	for (size_t i = 0; i < jobExecuterCount; i++)
 	{
-		jobThreads[i] = Pitaya::Thread::RegisterThread("JobThread_" + std::to_string(i + 1), 
+		jobThreads[i] = Pitaya::Thread::RegisterThread(Pitaya::Thread::ThreadType::Job, "JobThread_" + std::to_string(i + 1),
 			&Pitaya::Task::TaskScheduler::BootstrapJobThread, this, nullptr);
 	}
 	return true;

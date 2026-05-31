@@ -697,7 +697,7 @@ namespace Pitaya::Render
 
             // start render thread
             isRunning.store(true, std::memory_order_release);
-            renderThread = Pitaya::Thread::RegisterThread("Render", &Pitaya::Render::Renderer::BootstrapRenderThread, this, nativeWindow);
+            renderThread = Pitaya::Thread::RegisterThread(Pitaya::Thread::ThreadType::Render, "Render", &Pitaya::Render::Renderer::BootstrapRenderThread, this, nativeWindow);
             if (renderThread == Pitaya::Core::Thread::Identifier::Invalid) { throw std::runtime_error("Render Thread Register Fail!"); }
 
             // invoke hook func
@@ -752,12 +752,6 @@ namespace Pitaya::Render
             INVOKE_PRERENDERCONTEXTINRELEASED_HOOK
             Pitaya::GPU::DestroyAllGPUResource();
             ReleaseRenderContext();
-        }
-
-    public:
-        inline bool IsInRenderThread() const noexcept
-        {
-            return Pitaya::Core::Thread::GetCurrentThreadId() == renderThread;
         }
 
     private:
