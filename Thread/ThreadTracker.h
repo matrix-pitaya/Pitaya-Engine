@@ -71,14 +71,29 @@ namespace Pitaya::Thread
 			{
 				inline bool Emplace(Pitaya::Core::Thread::Identifier id, Pitaya::Thread::ThreadType type) noexcept
 				{
-					if (Pitaya::Thread::GetIsPrimaryThreadType(type)) { PrimaryThreadIds[static_cast<size_t>(type)] = id; return true; }
-					if (type == Pitaya::Thread::ThreadType::Job) { JobThreadIds.push_back(id); return true; }
+					if (Pitaya::Thread::GetIsPrimaryThreadType(type)) 
+					{ PrimaryThreadIds[static_cast<size_t>(type)] = id; return true; }
+
+					if (type == Pitaya::Thread::ThreadType::Job) 
+					{ JobThreadIds.push_back(id); return true; }
+
 					return false;
 				}
 				inline bool Erase(Pitaya::Core::Thread::Identifier id, Pitaya::Thread::ThreadType type) noexcept
 				{
-					if (Pitaya::Thread::GetIsPrimaryThreadType(type)) { PrimaryThreadIds[static_cast<size_t>(type)] = Pitaya::Core::Thread::Identifier::Invalid; return true; }
-					else if (type == Pitaya::Thread::ThreadType::Job) { auto it = std::find(JobThreadIds.begin(), JobThreadIds.end(), id); if (it != JobThreadIds.end()) { JobThreadIds.erase(it); } return true; }
+					if (Pitaya::Thread::GetIsPrimaryThreadType(type)) 
+					{ 
+						PrimaryThreadIds[static_cast<size_t>(type)] = Pitaya::Core::Thread::Identifier::Invalid; 
+						return true;
+					}
+					
+					if (type == Pitaya::Thread::ThreadType::Job) 
+					{ 
+						auto it = std::find(JobThreadIds.begin(), JobThreadIds.end(), id); 
+						if (it != JobThreadIds.end()) { JobThreadIds.erase(it); } 
+						return true;
+					}
+					
 					return false;
 				}
 				inline bool GetIsInThread(Pitaya::Thread::ThreadType type) const noexcept
@@ -88,13 +103,14 @@ namespace Pitaya::Thread
 					Pitaya::Core::Thread::Identifier id = Pitaya::Core::Thread::GetCurrentThreadId();
 					if (Pitaya::Thread::GetIsPrimaryThreadType(type)) { return id == PrimaryThreadIds[static_cast<size_t>(type)]; }
 					
-					if (type == Pitaya::Thread::ThreadType::Job)
-					{
-						for (auto jobId : JobThreadIds)
-						{
+					if (type == Pitaya::Thread::ThreadType::Job) 
+					{ 
+						for (auto jobId : JobThreadIds) 
+						{ 
 							if (id == jobId) { return true; }
-						}
+						} 
 					}
+
 					return false;
 				}
 

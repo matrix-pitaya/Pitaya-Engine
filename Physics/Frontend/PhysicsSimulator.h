@@ -65,7 +65,6 @@ namespace Pitaya::Physics
     public:
         class PhysicsPacket
         {
-            friend class PhysicsSimulator;
         public:
             struct Buffer
             {
@@ -80,6 +79,12 @@ namespace Pitaya::Physics
                     Snapshot.StepCompletionTime = 0.0;
                     Snapshot.StepSequence = 0;
                 }
+                inline void Reserve()
+                {
+                    CommandBuffer.reserve(16 * 1024);
+                    Snapshot.Prev.reserve(128);
+                    Snapshot.Curr.reserve(128);
+                }
             };
 
         private:
@@ -89,7 +94,7 @@ namespace Pitaya::Physics
                 uint32_t Size = 0;
             };
 
-        private:
+        public:
             PhysicsPacket() = default;
             ~PhysicsPacket() = default;
 
@@ -121,10 +126,20 @@ namespace Pitaya::Physics
                 buffers[newIndex].Clear();
                 writeIndex.store(newIndex, std::memory_order_release);
             }
+            inline void Reserve()
+            {
+				buffers[0].Reserve();
+				buffers[1].Reserve();
+            }
+            inline void Clear()
+            {
+                buffers[0].Clear();
+                buffers[1].Clear();
+            }
 
         private:
-            Buffer buffers[2];
-            std::atomic<uint32_t> writeIndex = 0;
+            std::array<Buffer, 2> buffers;
+            std::atomic<uint32_t> writeIndex = 0; // main thread writes to front buffer index (writeIndex), physics thread reads from back buffer index (1 - writeIndex)
         };
 
     private:
@@ -140,15 +155,8 @@ namespace Pitaya::Physics
     private:
         inline bool Initialize()
         {
-            // front buffer reserve
-            physicsPacket.buffers[0].CommandBuffer.reserve(16 * 1024);
-            physicsPacket.buffers[0].Snapshot.Prev.reserve(128);
-            physicsPacket.buffers[0].Snapshot.Curr.reserve(128);
-
-			// back buffer reserve
-            physicsPacket.buffers[1].CommandBuffer.reserve(16 * 1024);
-            physicsPacket.buffers[1].Snapshot.Prev.reserve(128);
-            physicsPacket.buffers[1].Snapshot.Curr.reserve(128);
+            // reserve physics packet
+            physicsPacket.Reserve();
 
             // start render thread
             accumulator = 0.0f;
@@ -165,9 +173,8 @@ namespace Pitaya::Physics
             isRunning.store(false, std::memory_order_release);
             Pitaya::Thread::UnregisterThread(physicsThread);
 
-			// clear physics packet
-			physicsPacket.buffers[0].Clear();
-			physicsPacket.buffers[1].Clear();
+            // clear physics packet
+            physicsPacket.Clear();
         }
 
     private:

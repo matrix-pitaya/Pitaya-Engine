@@ -377,7 +377,7 @@ namespace Pitaya::Asset
             // 在时间预算内处理资产
             Pitaya::Core::InvokeWithTimeBudget(
                 [this]() ->bool { return cacheAssetOperateQueue.empty(); },
-                [this]() { std::visit([this](auto& result_Inner) { this->SyncAssetOperate(result_Inner); }, cacheAssetOperateQueue.front().Data); cacheAssetOperateQueue.pop(); },
+                [this]() { std::visit([this](const auto& result_Inner) { this->SyncAssetOperate(result_Inner); }, cacheAssetOperateQueue.front().Data); cacheAssetOperateQueue.pop(); },
                 std::chrono::milliseconds(2));
         }
         inline bool IsUploadedToGPU(Pitaya::Core::PassKey<Pitaya::Render::Renderer>)
@@ -386,15 +386,15 @@ namespace Pitaya::Asset
         }
 
     private:
-        void SyncAssetOperate(std::monostate&);
-        void SyncAssetOperate(Pitaya::Import::Texture2DImportResult&);
-        void SyncAssetOperate(Pitaya::Import::TextureCubemapImportResult&);
-        void SyncAssetOperate(Pitaya::Import::ShaderImportResult&);
-        void SyncAssetOperate(Pitaya::Import::StaticMeshImportResult&);
-        void SyncAssetOperate(Pitaya::Import::SkinnedMeshImportResult&);
-        void SyncAssetOperate(Pitaya::Import::RenderTargetImportResult&);
-        void SyncAssetOperate(Pitaya::Asset::Texture2DUnloadRequire&);
-        void SyncAssetOperate(Pitaya::Import::SkyBoxImportResult&);
+        void SyncAssetOperate(const std::monostate&);
+        void SyncAssetOperate(const Pitaya::Import::Texture2DImportResult&);
+        void SyncAssetOperate(const Pitaya::Import::TextureCubemapImportResult&);
+        void SyncAssetOperate(const Pitaya::Import::ShaderImportResult&);
+        void SyncAssetOperate(const Pitaya::Import::StaticMeshImportResult&);
+        void SyncAssetOperate(const Pitaya::Import::SkinnedMeshImportResult&);
+        void SyncAssetOperate(const Pitaya::Import::RenderTargetImportResult&);
+        void SyncAssetOperate(const Pitaya::Asset::Texture2DUnloadRequire&);
+        void SyncAssetOperate(const Pitaya::Import::SkyBoxImportResult&);
 
     private:
         inline static constexpr const char* fileName = "asset.cfg";

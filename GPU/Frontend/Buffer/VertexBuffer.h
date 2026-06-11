@@ -13,7 +13,7 @@ namespace Pitaya::GPU
 		{
 			friend class RHIDevice;
 		private:
-			static VertexBuffer Create(float* vertices, uint32_t size, BufferLayout layout);
+			static VertexBuffer Create(const float* vertices, uint32_t size, BufferLayout layout);
 			static void Destroy(VertexBuffer);
 		};
 

@@ -62,7 +62,7 @@ void Pitaya::Render::Renderer::NewRenderFrame()
     Pitaya::GPU::ShaderStorageBuffer shaderStorageBuffer;
 
     // 动态扩容/上传 Transform SSBO
-    size_t uploadTransformCount = renderPacket.back.InstanceInfo.size();
+    size_t uploadTransformCount = renderPacket.GetReadBuffer().InstanceInfo.size();
     if (uploadTransformCount > 0)
     {
         if (Pitaya::GPU::GetShaderStorageBuffer(renderKit.InstanceModelTransformSSBO.Handle, shaderStorageBuffer))
@@ -81,12 +81,12 @@ void Pitaya::Render::Renderer::NewRenderFrame()
             }
 
             // 将最新推算好的数据安全更新到 SSBO 中
-            glNamedBufferSubData(shaderStorageBuffer.Id, 0, requiredSize, renderPacket.back.InstanceInfo.data());
+            glNamedBufferSubData(shaderStorageBuffer.Id, 0, requiredSize, renderPacket.GetReadBuffer().InstanceInfo.data());
         }
     }
 
     // 动态扩容/上传 Bone SSBO
-    size_t uploadBoneCount = renderPacket.back.BoneMatrices.size();
+    size_t uploadBoneCount = renderPacket.GetReadBuffer().BoneMatrices.size();
     if (uploadBoneCount > 0)
     {
         if (Pitaya::GPU::GetShaderStorageBuffer(renderKit.BoneInverseMatriceSSBO.Handle, shaderStorageBuffer))
@@ -103,12 +103,12 @@ void Pitaya::Render::Renderer::NewRenderFrame()
                 glNamedBufferData(shaderStorageBuffer.Id, renderKit.BoneInverseMatriceSSBO.Capacity, nullptr, GL_DYNAMIC_DRAW);
             }
 
-            glNamedBufferSubData(shaderStorageBuffer.Id, 0, requiredBoneSize, renderPacket.back.BoneMatrices.data());
+            glNamedBufferSubData(shaderStorageBuffer.Id, 0, requiredBoneSize, renderPacket.GetReadBuffer().BoneMatrices.data());
         }
     }
 
     // 动态扩容/上传 Material SSBO
-    size_t uploadMaterialSize = renderPacket.back.MaterialParams.size();
+    size_t uploadMaterialSize = renderPacket.GetReadBuffer().MaterialParams.size();
     if (uploadMaterialSize > 0)
     {
         if (Pitaya::GPU::GetShaderStorageBuffer(renderKit.MaterialSSBO.Handle, shaderStorageBuffer))
@@ -123,13 +123,13 @@ void Pitaya::Render::Renderer::NewRenderFrame()
                 glNamedBufferData(shaderStorageBuffer.Id, renderKit.MaterialSSBO.Capacity, nullptr, GL_DYNAMIC_DRAW);
             }
 
-            glNamedBufferSubData(shaderStorageBuffer.Id, 0, uploadMaterialSize, renderPacket.back.MaterialParams.data());
+            glNamedBufferSubData(shaderStorageBuffer.Id, 0, uploadMaterialSize, renderPacket.GetReadBuffer().MaterialParams.data());
 
             // 将Texture2D Handle 转化为 Texture2D SamplerId 用于在 Shader 中通过 sampler采样纹理数据
-            for (uint32_t offset : renderPacket.back.MaterialTexturePatches)
+            for (uint32_t offset : renderPacket.GetReadBuffer().MaterialTexturePatches)
             {
                 Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle handle;
-                std::memcpy(&handle, renderPacket.back.MaterialParams.data() + offset, sizeof(handle));
+                std::memcpy(&handle, renderPacket.GetReadBuffer().MaterialParams.data() + offset, sizeof(handle));
                 Pitaya::GPU::Texture2D tex;
                 if (Pitaya::GPU::GetTexture2D(handle, tex))
                 {
@@ -141,7 +141,7 @@ void Pitaya::Render::Renderer::NewRenderFrame()
     }
 
     // 动态扩容 Light SSBO（仅扩容，不在此处上传数据，由 ExecuteCommand(BeginPassCommand) 每 Pass 上传）
-    size_t totalLightCount = renderPacket.back.Lights.size();
+    size_t totalLightCount = renderPacket.GetReadBuffer().Lights.size();
     size_t headerSize = 4 * sizeof(uint32_t);
     size_t maxRequiredSize = headerSize + totalLightCount * sizeof(Pitaya::Render::LightInfo);
     if (Pitaya::GPU::GetShaderStorageBuffer(renderKit.SceneLightsSSBO.Handle, shaderStorageBuffer))
@@ -177,15 +177,15 @@ void Pitaya::Render::Renderer::NewRenderFrame()
                 static_cast<int>(newCapacity), Pitaya::GPU::PixelFormat::Depth32F);
             atlas.LayerCapacity = newCapacity;
         };
-    EnsureAtlas(renderKit.CSMAtlas, renderPacket.back.RequiredCSMLayers, RenderKit::ShadowAtlas::CSMResolution);
-    EnsureAtlas(renderKit.SpotShadowAtlas, renderPacket.back.RequiredSpotLayers, RenderKit::ShadowAtlas::SpotResolution);
-    EnsureAtlas(renderKit.PointShadowAtlas, renderPacket.back.RequiredPointLayers, RenderKit::ShadowAtlas::PointResolution);
-    if (!renderPacket.back.ShadowSSBOData.empty())
+    EnsureAtlas(renderKit.CSMAtlas, renderPacket.GetReadBuffer().RequiredCSMLayers, RenderKit::ShadowAtlas::CSMResolution);
+    EnsureAtlas(renderKit.SpotShadowAtlas, renderPacket.GetReadBuffer().RequiredSpotLayers, RenderKit::ShadowAtlas::SpotResolution);
+    EnsureAtlas(renderKit.PointShadowAtlas, renderPacket.GetReadBuffer().RequiredPointLayers, RenderKit::ShadowAtlas::PointResolution);
+    if (!renderPacket.GetReadBuffer().ShadowSSBOData.empty())
     {
         if (Pitaya::GPU::GetShaderStorageBuffer(
             renderKit.ShadowSSBO.Handle, shaderStorageBuffer))
         {
-            size_t requiredSize = renderPacket.back.ShadowSSBOData.size();
+            size_t requiredSize = renderPacket.GetReadBuffer().ShadowSSBOData.size();
 
             glBindBufferBase(GL_SHADER_STORAGE_BUFFER,
                 static_cast<uint32_t>(Pitaya::GPU::SSBOBindPoint::Shadow),
@@ -201,7 +201,7 @@ void Pitaya::Render::Renderer::NewRenderFrame()
 
             glNamedBufferSubData(shaderStorageBuffer.Id, 0,
                 static_cast<GLsizeiptr>(requiredSize),
-                renderPacket.back.ShadowSSBOData.data());
+                renderPacket.GetReadBuffer().ShadowSSBOData.data());
         }
     }
     auto BindShadowAtlas = [](const RenderKit::ShadowAtlas& atlas, uint32_t unit)
@@ -220,7 +220,7 @@ void Pitaya::Render::Renderer::NewRenderFrame()
 
     // 上传 SceneInfo UBO
     Pitaya::Render::SceneInfo sceneInfo = {};
-    const auto& setup = renderPacket.back.SceneInfoSetup;
+    const auto& setup = renderPacket.GetReadBuffer().SceneInfoSetup;
     sceneInfo.AmbientColor = setup.AmbientColor;
     sceneInfo.DeltaTime = setup.DeltaTime;
     Pitaya::GPU::TextureCubemap cubemap;
@@ -385,7 +385,7 @@ void Pitaya::Render::Renderer::ExecuteCommand(const Pitaya::Render::BeginPassCom
         {
             size_t headerSize = 4 * sizeof(uint32_t);
             size_t dataSize = command->LightCount * sizeof(Pitaya::Render::LightInfo);
-            const Pitaya::Render::LightInfo* passLights = &renderPacket.back.Lights[command->LightDataOffset];
+            const Pitaya::Render::LightInfo* passLights = &renderPacket.GetReadBuffer().Lights[command->LightDataOffset];
             glNamedBufferSubData(lightsSSBO.Id, headerSize, dataSize, passLights);
         }
     }

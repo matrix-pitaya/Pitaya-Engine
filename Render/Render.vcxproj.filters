@@ -108,6 +108,9 @@
     <ClInclude Include="Bake-Input\BRDFLUTBakeInput.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Command\RenderComand-TypeTraits.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Backend\OpenGL\OpenGLRenderer.cpp">

@@ -1,7 +1,7 @@
 #pragma once
 
 #include<Core/Singleton/Singleton.h>
-#include<Context/Common/EngineModuleType.h>
+#include<Context/Common/Module-TypeTraits.h>
 #include<Engine/API/def.h>
 #include<stdexcept>
 
@@ -69,7 +69,7 @@ namespace Pitaya::Engine
 		Context& operator=(Context&&) = delete;
 
 	public:
-		template<EngineModuleType T>
+		template<ModuleTypeTraits T>
 		inline Pitaya::Engine::Module<T>& GetModule() const noexcept
 		{
 			if constexpr (std::is_same_v<T, Pitaya::Task::TaskScheduler>)			 { return *modules.TaskScheduler; }
@@ -87,7 +87,7 @@ namespace Pitaya::Engine
 			else if constexpr (std::is_same_v<T, Pitaya::Game::GameWorld>)			 { return *modules.GameWorld; }
 			else if constexpr (std::is_same_v<T, Pitaya::Script::ScriptRuntime>)	 { return *modules.ScriptRuntime; }
 		}
-		template<EngineModuleType T>
+		template<ModuleTypeTraits T>
 		inline Pitaya::Engine::FuncTable<T>& GetFuncTable() const noexcept
 		{
 			if constexpr (std::is_same_v<T, Pitaya::Time::Chronometer>)				{ return *funcTables.Chronometer; }

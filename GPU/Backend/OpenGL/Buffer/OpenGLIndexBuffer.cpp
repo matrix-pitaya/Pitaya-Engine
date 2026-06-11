@@ -3,7 +3,7 @@
 #if defined(PITAYA_GRAPHICS_OPENGL)
 #include<GL/glew.h>
 
-Pitaya::GPU::IndexBuffer Pitaya::GPU::IndexBuffer::Factory::Create(uint32_t* indices, uint32_t count)
+Pitaya::GPU::IndexBuffer Pitaya::GPU::IndexBuffer::Factory::Create(const uint32_t* indices, uint32_t count)
 {
 	GLuint EBO = 0;
 	glGenBuffers(1, &EBO);

@@ -126,11 +126,11 @@ namespace Pitaya::Engine
 		{
 			return OnCreateVertexArray();
 		}
-		inline auto InvokeOnCreateVertexBuffer(float* vertices, uint32_t size, Pitaya::GPU::BufferLayout layout) const
+		inline auto InvokeOnCreateVertexBuffer(const float* vertices, uint32_t size, Pitaya::GPU::BufferLayout layout) const
 		{
 			return OnCreateVertexBuffer(vertices, size, layout);
 		}
-		inline auto InvokeOnCreateIndexBuffer(uint32_t* indices, uint32_t count) const
+		inline auto InvokeOnCreateIndexBuffer(const uint32_t* indices, uint32_t count) const
 		{
 			return OnCreateIndexBuffer(indices, count);
 		}
@@ -147,7 +147,7 @@ namespace Pitaya::Engine
 		{
 			return OnCreateTexture2D(data, width, height, format, isGenerateMipmap, isNearest);
 		}
-		inline auto InvokeOnCreateTextureCubemap(const void** datas, int* widths, int* heights, Pitaya::GPU::PixelFormat format, bool isGenerateMipmap, bool isNearest) const
+		inline auto InvokeOnCreateTextureCubemap(const void** datas, const int* widths, const int* heights, Pitaya::GPU::PixelFormat format, bool isGenerateMipmap, bool isNearest) const
 		{
 			return OnCreateTextureCubemap(datas, widths, heights, format, isGenerateMipmap, isNearest);
 		}
@@ -264,12 +264,12 @@ namespace Pitaya::Engine
 			Pitaya::Core::SlotMap<Pitaya::GPU::VertexBuffer>::Handle, Pitaya::Core::SlotMap<Pitaya::GPU::IndexBuffer>::Handle) = nullptr;
 
 		Pitaya::Core::SlotMap<Pitaya::GPU::VertexArray>::Handle (ENGINE_CALL *OnCreateVertexArray)() = nullptr;
-		Pitaya::Core::SlotMap<Pitaya::GPU::VertexBuffer>::Handle (ENGINE_CALL *OnCreateVertexBuffer)(float*, uint32_t, Pitaya::GPU::BufferLayout) = nullptr;
-		Pitaya::Core::SlotMap<Pitaya::GPU::IndexBuffer>::Handle (ENGINE_CALL *OnCreateIndexBuffer)(uint32_t*, uint32_t) = nullptr;
+		Pitaya::Core::SlotMap<Pitaya::GPU::VertexBuffer>::Handle (ENGINE_CALL *OnCreateVertexBuffer)(const float*, uint32_t, Pitaya::GPU::BufferLayout) = nullptr;
+		Pitaya::Core::SlotMap<Pitaya::GPU::IndexBuffer>::Handle (ENGINE_CALL *OnCreateIndexBuffer)(const uint32_t*, uint32_t) = nullptr;
 		Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle (ENGINE_CALL *OnCreateShaderVF)(const char*, size_t, const char*, size_t) = nullptr;
 		Pitaya::Core::SlotMap<Pitaya::GPU::Shader>::Handle  (ENGINE_CALL *OnCreateShaderVFG)(const char*, size_t, const char*, size_t, const char*, size_t) = nullptr;
 		Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle (ENGINE_CALL *OnCreateTexture2D)(const void*, int, int, Pitaya::GPU::PixelFormat, bool, bool) = nullptr;
-		Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle (ENGINE_CALL *OnCreateTextureCubemap)(const void**, int*, int*, Pitaya::GPU::PixelFormat, bool, bool) = nullptr;
+		Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle (ENGINE_CALL *OnCreateTextureCubemap)(const void**, const int*, const int*, Pitaya::GPU::PixelFormat, bool, bool) = nullptr;
 		Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle (ENGINE_CALL *OnCreateEmptyTextureCubemap)(int, int, Pitaya::GPU::PixelFormat) = nullptr;
 		Pitaya::Core::SlotMap<Pitaya::GPU::Texture2DArray>::Handle (ENGINE_CALL *OnCreateTexture2DArray)(int, int, int, Pitaya::GPU::PixelFormat) = nullptr;
 		Pitaya::Core::SlotMap<Pitaya::GPU::UniformBuffer>::Handle (ENGINE_CALL *OnCreateUniformBuffer)(uint32_t, uint32_t) = nullptr;
@@ -317,11 +317,11 @@ namespace Pitaya::GPU
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnCreateVertexArray();
 	}
-	inline auto CreateVertexBuffer(float* vertices, uint32_t size, Pitaya::GPU::BufferLayout layout)
+	inline auto CreateVertexBuffer(const float* vertices, uint32_t size, Pitaya::GPU::BufferLayout layout)
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnCreateVertexBuffer(vertices, size, layout);
 	}
-	inline auto CreateIndexBuffer(uint32_t* indices, uint32_t count)
+	inline auto CreateIndexBuffer(const uint32_t* indices, uint32_t count)
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnCreateIndexBuffer(indices, count);
 	}
@@ -337,7 +337,7 @@ namespace Pitaya::GPU
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnCreateTexture2D(data, width, height, format, isGenerateMipmap, isNearest);
 	}
-	inline auto CreateTextureCubemap(const void** datas, int* widths, int* heights, Pitaya::GPU::PixelFormat format, bool isGenerateMipmap, bool isNearest)
+	inline auto CreateTextureCubemap(const void** datas, const int* widths, const int* heights, Pitaya::GPU::PixelFormat format, bool isGenerateMipmap, bool isNearest)
 	{
 		return Pitaya::Engine::Context::Instance().GetFuncTable<Pitaya::GPU::RHIDevice>().InvokeOnCreateTextureCubemap(datas, widths, heights, format, isGenerateMipmap, isNearest);
 	}

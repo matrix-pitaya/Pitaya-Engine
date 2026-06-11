@@ -5,7 +5,7 @@
 #if defined(PITAYA_GRAPHICS_OPENGL)
 #include<GL/glew.h>
 
-Pitaya::GPU::TextureCubemap Pitaya::GPU::TextureCubemap::Factory::Create(const void** datas, int* widths, int* heights, PixelFormat format, bool isGenerateMipmap, bool isNearest)
+Pitaya::GPU::TextureCubemap Pitaya::GPU::TextureCubemap::Factory::Create(const void** datas, const int* widths, const int* heights, PixelFormat format, bool isGenerateMipmap, bool isNearest)
 {
     const auto triplet = Pitaya::GPU::PixelFormatToGL(format);
 

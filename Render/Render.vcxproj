@@ -169,6 +169,7 @@
     <ClInclude Include="Bake-Input\IBLBakeInput.h" />
     <ClInclude Include="Command\InstancedDrawCommand.h" />
     <ClInclude Include="Command\PostProcessCommand.h" />
+    <ClInclude Include="Command\RenderComand-TypeTraits.h" />
     <ClInclude Include="Common\API.h" />
     <ClInclude Include="Common\InstanceInfo.h" />
     <ClInclude Include="Common\LightInfo.h" />

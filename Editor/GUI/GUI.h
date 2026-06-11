@@ -29,6 +29,13 @@ namespace Pitaya::Editor
 		{
 			friend class Pitaya::Editor::GUI;
 		private:
+			struct Buffer
+			{
+				ImDrawData DrawData;
+				glm::uvec2 WindowSize;
+			};
+
+		private:
 			Drawer() = default;
 			~Drawer() = default;
 
@@ -43,14 +50,14 @@ namespace Pitaya::Editor
 			{
 				this->nativeWindow = nativeWindow;
 				glm::uvec2 windowSize = Pitaya::Window::GetWindowSize();
-				size[0] = windowSize;
-				size[1] = windowSize;
+				buffers[0].WindowSize = windowSize;
+				buffers[1].WindowSize = windowSize;
 				return true;
 			}
 			inline void Release()
 			{
-				ReleaseDrawData(frontBufferIndex);
-				ReleaseDrawData(backBufferIndex);
+				ReleaseDrawData(0);
+				ReleaseDrawData(1);
 				this->nativeWindow = nullptr;
 			}
 
@@ -60,56 +67,54 @@ namespace Pitaya::Editor
 		public:
 			inline void SwapBuffer(Pitaya::Core::PassKey<Editor>) noexcept	//MOUNT_POSTRENDERERSWAPBUFFER_HOOK
 			{
-				std::swap(frontBufferIndex, backBufferIndex);
+				writeIndex = 1 - writeIndex;
 			}
 			inline void CreateFrontDrawData(Pitaya::Core::PassKey<Editor>)	//MOUNT_PRERENDERERENDRENDERFRAME_HOOK
 			{
-				CreateDrawData(frontBufferIndex);
+				CreateDrawData(writeIndex);
 			}
 			inline void ReleaseFrontDrawData(Pitaya::Core::PassKey<Editor>)	//MOUNT_POSTRENDERERBEGINRENDERFRAME_HOOK
 			{
-				ReleaseDrawData(frontBufferIndex);
+				ReleaseDrawData(writeIndex);
 			}
 			inline void ReleaseBackDrawData(Pitaya::Core::PassKey<Editor>)	//MOUNT_POSTRENDERERPARSECOMMAND_HOOK（在Draw绘制后执行）
 			{
-				ReleaseDrawData(backBufferIndex);
+				ReleaseDrawData(1 - writeIndex);
 			}
 			inline bool HasRenderDrawData(Pitaya::Core::PassKey<Editor>)	//MOUNT_SHOULDWAKEUPRENDERTHREAD_HOOK
 			{
-				return buffer[backBufferIndex].CmdLists.Size > 0;
+				return buffers[1 - writeIndex].DrawData.CmdLists.Size > 0;
 			}
 
 		private:
-			inline void CreateDrawData(uint8_t index)
+			inline void CreateDrawData(uint32_t index)
 			{
 				ReleaseDrawData(index);
 				ImDrawData* src = ImGui::GetDrawData();
 				if (!src || src->CmdListsCount == 0 || src->TotalVtxCount == 0) { return; }
-				buffer[index] = *src;
-				buffer[index].CmdLists.clear();
-				buffer[index].CmdLists.reserve(src->CmdListsCount);
+				buffers[index].DrawData = *src;
+				buffers[index].DrawData.CmdLists.clear();
+				buffers[index].DrawData.CmdLists.reserve(src->CmdListsCount);
 				for (uint32_t i = 0; i < src->CmdListsCount; i++)
 				{
 					ImDrawList* srcList = src->CmdLists[i];
 					ImDrawList* dstList = srcList->CloneOutput();
-					buffer[index].CmdLists.push_back(dstList);
+					buffers[index].DrawData.CmdLists.push_back(dstList);
 				}
-				size[index] = Pitaya::Window::GetWindowSize();
+				buffers[index].WindowSize = Pitaya::Window::GetWindowSize();
 			}
-			inline void ReleaseDrawData(uint8_t index)
+			inline void ReleaseDrawData(uint32_t index)
 			{
-				for (uint32_t i = 0; i < buffer[index].CmdLists.Size; i++)
+				for (uint32_t i = 0; i < buffers[index].DrawData.CmdLists.Size; i++)
 				{
-					IM_DELETE(buffer[index].CmdLists[i]);
+					IM_DELETE(buffers[index].DrawData.CmdLists[i]);
 				}
-				buffer[index].CmdLists.clear();
+				buffers[index].DrawData.CmdLists.clear();
 			}
 
 		private:
-			ImDrawData buffer[2] = {};
-			glm::uvec2 size[2] = {};		//窗口尺寸
-			uint8_t frontBufferIndex = 0;	//主线程写入
-			uint8_t backBufferIndex = 1;	//渲染线程读取
+			std::array<Buffer, 2> buffers;	// 双缓冲 [writeIndex] = 主线程写入, [1-writeIndex] = 渲染线程读取
+			uint32_t writeIndex = 0;		// 主线程写入
 			void* nativeWindow = nullptr;
 		};
 		class Panels

@@ -24,7 +24,7 @@
     <ClInclude Include="Common\Module.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common\EngineModuleType.h">
+    <ClInclude Include="Common\Module-TypeTraits.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

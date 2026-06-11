@@ -610,12 +610,12 @@ void Pitaya::Editor::GUI::Drawer::Draw(Pitaya::Core::PassKey<Editor>)
 {
 #if defined(PITAYA_GRAPHICS_OPENGL)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, size[backBufferIndex].x, size[backBufferIndex].y);
+	glViewport(0, 0, buffers[1 - writeIndex].WindowSize.x, buffers[1 - writeIndex].WindowSize.y);
 	glClearColor(Pitaya::Core::Color::Dark.r, Pitaya::Core::Color::Dark.g, Pitaya::Core::Color::Dark.b, Pitaya::Core::Color::Dark.a);
 	glClearDepth(1.0f);
 	glClearStencil(0x00);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplOpenGL3_RenderDrawData(&buffer[backBufferIndex]);
+	ImGui_ImplOpenGL3_RenderDrawData(&buffers[1 - writeIndex].DrawData);
 #endif
 }

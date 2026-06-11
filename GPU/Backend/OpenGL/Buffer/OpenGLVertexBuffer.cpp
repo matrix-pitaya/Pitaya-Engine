@@ -5,7 +5,7 @@
 #include<GL/glew.h>
 
 
-Pitaya::GPU::VertexBuffer Pitaya::GPU::VertexBuffer::Factory::Create(float* vertices, uint32_t size, BufferLayout layout)
+Pitaya::GPU::VertexBuffer Pitaya::GPU::VertexBuffer::Factory::Create(const float* vertices, uint32_t size, BufferLayout layout)
 {
 	GLuint VBO = 0;
 	glGenBuffers(1, &VBO);

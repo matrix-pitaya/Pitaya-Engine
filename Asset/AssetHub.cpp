@@ -567,11 +567,11 @@ void Pitaya::Asset::AssetHub::Release()
     // END TODO
 }
 
-void Pitaya::Asset::AssetHub::SyncAssetOperate(std::monostate&)
+void Pitaya::Asset::AssetHub::SyncAssetOperate(const std::monostate&)
 {
     Pitaya::Log::Error("unknown cpu operate result");
 }
-void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::Texture2DImportResult& cpuOpResult_Inner)
+void Pitaya::Asset::AssetHub::SyncAssetOperate(const Pitaya::Import::Texture2DImportResult& cpuOpResult_Inner)
 {
     std::string log;
     Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry* entry = nullptr;
@@ -633,7 +633,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::Texture2DImportRe
     Pitaya::Log::Info("successfully created GPU resources for texture2D GUID: " + cpuOpResult_Inner.GUID.ToString());
     entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
-void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::TextureCubemapImportResult& cpuOpResult_Inner)
+void Pitaya::Asset::AssetHub::SyncAssetOperate(const Pitaya::Import::TextureCubemapImportResult& cpuOpResult_Inner)
 {
     std::string log;
     Pitaya::Core::AssetRef<Pitaya::Asset::Texture>::AssetEntry* entry = nullptr;
@@ -699,7 +699,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::TextureCubemapImp
     textureCubemap->Usage = cpuOpResult_Inner.Usage;
     entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
-void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::ShaderImportResult& cpuOpResult_Inner)
+void Pitaya::Asset::AssetHub::SyncAssetOperate(const Pitaya::Import::ShaderImportResult& cpuOpResult_Inner)
 {
     std::string log;
     Pitaya::Core::AssetRef<Pitaya::Asset::Shader>::AssetEntry* entry = nullptr;
@@ -787,7 +787,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::ShaderImportResul
     entry->Data.load(std::memory_order_acquire)->ShaderHandle = shaderHandle;
     entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
-void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::StaticMeshImportResult& cpuOpResult_Inner)
+void Pitaya::Asset::AssetHub::SyncAssetOperate(const Pitaya::Import::StaticMeshImportResult& cpuOpResult_Inner)
 {
     std::string log;
     Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry* entry = nullptr;
@@ -874,7 +874,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::StaticMeshImportR
     Pitaya::Log::Info("Successfully created GPU resources for static mesh GUID: " + cpuOpResult_Inner.GUID.ToString());
     entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
-void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::SkinnedMeshImportResult& cpuOpResult_Inner)
+void Pitaya::Asset::AssetHub::SyncAssetOperate(const Pitaya::Import::SkinnedMeshImportResult& cpuOpResult_Inner)
 {
     std::string log;
     Pitaya::Core::AssetRef<Pitaya::Asset::Mesh>::AssetEntry* entry = nullptr;
@@ -964,7 +964,7 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::SkinnedMeshImport
     Pitaya::Log::Info("successfully created GPU resources for skinned mesh GUID: " + cpuOpResult_Inner.GUID.ToString());
     entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
-void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::RenderTargetImportResult& cpuOpResult_Inner)
+void Pitaya::Asset::AssetHub::SyncAssetOperate(const Pitaya::Import::RenderTargetImportResult& cpuOpResult_Inner)
 {
     std::string log;
     Pitaya::Core::AssetRef<Pitaya::Asset::RenderTarget>::AssetEntry* entry = nullptr;
@@ -1035,11 +1035,11 @@ void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::RenderTargetImpor
     Pitaya::Log::Info("successfully created GPU resources for framebuffer GUID: " + cpuOpResult_Inner.GUID.ToString());
     entry->State.ModifyBits(Pitaya::Core::AssetState::GPULoaded, Pitaya::Core::AssetState::GPULoading);
 }
-void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Asset::Texture2DUnloadRequire& cpuOpResult_Inner)
+void Pitaya::Asset::AssetHub::SyncAssetOperate(const Pitaya::Asset::Texture2DUnloadRequire& cpuOpResult_Inner)
 {
     Pitaya::GPU::DestroyTexture2D(cpuOpResult_Inner.Texture2DHandle);
 }
-void Pitaya::Asset::AssetHub::SyncAssetOperate(Pitaya::Import::SkyBoxImportResult& cpuOpResult_Inner)
+void Pitaya::Asset::AssetHub::SyncAssetOperate(const Pitaya::Import::SkyBoxImportResult& cpuOpResult_Inner)
 {
     std::string log;
     Pitaya::Core::AssetRef<Pitaya::Asset::SkyBox>::AssetEntry* entry = nullptr;

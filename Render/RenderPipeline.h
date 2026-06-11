@@ -62,6 +62,29 @@ namespace Pitaya::Render
             uint32_t DirLightShadowCount = 0;
             uint32_t SpotLightShadowCount = 0;
             uint32_t PointLightShadowCount = 0;
+
+            inline void Clear() noexcept
+            {
+                Passes.clear();
+                Items.clear();
+                Lights.clear();
+                ShadowSlices.clear();
+                CascadeSplits.clear();
+                ShadowMatrices.clear();
+                SceneEnv = { };
+                DirLightShadowCount = 0;
+                SpotLightShadowCount = 0;
+                PointLightShadowCount = 0;
+			}
+            inline void Reserve()
+            {
+                Passes.reserve(10);
+                Items.reserve(5000);
+                Lights.reserve(10);
+                ShadowSlices.reserve(64);
+                CascadeSplits.reserve(16);
+                ShadowMatrices.reserve(256); 
+			}
         };
 
     private:
@@ -78,39 +101,20 @@ namespace Pitaya::Render
         inline bool Initialize()
         {
             // reserve render graph
-            graph.Passes.reserve(10);
-            graph.Items.reserve(5000);
-            graph.Lights.reserve(10);
-            graph.ShadowSlices.reserve(64);
-            graph.ShadowMatrices.reserve(256);
-            graph.CascadeSplits.reserve(16);
+			graph.Reserve();
             return true;
         }
         inline void Release()
         {
             // clear render graph
-            graph.Passes.clear();
-            graph.Items.clear();
-            graph.Lights.clear();
-            graph.ShadowSlices.clear();
-            graph.ShadowMatrices.clear();
-            graph.CascadeSplits.clear();
+            graph.Clear();
         }
 
     public:
         inline void NewPipeline(Pitaya::Core::PassKey<Pitaya::Engine::Engine>) noexcept
         {
             //清空上一帧残留数据
-            graph.Passes.clear();
-            graph.Items.clear();
-            graph.Lights.clear();
-            graph.ShadowSlices.clear();
-            graph.ShadowMatrices.clear();
-            graph.CascadeSplits.clear();
-            graph.DirLightShadowCount = 0;
-            graph.SpotLightShadowCount = 0;
-            graph.PointLightShadowCount = 0;
-            graph.SceneEnv = { };
+            graph.Clear();
         }
         inline void AddRenderPass(Pitaya::Core::PassKey<Pitaya::Engine::Engine>, const Pitaya::Core::CameraSnapshot& cameraSnapshot,  const Pitaya::Render::PostProcessSetting& setting, Pitaya::Render::RenderLayer cullingMask, Pitaya::Asset::RenderTarget* rt, float nearClip, float farClip)
         {

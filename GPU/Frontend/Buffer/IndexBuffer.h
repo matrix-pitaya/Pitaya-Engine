@@ -14,7 +14,7 @@ namespace Pitaya::GPU
 		{
 			friend class RHIDevice;
 		private:
-			static IndexBuffer Create(uint32_t* indices, uint32_t count);
+			static IndexBuffer Create(const uint32_t* indices, uint32_t count);
 			static void Destroy(IndexBuffer);
 		};
 

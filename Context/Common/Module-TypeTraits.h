@@ -18,7 +18,7 @@ namespace Pitaya::Game { class GameWorld; }
 namespace Pitaya::Script { class ScriptRuntime; }
 
 template <typename T>
-concept EngineModuleType =
+concept ModuleTypeTraits =
 std::is_same_v<T, Pitaya::Time::Chronometer> ||
 std::is_same_v<T, Pitaya::Log::Logger> ||
 std::is_same_v<T, Pitaya::Thread::ThreadTracker> ||

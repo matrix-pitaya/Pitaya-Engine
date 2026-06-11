@@ -56,6 +56,7 @@
 
 #include<Application/Built-in.h>
 
+#include<array>
 #include<algorithm>
 #include<atomic>
 #include<condition_variable>
@@ -233,7 +234,7 @@ namespace Pitaya::Render
                 auto fallbackVboData = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_VERTICES); PITAYA_CHECK(fallbackVboData)
                 auto fallbackIboData = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_INDICES); PITAYA_CHECK(fallbackIboData)
                 auto fallbackVBOHandle = Pitaya::GPU::CreateVertexBuffer(
-                    static_cast<float*>(const_cast<void*>(fallbackVboData.data)), fallbackVboData.size,
+                    static_cast<const float*>(fallbackVboData.data), fallbackVboData.size,
                     {
                         { Pitaya::GPU::ShaderVariableType::Float3, 0 },     // Position
                         { Pitaya::GPU::ShaderVariableType::Float3, 1 },     // Normal
@@ -241,7 +242,7 @@ namespace Pitaya::Render
                         { Pitaya::GPU::ShaderVariableType::Float4, 3 }      // Tangent
                     }); PITAYA_CHECK(fallbackVBOHandle)
                 auto fallbackIBOHandle = Pitaya::GPU::CreateIndexBuffer(
-                    static_cast<uint32_t*>(const_cast<void*>(fallbackIboData.data)), 36); PITAYA_CHECK(fallbackIBOHandle)
+                    static_cast<const uint32_t*>(fallbackIboData.data), 36); PITAYA_CHECK(fallbackIBOHandle)
                 PITAYA_CHECK(Pitaya::GPU::LinkVertexArray(Fallback.VAOHandle, fallbackVBOHandle, fallbackIBOHandle))
 
                 auto errTex = Pitaya::Core::LoadBuiltInRC(IDR_ERROR_TEXTURE); PITAYA_CHECK(errTex)
@@ -355,7 +356,6 @@ namespace Pitaya::Render
         };
         class RenderPacket
         {
-            friend class Renderer;
         public:
             struct Buffer
             {
@@ -385,6 +385,16 @@ namespace Pitaya::Render
                     RequiredSpotLayers = 0;
                     RequiredPointLayers = 0;
                 }
+                inline void Reserve()
+                {
+                    CommandBuffer.reserve(64 * 1024);
+                    InstanceInfo.reserve(1024);
+                    BoneMatrices.reserve(1024);
+                    MaterialParams.reserve(4096 * sizeof(float));
+                    MaterialTexturePatches.reserve(512);
+                    Lights.reserve(10);
+                    ShadowSSBOData.reserve(64 * 1024);
+                }
             };
 
         private:
@@ -394,7 +404,7 @@ namespace Pitaya::Render
                 uint32_t size = 0;
             };
 
-        private:
+        public:
             RenderPacket() = default;
             ~RenderPacket() = default;
 
@@ -408,8 +418,8 @@ namespace Pitaya::Render
             inline void ParseCommand(const Pitaya::Render::Renderer const* renderer)
             {
                 size_t offset = 0;
-                const size_t bufferSize = back.CommandBuffer.size();
-                std::byte* rawData = const_cast<std::byte*>(back.CommandBuffer.data());
+                const size_t bufferSize = buffers[1 - writeIndex].CommandBuffer.size();
+                std::byte* rawData = const_cast<std::byte*>(buffers[1 - writeIndex].CommandBuffer.data());
                 while (offset < bufferSize)
                 {
                     void* ptr = rawData + offset;
@@ -455,7 +465,7 @@ namespace Pitaya::Render
                             break;
                     }
                 }
-                back.Clear();	//清空缓冲区
+                buffers[1 - writeIndex].Clear();	//清空缓冲区
                 INVOKE_POSTRENDERERPARSECOMMAND_HOOK
             }
 
@@ -469,20 +479,20 @@ namespace Pitaya::Render
                 constexpr const size_t alignRequirement = alignof(CommandHeader);
                 constexpr const size_t dataSize = sizeof(CommandHeader) + sizeof(T);
 
-                size_t currentSize = front.CommandBuffer.size();
+                size_t currentSize = buffers[writeIndex].CommandBuffer.size();
                 size_t maxSpace = currentSize + dataSize + alignRequirement;
 
-                front.CommandBuffer.resize(maxSpace);
+                buffers[writeIndex].CommandBuffer.resize(maxSpace);
 
-                void* ptr = front.CommandBuffer.data() + currentSize;
+                void* ptr = buffers[writeIndex].CommandBuffer.data() + currentSize;
                 size_t space = dataSize + alignRequirement;
 
                 void* alignedPtr = std::align(alignRequirement, dataSize, ptr, space);
 
-                size_t alignedOffset = static_cast<std::byte*>(alignedPtr) - front.CommandBuffer.data();
-                front.CommandBuffer.resize(alignedOffset + dataSize);
+                size_t alignedOffset = static_cast<std::byte*>(alignedPtr) - buffers[writeIndex].CommandBuffer.data();
+                buffers[writeIndex].CommandBuffer.resize(alignedOffset + dataSize);
 
-                std::byte* writePtr = front.CommandBuffer.data() + alignedOffset;
+                std::byte* writePtr = buffers[writeIndex].CommandBuffer.data() + alignedOffset;
 
                 CommandHeader header = { T::Type, static_cast<uint32_t>(sizeof(T)) };
                 std::memcpy(writePtr, &header, sizeof(CommandHeader));
@@ -493,8 +503,8 @@ namespace Pitaya::Render
             template <typename T>
             inline const T* FetchCommand(size_t& offset)
             {
-                if (offset + sizeof(T) > back.CommandBuffer.size()) { return nullptr; }
-                const T* ptr = reinterpret_cast<const T*>(&back.CommandBuffer[offset]);
+                if (offset + sizeof(T) > buffers[1 - writeIndex].CommandBuffer.size()) { return nullptr; }
+                const T* ptr = reinterpret_cast<const T*>(&buffers[1 - writeIndex].CommandBuffer[offset]);
                 offset += sizeof(T);
                 return ptr;
             }
@@ -502,9 +512,9 @@ namespace Pitaya::Render
         public:
             inline bool IsRemain() const noexcept
             {
-                return !back.CommandBuffer.empty();
+                return !buffers[1 - writeIndex].CommandBuffer.empty();
             }
-            inline void PushDrawCommandToPass(DrawCommand&& cmd)
+            inline void EnqueueDrawCmd(DrawCommand&& cmd)
             {
                 if (!cmd.BoneInverseMatrices || cmd.BoneInverseMatrices->empty())
                 {
@@ -564,7 +574,7 @@ namespace Pitaya::Render
                                 currentBatch.CullFace = cmd.CullFace;
                                 currentBatch.ShaderHandle = cmd.ShaderHandle;
                                 currentBatch.InstanceCount = 0;
-                                currentBatch.BaseInstance = static_cast<uint32_t>(front.InstanceInfo.size());
+                                currentBatch.BaseInstance = static_cast<uint32_t>(buffers[writeIndex].InstanceInfo.size());
                             }
 
                             // 提交实例材质
@@ -575,9 +585,9 @@ namespace Pitaya::Render
                                 matByteOffset = currentMaterialOffset;
                                 currentMaterialOffset += layout.TotalBytes;
 
-                                auto baseSize = front.MaterialParams.size();
-                                front.MaterialParams.resize(baseSize + layout.TotalBytes);
-                                auto* block = front.MaterialParams.data() + baseSize;
+                                auto baseSize = buffers[writeIndex].MaterialParams.size();
+                                buffers[writeIndex].MaterialParams.resize(baseSize + layout.TotalBytes);
+                                auto* block = buffers[writeIndex].MaterialParams.data() + baseSize;
 
                                 Pitaya::Core::SlotMap<Pitaya::GPU::Texture2D>::Handle tex2Dhandle;  //用于将Index转化为Handle
                                 for (const auto& slot : layout.Slots)
@@ -598,7 +608,7 @@ namespace Pitaya::Render
                                             tex2Dhandle = (slot.Index < cmd.MaterialPtr->Textures.size() && cmd.MaterialPtr->Textures[slot.Index].IsReady() && cmd.MaterialPtr->Textures[slot.Index]->Type == Pitaya::GPU::TextureType::Texture2D) ?
                                                 cmd.MaterialPtr->Textures[slot.Index]->Texture2DHandle : renderer->renderKit.Fallback.TextureHandle;
                                             std::memcpy(block + slot.Offset, &tex2Dhandle, sizeof(tex2Dhandle));
-                                            front.MaterialTexturePatches.push_back(matByteOffset + slot.Offset);
+                                            buffers[writeIndex].MaterialTexturePatches.push_back(matByteOffset + slot.Offset);
                                             break;
 
                                         default: break;
@@ -607,7 +617,7 @@ namespace Pitaya::Render
                             }
 
                             // 提交实例数据
-                            front.InstanceInfo.push_back({ cmd.ModelMatrix, glm::transpose(glm::inverse(cmd.ModelMatrix)), {cmd.ReceiveShadow, matByteOffset, 0, 0} });
+                            buffers[writeIndex].InstanceInfo.push_back({ cmd.ModelMatrix, glm::transpose(glm::inverse(cmd.ModelMatrix)), {cmd.ReceiveShadow, matByteOffset, 0, 0} });
 
                             // 提交骨骼数据
                             if (cmd.BoneInverseMatrices && !cmd.BoneInverseMatrices->empty())
@@ -617,15 +627,15 @@ namespace Pitaya::Render
                                 size_t paddingBones = MaxBonesPerInstance - bonesToCopy;
                                 if (bonesToCopy > 0)
                                 {
-                                    front.BoneMatrices.insert(
-                                        front.BoneMatrices.end(),
+                                    buffers[writeIndex].BoneMatrices.insert(
+                                        buffers[writeIndex].BoneMatrices.end(),
                                         cmd.BoneInverseMatrices->begin(),
                                         cmd.BoneInverseMatrices->begin() + bonesToCopy);
                                 }
                                 if (paddingBones > 0)
                                 {
-                                    front.BoneMatrices.insert(
-                                        front.BoneMatrices.end(),
+                                    buffers[writeIndex].BoneMatrices.insert(
+                                        buffers[writeIndex].BoneMatrices.end(),
                                         paddingBones,
                                         glm::mat4(1.0f));
                                 }
@@ -647,15 +657,39 @@ namespace Pitaya::Render
             }
             inline void SwapBuffer()
             {
-                std::swap(front, back);
+                writeIndex = 1 - writeIndex;
                 INVOKE_POSTRENDERERSWAPBUFFER_HOOK
+            }
+            inline void Reserve()
+            {
+                buffers[0].Reserve();
+                buffers[1].Reserve();
+                skinnedPass.reserve(1024);
+                staticPass.reserve(1024);
+            }
+            inline void Clear()
+            {
+                buffers[0].Clear();
+                buffers[1].Clear();
+                skinnedPass.clear();
+                staticPass.clear();
+            }
+
+        public:
+            inline auto& GetWriteBuffer() noexcept
+            {
+                return buffers[writeIndex];
+            }
+            inline const auto& GetReadBuffer() const noexcept
+            {
+                return buffers[1 - writeIndex];
             }
 
         private:
-            Buffer front;								// 主线程写入渲染命令、实例化Models、骨骼动画
-            Buffer back;								// 渲染线程执行渲染命令
-            std::vector<DrawCommand> skinnedPass;		// 用于对DrawCommand进行排序
-            std::vector<DrawCommand> staticPass;		// 用于对DrawCommand进行排序
+            uint32_t writeIndex = 0;
+            std::array<Buffer, 2> buffers;	// [writeIndex] = 主线程写入, [1-writeIndex] = 渲染线程读取
+            std::vector<DrawCommand> skinnedPass;
+            std::vector<DrawCommand> staticPass;		
         };
 
     private:
@@ -671,29 +705,8 @@ namespace Pitaya::Render
     private:
         inline bool Initialize(void* nativeWindow)
         {
-            // front buffer reserve
-            renderPacket.front.CommandBuffer.reserve(64 * 1024);
-            renderPacket.front.InstanceInfo.reserve(1024);
-            renderPacket.front.BoneMatrices.reserve(1024);
-            renderPacket.front.MaterialParams.reserve(4096 * sizeof(float));
-            renderPacket.front.MaterialTexturePatches.reserve(512);
-            renderPacket.front.Lights.reserve(10);
-            renderPacket.front.ShadowSSBOData.reserve(64 * 1024);
-
-            // front buffer reserve
-            renderPacket.back.CommandBuffer.reserve(64 * 1024);
-            renderPacket.back.InstanceInfo.reserve(1024);
-            renderPacket.back.BoneMatrices.reserve(1024);
-            renderPacket.back.MaterialParams.reserve(4096 * sizeof(float));
-            renderPacket.back.MaterialTexturePatches.reserve(512);
-            renderPacket.back.Lights.reserve(10);
-            renderPacket.back.ShadowSSBOData.reserve(64 * 1024);
-
-            // skinned comand reserve
-            renderPacket.skinnedPass.reserve(1024);
-
-            // static comand reserve
-            renderPacket.staticPass.reserve(1024);
+            // reserve render packet
+            renderPacket.Reserve();
 
             // start render thread
             isRunning.store(true, std::memory_order_release);
@@ -712,10 +725,7 @@ namespace Pitaya::Render
             Pitaya::Thread::UnregisterThread(renderThread);
 
             // clear render packet
-            renderPacket.front.Clear();
-            renderPacket.back.Clear();
-            renderPacket.skinnedPass.clear();
-            renderPacket.staticPass.clear();
+            renderPacket.Clear();
 
             //invoke hook func
             INVOKE_POSTRENDERERRELEASE_HOOK
@@ -774,12 +784,12 @@ namespace Pitaya::Render
     public:
         inline void BeginRenderFrame(Pitaya::Core::PassKey<RenderPipeline>)
         {
-            renderPacket.front.Clear();
+            renderPacket.GetWriteBuffer().Clear();
             INVOKE_POSTRENDERERBEGINRENDERFRAME_HOOK
         }
         inline void SubmitSceneEnv(Pitaya::Core::PassKey<RenderPipeline>, const SceneEnv& env)
         {
-            auto& setup = renderPacket.front.SceneInfoSetup;
+            auto& setup = renderPacket.GetWriteBuffer().SceneInfoSetup;
             setup.AmbientColor = glm::vec4(env.AmbientColor, 1.0f);
             setup.BRDFLUTHandle = renderKit.IBL.BRDFLUTHandle;
             setup.DeltaTime = Pitaya::Time::delta();
@@ -810,9 +820,9 @@ namespace Pitaya::Render
                     case 1: maxPointLayer = std::max(maxPointLayer, endLayer); break;
                 }
             }
-            renderPacket.front.RequiredCSMLayers = maxCSMLayer;
-            renderPacket.front.RequiredSpotLayers = maxSpotLayer;
-            renderPacket.front.RequiredPointLayers = maxPointLayer;
+            renderPacket.GetWriteBuffer().RequiredCSMLayers = maxCSMLayer;
+            renderPacket.GetWriteBuffer().RequiredSpotLayers = maxSpotLayer;
+            renderPacket.GetWriteBuffer().RequiredPointLayers = maxPointLayer;
 
             // 序列化 SSBO 数据
             // 布局: Header | CascadeSplit[] | SliceGPU[] | mat4[]
@@ -824,7 +834,7 @@ namespace Pitaya::Render
 
             if (totalSize > 0)
             {
-                auto& shadowData = renderPacket.front.ShadowSSBOData;
+                auto& shadowData = renderPacket.GetWriteBuffer().ShadowSSBOData;
                 shadowData.resize(totalSize);
 
                 Pitaya::Render::ShadowSSBOHeader header;
@@ -901,7 +911,7 @@ namespace Pitaya::Render
             cmd.CullFace = true;
             cmd.SortKey = 0;
 
-            renderPacket.PushDrawCommandToPass(std::move(cmd));
+            renderPacket.EnqueueDrawCmd(std::move(cmd));
         }
         inline void EndShadowPass(Pitaya::Core::PassKey<RenderPipeline>)
         {
@@ -928,7 +938,7 @@ namespace Pitaya::Render
                 beginPassCommand.ClearDepth = true;
                 beginPassCommand.ClearStencil = true;
             }
-            size_t currentTotal = renderPacket.front.Lights.size();
+            size_t currentTotal = renderPacket.GetWriteBuffer().Lights.size();
             beginPassCommand.LightCount = pass.LightCount;
             beginPassCommand.LightDataOffset = (currentTotal >= pass.LightCount)
                 ? static_cast<uint32_t>(currentTotal - pass.LightCount) : 0;
@@ -1044,7 +1054,7 @@ namespace Pitaya::Render
                     0);
             }
 
-            renderPacket.PushDrawCommandToPass(std::move(cmd));
+            renderPacket.EnqueueDrawCmd(std::move(cmd));
         }
         inline void EndPass(Pitaya::Core::PassKey<RenderPipeline>)
         {
@@ -1132,7 +1142,7 @@ namespace Pitaya::Render
         }
         inline void SubmitLight(Pitaya::Core::PassKey<RenderPipeline>, const LightInfo& light)
         {
-            renderPacket.front.Lights.emplace_back(light);
+            renderPacket.GetWriteBuffer().Lights.emplace_back(light);
         }
         inline void SubmitBlitToScreen(Pitaya::Core::PassKey<RenderPipeline>)
         {

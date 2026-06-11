@@ -229,11 +229,11 @@ namespace
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::VertexArray>();
     }
-    Pitaya::Core::SlotMap<Pitaya::GPU::VertexBuffer>::Handle ENGINE_CALL OnCreateVertexBuffer(float* vertices, uint32_t size, Pitaya::GPU::BufferLayout layout)
+    Pitaya::Core::SlotMap<Pitaya::GPU::VertexBuffer>::Handle ENGINE_CALL OnCreateVertexBuffer(const float* vertices, uint32_t size, Pitaya::GPU::BufferLayout layout)
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::VertexBuffer>(vertices, size, layout);
     }
-    Pitaya::Core::SlotMap<Pitaya::GPU::IndexBuffer>::Handle ENGINE_CALL OnCreateIndexBuffer(uint32_t* indices, uint32_t count)
+    Pitaya::Core::SlotMap<Pitaya::GPU::IndexBuffer>::Handle ENGINE_CALL OnCreateIndexBuffer(const uint32_t* indices, uint32_t count)
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::IndexBuffer>(indices, count);
     }
@@ -249,7 +249,7 @@ namespace
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::Texture2D>(data, width, height, format, isGenerateMipmap, isNearest);
     }
-    Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle ENGINE_CALL OnCreateTextureCubemap(const void** datas, int* widths, int* heights, Pitaya::GPU::PixelFormat format, bool isGenerateMipmap, bool isNearest)
+    Pitaya::Core::SlotMap<Pitaya::GPU::TextureCubemap>::Handle ENGINE_CALL OnCreateTextureCubemap(const void** datas, const int* widths, const int* heights, Pitaya::GPU::PixelFormat format, bool isGenerateMipmap, bool isNearest)
     {
         return Pitaya::Engine::Context::Instance().GetModule<Pitaya::GPU::RHIDevice>()->Create<Pitaya::GPU::TextureCubemap>(datas, widths, heights, format, isGenerateMipmap, isNearest);
     }
